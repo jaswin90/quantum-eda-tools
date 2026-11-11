@@ -87,4 +87,4 @@ uncited bibliography entries.
   checked before external use.
 - Every figure is computed from a stated model (Appendix A of the review), not digitised from data.
   The collision-yield curve in particular is an illustrative model.
-- Author names are a placeholder in `review/template.html`.
+- The byline is set in `review/template.html`.
