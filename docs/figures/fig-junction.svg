@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 460" width="760" height="460" role="img" aria-label="Qubit frequency depends exponentially on tunnel-barrier thickness: a hundredth of a nanometre moves a 5 GHz qubit by about 250 MHz." font-family="Inter, 'Helvetica Neue', Arial, sans-serif">
+<title>Qubit frequency depends exponentially on tunnel-barrier thickness: a hundredth of a nanometre moves a 5 GHz qubit by about 250 MHz.</title>
+<rect width="760" height="460" fill="#fcfcfb"/>
+<rect x="86" y="211.2" width="646" height="7.7" fill="#F2A25C" opacity="0.22"/>
+<line x1="86" y1="396.0" x2="732" y2="396.0" stroke="#e4e2db" stroke-width="1"/>
+<text x="76.0" y="401.0" font-size="15" fill="#5b6270" text-anchor="end" font-weight="400">-800</text>
+<line x1="86" y1="305.5" x2="732" y2="305.5" stroke="#e4e2db" stroke-width="1"/>
+<text x="76.0" y="310.5" font-size="15" fill="#5b6270" text-anchor="end" font-weight="400">-400</text>
+<line x1="86" y1="215.0" x2="732" y2="215.0" stroke="#e4e2db" stroke-width="1"/>
+<text x="76.0" y="220.0" font-size="15" fill="#5b6270" text-anchor="end" font-weight="400">0</text>
+<line x1="86" y1="124.5" x2="732" y2="124.5" stroke="#e4e2db" stroke-width="1"/>
+<text x="76.0" y="129.5" font-size="15" fill="#5b6270" text-anchor="end" font-weight="400">+400</text>
+<line x1="86" y1="34.0" x2="732" y2="34.0" stroke="#e4e2db" stroke-width="1"/>
+<text x="76.0" y="39.0" font-size="15" fill="#5b6270" text-anchor="end" font-weight="400">+800</text>
+<line x1="86.0" y1="396" x2="86.0" y2="402" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="86.0" y="422.0" font-size="15" fill="#5b6270" text-anchor="middle" font-weight="400">-0.03</text>
+<line x1="193.7" y1="396" x2="193.7" y2="402" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="193.7" y="422.0" font-size="15" fill="#5b6270" text-anchor="middle" font-weight="400">-0.02</text>
+<line x1="301.3" y1="396" x2="301.3" y2="402" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="301.3" y="422.0" font-size="15" fill="#5b6270" text-anchor="middle" font-weight="400">-0.01</text>
+<line x1="409.0" y1="396" x2="409.0" y2="402" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="409.0" y="422.0" font-size="15" fill="#5b6270" text-anchor="middle" font-weight="400">0</text>
+<line x1="516.7" y1="396" x2="516.7" y2="402" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="516.7" y="422.0" font-size="15" fill="#5b6270" text-anchor="middle" font-weight="400">+0.01</text>
+<line x1="624.3" y1="396" x2="624.3" y2="402" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="624.3" y="422.0" font-size="15" fill="#5b6270" text-anchor="middle" font-weight="400">+0.02</text>
+<line x1="732.0" y1="396" x2="732.0" y2="402" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="732.0" y="422.0" font-size="15" fill="#5b6270" text-anchor="middle" font-weight="400">+0.03</text>
+<line x1="86" y1="396" x2="732" y2="396" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="409.0" y="448.0" font-size="15" fill="#1d222b" text-anchor="middle" font-weight="400">Change in average barrier thickness δd (nm)</text>
+<text x="82.0" y="20.0" font-size="15" fill="#1d222b" text-anchor="start" font-weight="400">Qubit frequency shift at 5 GHz (MHz)</text>
+<polyline fill="none" stroke="#1F5FE0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="86.0,28.0 96.8,34.7 107.5,41.4 118.3,48.0 129.1,54.6 139.8,61.2 150.6,67.7 161.4,74.2 172.1,80.7 182.9,87.1 193.7,93.5 204.4,99.9 215.2,106.2 226.0,112.5 236.7,118.8 247.5,125.1 258.3,131.3 269.0,137.5 279.8,143.6 290.6,149.7 301.3,155.8 312.1,161.9 322.9,167.9 333.6,173.9 344.4,179.8 355.2,185.8 365.9,191.7 376.7,197.6 387.5,203.4 398.2,209.2 409.0,215.0 419.8,220.8 430.5,226.5 441.3,232.2 452.1,237.8 462.8,243.5 473.6,249.1 484.4,254.7 495.1,260.2 505.9,265.8 516.7,271.2 527.4,276.7 538.2,282.2 549.0,287.6 559.7,293.0 570.5,298.3 581.3,303.6 592.0,308.9 602.8,314.2 613.6,319.5 624.3,324.7 635.1,329.9 645.9,335.1 656.6,340.2 667.4,345.3 678.2,350.4 688.9,355.5 699.7,360.5 710.5,365.5 721.2,370.5 732.0,375.5"/>
+<text x="100.0" y="54.0" font-size="15" fill="#1F5FE0" text-anchor="start" font-weight="600">f ∝ √I<tspan baseline-shift="sub" font-size="11">c</tspan> ∝ exp(−κd)</text>
+<text x="452.1" y="201.2" font-size="14" fill="#1d222b" text-anchor="start" font-weight="400">±17 MHz collision window</text>
+<text x="409.0" y="362.1" font-size="15" fill="#1d222b" text-anchor="middle" font-weight="600">0.01 nm ≈ 250 MHz</text>
+<circle cx="516.7" cy="271.2" r="5.5" fill="#1F5FE0" stroke="#fcfcfb" stroke-width="2"/>
+</svg>

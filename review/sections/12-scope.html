@@ -1,0 +1,34 @@
+<section id="sec-scope"><h2>Commercial scope, timing and risk</h2>
+<p>This section translates the technical agenda into a scope for a new tools company. The assessments are this review's, drawn from public information without customer interviews. They should be read as hypotheses to test.</p>
+
+<h3 id="sec-scope-who">Who would buy, in what order</h3>
+<figure class="tbl" id="tab-buyers"><figcaption>Buyer segments, ordered by how soon each faces the problems of §11.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Segment</th><th>Examples</th><th>First purchase</th><th>Problems</th></tr>
+<tr><td>Open foundries</td><td>Anderon, SkyWater, QuantWare, GlobalFoundries, Tower, Infineon</td><td>Design kit, rule decks, yield and test-data software</td><td>3, 4, 5, 7</td></tr>
+<tr><td>Fabless and small-fab qubit makers</td><td>Qolab, IQM, OQC, Rigetti, Alice &amp; Bob, Diraq</td><td>Design-to-layout flow with foundry sign-off</td><td>1, 2, 3</td></tr>
+<tr><td>National laboratories and testbeds</td><td>US DOE laboratories, NQCC, CEA-Leti, Fraunhofer, imec</td><td>Reference flows, licences, paid pilots</td><td>2, 4, 5</td></tr>
+<tr><td>Integrated leaders</td><td>IBM, Google, IonQ, Quantinuum, Intel</td><td>Point tools that beat in-house code; QEC-aware design</td><td>2, 6</td></tr>
+<tr><td>Atom and ion companies</td><td>QuEra, Pasqal, Atom Computing, Quantinuum</td><td>Logical-yield and noise-model tooling</td><td>6, 7</td></tr>
+<tr><td>Channels and acquirers</td><td>Keysight, Synopsys, Cadence, NVIDIA, control vendors</td><td>Integration, resale, eventual acquisition</td><td>—</td></tr>
+</table></div></figure>
+<p>Open foundries come first because a foundry cannot accept outside designs without a kit, and a kit adopted by a foundry reaches every customer of that foundry. Fabless makers come alongside them, since several are now designing for fabs they do not control; Qolab's arrangement with an IonQ-owned SkyWater is the clearest case. A third-party kit also offers neutrality that a fab owned by a competitor cannot. The integrated leaders have the largest budgets but strong internal tools and long evaluation cycles. They are best approached later, with a specific capability such as Problem 6. The total number of serious buyers is in the dozens, so pricing must reflect high value per account.</p>
+
+<h3 id="sec-scope-plan">A phased plan keyed to the roadmaps</h3>
+<ol>
+<li><b>Months 0–6 (prove).</b> Build layout-versus-Hamiltonian checking (Problem 3, conditions i and ii) on top of KLayout and Palace for superconducting chips. Sign two or three design partners about to tape out at an outside fab, and open discussions with Anderon and SkyWater on a kit schema.</li>
+<li><b>Months 6–18 (productise).</b> Ship a kit qualified by one foundry, adding statistical condition (iii) via Problems 1 and 2. Pilot Problem 4 on that foundry's warm data. Export detector error models in Stim format and integrate with CUDA-Q, which costs little and buys visibility with QEC teams.</li>
+<li><b>Months 18–36 (extend).</b> Add photonic and trap kernels (Problem 7), test planning (Problem 5), logical yield (Problem 6) and, with accumulated data, the recipe-to-loss models of §5.</li>
+</ol>
+<p>This schedule places a qualified kit in customers' hands during 2027, when the 2028 designs are drawn.</p>
+
+<h3 id="sec-scope-risk">Risks</h3>
+<ul>
+<li><b>In-house tooling.</b> The leaders may continue to build their own. The mitigation is to target the foundry relationship, which they cannot replicate for others.</li>
+<li><b>Incumbent extension.</b> Keysight could extend QuantumPro into sign-off. The mitigation is speed, openness of the kit schema, and a partnership posture.</li>
+<li><b>Data access.</b> Problems 4–6 need foundry measurements, which foundries guard. The offer must return something they cannot easily build: yield lift, faster qualification of customers' designs.</li>
+<li><b>Market size.</b> Dozens of buyers today; value per account must be high and the product must expand with their headcount.</li>
+<li><b>Technology selection.</b> A modality could stall. The QEC layer (Problem 6) and modality kernels (Problem 7) hedge this exposure.</li>
+</ul>
+<p>Explicitly out of scope: general field solvers, fabrication equipment, control hardware, calibration automation, decoders and algorithm compilers. Each is either commoditised, well funded, or both.</p>
+</section>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 460" width="760" height="460" role="img" aria-label="Logical error falls exponentially with code distance at a rate set by the suppression factor Lambda." font-family="Inter, 'Helvetica Neue', Arial, sans-serif">
+<title>Logical error falls exponentially with code distance at a rate set by the suppression factor Lambda.</title>
+<rect width="760" height="460" fill="#fcfcfb"/>
+<line x1="86" y1="34.0" x2="732" y2="34.0" stroke="#e4e2db" stroke-width="1"/>
+<text x="76.0" y="39.0" font-size="15" fill="#5b6270" text-anchor="end" font-weight="400">10⁻¹</text>
+<line x1="86" y1="124.5" x2="732" y2="124.5" stroke="#e4e2db" stroke-width="1"/>
+<text x="76.0" y="129.5" font-size="15" fill="#5b6270" text-anchor="end" font-weight="400">10⁻⁴</text>
+<line x1="86" y1="215.0" x2="732" y2="215.0" stroke="#e4e2db" stroke-width="1"/>
+<text x="76.0" y="220.0" font-size="15" fill="#5b6270" text-anchor="end" font-weight="400">10⁻⁷</text>
+<line x1="86" y1="305.5" x2="732" y2="305.5" stroke="#e4e2db" stroke-width="1"/>
+<text x="76.0" y="310.5" font-size="15" fill="#5b6270" text-anchor="end" font-weight="400">10⁻¹⁰</text>
+<line x1="86" y1="396.0" x2="732" y2="396.0" stroke="#e4e2db" stroke-width="1"/>
+<text x="76.0" y="401.0" font-size="15" fill="#5b6270" text-anchor="end" font-weight="400">10⁻¹³</text>
+<line x1="86.0" y1="396" x2="86.0" y2="402" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="86.0" y="422.0" font-size="15" fill="#5b6270" text-anchor="middle" font-weight="400">3</text>
+<line x1="147.5" y1="396" x2="147.5" y2="402" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="147.5" y="422.0" font-size="15" fill="#5b6270" text-anchor="middle" font-weight="400">7</text>
+<line x1="270.6" y1="396" x2="270.6" y2="402" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="270.6" y="422.0" font-size="15" fill="#5b6270" text-anchor="middle" font-weight="400">15</text>
+<line x1="424.4" y1="396" x2="424.4" y2="402" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="424.4" y="422.0" font-size="15" fill="#5b6270" text-anchor="middle" font-weight="400">25</text>
+<line x1="578.2" y1="396" x2="578.2" y2="402" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="578.2" y="422.0" font-size="15" fill="#5b6270" text-anchor="middle" font-weight="400">35</text>
+<line x1="732.0" y1="396" x2="732.0" y2="402" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="732.0" y="422.0" font-size="15" fill="#5b6270" text-anchor="middle" font-weight="400">45</text>
+<line x1="86" y1="396" x2="732" y2="396" stroke="#8a8f98" stroke-width="1.5"/>
+<text x="409.0" y="448.0" font-size="15" fill="#1d222b" text-anchor="middle" font-weight="400">Surface-code distance d</text>
+<text x="82.0" y="20.0" font-size="15" fill="#1d222b" text-anchor="start" font-weight="400">Logical error per QEC cycle</text>
+<line x1="86" y1="275.3" x2="732" y2="275.3" stroke="#8a8f98" stroke-width="1.5" stroke-dasharray="6 5"/>
+<text x="501.3" y="267.3" font-size="14" fill="#1d222b" text-anchor="start" font-weight="400">target 10⁻⁹</text>
+<polyline fill="none" stroke="#1F5FE0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="86.0,69.7 116.8,79.7 147.5,89.6 178.3,99.6 209.0,109.6 239.8,119.5 270.6,129.5 301.3,139.5 332.1,149.5 362.9,159.4 393.6,169.4 424.4,179.4 455.1,189.3 485.9,199.3 516.7,209.3 547.4,219.2 578.2,229.2 609.0,239.2 639.7,249.1 670.5,259.1 701.2,269.1 732.0,279.0"/>
+<text x="495.9" y="189.3" font-size="15" fill="#1F5FE0" text-anchor="start" font-weight="600">Λ = 2.14 (measured)</text>
+<polyline fill="none" stroke="#B84E14" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="86.0,53.3 116.8,71.5 147.5,89.6 178.3,107.8 209.0,126.0 239.8,144.1 270.6,162.3 301.3,180.5 332.1,198.6 362.9,216.8 393.6,234.9 424.4,253.1 455.1,271.3 485.9,289.4 516.7,307.6 547.4,325.8 578.2,343.9 609.0,362.1 639.7,380.2"/>
+<text x="434.4" y="247.1" font-size="15" fill="#B84E14" text-anchor="start" font-weight="600">Λ = 4</text>
+<polyline fill="none" stroke="#0E8A7A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="86.0,29.3 116.8,59.5 147.5,89.6 178.3,119.8 209.0,150.0 239.8,180.1 270.6,210.3 301.3,240.5 332.1,270.6 362.9,300.8 393.6,331.0 424.4,361.1 455.1,391.3"/>
+<text x="227.8" y="186.1" font-size="15" fill="#0E8A7A" text-anchor="end" font-weight="600">Λ = 10</text>
+<circle cx="147.5" cy="89.6" r="6" fill="#1d222b" stroke="#fcfcfb" stroke-width="2"/>
+<text x="161.5" y="75.6" font-size="15" fill="#1d222b" text-anchor="start" font-weight="600">Willow, d = 7</text>
+</svg>

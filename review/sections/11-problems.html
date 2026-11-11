@@ -1,0 +1,79 @@
+<section id="sec-prob"><h2>Seven open problems</h2>
+<p>We select problems by four criteria. Each must be needed by a dated roadmap milestone (@tab:roadmap); be mathematically well posed with known methods, so that the risk is engineering rather than new physics; produce value that accrues to whoever holds the data; and not already be commoditised. Each is stated with its formal core, the state of the art, a proposed approach and a validation criterion.</p>
+
+<div class="problem" id="p1">
+<h4>Problem 1. Variation-aware frequency planning</h4>
+<dl>
+<dt>Formal core</dt><dd>The chance-constrained programme @eq:ccp over target frequencies \(\boldsymbol\mu\) and trim policy \(\mathbf s\), with spatially correlated fabrication error \(\boldsymbol\Sigma_f(\mathbf r,\mathbf r')\) fitted per foundry.</dd>
+<dt>State of the art</dt><dd>Fixed frequency patterns with laser trimming [@hertzberg2021; @zhang2022]; lattice allocation under a uniform \(\sigma_f\) [@morvan2022; @osman2023].</dd>
+<dt>Approach</dt><dd>Sample-average approximation with mixed-integer solvers [@luedtke2008]; joint optimisation with the trim budget; heavy-tailed error models from Problem 4.</dd>
+<dt>Validation</dt><dd>Predicted zero-collision yield within five percentage points of measured yield on a partner foundry's wafers.</dd>
+<dt>Needed by</dt><dd>2027 design cycle; fabless designers using Anderon and SkyWater do not control \(\sigma_f\).</dd>
+</dl></div>
+
+<div class="problem" id="p2">
+<h4>Problem 2. Chip-scale extraction with certified error</h4>
+<dl>
+<dt>Formal core</dt><dd>Compute \(\boldsymbol\theta(\mathbf x)\) for \(10^3\)–\(10^4\)-qubit layouts with \(\|\tilde{\boldsymbol\theta}-\boldsymbol\theta\|\le\varepsilon\), \(\varepsilon_\omega/\omega\lesssim2\times10^{-3}\), by composing passive reduced cell models through the Schur complement @eq:schur.</dd>
+<dt>State of the art</dt><dd>Per-cell HFSS with EPR; Palace on clusters; manual partitioning; no stated uncertainty (@sec:design-scale).</dd>
+<dt>Approach</dt><dd>Parametrised cell libraries built once with existing solvers; passivity-preserving reduction [@odabasioglu1998; @gustavsen1999]; a posteriori estimates for truncated couplings; operator-learning surrogates [@li2021fno; @pfaff2021] with conformal error bounds [@angelopoulos2023]; adjoint Jacobians @eq:adjoint as a by-product; GPU back end.</dd>
+<dt>Validation</dt><dd>A 100+ qubit die extracted in under an hour, agreeing with measured frequencies to within 10 MHz RMS.</dd>
+<dt>Needed by</dt><dd>2028, for \(10^4\)-qubit architectures and multilayer routing.</dd>
+</dl></div>
+
+<div class="problem" id="p3">
+<h4>Problem 3. Layout-versus-Hamiltonian sign-off and an open PDK schema</h4>
+<dl>
+<dt>Formal core</dt><dd>A design kit \(\mathcal K = (\text{layers},\ \mathcal R,\ \text{cells},\ \text{models},\ \boldsymbol\Sigma_x)\). Accept layout \(\mathbf x\) if and only if (i) the rules \(\mathcal R(\mathbf x)\) hold; (ii) the circuit graph recognised from the layout is isomorphic to the intended graph, \(G(\mathbf x)\cong G^*\); and (iii) the statistical criterion @eq:signoff holds under \(\mathcal K\).</dd>
+<dt>State of the art</dt><dd>Geometric rule scripts in KLayout; parametrised layout generators without verification; no shared kit format.</dd>
+<dt>Approach</dt><dd>An open, versioned schema agreed with at least one foundry; recognition of superconducting islands, junctions and couplers; graph matching for (ii); Problems 1 and 2 for (iii).</dd>
+<dt>Validation</dt><dd>A foundry-qualified kit in use on a real tape-out, catching errors that the existing flow missed.</dd>
+<dt>Needed by</dt><dd>Now: Anderon aims to accept outside wafers from late 2026.</dd>
+</dl></div>
+
+<div class="problem" id="p4">
+<h4>Problem 4. Warm-to-cold prediction, trim planning and die ranking</h4>
+<dl>
+<dt>Formal core</dt><dd>The hierarchical model @eq:hier, its posterior \(p(f_i\mid\mathcal D)\), the trim programme @eq:trim under that posterior, and the known-good-die rule.</dd>
+<dt>State of the art</dt><dd>In-house flows at one company; point estimates; resistance-variation studies [@kreikebaum2020].</dd>
+<dt>Approach</dt><dd>Gaussian-process wafer trends with heavy-tailed residuals; process covariates; posterior-expected-collision objective for trimming; calibration against cold data from Problem 5.</dd>
+<dt>Validation</dt><dd>Frequency predicted from warm data with RMS error below 15 MHz, and a measured improvement in post-trim yield.</dd>
+<dt>Needed by</dt><dd>2027, as 300 mm lines produce thousands of junction measurements per wafer.</dd>
+</dl></div>
+
+<div class="problem" id="p5">
+<h4>Problem 5. Test planning and simulator calibration</h4>
+<dl>
+<dt>Formal core</dt><dd>Sequential design @eq:boed with a stopping rule; simulator parameters \(\boldsymbol\phi\) updated by \(p(\boldsymbol\phi\mid\mathbf y)\), by simulation-based inference where the likelihood is implicit.</dd>
+<dt>State of the art</dt><dd>Wafer-scale cryogenic statistics for spins [@neyens2024]; model-based calibration of single devices [@wittler2021]; habitual test ordering for superconducting dies.</dd>
+<dt>Approach</dt><dd>A die record (@fig:flow) joining design, process and test; amortised Bayesian experimental design [@rainforth2024]; neural posterior estimation [@cranmer2020] for \(\boldsymbol\phi\).</dd>
+<dt>Validation</dt><dd>Cold-test hours per qualified die halved; prediction bias shrinking from wafer to wafer.</dd>
+<dt>Needed by</dt><dd>2027–2028, where cryogenic probers are installed.</dd>
+</dl></div>
+
+<div class="problem" id="p6">
+<h4>Problem 6. From layout to logical error</h4>
+<dl>
+<dt>Formal core</dt><dd>The map \(p_L = F\big(\mathrm{DEM}(\boldsymbol\theta,\ T_1\text{ map},\ \text{defects}),\ \text{code},\ \text{decoder}\big)\) and the logical yield @eq:ly, before and after fabrication; defect-adaptive patch selection maximising \(d_{\mathrm{eff}}\).</dd>
+<dt>State of the art</dt><dd>Stim with uniform circuit noise [@gidney2021stim]; defect-adapted surface codes [@auger2017; @nagayama2017; @strikis2023]; component error budgets in hardware papers [@google2025].</dd>
+<dt>Approach</dt><dd>Automatic detector-error-model generation from the die record via @eq:eps; rare-event estimation [@bravyi2013]; code-aware layout checks that the drawn connectivity realises the code graph (@tab:codes); interfaces to Stim and CUDA-Q.</dd>
+<dt>Validation</dt><dd>Reproduce a published \(\Lambda\) from published device data to within 10%.</dd>
+<dt>Needed by</dt><dd>2028–2029: Libra, Starling and Apollo are specified in logical qubits.</dd>
+</dl></div>
+
+<div class="problem" id="p7">
+<h4>Problem 7. Sign-off kernels for photonic and trap chips</h4>
+<dl>
+<dt>Formal core</dt><dd>Photonics: \(\Pr\big(\min_{\mathcal P}\prod_{i\in\mathcal P}\eta_i\ge\eta_{\min}\big)\ge Y_{\min}\) over measured component distributions. Traps: \(\min_{g,\mathbf V}\) (heating + crosstalk) subject to secular-frequency, RF-null and rule constraints, with @eq:wave as the inner problem.</dd>
+<dt>State of the art</dt><dd>Component-level photonic simulation with nominal losses [@bogaerts2018]; COMSOL or analytic [@house2008] basis potentials with manual electrode layout.</dd>
+<dt>Approach</dt><dd>Reuse the statistical engine of Problem 3 with modality-specific physics kernels.</dd>
+<dt>Validation</dt><dd>One photonic and one trap design partner using the kernel on a tape-out.</dd>
+<dt>Needed by</dt><dd>2027–2028: Xanadu on GlobalFoundries' 300 mm line; Quantinuum's 2D traps; Oxford Ionics traps at SkyWater.</dd>
+</dl></div>
+
+<h3 id="sec-prob-record">Integration: the die record</h3>
+<p>The seven problems share inputs and outputs, and should not be built as seven point tools. Their common substrate is a versioned record per die (@fig:flow) holding the targets \(\boldsymbol\theta^*\), layout \(\mathbf x\), extracted \(\hat{\boldsymbol\theta}\pm\boldsymbol\Sigma_\theta\), process history, the warm-measurement map, cold results and calibrated values. With that record in place, three feedback loops close. Measured \(\boldsymbol\Sigma_x\) updates the frequency plan and sign-off limits (Problems 1, 3 and 4). Cold results recalibrate the extraction and loss models (Problems 2 and 5). Operating data becomes new rules and a logical-yield figure (Problem 6). The record is also the data asset that compounds: each wafer that passes through it improves every model. A competitor without the same history cannot easily reproduce it.</p>
+
+<h3 id="sec-prob-ml">A note on machine learning</h3>
+<p>Readers from machine learning will recognise most of the methods above. Three cautions apply in this domain. First, data are scarce and expensive. A foundry may produce hundreds, not millions, of characterised dies per year, so priors from physics carry most of the weight and hierarchical models outperform flexible ones. Second, the decisions are tail decisions. Yield depends on rare collisions and outlier junctions, which reward explicit tail models and calibrated uncertainty over average-case accuracy. Third, the deployment distribution shifts by construction: every new process, foundry and architecture is out of distribution for models trained on the last one. Conformal and Bayesian methods that report when they do not know are therefore more valuable than larger models. Learned decoders [@bausch2024] are the exception that proves the rule, since syndrome data can be generated in abundance.</p>
+</section>

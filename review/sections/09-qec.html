@@ -1,0 +1,43 @@
+<section id="sec-qec"><h2>Error correction: the layer every stack shares</h2>
+<p>Error correction is largely independent of physical modality. A code, a decoder and a syndrome-extraction schedule see only error rates, connectivity and timing. That makes it the one layer of tooling that can be sold to every company in §2, including those with no chip to design. It also supplies the objective function for the rest of the flow.</p>
+
+<h3 id="sec-qec-law">The scaling law and the suppression factor</h3>
+<p>Below threshold, the logical error per cycle of a distance-\(d\) code falls exponentially in \(d\) [@dennis2002; @fowler2012; @terhal2015]:</p>
+<div class="eq" id="eq-pl">$$ p_L(d) \simeq A\left(\frac{p}{p_{\mathrm{th}}}\right)^{(d+1)/2}, \qquad \Lambda \equiv \frac{p_L(d)}{p_L(d+2)} = \frac{p_{\mathrm{th}}}{p}. $$</div>
+<p>Google's Willow processor measured \(\Lambda = 2.14\) on surface codes of distance 3, 5 and 7, with \(p_L(7) = 0.143\%\) per cycle [@google2025], following an earlier demonstration of distance scaling [@google2023]. Extrapolating from that point, \(p_L(d) = p_L(7)\,\Lambda^{-(d-7)/2}\), so reaching a target \(p_L^\star\) requires</p>
+<div class="eq" id="eq-dreq">$$ d^\star = 7 + \frac{2\ln\!\big(p_L(7)/p_L^\star\big)}{\ln\Lambda}, \qquad n_{\mathrm{phys}} = 2{d^\star}^2 - 1 \ \ \text{(rotated surface code)}. $$</div>
+<p>For \(p_L^\star = 10^{-9}\), @eq:dreq gives \(d = 45\) (4,049 physical qubits per logical qubit) at \(\Lambda = 2.14\), \(d = 29\) (1,681) at \(\Lambda = 4\), and \(d = 21\) (881) at \(\Lambda = 10\) (@fig:lambda, @fig:overhead). Because \(n_{\mathrm{phys}} \propto (\ln(1/p_L^\star)/\ln\Lambda)^2\), doubling \(\ln\Lambda\) cuts overhead fourfold. Resource estimates for useful algorithms [@beverland2022; @gidney2021rsa; @gidney2025rsa] inherit this sensitivity directly.</p>
+<figure id="fig-lambda">
+<img src="figures/fig-lambda.svg" alt="Logical error per cycle versus code distance for three values of Lambda, anchored at the Willow distance-7 point.">
+<figcaption>Logical error per cycle from @eq:pl, anchored at the measured \(p_L(7)=0.143\%\) [@google2025], for the measured \(\Lambda=2.14\) and two improved values.</figcaption>
+</figure>
+<figure id="fig-overhead">
+<img src="figures/fig-overhead.svg" alt="Physical qubits per logical qubit versus Lambda for three logical error targets.">
+<figcaption>Physical qubits per logical qubit, \(2d^{\star 2}-1\) with \(d^\star\) from @eq:dreq, versus \(\Lambda\), for three targets. The steps come from rounding \(d\) up to the next odd integer.</figcaption>
+</figure>
+<p>\(\Lambda\) is set by physical error rates. Those are set by coherence, crosstalk, leakage and uniformity, which in turn are set in design and fabrication. More precisely, \(p\) in @eq:pl is not a scalar: it is a map over qubits and couplers, and the logical error is dominated by the worst regions. This is the quantitative link between the EDA problems of §3–§7 and the roadmaps of @tab:roadmap. <i>Hardware quality, determined largely before the chip is cooled, is worth more than hardware quantity.</i></p>
+
+<h3 id="sec-qec-codes">Codes fix the chip's wiring diagram</h3>
+<figure class="tbl" id="tab-codes"><figcaption>Code families and what each demands of hardware.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Code</th><th>Parameters</th><th>Overhead example</th><th>Connectivity required</th><th>Programmes</th></tr>
+<tr><td>Rotated surface code</td><td>\([[2d^2-1,\,1,\,d]]\) incl. checks</td><td>337 at \(d=13\)</td><td>Nearest neighbour, square grid</td><td>Google</td></tr>
+<tr><td>Bivariate bicycle (qLDPC)</td><td>\([[144,12,12]]\) "gross" code</td><td>288 physical for 12 logical</td><td>Degree 6, thickness-2 graph, long-range edges</td><td>IBM [@bravyi2024]</td></tr>
+<tr><td>Cat qubits + repetition</td><td>Biased noise; phase-flip code only</td><td>Linear chain</td><td>High-\(Q\) bosonic modes; bias-preserving gates</td><td>Alice &amp; Bob, AWS [@guillaud2019; @puri2020; @putterman2025]</td></tr>
+<tr><td>Codes with transport</td><td>Surface, colour and qLDPC</td><td>Code-dependent</td><td>Qubits moved in space</td><td>QuEra, Quantinuum [@bluvstein2024; @xu2024]</td></tr>
+</table></div></figure>
+<p>Quantum LDPC codes [@breuckmann2021; @panteleev2021] trade locality for rate. IBM's bivariate bicycle codes encode 12 logical qubits in 288 physical qubits, about an order of magnitude below a surface code of comparable distance. They require each qubit to couple to six others, two of them over long range, on a graph that can be embedded in two planar layers [@bravyi2024]. That is why IBM's Loon introduced long-range couplers on extra routing layers. The choice of code is therefore a hardware decision made at the start of design. Its cost in crosstalk, loss and yield should be evaluated with the same extraction and variation models as any other layout feature. No current tool does this.</p>
+
+<h3 id="sec-qec-dec">Decoders and the real-time constraint</h3>
+<p>Minimum-weight perfect matching (PyMatching and its Sparse Blossom implementation) is the workhorse for surface codes [@higgott2022; @higgott2023]. Union-find gives near-linear time at slightly lower accuracy [@delfosse2021]. Belief propagation with ordered-statistics post-processing extends to qLDPC codes [@roffe2020]. Neural decoders now exceed matching accuracy on experimental data [@bausch2024], and a follow-up reports real-time operation under 1 µs per cycle up to distance 11 [@alphaqubit2]. Syndromes arrive about once per microsecond on superconducting hardware. Throughput must exceed that rate or a backlog grows without bound [@terhal2015; @battistel2023]. Reported hardware implementations include IBM's qLDPC decoder on an AMD FPGA at under 480 ns [@web_ibm_roadmap], Riverlane's Deltaflow stack [@barber2025; @web_riverlane] and NVIDIA's GPU decoding inside the control loop [@web_nvidia_gtc26]. Decoding is thus well served, and partly given away by firms that sell hardware around it. A new entrant should integrate with decoders, not build them.</p>
+
+<h3 id="sec-qec-dem">From device data to logical error</h3>
+<p>The open problem is upstream of the decoder. The physical error of each operation can be assembled from quantities the design and test flow already produce:</p>
+<div class="eq" id="eq-eps">$$ \varepsilon_i \simeq c\,t_g\Big(\frac1{T_{1,i}}+\frac1{T_{\varphi,i}}\Big) + \varepsilon^{\mathrm{ctrl}}_i + \varepsilon^{ZZ}_i(\zeta) + \varepsilon^{\mathrm{leak}}_i, $$</div>
+<p>with \(c\) of order one-half, \(\zeta\) from @eq:zz and extraction, and \(T_1\) from the budget of @eq:t1. Stim represents a noisy syndrome-extraction circuit as a <i>detector error model</i>: a list of independent mechanisms \(\{(p_e, D_e, L_e)\}\), each with a probability, the detectors it flips and the logical observables it flips [@gidney2021stim]. The logical error rate is then estimated by sampling and decoding,</p>
+<div class="eq" id="eq-mc">$$ \hat p_L = \frac1N\sum_{s=1}^N \mathbb 1\big[\mathrm{dec}(\mathbf D_s)\ne \mathbf L_s\big], \qquad N \gg 1/p_L, $$</div>
+<p>which becomes expensive at low \(p_L\) and calls for rare-event methods [@bravyi2013]. Dead or weak qubits can be routed around with modified stabilisers, at a cost in effective distance roughly \(d_{\mathrm{eff}}\approx d-w\) for a defect cluster of width \(w\) [@auger2017; @nagayama2017; @strikis2023]. Correlated errors from radiation [@mcewen2022] violate the independence assumption and must be modelled separately.</p>
+<p>The quantity of interest for manufacture is the <i>logical yield</i>: the probability, over process variation \(\mathbf x\) before fabrication or given a measured defect map after it, that a die meets a logical-error target,</p>
+<div class="eq" id="eq-ly">$$ Y_L = \Pr_{\mathbf x}\big[\,p_L(\mathbf x;\ \text{code},\ \text{decoder}) \le p_L^\star\,\big]. $$</div>
+<p>Each ingredient of @eq:ly exists in the literature. What does not exist is the automation that produces the detector error model from a layout, the foundry's variation statistics and test data, rather than from a uniform noise parameter chosen by hand. Because roadmaps are now specified in logical qubits (IBM's 200 logical by 2029, QuEra's 256 logical by 2028 [@web_quera_roadmap]), logical yield is becoming the acceptance test for hardware.</p>
+</section>

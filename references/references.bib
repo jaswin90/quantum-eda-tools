@@ -1,0 +1,780 @@
+% References for "From Laboratory to Foundry" (review/sections/*.html).
+% Cited in the text as [@key]; scripts/build.py numbers them in order of first use.
+% Entries marked note = {verify ...} were written from memory of the literature
+% and their bibliographic details should be checked before external use.
+% Web sources were accessed on 2026-11-11.
+
+% ---------------------------------------------------------------- circuit QED
+@article{koch2007,
+  author = {Koch, J. and Yu, T. M. and Gambetta, J. and Houck, A. A. and Schuster, D. I. and Majer, J. and Blais, A. and Devoret, M. H. and Girvin, S. M. and Schoelkopf, R. J.},
+  title = {Charge-insensitive qubit design derived from the Cooper pair box},
+  journal = {Phys. Rev. A}, volume = {76}, pages = {042319}, year = {2007}}
+@incollection{devoret1997,
+  author = {Devoret, M. H.},
+  title = {Quantum fluctuations in electrical circuits},
+  booktitle = {Les Houches Session LXIII: Quantum Fluctuations}, publisher = {Elsevier}, year = {1997}}
+@article{vool2017,
+  author = {Vool, U. and Devoret, M.},
+  title = {Introduction to quantum electromagnetic circuits},
+  journal = {Int. J. Circuit Theory Appl.}, volume = {45}, pages = {897}, year = {2017}}
+@article{blais2021,
+  author = {Blais, A. and Grimsmo, A. L. and Girvin, S. M. and Wallraff, A.},
+  title = {Circuit quantum electrodynamics},
+  journal = {Rev. Mod. Phys.}, volume = {93}, pages = {025005}, year = {2021}}
+@article{krantz2019,
+  author = {Krantz, P. and Kjaergaard, M. and Yan, F. and Orlando, T. P. and Gustavsson, S. and Oliver, W. D.},
+  title = {A quantum engineer's guide to superconducting qubits},
+  journal = {Appl. Phys. Rev.}, volume = {6}, pages = {021318}, year = {2019}}
+@article{rasmussen2021,
+  author = {Rasmussen, S. E. and Christensen, K. S. and Pedersen, S. P. and Svendsen, L. B. and Zinner, N. T. and others},
+  title = {Superconducting circuit companion: an introduction with worked examples},
+  journal = {PRX Quantum}, volume = {2}, pages = {040204}, year = {2021}}
+@article{kjaergaard2020,
+  author = {Kjaergaard, M. and Schwartz, M. E. and Braum{\"u}ller, J. and Krantz, P. and Wang, J. I.-J. and Gustavsson, S. and Oliver, W. D.},
+  title = {Superconducting qubits: current state of play},
+  journal = {Annu. Rev. Condens. Matter Phys.}, volume = {11}, pages = {369}, year = {2020}}
+@article{rigetti2010,
+  author = {Rigetti, C. and Devoret, M.},
+  title = {Fully microwave-tunable universal gates in superconducting qubits with linear couplings and fixed transition frequencies},
+  journal = {Phys. Rev. B}, volume = {81}, pages = {134507}, year = {2010}}
+@article{sheldon2016,
+  author = {Sheldon, S. and Magesan, E. and Chow, J. M. and Gambetta, J. M.},
+  title = {Procedure for systematically tuning up cross-talk in the cross-resonance gate},
+  journal = {Phys. Rev. A}, volume = {93}, pages = {060302}, year = {2016}}
+@article{yan2018,
+  author = {Yan, F. and Krantz, P. and Sung, Y. and Kjaergaard, M. and Campbell, D. L. and Orlando, T. P. and Gustavsson, S. and Oliver, W. D.},
+  title = {Tunable coupling scheme for implementing high-fidelity two-qubit gates},
+  journal = {Phys. Rev. Applied}, volume = {10}, pages = {054062}, year = {2018}}
+@article{mundada2019,
+  author = {Mundada, P. and Zhang, G. and Hazard, T. and Houck, A.},
+  title = {Suppression of qubit crosstalk in a tunable coupling superconducting circuit},
+  journal = {Phys. Rev. Applied}, volume = {12}, pages = {054023}, year = {2019}}
+@article{manucharyan2009,
+  author = {Manucharyan, V. E. and Koch, J. and Glazman, L. I. and Devoret, M. H.},
+  title = {Fluxonium: single Cooper-pair circuit free of charge offsets},
+  journal = {Science}, volume = {326}, pages = {113}, year = {2009}}
+@article{nguyen2019,
+  author = {Nguyen, L. B. and Lin, Y.-H. and Somoroff, A. and Mencia, R. and Grabon, N. and Manucharyan, V. E.},
+  title = {High-coherence fluxonium qubit},
+  journal = {Phys. Rev. X}, volume = {9}, pages = {041041}, year = {2019}}
+
+% ------------------------------------------------------- geometry to Hamiltonian
+@article{nigg2012,
+  author = {Nigg, S. E. and Paik, H. and Vlastakis, B. and Kirchmair, G. and Shankar, S. and Frunzio, L. and Devoret, M. H. and Schoelkopf, R. J. and Girvin, S. M.},
+  title = {Black-box superconducting circuit quantization},
+  journal = {Phys. Rev. Lett.}, volume = {108}, pages = {240502}, year = {2012}}
+@article{solgun2014,
+  author = {Solgun, F. and Abraham, D. W. and DiVincenzo, D. P.},
+  title = {Blackbox quantization of superconducting circuits using exact impedance synthesis},
+  journal = {Phys. Rev. B}, volume = {90}, pages = {134504}, year = {2014}}
+@article{minev2021epr,
+  author = {Minev, Z. K. and Leghtas, Z. and Mundhada, S. O. and Christakis, L. and Pop, I. M. and Devoret, M. H.},
+  title = {Energy-participation quantization of Josephson circuits},
+  journal = {npj Quantum Inf.}, volume = {7}, pages = {131}, year = {2021}}
+@misc{minev2021lom,
+  author = {Minev, Z. K. and McConkey, T. G. and Takita, M. and C{\'o}rcoles, A. D. and Gambetta, J. M.},
+  title = {Circuit quantum electrodynamics (cQED) with modular quasi-lumped models},
+  howpublished = {arXiv:2103.10344}, year = {2021}}
+@article{groszkowski2021,
+  author = {Groszkowski, P. and Koch, J.},
+  title = {Scqubits: a Python package for superconducting qubits},
+  journal = {Quantum}, volume = {5}, pages = {583}, year = {2021}}
+@article{johansson2013,
+  author = {Johansson, J. R. and Nation, P. D. and Nori, F.},
+  title = {QuTiP 2: A Python framework for the dynamics of open quantum systems},
+  journal = {Comput. Phys. Commun.}, volume = {184}, pages = {1234}, year = {2013}}
+@article{gely2020,
+  author = {Gely, M. F. and Steele, G. A.},
+  title = {QuCAT: quantum circuit analyzer tool in Python},
+  journal = {New J. Phys.}, volume = {22}, pages = {013025}, year = {2020}}
+@article{rajabzadeh2023,
+  author = {Rajabzadeh, T. and Wang, Z. and Lee, N. and Makihara, T. and Guo, Y. and Safavi-Naeini, A. H.},
+  title = {Analysis of arbitrary superconducting quantum circuits accompanied by a Python package: SQcircuit},
+  journal = {Quantum}, volume = {7}, pages = {1118}, year = {2023}}
+@article{menke2021,
+  author = {Menke, T. and H{\"a}se, F. and Gustavsson, S. and Kerman, A. J. and Oliver, W. D. and Aspuru-Guzik, A.},
+  title = {Automated design of superconducting circuits and its application to 4-local couplers},
+  journal = {npj Quantum Inf.}, volume = {7}, pages = {49}, year = {2021}}
+@article{shanto2024,
+  author = {Shanto, S. and Kuo, A. and Miyamoto, C. and Zhang, H. and Maurya, V. and Vlachos, E. and Hecht, M. and Shum, C. W. and Levenson-Falk, E.},
+  title = {SQuADDS: A validated design database and simulation workflow for superconducting qubit design},
+  journal = {Quantum}, volume = {8}, pages = {1465}, year = {2024}}
+@misc{quantummetal,
+  author = {{Quantum Device Consortium}},
+  title = {Quantum Metal (formerly Qiskit Metal): documentation},
+  url = {https://qiskit-community.github.io/qiskit-metal}, year = {2026}}
+@misc{kqcircuits,
+  author = {{IQM}},
+  title = {KQCircuits: KLayout Python library for integrated quantum circuit design},
+  url = {https://github.com/iqm-finland/KQCircuits}, year = {2026}}
+@misc{palace,
+  author = {{AWS Labs}},
+  title = {Palace: 3D finite element solver for computational electromagnetics},
+  url = {https://github.com/awslabs/palace}, year = {2026}}
+@misc{sqdmetal2026,
+  author = {{APS March Meeting 2026}},
+  title = {Open-source highly parallel electromagnetic simulations for superconducting circuits (SQDMetal), abstract},
+  url = {https://meetings-archive.aps.org/smt/2026/mar-s32/13/}, year = {2026}}
+@misc{gdsfactory,
+  author = {{gdsfactory contributors}},
+  title = {gdsfactory: Python library for chip design},
+  url = {https://github.com/gdsfactory/gdsfactory}, year = {2026}}
+
+% ------------------------------------------------------------- numerics and ML
+@book{jin2014,
+  author = {Jin, J.-M.}, title = {The Finite Element Method in Electromagnetics}, edition = {3rd},
+  publisher = {Wiley}, year = {2014}}
+@article{gustavsen1999,
+  author = {Gustavsen, B. and Semlyen, A.},
+  title = {Rational approximation of frequency domain responses by vector fitting},
+  journal = {IEEE Trans. Power Delivery}, volume = {14}, pages = {1052}, year = {1999}}
+@article{odabasioglu1998,
+  author = {Odabasioglu, A. and Celik, M. and Pileggi, L. T.},
+  title = {PRIMA: passive reduced-order interconnect macromodeling algorithm},
+  journal = {IEEE Trans. Comput.-Aided Des.}, volume = {17}, pages = {645}, year = {1998}}
+@book{antoulas2005,
+  author = {Antoulas, A. C.}, title = {Approximation of Large-Scale Dynamical Systems},
+  publisher = {SIAM}, year = {2005}}
+@book{toselli2005,
+  author = {Toselli, A. and Widlund, O.}, title = {Domain Decomposition Methods: Algorithms and Theory},
+  publisher = {Springer}, year = {2005}}
+@inproceedings{li2021fno,
+  author = {Li, Z. and Kovachki, N. and Azizzadenesheli, K. and Liu, B. and Bhattacharya, K. and Stuart, A. and Anandkumar, A.},
+  title = {Fourier neural operator for parametric partial differential equations},
+  booktitle = {International Conference on Learning Representations (ICLR)}, year = {2021}}
+@article{lu2021deeponet,
+  author = {Lu, L. and Jin, P. and Pang, G. and Zhang, Z. and Karniadakis, G. E.},
+  title = {Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators},
+  journal = {Nat. Mach. Intell.}, volume = {3}, pages = {218}, year = {2021}}
+@article{raissi2019,
+  author = {Raissi, M. and Perdikaris, P. and Karniadakis, G. E.},
+  title = {Physics-informed neural networks: a deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations},
+  journal = {J. Comput. Phys.}, volume = {378}, pages = {686}, year = {2019}}
+@inproceedings{pfaff2021,
+  author = {Pfaff, T. and Fortunato, M. and Sanchez-Gonzalez, A. and Battaglia, P.},
+  title = {Learning mesh-based simulation with graph networks},
+  booktitle = {International Conference on Learning Representations (ICLR)}, year = {2021}}
+@article{angelopoulos2023,
+  author = {Angelopoulos, A. N. and Bates, S.},
+  title = {Conformal prediction: a gentle introduction},
+  journal = {Found. Trends Mach. Learn.}, volume = {16}, pages = {494}, year = {2023}}
+@article{cranmer2020,
+  author = {Cranmer, K. and Brehmer, J. and Louppe, G.},
+  title = {The frontier of simulation-based inference},
+  journal = {Proc. Natl. Acad. Sci. USA}, volume = {117}, pages = {30055}, year = {2020}}
+@book{rasmussen2006,
+  author = {Rasmussen, C. E. and Williams, C. K. I.}, title = {Gaussian Processes for Machine Learning},
+  publisher = {MIT Press}, year = {2006}}
+@misc{frazier2018,
+  author = {Frazier, P. I.}, title = {A tutorial on Bayesian optimization},
+  howpublished = {arXiv:1807.02811}, year = {2018}}
+@article{chaloner1995,
+  author = {Chaloner, K. and Verdinelli, I.},
+  title = {Bayesian experimental design: a review},
+  journal = {Stat. Sci.}, volume = {10}, pages = {273}, year = {1995}}
+@article{rainforth2024,
+  author = {Rainforth, T. and Foster, A. and Ivanova, D. R. and Bickford Smith, F.},
+  title = {Modern Bayesian experimental design},
+  journal = {Stat. Sci.}, volume = {39}, pages = {100}, year = {2024}}
+@article{nemirovski2006,
+  author = {Nemirovski, A. and Shapiro, A.},
+  title = {Convex approximations of chance constrained programs},
+  journal = {SIAM J. Optim.}, volume = {17}, pages = {969}, year = {2006}}
+@article{luedtke2008,
+  author = {Luedtke, J. and Ahmed, S.},
+  title = {A sample approximation approach for optimization with probabilistic constraints},
+  journal = {SIAM J. Optim.}, volume = {19}, pages = {674}, year = {2008}}
+
+% ---------------------------------------------------- classical EDA and yield
+@techreport{nagel1975,
+  author = {Nagel, L. W.},
+  title = {SPICE2: A computer program to simulate semiconductor circuits},
+  institution = {University of California, Berkeley}, number = {ERL-M520}, year = {1975}}
+@book{meadconway1980,
+  author = {Mead, C. and Conway, L.}, title = {Introduction to VLSI Systems},
+  publisher = {Addison-Wesley}, year = {1980}}
+@article{blaauw2008,
+  author = {Blaauw, D. and Chopra, K. and Srivastava, A. and Scheffer, L.},
+  title = {Statistical timing analysis: from basic principles to state of the art},
+  journal = {IEEE Trans. Comput.-Aided Des.}, volume = {27}, pages = {589}, year = {2008}}
+@book{orshansky2008,
+  author = {Orshansky, M. and Nassif, S. and Boning, D.},
+  title = {Design for Manufacturability and Statistical Design: A Constructive Approach},
+  publisher = {Springer}, year = {2008}}
+@article{pelgrom1989,
+  author = {Pelgrom, M. J. M. and Duinmaijer, A. C. J. and Welbers, A. P. G.},
+  title = {Matching properties of MOS transistors},
+  journal = {IEEE J. Solid-State Circuits}, volume = {24}, pages = {1433}, year = {1989}}
+@article{stapper1983,
+  author = {Stapper, C. H. and Armstrong, F. M. and Saji, K.},
+  title = {Integrated circuit yield statistics},
+  journal = {Proc. IEEE}, volume = {71}, pages = {453}, year = {1983}}
+@article{wu2015wafer,
+  author = {Wu, M.-J. and Jang, J.-S. R. and Chen, J.-L.},
+  title = {Wafer map failure pattern recognition and similarity ranking for large-scale data sets},
+  journal = {IEEE Trans. Semicond. Manuf.}, volume = {28}, pages = {1}, year = {2015}}
+@book{krylov2022,
+  author = {Krylov, G. and Friedman, E. G.}, title = {Single Flux Quantum Integrated Circuit Design}, edition = {2nd},
+  publisher = {Springer}, year = {2022}}
+@misc{seda2026,
+  author = {{IEEE Council on Superconductivity}},
+  title = {Review of superconductor electronic design automation (abstract, Superconductivity News Forum)},
+  url = {https://snf.ieeecsc.org/files/ieeecsc/2026-03/schindler-abstract.pdf}, year = {2026}}
+
+% ------------------------------------------------------ junctions and yield
+@article{ambegaokar1963,
+  author = {Ambegaokar, V. and Baratoff, A.},
+  title = {Tunneling between superconductors},
+  journal = {Phys. Rev. Lett.}, volume = {10}, pages = {486}, year = {1963}}
+@article{simmons1963,
+  author = {Simmons, J. G.},
+  title = {Generalized formula for the electric tunnel effect between similar electrodes separated by a thin insulating film},
+  journal = {J. Appl. Phys.}, volume = {34}, pages = {1793}, year = {1963}}
+@article{dolan1977,
+  author = {Dolan, G. J.}, title = {Offset masks for lift-off photoprocessing},
+  journal = {Appl. Phys. Lett.}, volume = {31}, pages = {337}, year = {1977}}
+@article{kreikebaum2020,
+  author = {Kreikebaum, J. M. and O'Brien, K. P. and Morvan, A. and Siddiqi, I.},
+  title = {Improving wafer-scale Josephson junction resistance variation in superconducting quantum coherent circuits},
+  journal = {Supercond. Sci. Technol.}, volume = {33}, pages = {06LT02}, year = {2020}}
+@inproceedings{brink2018,
+  author = {Brink, M. and Chow, J. M. and Hertzberg, J. and Magesan, E. and Rosenblatt, S.},
+  title = {Device challenges for near term superconducting quantum processors: frequency collisions},
+  booktitle = {IEEE International Electron Devices Meeting (IEDM)}, year = {2018}}
+@article{hertzberg2021,
+  author = {Hertzberg, J. B. and Zhang, E. J. and Rosenblatt, S. and Magesan, E. and Smolin, J. A. and Yau, J.-B. and Adiga, V. P. and Sandberg, M. and Brink, M. and Chow, J. M. and Orcutt, J. S.},
+  title = {Laser-annealing Josephson junctions for yielding scaled-up superconducting quantum processors},
+  journal = {npj Quantum Inf.}, volume = {7}, pages = {129}, year = {2021}}
+@article{zhang2022,
+  author = {Zhang, E. J. and Srinivasan, S. and Sundaresan, N. and others},
+  title = {High-performance superconducting quantum processors via laser annealing of transmon qubits},
+  journal = {Sci. Adv.}, volume = {8}, pages = {eabi6690}, year = {2022}}
+@article{morvan2022,
+  author = {Morvan, A. and Chen, L. and Larson, J. M. and Santiago, D. I. and Siddiqi, I.},
+  title = {Optimizing frequency allocation for fixed-frequency superconducting quantum processors},
+  journal = {Phys. Rev. Research}, volume = {4}, pages = {023079}, year = {2022}}
+@article{osman2023,
+  author = {Osman, A. and others},
+  title = {Mitigation of frequency collisions in superconducting quantum processors},
+  journal = {Phys. Rev. Research}, year = {2023}, note = {verify volume and pages}}
+@article{vandamme2024,
+  author = {Van Damme, J. and others},
+  title = {Advanced CMOS manufacturing of superconducting qubits on 300 mm wafers},
+  journal = {Nature}, year = {2024}}
+
+% ------------------------------------------------------------- materials, loss
+@article{martinis2005,
+  author = {Martinis, J. M. and others},
+  title = {Decoherence in Josephson qubits from dielectric loss},
+  journal = {Phys. Rev. Lett.}, volume = {95}, pages = {210503}, year = {2005}}
+@article{wenner2011,
+  author = {Wenner, J. and others},
+  title = {Surface loss simulations of superconducting coplanar waveguide resonators},
+  journal = {Appl. Phys. Lett.}, volume = {99}, pages = {113513}, year = {2011}}
+@article{wang2015,
+  author = {Wang, C. and Axline, C. and Gao, Y. Y. and Brecht, T. and Chu, Y. and Frunzio, L. and Devoret, M. H. and Schoelkopf, R. J.},
+  title = {Surface participation and dielectric loss in superconducting qubits},
+  journal = {Appl. Phys. Lett.}, volume = {107}, pages = {162601}, year = {2015}}
+@article{gambetta2017,
+  author = {Gambetta, J. M. and Murray, C. E. and Fung, Y.-K.-K. and McClure, D. T. and Dial, O. and Shanks, W. and Sleight, J. W. and Steffen, M.},
+  title = {Investigating surface loss effects in superconducting transmon qubits},
+  journal = {IEEE Trans. Appl. Supercond.}, volume = {27}, pages = {1700205}, year = {2017}}
+@article{muller2019,
+  author = {M{\"u}ller, C. and Cole, J. H. and Lisenfeld, J.},
+  title = {Towards understanding two-level-systems in amorphous solids: insights from quantum circuits},
+  journal = {Rep. Prog. Phys.}, volume = {82}, pages = {124501}, year = {2019}}
+@article{mcrae2020,
+  author = {McRae, C. R. H. and Wang, H. and Gao, J. and Vissers, M. R. and Brecht, T. and Dunsworth, A. and Pappas, D. P. and Mutus, J.},
+  title = {Materials loss measurements using superconducting microwave resonators},
+  journal = {Rev. Sci. Instrum.}, volume = {91}, pages = {091101}, year = {2020}}
+@article{place2021,
+  author = {Place, A. P. M. and others},
+  title = {New material platform for superconducting transmon qubits with coherence times exceeding 0.3 milliseconds},
+  journal = {Nat. Commun.}, volume = {12}, pages = {1779}, year = {2021}}
+@article{wang2022ta,
+  author = {Wang, C. and others},
+  title = {Towards practical quantum computers: transmon qubit with a lifetime approaching 0.5 milliseconds},
+  journal = {npj Quantum Inf.}, volume = {8}, pages = {3}, year = {2022}}
+@article{deleon2021,
+  author = {de Leon, N. P. and Itoh, K. M. and Kim, D. and Mehta, K. K. and Northup, T. E. and Paik, H. and Palmer, B. S. and Samarth, N. and Sangtawesin, S. and Steuerman, D. W.},
+  title = {Materials challenges and opportunities for quantum computing hardware},
+  journal = {Science}, volume = {372}, pages = {eabb2823}, year = {2021}}
+@article{siddiqi2021,
+  author = {Siddiqi, I.}, title = {Engineering high-coherence superconducting qubits},
+  journal = {Nat. Rev. Mater.}, volume = {6}, pages = {875}, year = {2021}}
+@article{murray2021,
+  author = {Murray, C. E.}, title = {Material matters in superconducting qubits},
+  journal = {Mater. Sci. Eng. R}, volume = {146}, pages = {100646}, year = {2021}}
+@article{klimov2018,
+  author = {Klimov, P. V. and others},
+  title = {Fluctuations of energy-relaxation times in superconducting qubits},
+  journal = {Phys. Rev. Lett.}, volume = {121}, pages = {090502}, year = {2018}}
+@article{vepsalainen2020,
+  author = {Veps{\"a}l{\"a}inen, A. P. and others},
+  title = {Impact of ionizing radiation on superconducting qubit coherence},
+  journal = {Nature}, volume = {584}, pages = {551}, year = {2020}}
+@article{mcewen2022,
+  author = {McEwen, M. and others},
+  title = {Resolving catastrophic error bursts from cosmic rays in large arrays of superconducting qubits},
+  journal = {Nat. Phys.}, volume = {18}, pages = {107}, year = {2022}}
+
+% ----------------------------------------------- packaging, wiring, control
+@article{rosenberg2017,
+  author = {Rosenberg, D. and others}, title = {3D integrated superconducting qubits},
+  journal = {npj Quantum Inf.}, volume = {3}, pages = {42}, year = {2017}}
+@article{yost2020,
+  author = {Yost, D. R. W. and others},
+  title = {Solid-state qubits integrated with superconducting through-silicon vias},
+  journal = {npj Quantum Inf.}, volume = {6}, pages = {59}, year = {2020}}
+@article{huang2021,
+  author = {Huang, S. and Lienhard, B. and Calusine, G. and Veps{\"a}l{\"a}inen, A. and Braum{\"u}ller, J. and Kim, D. K. and Melville, A. J. and Niedzielski, B. M. and Yoder, J. L. and Kannan, B. and Orlando, T. P. and Gustavsson, S. and Oliver, W. D.},
+  title = {Microwave package design for superconducting quantum processors},
+  journal = {PRX Quantum}, volume = {2}, pages = {020306}, year = {2021}}
+@article{krinner2019,
+  author = {Krinner, S. and Storz, S. and Kurpiers, P. and Magnard, P. and Heinsoo, J. and Keller, R. and L{\"u}tolf, J. and Eichler, C. and Wallraff, A.},
+  title = {Engineering cryogenic setups for 100-qubit scale superconducting circuit systems},
+  journal = {EPJ Quantum Technol.}, volume = {6}, pages = {2}, year = {2019}}
+@article{yeh2017,
+  author = {Yeh, J.-H. and LeFebvre, J. and Premaratne, S. and Wellstood, F. C. and Palmer, B. S.},
+  title = {Microwave attenuators for use with quantum devices below 100 mK},
+  journal = {J. Appl. Phys.}, volume = {121}, pages = {224501}, year = {2017}}
+@article{clerk2007,
+  author = {Clerk, A. A. and Utami, D. W.},
+  title = {Using a qubit to measure photon-number statistics of a driven thermal oscillator},
+  journal = {Phys. Rev. A}, volume = {75}, pages = {042302}, year = {2007}}
+@article{reilly2015,
+  author = {Reilly, D. J.}, title = {Engineering the quantum-classical interface of solid-state qubits},
+  journal = {npj Quantum Inf.}, volume = {1}, pages = {15011}, year = {2015}}
+@inproceedings{charbon2016,
+  author = {Charbon, E. and others}, title = {Cryo-CMOS for quantum computing},
+  booktitle = {IEEE International Electron Devices Meeting (IEDM)}, year = {2016}}
+@article{patra2018,
+  author = {Patra, B. and others},
+  title = {Cryo-CMOS circuits and systems for quantum computing applications},
+  journal = {IEEE J. Solid-State Circuits}, volume = {53}, pages = {309}, year = {2018}}
+@article{bardin2019,
+  author = {Bardin, J. C. and others},
+  title = {Design and characterization of a 28-nm bulk-CMOS cryogenic quantum controller dissipating less than 2 mW at 3 K},
+  journal = {IEEE J. Solid-State Circuits}, volume = {54}, pages = {3043}, year = {2019}}
+@article{xue2021,
+  author = {Xue, X. and others}, title = {CMOS-based cryogenic control of silicon quantum circuits},
+  journal = {Nature}, volume = {593}, pages = {205}, year = {2021}}
+@article{mcdermott2018,
+  author = {McDermott, R. and others},
+  title = {Quantum-classical interface based on single flux quantum digital logic},
+  journal = {Quantum Sci. Technol.}, volume = {3}, pages = {024004}, year = {2018}}
+
+% --------------------------------------------- test, characterisation, control
+@article{neyens2024,
+  author = {Neyens, S. and others}, title = {Probing single electrons across 300-mm spin qubit wafers},
+  journal = {Nature}, year = {2024}}
+@article{magesan2011,
+  author = {Magesan, E. and Gambetta, J. M. and Emerson, J.},
+  title = {Scalable and robust randomized benchmarking of quantum processes},
+  journal = {Phys. Rev. Lett.}, volume = {106}, pages = {180504}, year = {2011}}
+@article{motzoi2009,
+  author = {Motzoi, F. and Gambetta, J. M. and Rebentrost, P. and Wilhelm, F. K.},
+  title = {Simple pulses for elimination of leakage in weakly nonlinear qubits},
+  journal = {Phys. Rev. Lett.}, volume = {103}, pages = {110501}, year = {2009}}
+@misc{kelly2018,
+  author = {Kelly, J. and O'Malley, P. and Neeley, M. and Neven, H. and Martinis, J. M.},
+  title = {Physical qubit calibration on a directed acyclic graph},
+  howpublished = {arXiv:1803.03226}, year = {2018}}
+@article{granade2012,
+  author = {Granade, C. E. and Ferrie, C. and Wiebe, N. and Cory, D. G.},
+  title = {Robust online Hamiltonian learning},
+  journal = {New J. Phys.}, volume = {14}, pages = {103013}, year = {2012}}
+@article{wittler2021,
+  author = {Wittler, N. and Roy, F. and Pack, K. and Werninghaus, M. and Roy, A. S. and Egger, D. J. and Filipp, S. and Wilhelm, F. K. and Machnes, S.},
+  title = {Integrated tool set for control, calibration, and characterization of quantum devices applied to superconducting qubits},
+  journal = {Phys. Rev. Applied}, volume = {15}, pages = {034080}, year = {2021}}
+@article{eisert2020,
+  author = {Eisert, J. and Hangleiter, D. and Walk, N. and Roth, I. and Markham, D. and Parekh, R. and Chabaud, U. and Kashefi, E.},
+  title = {Quantum certification and benchmarking},
+  journal = {Nat. Rev. Phys.}, volume = {2}, pages = {382}, year = {2020}}
+
+% ------------------------------------------------------------ error correction
+@article{dennis2002,
+  author = {Dennis, E. and Kitaev, A. and Landahl, A. and Preskill, J.},
+  title = {Topological quantum memory},
+  journal = {J. Math. Phys.}, volume = {43}, pages = {4452}, year = {2002}}
+@article{fowler2012,
+  author = {Fowler, A. G. and Mariantoni, M. and Martinis, J. M. and Cleland, A. N.},
+  title = {Surface codes: towards practical large-scale quantum computation},
+  journal = {Phys. Rev. A}, volume = {86}, pages = {032324}, year = {2012}}
+@article{terhal2015,
+  author = {Terhal, B. M.}, title = {Quantum error correction for quantum memories},
+  journal = {Rev. Mod. Phys.}, volume = {87}, pages = {307}, year = {2015}}
+@article{gidney2021stim,
+  author = {Gidney, C.}, title = {Stim: a fast stabilizer circuit simulator},
+  journal = {Quantum}, volume = {5}, pages = {497}, year = {2021}}
+@article{higgott2022,
+  author = {Higgott, O.},
+  title = {PyMatching: A Python package for decoding quantum codes with minimum-weight perfect matching},
+  journal = {ACM Trans. Quantum Comput.}, volume = {3}, pages = {16}, year = {2022}}
+@misc{higgott2023,
+  author = {Higgott, O. and Gidney, C.},
+  title = {Sparse Blossom: correcting a million errors per core second with minimum-weight matching},
+  howpublished = {arXiv:2303.15933}, year = {2023}}
+@article{delfosse2021,
+  author = {Delfosse, N. and Nickerson, N. H.},
+  title = {Almost-linear time decoding algorithm for topological codes},
+  journal = {Quantum}, volume = {5}, pages = {595}, year = {2021}}
+@article{roffe2020,
+  author = {Roffe, J. and White, D. R. and Burton, S. and Campbell, E.},
+  title = {Decoding across the quantum low-density parity-check code landscape},
+  journal = {Phys. Rev. Research}, volume = {2}, pages = {043423}, year = {2020}}
+@article{panteleev2021,
+  author = {Panteleev, P. and Kalachev, G.},
+  title = {Degenerate quantum LDPC codes with good finite length performance},
+  journal = {Quantum}, volume = {5}, pages = {585}, year = {2021}}
+@article{breuckmann2021,
+  author = {Breuckmann, N. P. and Eberhardt, J. N.},
+  title = {Quantum low-density parity-check codes},
+  journal = {PRX Quantum}, volume = {2}, pages = {040101}, year = {2021}}
+@article{bravyi2024,
+  author = {Bravyi, S. and Cross, A. W. and Gambetta, J. M. and Maslov, D. and Rall, P. and Yoder, T. J.},
+  title = {High-threshold and low-overhead fault-tolerant quantum memory},
+  journal = {Nature}, volume = {627}, pages = {778}, year = {2024}}
+@article{google2023,
+  author = {{Google Quantum AI}},
+  title = {Suppressing quantum errors by scaling a surface code logical qubit},
+  journal = {Nature}, volume = {614}, pages = {676}, year = {2023}}
+@article{google2025,
+  author = {{Google Quantum AI and Collaborators}},
+  title = {Quantum error correction below the surface code threshold},
+  journal = {Nature}, volume = {638}, pages = {920}, year = {2025}}
+@article{bausch2024,
+  author = {Bausch, J. and others},
+  title = {Learning high-accuracy error decoding for quantum processors},
+  journal = {Nature}, volume = {635}, pages = {834}, year = {2024}}
+@misc{alphaqubit2,
+  author = {{Google DeepMind and Google Quantum AI}},
+  title = {Real-time neural decoding (AlphaQubit 2), preprint},
+  howpublished = {arXiv:2512.07737}, year = {2025}, note = {verify title}}
+@article{battistel2023,
+  author = {Battistel, F. and others},
+  title = {Real-time decoding for fault-tolerant quantum computing: progress, challenges and outlook},
+  journal = {Nano Futures}, volume = {7}, pages = {032003}, year = {2023}}
+@article{barber2025,
+  author = {Barber, B. and others},
+  title = {A real-time, scalable, fast and resource-efficient decoder for a quantum computer},
+  journal = {Nat. Electron.}, year = {2025}, note = {verify volume and pages}}
+@article{auger2017,
+  author = {Auger, J. M. and Anwar, H. and Gimeno-Segovia, M. and Stace, T. M. and Browne, D. E.},
+  title = {Fault-tolerance thresholds for the surface code with fabrication errors},
+  journal = {Phys. Rev. A}, volume = {96}, pages = {042316}, year = {2017}}
+@article{nagayama2017,
+  author = {Nagayama, S. and Fowler, A. G. and Horsman, D. and Devitt, S. J. and Van Meter, R.},
+  title = {Surface code error correction on a defective lattice},
+  journal = {New J. Phys.}, volume = {19}, pages = {023050}, year = {2017}}
+@article{strikis2023,
+  author = {Strikis, A. and Benjamin, S. C. and Brown, B. J.},
+  title = {Quantum computing is scalable on a planar array of qubits with fabrication defects},
+  journal = {Phys. Rev. Applied}, volume = {19}, pages = {064081}, year = {2023}}
+@article{bravyi2013,
+  author = {Bravyi, S. and Vargo, A.},
+  title = {Simulation of rare events in quantum error correction},
+  journal = {Phys. Rev. A}, volume = {88}, pages = {062308}, year = {2013}}
+@article{gidney2021rsa,
+  author = {Gidney, C. and Eker{\aa}, M.},
+  title = {How to factor 2048 bit RSA integers in 8 hours using 20 million noisy qubits},
+  journal = {Quantum}, volume = {5}, pages = {433}, year = {2021}}
+@misc{gidney2025rsa,
+  author = {Gidney, C.},
+  title = {How to factor 2048 bit RSA integers with less than a million noisy qubits},
+  howpublished = {arXiv:2505.15917}, year = {2025}}
+@misc{beverland2022,
+  author = {Beverland, M. E. and others},
+  title = {Assessing requirements to scale to practical quantum advantage},
+  howpublished = {arXiv:2211.07629}, year = {2022}}
+@article{guillaud2019,
+  author = {Guillaud, J. and Mirrahimi, M.},
+  title = {Repetition cat qubits for fault-tolerant quantum computation},
+  journal = {Phys. Rev. X}, volume = {9}, pages = {041053}, year = {2019}}
+@article{puri2020,
+  author = {Puri, S. and others}, title = {Bias-preserving gates with stabilized cat qubits},
+  journal = {Sci. Adv.}, volume = {6}, pages = {eaay5901}, year = {2020}}
+@article{putterman2025,
+  author = {Putterman, H. and others},
+  title = {Hardware-efficient quantum error correction via concatenated bosonic qubits},
+  journal = {Nature}, volume = {638}, pages = {927}, year = {2025}}
+@article{xu2024,
+  author = {Xu, Q. and Bonilla Ataides, J. P. and Pattison, C. A. and Raveendran, N. and Bluvstein, D. and Wurtz, J. and Vasi{\'c}, B. and Lukin, M. D. and Jiang, L. and Zhou, H.},
+  title = {Constant-overhead fault-tolerant quantum computation with reconfigurable atom arrays},
+  journal = {Nat. Phys.}, volume = {20}, pages = {1084}, year = {2024}}
+
+% ------------------------------------------------------------- trapped ions
+@article{leibfried2003,
+  author = {Leibfried, D. and Blatt, R. and Monroe, C. and Wineland, D.},
+  title = {Quantum dynamics of single trapped ions},
+  journal = {Rev. Mod. Phys.}, volume = {75}, pages = {281}, year = {2003}}
+@article{kielpinski2002,
+  author = {Kielpinski, D. and Monroe, C. and Wineland, D. J.},
+  title = {Architecture for a large-scale ion-trap quantum computer},
+  journal = {Nature}, volume = {417}, pages = {709}, year = {2002}}
+@article{chiaverini2005,
+  author = {Chiaverini, J. and others},
+  title = {Surface-electrode architecture for ion-trap quantum information processing},
+  journal = {Quantum Inf. Comput.}, volume = {5}, pages = {419}, year = {2005}}
+@article{house2008,
+  author = {House, M. G.},
+  title = {Analytic model for electrostatic fields in surface-electrode ion traps},
+  journal = {Phys. Rev. A}, volume = {78}, pages = {033402}, year = {2008}}
+@article{brownnutt2015,
+  author = {Brownnutt, M. and Kumph, M. and Rabl, P. and Blatt, R.},
+  title = {Ion-trap measurements of electric-field noise near surfaces},
+  journal = {Rev. Mod. Phys.}, volume = {87}, pages = {1419}, year = {2015}}
+@article{bruzewicz2019,
+  author = {Bruzewicz, C. D. and Chiaverini, J. and McConnell, R. and Sage, J. M.},
+  title = {Trapped-ion quantum computing: progress and challenges},
+  journal = {Appl. Phys. Rev.}, volume = {6}, pages = {021314}, year = {2019}}
+@article{pino2021,
+  author = {Pino, J. M. and others},
+  title = {Demonstration of the trapped-ion quantum CCD computer architecture},
+  journal = {Nature}, volume = {592}, pages = {209}, year = {2021}}
+@article{moses2023,
+  author = {Moses, S. A. and others}, title = {A race-track trapped-ion quantum processor},
+  journal = {Phys. Rev. X}, volume = {13}, pages = {041052}, year = {2023}}
+@article{ospelkaus2011,
+  author = {Ospelkaus, C. and others}, title = {Microwave quantum logic gates for trapped ions},
+  journal = {Nature}, volume = {476}, pages = {181}, year = {2011}}
+@article{srinivas2021,
+  author = {Srinivas, R. and others},
+  title = {High-fidelity laser-free universal control of trapped ion qubits},
+  journal = {Nature}, volume = {597}, pages = {209}, year = {2021}}
+@article{mehta2020,
+  author = {Mehta, K. K. and Zhang, C. and Malinowski, M. and Nguyen, T.-L. and Stadler, M. and Home, J. P.},
+  title = {Integrated optical multi-ion quantum logic},
+  journal = {Nature}, volume = {586}, pages = {533}, year = {2020}}
+@article{niffenegger2020,
+  author = {Niffenegger, R. J. and others}, title = {Integrated multi-wavelength control of an ion qubit},
+  journal = {Nature}, volume = {586}, pages = {538}, year = {2020}}
+
+% ----------------------------------------------------------------- photonics
+@article{gottesman2001,
+  author = {Gottesman, D. and Kitaev, A. and Preskill, J.}, title = {Encoding a qubit in an oscillator},
+  journal = {Phys. Rev. A}, volume = {64}, pages = {012310}, year = {2001}}
+@article{rudolph2017,
+  author = {Rudolph, T.},
+  title = {Why I am optimistic about the silicon-photonic route to quantum computing},
+  journal = {APL Photonics}, volume = {2}, pages = {030901}, year = {2017}}
+@article{bourassa2021,
+  author = {Bourassa, J. E. and others},
+  title = {Blueprint for a scalable photonic fault-tolerant quantum computer},
+  journal = {Quantum}, volume = {5}, pages = {392}, year = {2021}}
+@article{bartolucci2023,
+  author = {Bartolucci, S. and others}, title = {Fusion-based quantum computation},
+  journal = {Nat. Commun.}, volume = {14}, pages = {912}, year = {2023}}
+@article{madsen2022,
+  author = {Madsen, L. S. and others},
+  title = {Quantum computational advantage with a programmable photonic processor},
+  journal = {Nature}, volume = {606}, pages = {75}, year = {2022}}
+@article{aghaeerad2025,
+  author = {Aghaee Rad, H. and others},
+  title = {Scaling and networking a modular photonic quantum computer},
+  journal = {Nature}, year = {2025}}
+@article{psiquantum2025,
+  author = {{PsiQuantum team}},
+  title = {A manufacturable platform for photonic quantum computing},
+  journal = {Nature}, volume = {641}, year = {2025}}
+@article{wang2020photonics,
+  author = {Wang, J. and Sciarrino, F. and Laing, A. and Thompson, M. G.},
+  title = {Integrated photonic quantum technologies},
+  journal = {Nat. Photon.}, volume = {14}, pages = {273}, year = {2020}}
+@article{bogaerts2018,
+  author = {Bogaerts, W. and Chrostowski, L.},
+  title = {Silicon photonics circuit design: methods, tools and challenges},
+  journal = {Laser Photonics Rev.}, volume = {12}, pages = {1700237}, year = {2018}}
+@article{somaschi2016,
+  author = {Somaschi, N. and others}, title = {Near-optimal single-photon sources in the solid state},
+  journal = {Nat. Photon.}, volume = {10}, pages = {340}, year = {2016}}
+@article{maring2024,
+  author = {Maring, N. and others},
+  title = {A versatile single-photon-based quantum computing platform},
+  journal = {Nat. Photon.}, year = {2024}}
+
+% ----------------------------------------------------- spins, atoms, topology
+@article{loss1998,
+  author = {Loss, D. and DiVincenzo, D. P.}, title = {Quantum computation with quantum dots},
+  journal = {Phys. Rev. A}, volume = {57}, pages = {120}, year = {1998}}
+@article{vandersypen2017,
+  author = {Vandersypen, L. M. K. and others},
+  title = {Interfacing spin qubits in quantum dots and donors: hot, dense, and coherent},
+  journal = {npj Quantum Inf.}, volume = {3}, pages = {34}, year = {2017}}
+@article{burkard2023,
+  author = {Burkard, G. and Ladd, T. D. and Pan, A. and Nichol, J. M. and Petta, J. R.},
+  title = {Semiconductor spin qubits},
+  journal = {Rev. Mod. Phys.}, volume = {95}, pages = {025003}, year = {2023}}
+@article{zwerver2022,
+  author = {Zwerver, A. M. J. and others}, title = {Qubits made by advanced semiconductor manufacturing},
+  journal = {Nat. Electron.}, volume = {5}, pages = {184}, year = {2022}}
+@article{xue2022,
+  author = {Xue, X. and others},
+  title = {Quantum logic with spin qubits crossing the surface code threshold},
+  journal = {Nature}, volume = {601}, pages = {343}, year = {2022}}
+@article{beaudoin2022,
+  author = {Beaudoin, F. and others},
+  title = {Robust technology computer-aided design of gated quantum dots at cryogenic temperature},
+  journal = {Appl. Phys. Lett.}, year = {2022}, note = {verify authors, volume and pages}}
+@article{saffman2010,
+  author = {Saffman, M. and Walker, T. G. and M{\o}lmer, K.}, title = {Quantum information with Rydberg atoms},
+  journal = {Rev. Mod. Phys.}, volume = {82}, pages = {2313}, year = {2010}}
+@article{bluvstein2022,
+  author = {Bluvstein, D. and others},
+  title = {A quantum processor based on coherent transport of entangled atom arrays},
+  journal = {Nature}, volume = {604}, pages = {451}, year = {2022}}
+@article{evered2023,
+  author = {Evered, S. J. and others},
+  title = {High-fidelity parallel entangling gates on a neutral-atom quantum computer},
+  journal = {Nature}, volume = {622}, pages = {268}, year = {2023}}
+@article{bluvstein2024,
+  author = {Bluvstein, D. and others},
+  title = {Logical quantum processor based on reconfigurable atom arrays},
+  journal = {Nature}, volume = {626}, pages = {58}, year = {2024}}
+@article{nayak2008,
+  author = {Nayak, C. and Simon, S. H. and Stern, A. and Freedman, M. and Das Sarma, S.},
+  title = {Non-Abelian anyons and topological quantum computation},
+  journal = {Rev. Mod. Phys.}, volume = {80}, pages = {1083}, year = {2008}}
+@article{aghaee2023,
+  author = {Aghaee, M. and others},
+  title = {InAs-Al hybrid devices passing the topological gap protocol},
+  journal = {Phys. Rev. B}, volume = {107}, pages = {245423}, year = {2023}}
+@article{msft2025,
+  author = {{Microsoft Azure Quantum}},
+  title = {Interferometric single-shot parity measurement in InAs--Al hybrid devices},
+  journal = {Nature}, year = {2025}}
+
+% ------------------------------------------------- industry sources (web)
+@misc{web_anderon,
+  author = {{IBM Newsroom}}, title = {Anderon, an IBM company, finalizes agreement with the U.S. Department of Commerce for a \$1 billion CHIPS award},
+  url = {https://newsroom.ibm.com/2026-09-16-anderon,-an-ibm-company,-finalizes-agreement-with-the-u-s-department-of-commerce-for-a-1-billion-chips-award-to-accelerate-r-d-for-u-s-based-pure-play-quantum-foundry}, year = {2026}}
+@misc{web_anderon_ieee,
+  author = {{IEEE Spectrum}}, title = {Anderon quantum fab},
+  url = {https://spectrum.ieee.org/anderon-quantum-fab}, year = {2026}}
+@misc{web_anderon_futurum,
+  author = {{Futurum Group}}, title = {Anderon finalizes \$1 billion CHIPS award. Who buys quantum wafers besides IBM?},
+  url = {https://futurumgroup.com/insights/anderon-finalizes-1-billion-chips-award-who-buys-quantum-wafers-besides-ibm/}, year = {2026}}
+@misc{web_ibm_roadmap,
+  author = {{Quantum Computing Report}}, title = {IBM advances quantum roadmap with Nighthawk processor and 300mm wafer fabrication shift},
+  url = {https://quantumcomputingreport.com/ibm-advances-quantum-roadmap-with-nighthawk-processor-and-300mm-wafer-fabrication-shift/}, year = {2025}}
+@misc{web_ibm_10b,
+  author = {{NAND Research}}, title = {IBM's big quantum month: a \$10 billion bet, a national fab and a 2029 deadline},
+  url = {https://nand-research.com/ibms-big-quantum-month-a-10-billion-bet-a-national-fab-and-a-2029-deadline/}, year = {2026}}
+@misc{web_ionq_skywater,
+  author = {{Quantum Computing Report}}, title = {IonQ completes acquisition of SkyWater Technology},
+  url = {https://quantumcomputingreport.com/ionq-completes-acquisition-of-skywater-technology-establishing-vertically-integrated-quantum-platform/}, year = {2026}}
+@misc{web_ionq_10q,
+  author = {{IonQ, Inc.}}, title = {Form 10-Q for the quarter ended June 30, 2026},
+  url = {https://www.sec.gov/Archives/edgar/data/0001824920/000119312526341001/ionq-20260630.htm}, year = {2026}}
+@misc{web_ionq_nexus,
+  author = {{IonQ}}, title = {IonQ completes acquisition of Nexus Photonics},
+  url = {https://ionq.com/news/ionq-completes-acquisition-of-nexus-photonics-securing-scalable-manufacturing-for-quantum-systems}, year = {2026}}
+@misc{web_forbes_ionq,
+  author = {McDowell, S.}, title = {Acquisitions reshape the quantum computing supply chain (Forbes)},
+  url = {https://www.forbes.com/sites/stevemcdowell/2026/10/13/ionqs-skywater-and-elisity-deals-reshape-the-quantum-supply-chain/}, year = {2026}}
+@misc{web_intel_classiq,
+  author = {{The Next Platform}}, title = {Intel's \$2.3 billion bet on a quantum future is a decade in the making},
+  url = {https://www.nextplatform.com/hpc/2026/10/28/intels-23-billion-bet-on-a-quantum-future-is-a-decade-in-the-making/5306068}, year = {2026}}
+@misc{web_darpa_qbi,
+  author = {{DARPA}}, title = {Four more teams enter Quantum Benchmarking Initiative final stage},
+  url = {https://www.darpa.mil/news/2026/four-more-teams-enter-quantum-benchmarking-initiative-final-stage}, year = {2026}}
+@misc{web_google_atoms,
+  author = {{Google}}, title = {Building superconducting and neutral atom quantum computers},
+  url = {https://blog.google/innovation-and-ai/technology/research/neutral-atom-quantum-computers/}, year = {2026}}
+@misc{web_google_aq,
+  author = {{Google}}, title = {Scaling quantum computing even faster with Atlantic Quantum},
+  url = {https://blog.google/innovation-and-ai/technology/research/scaling-quantum-computing-even-faster-with-atlantic-quantum/}, year = {2025}}
+@misc{web_keysight_qp,
+  author = {{Keysight Technologies}}, title = {Keysight introduces QuantumPro, delivering first integrated EDA workflow for qubit design},
+  url = {https://businesswire.com/news/home/20240227806272/en/5604858/Keysight-Introduces-QuantumPro-Delivering-First-Integrated-EDA-Workflow-for-Qubit-Design}, year = {2024}}
+@misc{web_keysight_qsa,
+  author = {{Keysight Technologies}}, title = {Keysight advances quantum engineering with new system level simulation solution},
+  url = {https://secure.businesswire.com/news/home/20251029479303/en/Keysight-Advances-Quantum-Engineering-with-New-System-Level-Simulation-Solution}, year = {2025}}
+@misc{web_synopsys_q,
+  author = {{Synopsys}}, title = {From bits to qubits: how Synopsys is helping advance quantum computing R\&D},
+  url = {https://www.synopsys.com/blogs/chip-design/advancing-quantum-computing-rd.html}, year = {2025}}
+@misc{web_synopsys_qtnm,
+  author = {{Quantinuum}}, title = {Quantinuum announces collaboration with Synopsys toward advancing industrial design with quantum computing},
+  url = {https://ir.quantinuum.com/news-releases/news-release-details/quantinuum-announces-collaboration-synopsys-toward-advancing}, year = {2026}}
+@misc{web_cadence_equal1,
+  author = {{Cadence}}, title = {Equal1 builds the world's first silicon-based quantum computer with Cadence tools},
+  url = {https://www.cadence.com/en_US/home/resources/videos/designed-with-cadence/equal1-builds-the-worlds-first-silicon-based-quantum-computer.html}, year = {2026}}
+@misc{web_cadence_cryo,
+  author = {{Design \& Reuse}}, title = {Semiwise, sureCore and Cadence showcase breakthrough in cryogenic CMOS circuit development},
+  url = {https://us.design-reuse.com/news/56417/semiwise-surecore-cadence-cryogenic-cmos.html}, year = {2024}}
+@misc{web_quera_roadmap,
+  author = {{QuEra Computing}}, title = {QuEra unveils gigaquop-class fault-tolerant roadmap},
+  url = {https://www.quera.com/press-releases/quera-unveils-gigaquop-class-fault-tolerant-roadmap-and-invites-organizations-to-co-design-quantum-applications}, year = {2026}}
+@misc{web_quandela,
+  author = {{Quandela}}, title = {Roadmap brochure 2026--2033},
+  url = {https://www.quandela.com/wp-content/uploads/2026/04/Roadmap-brochure-220426-web.pdf}, year = {2026}}
+@misc{web_xanadu_gf,
+  author = {{The Quantum Insider}}, title = {Xanadu and GlobalFoundries partner on photonic quantum manufacturing},
+  url = {https://thequantuminsider.com/2026/10/06/xanadu-globalfoundries-photonic-quantum-manufacturing}, year = {2026}}
+@misc{web_xanadu_tower,
+  author = {{The Quantum Insider}}, title = {Tower and Xanadu advance manufacturing for photonic quantum chips},
+  url = {https://thequantuminsider.com/2026/02/19/tower-xanadu-quantum-chip-manufacturing/}, year = {2026}}
+@misc{web_xanadu_evg,
+  author = {{EV Group}}, title = {Xanadu and EV Group partner to build industrial-scale photonic quantum hardware},
+  url = {https://www.evgroup.com/company/news/detail/xanadu-and-ev-group-partner-to-build-industrial-scale-photonic-quantum-hardware}, year = {2026}}
+@misc{web_xanadu_ipo,
+  author = {{The Quantum Insider}}, title = {Xanadu becomes first pure-play photonic quantum computing company to go public},
+  url = {https://thequantuminsider.com/2026/03/27/xanadu-becomes-first-pure-play-photonic-quantum-computing-company-to-go-public/}, year = {2026}}
+@misc{web_psiq,
+  author = {{PsiQuantum}}, title = {Our path to a useful quantum computer},
+  url = {https://psiquantum.com/technology}, year = {2026}}
+@misc{web_qolab_b,
+  author = {{Qolab}}, title = {Qolab announces \$54.2 million Series B financing},
+  url = {https://qolab.ai/press-releases/qolab-announces-54-2-million-series-b-financing-and-commitments-led-by-uc-investments}, year = {2026}}
+@misc{web_qolab_skywater,
+  author = {{Qolab}}, title = {Qolab and SkyWater announce commercial foundry collaboration},
+  url = {https://qolab.ai/news-and-updates/qolab-and-skywater-announce-commercial-foundry-collaboration}, year = {2026}}
+@misc{web_quantware,
+  author = {{QuantWare}}, title = {QuantWare raises \$178 million},
+  url = {https://quantware.com/news/quantware-raises-178-million}, year = {2026}}
+@misc{web_riverlane,
+  author = {{Quantum Computing Report}}, title = {Riverlane publishes QEC technology roadmap},
+  url = {https://quantumcomputingreport.com/riverlane-publishes-qec-technology-roadmap-to-accelerate-utility-scale-quantum-computing/}, year = {2026}}
+@misc{web_nvidia_gtc26,
+  author = {{NVIDIA}}, title = {CUDA-Q accelerates quantum workloads at GTC 2026},
+  url = {https://nvidia.github.io/cuda-quantum/blogs/blog/2026/03/16/cudaq-GTC-26}, year = {2026}}
+@misc{web_nvqlink,
+  author = {{Quantum Computing Report}}, title = {NVIDIA's NVQLink unites quantum ecosystem for real-time error correction},
+  url = {https://quantumcomputingreport.com/nvidias-nvqlink-unites-quantum-ecosystem-for-real-time-error-correction/}, year = {2025}}
+@misc{web_msft_maj2,
+  author = {{Microsoft Quantum}}, title = {The Majorana 2 quantum processor},
+  url = {https://quantum.microsoft.com/en-us/insights/blogs/majorana-2-scalable-quantum-processor}, year = {2026}}
+@misc{web_msft_darpa,
+  author = {{The Quantum Insider}}, title = {Microsoft gives DARPA access to Majorana system, opens Maryland quantum research center},
+  url = {https://thequantuminsider.com/2026/09/22/microsoft-gives-darpa-access-to-majorana-system-opens-maryland-quantum-research-center/}, year = {2026}}
+@misc{web_bluefors,
+  author = {{everything RF}}, title = {Cryogenic wafer prober from Bluefors accelerates quantum device development below 2 K},
+  url = {https://www.everythingrf.com/news/details/21262-cryogenic-wafer-prober-from-bluefors-accelerates-quantum-device-development-below-2-k}, year = {2023}}
+@misc{web_qtcad,
+  author = {{Nanoacademic Technologies}}, title = {QTCAD},
+  url = {https://nanoacademic.com/products/qtcad/}, year = {2026}}
+@misc{web_zi_zqcs,
+  author = {{The Quantum Insider}}, title = {Zurich Instruments launches the ZQCS quantum control system},
+  url = {https://thequantuminsider.com/2026/03/09/zurich-instruments-zqcs-quantum-control-system-logical-qubits/}, year = {2026}}
+@misc{web_quantinuum_ipo,
+  author = {{SiliconANGLE}}, title = {Trapped-ion quantum computer startup Quantinuum files to go public},
+  url = {https://siliconangle.com/2026/05/26/trapped-ion-quantum-computer-startup-quantinuum-files-go-public/}, year = {2026}}
+@misc{web_quantinuum_infineon,
+  author = {{The Quantum Insider}}, title = {Quantinuum, Infineon partner to build ion trap quantum computers},
+  url = {https://thequantuminsider.com/2024/11/19/quantinuum-infineon-partner-to-build-ion-trap-quantum-computers/}, year = {2024}}
+@misc{web_semieng_q3,
+  author = {{Semiconductor Engineering}}, title = {Startup funding: Q3 2026},
+  url = {https://semiengineering.com/startup-funding-q3-2026/}, year = {2026}}
+@misc{web_dcd_q2,
+  author = {{DCD}}, title = {Quantum earnings Q2 2026},
+  url = {https://www.datacenterdynamics.com/en/news/quantum-earnings-q2-2026-d-wave-ionq-and-rigetti-publish-financial-results-alongside-newly-ipo-ed-iqm-quantum-computers/}, year = {2026}}
+@misc{web_mna,
+  author = {{Entangled Future}}, title = {Quantum computing acquisitions and M\&A 2026},
+  url = {https://entangledfuture.com/acquisitions/}, year = {2026}}
+@misc{web_alicebob_nv,
+  author = {{Maddyness}}, title = {Quantum: NVIDIA takes a stake in Alice \& Bob},
+  url = {https://www.maddyness.com/uk/2026/05/26/quantum-nvidia-takes-a-stake-in-alice-bob/}, year = {2026}}
+@misc{web_infleqtion,
+  author = {{The Quantum Insider}}, title = {Infleqtion announces 2026 revenue guidance of \$40 million},
+  url = {https://thequantuminsider.com/2026/04/09/infleqtion-announces-2026-revenue-guidance-of-40-million/}, year = {2026}}
