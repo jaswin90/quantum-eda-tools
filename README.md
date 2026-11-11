@@ -8,7 +8,7 @@ design to calibrated operation, what existing tools do, and seven open problems 
 (Settings → Pages → Deploy from branch → `/docs`). The page is self-contained and renders
 equations offline with vendored KaTeX.
 
-![Title page and abstract](docs/screenshots/01-title-abstract.png)
+![Title page and abstract](screenshots/01-title-abstract.png)
 
 ## Contents of the review
 
@@ -30,8 +30,8 @@ About 12,600 words, 39 numbered equations, 7 computed figures, 7 tables and 205 
 
 | Equations | Computed figures |
 |---|---|
-| ![Transmon equations](docs/screenshots/02-transmon-equations.png) | ![Collision yield figure](docs/screenshots/03-collision-yield.png) |
-| ![QEC scaling](docs/screenshots/04-qec-scaling.png) | ![Open problem statement](docs/screenshots/05-open-problem.png) |
+| ![Transmon equations](screenshots/02-transmon-equations.png) | ![Collision yield figure](screenshots/03-collision-yield.png) |
+| ![QEC scaling](screenshots/04-qec-scaling.png) | ![Open problem statement](screenshots/05-open-problem.png) |
 
 ## Repository layout
 
@@ -47,10 +47,11 @@ scripts/
   build.py               numbers sections/equations/figures, resolves citations
 docs/                    built site (GitHub Pages root)
   index.html             the assembled article (generated; do not edit)
-  assets/style.css
+  assets/css/book.css   book stylesheet (library theme variables)
+  assets/js/book.js     dark-mode toggle and library hooks
   figures/*.svg          generated figures
   vendor/katex/          KaTeX 0.16.11 (MIT licence)
-  screenshots/           previews used in this README
+screenshots/             previews used in this README
 Makefile
 ```
 
