@@ -4,38 +4,130 @@
 <li>Use the partial trace to describe one part of a composite system.</li>
 <li>Recognise entanglement, quantify it for pure states, and understand why it is not a means of signalling.</li>
 <li>Derive the CHSH inequality and its quantum violation.</li>
+<li>Measure how close a prepared state is to a target with fidelity and trace distance.</li>
 </ul></div>
 
+<div class="bigpic"><p>So far each state was a single vector, known exactly. Real qubits are never that tidy: they start slightly hot, they are imperfectly controlled, and above all they become correlated with things we cannot see. This chapter introduces the tool that handles all of that, the <b>density matrix</b>, and uses it to describe systems made of several parts. That brings us to <b>entanglement</b>, the correlation between quantum systems that has no classical counterpart. Entanglement is both the resource that makes quantum computers powerful and, when a qubit entangles with its environment, the mechanism that destroys their information. The same mathematics describes both.</p></div>
+
 <h3 id="sec-q-comp-rho">The density matrix</h3>
-<p>Postulate 1 describes a system whose state we know exactly. In practice we are often uncertain: a qubit prepared with a thermal population, a photon from a source that sometimes fails, a qubit entangled with an environment we cannot see. If the system is in state \(\ket{\psi_k}\) with probability \(p_k\), all measurement predictions follow from the <b>density matrix</b></p>
+<p>Postulate 1 describes a system whose state we know exactly. In practice we are often uncertain about which state was prepared:</p>
+<ul>
+<li>a qubit with a small thermal excited population (Book 2, Chapter 8);</li>
+<li>a photon source that sometimes fails to emit;</li>
+<li>a qubit entangled with an environment we cannot see (below).</li>
+</ul>
+<p>Suppose the system is in state \(\ket{\psi_k}\) with probability \(p_k\). The average of an observable is then \(\sum_kp_k\bra{\psi_k}A\ket{\psi_k}\), and all of that information can be packed into one matrix, the <b>density matrix</b>:</p>
 <div class="eq" id="eq-q-rho">$$ \rho = \sum_k p_k\,\ketbra{\psi_k}{\psi_k}, \qquad \expval A = \Tr(\rho A), \qquad p(a) = \Tr(\rho P_a) . $$</div>
-<p>(Check: for a single pure state \(\Tr(\ketbra\psi\psi A) = \bra\psi A\ket\psi\).) Every density matrix is Hermitian, positive semi-definite and has trace 1, and every such matrix is a valid state. The Schrödinger equation becomes the <b>von Neumann equation</b> \(\dot\rho = -\tfrac{\ii}{\hbar}[H,\rho]\), so \(\rho(t) = U\rho U^\dagger\).</p>
-<p>A state is <b>pure</b> if \(\rho = \ketbra\psi\psi\), which is equivalent to \(\Tr\rho^2 = 1\); otherwise it is <b>mixed</b>, with \(\Tr\rho^2 \lt 1\). The <b>purity</b> \(\Tr\rho^2\) ranges from \(1/d\) (the maximally mixed state \(I/d\)) to 1. The diagonal elements of \(\rho\) in a basis are populations; the off-diagonal elements are <b>coherences</b>, which carry phase information. The two preparations of @sec:q-post-mixture differ exactly there:</p>
+<p>(Check: for a single pure state, \(\Tr(\ketbra\psi\psi A) = \bra\psi A\ket\psi\), using the cyclic property of the trace from Book 1.) Every density matrix is</p>
+<ul>
+<li><b>Hermitian</b> (\(\rho^\dagger = \rho\));</li>
+<li><b>positive semi-definite</b> (all eigenvalues \(\ge0\); they are probabilities);</li>
+<li>of <b>trace 1</b> (probabilities sum to one);</li>
+</ul>
+<p>and every matrix with these three properties is a valid state. The Schrödinger equation becomes the <b>von Neumann equation</b> \(\dot\rho = -\tfrac{\ii}{\hbar}[H,\rho]\), whose solution is \(\rho(t) = U\rho U^\dagger\).</p>
+<p>A state is <b>pure</b> if \(\rho = \ketbra\psi\psi\) for some vector, which is equivalent to \(\Tr\rho^2 = 1\); otherwise it is <b>mixed</b>, with \(\Tr\rho^2 \lt 1\). The <b>purity</b> \(\Tr\rho^2\) ranges from \(1/d\) (the maximally mixed state \(I/d\), complete ignorance, in dimension \(d\)) to 1.</p>
+<p>How to read a density matrix written in a basis:</p>
+<ul>
+<li>The <b>diagonal elements</b> are <b>populations</b>: \(\rho_{00}\) is the probability of finding \(\ket0\).</li>
+<li>The <b>off-diagonal elements</b> are <b>coherences</b>: they carry the relative-phase information that makes interference possible.</li>
+</ul>
+<p>The two preparations of @sec:q-post-mixture (a superposition and a coin-flip mixture) differ exactly in the coherences:</p>
 \[ \rho_{\ket+} = \frac12\begin{pmatrix}1&1\\1&1\end{pmatrix}, \qquad \rho_{\mathrm{mix}} = \frac12\begin{pmatrix}1&0\\0&1\end{pmatrix}. \]
-<p>A qubit density matrix can always be written \(\rho = \tfrac12(I + \mathbf r\cdot\boldsymbol\sigma)\) with \(|\mathbf r|\le1\). Pure states lie on the Bloch sphere, mixed states inside it, and the maximally mixed state at the centre. Decoherence (Chapter 8) shrinks the Bloch vector.</p>
-<p>The ensemble decomposition of a mixed \(\rho\) is not unique: an equal mixture of \(\ket0,\ket1\) and an equal mixture of \(\ket+,\ket-\) give the same \(I/2\) and are physically indistinguishable. Only \(\rho\) matters.</p>
+<p>Same populations, and therefore the same \(Z\) statistics; different coherences, and therefore different \(X\) statistics.</p>
+<p>A qubit density matrix can always be written</p>
+\[ \rho = \tfrac12(I + \mathbf r\cdot\boldsymbol\sigma), \qquad |\mathbf r|\le1, \]
+<p>where \(\mathbf r = (\expval X, \expval Y, \expval Z)\) is the Bloch vector. Pure states lie on the Bloch sphere's surface (\(|\mathbf r| = 1\)), mixed states inside it, and the maximally mixed state at the centre. The purity is \(\tfrac12(1+|\mathbf r|^2)\). <b>Decoherence</b> (Chapter 8) shrinks the Bloch vector toward the centre, or toward a pole.</p>
+<div class="pitfall"><p>The ensemble behind a mixed \(\rho\) is not unique. An equal mixture of \(\ket0\) and \(\ket1\), and an equal mixture of \(\ket+\) and \(\ket-\), both give \(I/2\), and no experiment can tell them apart. Do not attach physical meaning to "which states are in the mixture"; only \(\rho\) is physical.</p></div>
 
 <h3 id="sec-q-comp-reduced">Subsystems and the partial trace</h3>
-<p>For a state \(\rho_{AB}\) of two systems, everything that can be measured on \(A\) alone is determined by the <b>reduced density matrix</b> \(\rho_A = \Tr_B\rho_{AB}\) (@b1:eq-m-ptrace), because \(\Tr(\rho_{AB}(A\otimes I)) = \Tr(\rho_AA)\). For a product state \(\rho_A\otimes\rho_B\), the reduced state is just \(\rho_A\). For the Bell state \(\ket{\Phi^+} = (\ket{00}+\ket{11})/\sqrt2\), the global state is pure, yet \(\rho_A = I/2\) is maximally mixed. The whole is known exactly while each part is completely random: this is <b>entanglement</b>.</p>
-<p>This observation explains decoherence. If a qubit interacts with an environment and they become entangled, the qubit alone is described by a mixed reduced state even though the joint state is pure. Nothing "random" was added; information about the qubit's phase has moved into correlations with the environment, where we cannot access it.</p>
+<p>Two systems \(A\) and \(B\) together have a state \(\rho_{AB}\) on the tensor-product space (Postulate 5). Suppose we can only measure \(A\). Everything we can learn is determined by the <b>reduced density matrix</b></p>
+\[ \rho_A = \Tr_B\rho_{AB} \]
+<p>(the partial trace of @b1:eq-m-ptrace: sum over \(B\)'s basis states, keeping \(A\)'s indices). This works because \(\Tr(\rho_{AB}(A\otimes I)) = \Tr(\rho_AA)\) for every observable \(A\) acting on the first system alone.</p>
+<ul>
+<li>For a product state \(\rho_A\otimes\rho_B\), the reduced state is just \(\rho_A\): the systems are independent.</li>
+<li>For the Bell state \(\ket{\Phi^+} = (\ket{00}+\ket{11})/\sqrt2\), the global state is pure and known exactly, yet \(\rho_A = I/2\) is maximally mixed (exercise 2). The whole is known perfectly while each part, on its own, is completely random. This is <b>entanglement</b>.</li>
+</ul>
+<p>This observation explains decoherence. If a qubit interacts with its environment and they become entangled, the qubit alone is described by a mixed reduced state even though the joint state is pure. Nothing "random" was added: information about the qubit's phase has moved into correlations with the environment, where we cannot access it. Recall the double slit (Chapter 1): a which-path record anywhere destroys interference. Entanglement with the environment <i>is</i> such a record.</p>
 
 <h3 id="sec-q-comp-ent">Entanglement</h3>
-<p>A pure state of \(AB\) is <b>entangled</b> if it is not a product \(\ket a\otimes\ket b\). Its <b>Schmidt decomposition</b> (@b1:sec-m-tensor-ent) \(\ket\psi = \sum_k s_k\ket{a_k}\ket{b_k}\) gives the eigenvalues \(s_k^2\) of both reduced states, and the <b>entanglement entropy</b></p>
+<p>A pure state of \(AB\) is <b>entangled</b> if it cannot be written as a product \(\ket a\otimes\ket b\). The test is the <b>Schmidt decomposition</b> (@b1:sec-m-tensor-ent), the singular-value decomposition of the amplitude matrix:</p>
+\[ \ket\psi = \sum_k s_k\ket{a_k}\ket{b_k}, \qquad s_k\ge0,\ \sum_ks_k^2 = 1 . \]
+<p>The state is a product exactly when only one \(s_k\) is non-zero. The numbers \(s_k^2\) are the eigenvalues of both reduced states, and the <b>entanglement entropy</b></p>
 <div class="eq" id="eq-q-entropy">$$ S(\rho_A) = -\Tr(\rho_A\log_2\rho_A) = -\sum_k s_k^2\log_2 s_k^2 $$</div>
-<p>quantifies the entanglement: 0 for product states, 1 bit (ebit) for a Bell pair. The four Bell states</p>
+<p>quantifies how entangled it is: 0 for product states, 1 bit (an "ebit") for a maximally entangled pair of qubits. It measures how much of the information about \(A\) is stored only in correlations with \(B\).</p>
+<p>The four <b>Bell states</b></p>
 <div class="eq" id="eq-q-bellstates">$$ \ket{\Phi^\pm} = \frac{\ket{00}\pm\ket{11}}{\sqrt2}, \qquad \ket{\Psi^\pm} = \frac{\ket{01}\pm\ket{10}}{\sqrt2} $$</div>
-<p>form an orthonormal basis of two qubits, all maximally entangled. They are the resource for teleportation and many error-correction circuits (Book 4). For mixed states, deciding whether a state is entangled is harder; for two qubits the <b>concurrence</b> or the Peres–Horodecki test (a state is entangled if its partial transpose has a negative eigenvalue) settles it.</p>
-<p>Entanglement does not allow signalling. Whatever Bob does to his half of an entangled pair, Alice's reduced state \(\rho_A\) is unchanged, so her measurement statistics cannot reveal his choice. Correlations appear only when they compare notes over a classical channel.</p>
+<p>form an orthonormal basis of two qubits, all maximally entangled. In \(\ket{\Phi^+}\), measuring both qubits in \(Z\) always gives equal results, and measuring both in \(X\) also always gives equal results. No classical pair of coins does both. Bell states are the resource for teleportation and many error-correction circuits (Book 4), and preparing one is the standard first test of a two-qubit gate.</p>
+<p>For mixed states, deciding whether a state is entangled is harder, because classical randomness can also create correlations. For two qubits the <b>Peres–Horodecki test</b> settles it: transpose only the \(B\) indices of \(\rho_{AB}\) (the "partial transpose"); the state is entangled exactly when the result has a negative eigenvalue. The Python example uses it.</p>
+<div class="box"><p><strong>No signalling.</strong> Entanglement cannot send messages. Whatever Bob does to his half of an entangled pair (measure it, rotate it, throw it away), Alice's reduced state \(\rho_A\) is unchanged, so her measurement statistics cannot reveal his choice. The correlations appear only when they later compare notes over an ordinary classical channel. Quantum mechanics is strange but it respects relativity.</p></div>
 
 <h3 id="sec-q-comp-bell">Bell's inequality</h3>
-<p>Could entanglement be explained by hidden classical variables, as if each pair carried a pre-arranged list of answers? Bell showed that it cannot [@bell1964]. In the CHSH form [@chsh1969], Alice measures one of two observables \(A_0, A_1\) and Bob one of \(B_0,B_1\), each with outcomes \(\pm1\). Any local hidden-variable model satisfies</p>
-<div class="eq" id="eq-q-chsh">$$ \big|\expval{A_0B_0} + \expval{A_0B_1} + \expval{A_1B_0} - \expval{A_1B_1}\big| \le 2 , $$</div>
-<p>because for any fixed values \(a_i, b_j = \pm1\), \(a_0(b_0+b_1) + a_1(b_0-b_1) = \pm2\). Quantum mechanics with the state \(\ket{\Phi^+}\), \(A_0 = Z\), \(A_1 = X\), \(B_{0,1} = (Z\pm X)/\sqrt2\), gives \(2\sqrt2\approx2.83\). Experiments since the 1980s, and loophole-free ones since 2015, observe the quantum value. Superconducting qubits violate CHSH routinely, and the size of the violation is a benchmark of two-qubit gate and readout quality.</p>
+<p>Could entanglement be explained by hidden classical variables, as if each pair of particles carried a pre-arranged list of answers to every question, like twins who agreed beforehand what to say? Bell showed that it cannot [@bell1964], by finding a statistical test that any such explanation must pass.</p>
+<p>In the CHSH form [@chsh1969], Alice measures one of two observables \(A_0, A_1\) (chosen at random each round) and Bob one of \(B_0,B_1\), each with outcomes \(\pm1\). Suppose each pair secretly carries definite answers \(a_0, a_1, b_0, b_1\), each \(\pm1\). Then, for any such list,</p>
+\[ a_0(b_0+b_1) + a_1(b_0-b_1) = \pm2 , \]
+<p>because one of \(b_0\pm b_1\) is zero and the other is \(\pm2\). Averaging over many pairs, whatever the distribution of lists, gives</p>
+<div class="eq" id="eq-q-chsh">$$ \big|\expval{A_0B_0} + \expval{A_0B_1} + \expval{A_1B_0} - \expval{A_1B_1}\big| \le 2 . $$</div>
+<p>Quantum mechanics, with the state \(\ket{\Phi^+}\) and the choices \(A_0 = Z\), \(A_1 = X\), \(B_{0,1} = (Z\pm X)/\sqrt2\), gives \(2\sqrt2\approx2.83\) (exercise 4). Experiments since the 1980s, and loophole-free ones since 2015, observe the quantum value. No pre-arranged answers can explain it.</p>
+<p>Superconducting qubits violate CHSH routinely. Because noise pulls the value down (for a Bell state mixed with white noise, the violation disappears well before the entanglement does; see the Python example), the size of the violation is a quick benchmark of two-qubit gate and readout quality.</p>
 
 <h3 id="sec-q-comp-fid">Distance between states</h3>
-<p>How close is a prepared state \(\rho\) to the target \(\ket\psi\)? The <b>fidelity</b> \(F = \bra\psi\rho\ket\psi\) is the probability that a test for \(\ket\psi\) succeeds; for two mixed states \(F(\rho,\sigma) = (\Tr\sqrt{\sqrt\rho\sigma\sqrt\rho})^2\). The <b>trace distance</b> \(D = \tfrac12\Tr|\rho-\sigma|\) is the maximum difference in probability that any measurement can show between the two states. For qubits, \(D\) is half the Euclidean distance between Bloch vectors. Book 4 extends these to gates.</p>
+<p>An engineer needs a number for "how close is the state I made to the state I wanted?". Two standard choices:</p>
+<ul>
+<li><b>Fidelity.</b> For a pure target \(\ket\psi\), \(F = \bra\psi\rho\ket\psi\): the probability that a test for \(\ket\psi\) succeeds. \(F = 1\) means perfect. For two mixed states the general formula is \(F(\rho,\sigma) = (\Tr\sqrt{\sqrt\rho\sigma\sqrt\rho})^2\).</li>
+<li><b>Trace distance.</b> \(D = \tfrac12\Tr|\rho-\sigma|\) (half the sum of the absolute eigenvalues of \(\rho - \sigma\)). It is the largest difference in probability that <i>any</i> measurement can show between the two states: a strong, operational meaning. For qubits, \(D\) is half the Euclidean distance between the two Bloch vectors.</li>
+</ul>
+<p>Book 4 extends these to gates, where "gate fidelity" is the headline number of every quantum processor.</p>
+<div class="quick"><p>What is the fidelity of the maximally mixed state \(I/2\) with any pure qubit state?</p>
+<details><summary>Answer</summary><p>\(\bra\psi\tfrac I2\ket\psi = \tfrac12\). A random guess is "50% right", which is why fidelities near 0.5 for a qubit mean the state is essentially lost.</p></details></div>
+
+<h3 id="sec-q-comp-code">Try it in Python</h3>
+<p>Take the partial trace of a Bell pair, then mix it with noise (a "Werner state") and watch purity, the CHSH value and the entanglement test respond differently.</p>
+<pre class="code"><code>import numpy as np
+
+I2 = np.eye(2)
+X = np.array([[0, 1], [1, 0]]); Z = np.diag([1, -1])
+
+def ptrace_B(rho):
+    """Partial trace over the second qubit of a 4x4 density matrix."""
+    return np.einsum("ijkj->ik", rho.reshape(2, 2, 2, 2))
+
+def entropy(rho):
+    p = np.linalg.eigvalsh(rho)
+    p = p[p > 1e-12]
+    return float(-np.sum(p * np.log2(p)))
+
+phi_plus = np.array([1, 0, 0, 1]) / np.sqrt(2)
+bell = np.outer(phi_plus, phi_plus.conj())
+print("reduced state of a Bell pair:\n", ptrace_B(bell).real)
+print("entanglement entropy:", entropy(ptrace_B(bell)), "ebit")
+
+def chsh(rho):
+    A0, A1 = Z, X
+    B0, B1 = (Z + X) / np.sqrt(2), (Z - X) / np.sqrt(2)
+    E = lambda A, B: np.trace(rho @ np.kron(A, B)).real
+    return E(A0, B0) + E(A0, B1) + E(A1, B0) - E(A1, B1)
+
+def partial_transpose_min_eig(rho):
+    r = rho.reshape(2, 2, 2, 2).transpose(0, 3, 2, 1).reshape(4, 4)
+    return np.linalg.eigvalsh(r).min()
+
+# Werner state: a Bell pair mixed with white noise
+for p in (1.0, 0.8, 0.7, 0.5, 0.3):
+    rho = p * bell + (1 - p) * np.eye(4) / 4
+    print(f"p = {p}: purity {np.trace(rho @ rho).real:.3f}, CHSH {chsh(rho):.3f}, "
+          f"entangled (PPT test) {partial_transpose_min_eig(rho) &lt; -1e-12}")</code></pre>
+<p>CHSH exceeds 2 only for \(p\gt1/\sqrt2\approx0.71\), but the state stays entangled down to \(p = 1/3\). Between those values the state is entangled yet admits a classical explanation of this particular test: entanglement and Bell violation are not the same thing.</p>
 
 <div class="eda"><p>Simulating noisy qubits means evolving density matrices, whose size is the square of the state vector's: \(4^n\) entries for \(n\) qubits. That is why device-level noise simulation is limited to a handful of qubits, and why error-correction tools use the restricted but efficient Pauli-channel description of Book 4 (@lf:sec-qec-dem).</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>\(\rho = \sum p_k\ketbra{\psi_k}{\psi_k}\); \(\expval A = \Tr(\rho A)\); Hermitian, positive, trace 1.</li>
+<li>Diagonal = populations, off-diagonal = coherences; purity \(\Tr\rho^2\); qubit \(\rho = \tfrac12(I+\mathbf r\cdot\boldsymbol\sigma)\).</li>
+<li>The partial trace gives the state of a part; a pure entangled whole has mixed parts.</li>
+<li>Entanglement: not a product; Schmidt coefficients and entropy measure it; it cannot signal.</li>
+<li>CHSH: classical \(\le2\), quantum up to \(2\sqrt2\).</li>
+<li>Fidelity and trace distance quantify how close two states are.</li>
+</ul></div>
 
 <div class="exercises" id="ex-q-composite"><h4>Exercises</h4><ol>
 <li>A qubit is \(\ket0\) with probability 0.9 and \(\ket+\) with probability 0.1. Find \(\rho\), its Bloch vector and its purity.
@@ -46,5 +138,9 @@
 <details><summary>Solution</summary><p>Schmidt coefficients squared: 0.9 and 0.1. \(S = -0.9\log_20.9 - 0.1\log_20.1 = 0.137 + 0.332 = 0.47\) ebits.</p></details></li>
 <li>Verify the quantum CHSH value \(2\sqrt2\) using \(\bra{\Phi^+}(P\otimes Q)\ket{\Phi^+} = \tfrac12\Tr(P^{\mathsf T}Q)\) for real Pauli combinations.
 <details><summary>Solution</summary><p>For real symmetric \(P,Q\), \(\expval{P\otimes Q} = \tfrac12\Tr(PQ)\). With \(B_\pm = (Z\pm X)/\sqrt2\): \(\expval{ZB_\pm} = \tfrac12\Tr(Z(Z\pm X))/\sqrt2 = 1/\sqrt2\); \(\expval{XB_\pm} = \pm1/\sqrt2\). Sum: \(1/\sqrt2 + 1/\sqrt2 + 1/\sqrt2 - (-1/\sqrt2) = 4/\sqrt2 = 2\sqrt2\).</p></details></li>
+<li>Is \((\ket{00}+\ket{01}+\ket{10}+\ket{11})/2\) entangled?
+<details><summary>Solution</summary><p>No: it equals \(\ket+\otimes\ket+\). The amplitude matrix \(\tfrac12\begin{pmatrix}1&1\\1&1\end{pmatrix}\) has rank 1 (one Schmidt coefficient).</p></details></li>
+<li>Compute the trace distance between \(\ket0\) and \(\ket+\), and the fidelity.
+<details><summary>Solution</summary><p>Bloch vectors \((0,0,1)\) and \((1,0,0)\), distance \(\sqrt2\), so \(D = \sqrt2/2\approx0.71\). Fidelity \(|\braket0+|^2 = 0.5\). (For pure states \(D = \sqrt{1-F}\).)</p></details></li>
 </ol></div>
 </section>
