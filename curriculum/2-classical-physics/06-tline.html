@@ -1,0 +1,60 @@
+<section id="sec-c-tline"><h2>Transmission lines, resonators and microwave networks</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Derive the telegrapher's equations and the characteristic impedance and phase velocity of a line.</li>
+<li>Compute reflections, standing waves and input impedances, and use S-parameters.</li>
+<li>Design coplanar-waveguide (CPW) lines and quarter- and half-wave resonators, and read a resonator's transmission.</li>
+<li>See how a distributed resonator reduces to an LC circuit near resonance, which is what lets us quantise it.</li>
+</ul></div>
+
+<h3 id="sec-c-tl-telegraph">When wires become waveguides</h3>
+<p>A circuit can be treated as lumped (point-like capacitors and inductors joined by ideal wires) only when it is much smaller than the wavelength. At 5 GHz on a chip the wavelength is about 24 mm, and a readout resonator is several millimetres long. Such structures are <b>transmission lines</b>: two conductors that guide a wave. Model a short piece of length \(\dd z\) as a series inductance \(\mathcal L\,\dd z\) and a shunt capacitance \(\mathcal C\,\dd z\), where \(\mathcal L\) and \(\mathcal C\) are per unit length. Kirchhoff's laws on the piece give the <b>telegrapher's equations</b>:</p>
+<div class="eq" id="eq-c-telegraph">$$ \frac{\partial V}{\partial z} = -\mathcal L\frac{\partial I}{\partial t}, \qquad \frac{\partial I}{\partial z} = -\mathcal C\frac{\partial V}{\partial t} . $$</div>
+<p>Eliminating \(I\) gives the wave equation \(\partial_z^2V = \mathcal L\mathcal C\,\partial_t^2V\), with solutions travelling in both directions at the <b>phase velocity</b> \(v_p = 1/\sqrt{\mathcal L\mathcal C}\). For a wave travelling in \(+z\), the ratio of voltage to current is fixed:</p>
+<div class="eq" id="eq-c-z0">$$ Z_0 = \frac{V^+}{I^+} = \sqrt{\frac{\mathcal L}{\mathcal C}}, \qquad v_p = \frac{1}{\sqrt{\mathcal L\mathcal C}} = \frac{c}{\sqrt{\varepsilon_{\mathrm{eff}}}} . $$</div>
+<p>\(Z_0\) is the <b>characteristic impedance</b>, a real number for a lossless line even though no energy is dissipated: it describes how much current a given voltage drives into the line. Microwave equipment is standardised at 50 Ω. Losses add a series resistance and shunt conductance per length and make the propagation constant complex, \(\gamma = \alpha + \ii\beta\), with \(\alpha\) the attenuation per unit length.</p>
+
+<h3 id="sec-c-tl-cpw">The coplanar waveguide</h3>
+<p>Superconducting chips use the <b>coplanar waveguide</b> (CPW): a centre strip of width \(w\) separated by gaps \(s\) from ground planes on either side, all in one metal layer on a substrate. It is easy to fabricate in a single lithography step and confines the field near the surface. For a substrate much thicker than the gaps, conformal mapping gives [@simons2001; @goppl2008]</p>
+<div class="eq" id="eq-c-cpw">$$ \varepsilon_{\mathrm{eff}} \approx \frac{1+\varepsilon_r}{2}, \qquad Z_0 = \frac{30\pi}{\sqrt{\varepsilon_{\mathrm{eff}}}}\,\frac{K(k')}{K(k)}, \qquad k = \frac{w}{w+2s}, \quad k' = \sqrt{1-k^2}, $$</div>
+<p>where \(K\) is the complete elliptic integral of the first kind. Half the field is in the substrate and half in vacuum, hence \(\varepsilon_{\mathrm{eff}}\approx(1+\varepsilon_r)/2\approx6.2\) on silicon. A centre width of 10 µm with 6 µm gaps on silicon gives close to 50 Ω. Only the ratio \(w/(w+2s)\) matters, so the same impedance can be made at many sizes: smaller lines save area, larger lines put less field at the lossy metal edges. A superconducting CPW also has kinetic inductance, which adds to \(\mathcal L\), raises \(Z_0\) and lowers \(v_p\), by a fraction that depends on film thickness and temperature.</p>
+
+<h3 id="sec-c-tl-reflect">Reflections and input impedance</h3>
+<p>A line terminated by a load \(Z_L\) reflects part of an incoming wave. Matching voltage and current at the load gives the <b>reflection coefficient</b></p>
+<div class="eq" id="eq-c-gamma">$$ \Gamma = \frac{V^-}{V^+} = \frac{Z_L - Z_0}{Z_L + Z_0} . $$</div>
+<p>A matched load (\(Z_L = Z_0\)) absorbs everything; a short (\(Z_L=0\)) reflects with \(\Gamma=-1\); an open (\(Z_L = \infty\)) with \(\Gamma=+1\). Seen from a distance \(\ell\) away, the load looks like the <b>input impedance</b></p>
+<div class="eq" id="eq-c-zin">$$ Z_{\mathrm{in}} = Z_0\,\frac{Z_L + \ii Z_0\tan\beta\ell}{Z_0 + \ii Z_L\tan\beta\ell}, \qquad \beta = \frac{2\pi}{\lambda} . $$</div>
+<p>This chapter follows the microwave-engineering convention \(\ee^{+j\omega t}\), writing \(j\) as \(\ii\), so an inductor is \(+\ii\omega L\) as in [@pozar2011]. Three special cases explain most resonator designs. A <b>short-circuited</b> line of length \(\ell\) has \(Z_{\mathrm{in}} = \ii Z_0\tan\beta\ell\): inductive when short, infinite at \(\ell = \lambda/4\). An <b>open-circuited</b> line has \(Z_{\mathrm{in}} = -\ii Z_0\cot\beta\ell\): capacitive when short, zero at \(\ell = \lambda/4\). A <b>quarter-wave</b> section transforms any load to \(Z_0^2/Z_L\), turning shorts into opens and vice versa.</p>
+
+<h3 id="sec-c-tl-res">Transmission-line resonators</h3>
+<p>A length of line with reflecting ends supports standing waves. With both ends open (or both shorted), resonance occurs when \(\ell = n\lambda/2\): a <b>half-wave resonator</b>, \(f_n = nv_p/2\ell\). With one end shorted and the other open, \(\ell = (2n-1)\lambda/4\): a <b>quarter-wave resonator</b>, \(f_n = (2n-1)v_p/4\ell\), half as long for the same frequency. Most readout resonators on transmon chips are quarter-wave CPW lines a few millimetres long, meandered to save area, shorted to ground at one end and capacitively coupled to a qubit at the other.</p>
+<p>Near its fundamental resonance a transmission-line resonator behaves exactly like a lumped LC circuit. For a half-wave resonator (open ends), expanding the input impedance near \(\omega_0\) gives an equivalent parallel LC with</p>
+<div class="eq" id="eq-c-lceq">$$ C_{\mathrm{eq}} = \frac{\mathcal C\,\ell}{2}, \qquad L_{\mathrm{eq}} = \frac{2\mathcal L\ell}{\pi^2}, \qquad \omega_0 = \frac{1}{\sqrt{L_{\mathrm{eq}}C_{\mathrm{eq}}}} = \frac{\pi v_p}{\ell} . $$</div>
+<p>(The factor \(1/2\) in \(C_{\mathrm{eq}}\) is the average of \(\cos^2\) over the standing-wave pattern.) Each higher mode is another independent LC oscillator. This is the route by which a distributed electromagnetic structure becomes a set of harmonic oscillators, each of which can be quantised (Book 5 for photons, Book 6 for circuits). The review's energy-participation and black-box methods are systematic versions of this reduction (@lf:sec-design-extract).</p>
+
+<h3 id="sec-c-tl-s">S-parameters</h3>
+<p>A microwave component with \(N\) ports is described by its <b>scattering matrix</b>: the amplitudes of waves leaving each port, \(\mathbf b\), in terms of those entering, \(\mathbf a\), normalised so that \(|a_i|^2\) is power:</p>
+<div class="eq" id="eq-c-smatrix">$$ \mathbf b = S\,\mathbf a, \qquad S = \begin{pmatrix}S_{11} & S_{12}\\ S_{21} & S_{22}\end{pmatrix}\ \text{(two ports)}. $$</div>
+<p>\(S_{11}\) is the reflection at port 1 and \(S_{21}\) the transmission from 1 to 2. A lossless network has a <b>unitary</b> S-matrix (\(S^\dagger S = I\): power in equals power out), and a reciprocal one has \(S = S^{\mathsf T}\). Network analysers measure S-parameters directly, and electromagnetic solvers compute them. Chaining components is done with the related ABCD (transfer) matrices, which multiply. The unitarity of a lossless S-matrix is the same mathematics as the unitarity of a quantum gate; a beam splitter in Book 5 is a \(2\times2\) unitary S-matrix.</p>
+<p>A resonator side-coupled to a through line (a "hanger" or "notch" geometry, used for multiplexed readout of many resonators on one feedline) has, near resonance,</p>
+<div class="eq" id="eq-c-notch">$$ S_{21}(\omega) = 1 - \frac{Q_L/Q_e}{1 + 2\ii Q_L\,\dfrac{\omega-\omega_0}{\omega_0}} . $$</div>
+<p>It dips at \(\omega_0\) to \(S_{21}^{\min} = Q_L/Q_i\) and traces a circle in the complex plane (@fig:c-notch). Fitting the circle gives \(\omega_0\), \(Q_i\) and \(Q_e\), and is the standard measurement of materials loss [@mcrae2020]. Real data add an impedance mismatch that rotates the circle and a cable delay that winds it, both corrected in the fit.</p>
+<figure id="fig-c-notch">
+<img src="../figures/fig-c-notch.svg" alt="Magnitude of S21 of a notch-coupled resonator versus frequency, and the same data as a circle in the complex plane.">
+<figcaption>A notch-coupled resonator with \(Q_e = 2\times10^4\) and \(Q_i = 10^5\) (blue) or \(2\times10^4\) (orange, critically coupled), from @eq:c-notch. Left: transmission magnitude. Right: the complex \(S_{21}\), a circle through 1 whose diameter \(Q_L/Q_e\) reveals the coupling.</figcaption>
+</figure>
+
+<div class="eda"><p>A superconducting chip's microwave design is a transmission-line problem: feedlines, readout resonators, Purcell filters, coupling buses, flux and drive lines, wirebond pads and the package. The S-parameters of the whole assembly, simulated before fabrication, predict resonator frequencies, coupling \(Q\)s and crosstalk. The quantum parameters (qubit–resonator coupling \(g\), Purcell decay) are derived from these classical responses (@lf:eq-chi).</p></div>
+
+<div class="exercises" id="ex-c-tline"><h4>Exercises</h4><ol>
+<li>A CPW on silicon has \(\varepsilon_{\mathrm{eff}} = 6.2\). How long is a quarter-wave resonator at 7 GHz?
+<details><summary>Solution</summary><p>\(v_p = 3\times10^8/\sqrt{6.2} = 1.205\times10^8\) m/s, \(\lambda = v_p/f = 17.2\) mm, \(\ell = \lambda/4 = 4.3\) mm.</p></details></li>
+<li>A 50 Ω line is terminated by 75 Ω. What fraction of incident power is reflected?
+<details><summary>Solution</summary><p>\(\Gamma = 25/125 = 0.2\), reflected power \(|\Gamma|^2 = 4\%\), about \(-14\) dB return loss.</p></details></li>
+<li>Show from @eq:c-zin that a shorted line of length \(\ell\ll\lambda\) looks like an inductor \(L = \mathcal L\ell\).
+<details><summary>Solution</summary><p>\(Z_{\mathrm{in}} = \ii Z_0\tan\beta\ell\approx\ii Z_0\beta\ell = \ii\sqrt{\mathcal L/\mathcal C}\,\omega\sqrt{\mathcal L\mathcal C}\,\ell = \ii\omega\mathcal L\ell\), the impedance of an inductor \(\mathcal L\ell\) in the engineering convention.</p></details></li>
+<li>For the notch resonator, find the minimum of \(|S_{21}|\) and show it equals \(Q_L/Q_i\). For \(Q_i = 10^5\), \(Q_e = 2\times10^4\), what is the dip in dB?
+<details><summary>Solution</summary><p>At \(\omega = \omega_0\), \(S_{21} = 1 - Q_L/Q_e\). Since \(1/Q_L = 1/Q_i + 1/Q_e\), \(1 - Q_L/Q_e = Q_L/Q_i\). Here \(Q_L = 16667\), \(S_{21}^{\min} = 0.167\), i.e. \(-15.6\) dB.</p></details></li>
+<li>Show that \(S = \begin{pmatrix}0 & \ee^{\ii\phi}\\ \ee^{\ii\phi} & 0\end{pmatrix}\) (a matched line of electrical length \(\phi\)) is unitary.
+<details><summary>Solution</summary><p>\(S^\dagger S = \begin{pmatrix}0&\ee^{-\ii\phi}\\ \ee^{-\ii\phi}&0\end{pmatrix}\begin{pmatrix}0&\ee^{\ii\phi}\\ \ee^{\ii\phi}&0\end{pmatrix} = I\).</p></details></li>
+</ol></div>
+</section>

@@ -92,7 +92,80 @@ def fig_m_yield():
     return out
 
 
-FIGS = [fig_m_lorentz, fig_m_yield]
+# ============================================================== Book 2: classical physics
+def fig_c_avoided():
+    p = Plot()
+    g = 0.02
+    p.set_x(-0.15, 0.15)
+    p.set_y(0.85, 1.15)
+    p.axes([-0.1, -0.05, 0, 0.05, 0.1], [0.9, 1.0, 1.1], "detuning Δ/ω₂ = (ω₁ − ω₂)/ω₂", "mode frequency / ω₂", fmt, fmt)
+    xs = frange(-0.15, 0.15, 400)
+    p.line([(d, 1 + d) for d in xs], AXIS, width=1.5, dash="6 5")
+    p.line([(d, 1.0) for d in xs], AXIS, width=1.5, dash="6 5")
+    up = [(d, 1 + d / 2 + 0.5 * math.sqrt(d * d + 4 * g * g)) for d in xs]
+    lo = [(d, 1 + d / 2 - 0.5 * math.sqrt(d * d + 4 * g * g)) for d in xs]
+    p.line(up, C1)
+    p.line(lo, C2)
+    p.add(f'<line x1="{p.X(0):.1f}" y1="{p.Y(1 + g):.1f}" x2="{p.X(0):.1f}" y2="{p.Y(1 - g):.1f}" stroke="{INK}" stroke-width="1.5"/>')
+    p.label(0, 1.0, "2g", INK, dx=8, dy=5)
+    p.label(0.07, 1.11, "ω₊", C1)
+    p.label(0.07, 0.985, "ω₋", C2, dy=20)
+    save(p, "fig-c-avoided.svg", "Avoided crossing of two coupled modes with minimum splitting 2g.")
+
+
+def fig_c_notch():
+    qe = 2e4
+    left = Plot(w=470, h=380, l=70, r=18)
+    left.set_x(-60, 60)
+    left.set_y(0, 1.05)
+    left.axes([-50, -25, 0, 25, 50], [0, 0.5, 1], "detuning (ω − ω₀)/ω₀ × 10⁶", "|S₂₁|", fmt, fmt)
+    right = Plot(w=420, h=380, l=70, r=28)
+    right.set_x(0, 1.05)
+    right.set_y(-0.52, 0.52)
+    right.axes([0, 0.5, 1], [-0.5, 0, 0.5], "Re S₂₁", "Im S₂₁", fmt, fmt)
+    for qi, col in ((1e5, C1), (2e4, C2)):
+        ql = 1 / (1 / qi + 1 / qe)
+        s = [(x, 1 - (ql / qe) / (1 + 2j * ql * x * 1e-6)) for x in frange(-60, 60, 1201)]
+        left.line([(x, abs(v)) for x, v in s], col)
+        right.line([(v.real, v.imag) for _, v in frange_c(ql, qe)], col)
+    left.label(15, 0.25, "Qᵢ = 10⁵", C1, size=13)
+    left.label(15, 0.12, "Qᵢ = Qₑ", C2, size=13)
+    combine([left, right], "fig-c-notch.svg", "Transmission of a notch-coupled resonator, as magnitude and as a circle in the complex plane.")
+
+
+def frange_c(ql, qe):
+    out = []
+    for i in range(2001):
+        x = math.tan(math.pi * (i / 2000 - 0.5) * 0.999)   # sweep the whole circle
+        out.append((x, 1 - (ql / qe) / (1 + 2j * x)))
+    return out
+
+
+def fig_c_nth():
+    p = Plot()
+    p.set_x(0.005, 10, log=True)
+    p.set_y(1e-8, 1e2, log=True)
+    p.axes([0.01, 0.1, 1, 10], [1e-8, 1e-6, 1e-4, 1e-2, 1, 100], "temperature (K)", "mean thermal photon number n̄",
+           lambda v: {0.01: "10 mK", 0.1: "100 mK", 1: "1 K", 10: "10 K"}[v],
+           lambda v: mf.p10(int(round(math.log10(v)))))
+    p.vband(0.01, 0.025, color="#0E8A7A", opacity=0.14)
+    p.hline(1e-3)
+    h_kb = 4.799e-11
+    for f, col, lab in ((1e9, C3, "1 GHz"), (5e9, C1, "5 GHz"), (10e9, C2, "10 GHz")):
+        pts = []
+        for e in frange(math.log10(0.005), 1, 400):
+            T = 10 ** e
+            x = f * h_kb / T
+            n = 1 / math.expm1(x) if x < 700 else 0
+            if n > 1e-8:
+                pts.append((T, n))
+        p.line(pts, col)
+        T0 = {1e9: 0.03, 5e9: 0.09, 10e9: 0.2}[f]
+        p.label(T0, 1 / math.expm1(f * h_kb / T0), lab, col, dx=-58, dy=-4)
+    save(p, "fig-c-nth.svg", "Thermal photon number versus temperature for 1, 5 and 10 GHz modes.")
+
+
+FIGS = [fig_m_lorentz, fig_m_yield, fig_c_avoided, fig_c_notch, fig_c_nth]
 
 
 def main():
