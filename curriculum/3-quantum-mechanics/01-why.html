@@ -6,27 +6,122 @@
 <li>Know the energy scales that decide when quantum effects are visible in engineered devices.</li>
 </ul></div>
 
+<div class="bigpic"><p>Quantum mechanics has a reputation for being weird, and it is: but it is weird in a very specific, precise way that a few experiments reveal. This chapter walks through those experiments without heavy mathematics. By the end you will have discovered for yourself the three ingredients of the theory: states are vectors with complex entries, probabilities come from squaring amplitudes, and measuring a system changes it. You will also meet the <b>qubit</b>, the simplest quantum system, and see why so many different pieces of hardware (atoms, photons, superconducting circuits) can all be qubits. The rest of the book turns these ideas into calculations.</p></div>
+
 <h3 id="sec-q-why-energy">Energy comes in packets</h3>
-<p>By 1900 classical physics predicted that a hot cavity should radiate infinite power at high frequencies, because equipartition gives every mode an energy \(k_BT\) and there are infinitely many modes. Planck fixed this by assuming that a mode of frequency \(\nu\) exchanges energy only in multiples of \(h\nu\). High-frequency modes then cannot be excited at low temperature, exactly the behaviour of @b2:eq-c-nth. Einstein then explained the photoelectric effect (light ejects electrons only above a threshold frequency, however intense it is) by taking the packets literally: light consists of <b>photons</b> of energy \(E = h\nu = \hbar\omega\). Bohr explained the sharp spectral lines of hydrogen by allowing electrons only certain orbits. In each case a continuous classical quantity turned out to be discrete.</p>
-<p>In engineered quantum devices the same discreteness appears when the level spacing \(\hbar\omega\) exceeds the thermal energy \(k_BT\) and the loss rate \(\hbar\gamma\). A 5 GHz superconducting resonator has \(\hbar\omega/k_B\approx 0.24\) K, so at 20 mK its energy levels are resolved; at 4 K they are washed out by thermal fluctuations. An optical photon at 1550 nm has \(\hbar\omega/k_B\approx9300\) K and is quantum at room temperature.</p>
+<p>Around 1900, classical physics made a disastrous prediction. A hot oven is full of electromagnetic standing waves (modes). Classical statistical physics gives every mode an average energy \(k_BT\) (equipartition, Book 2, Chapter 8), and since there are infinitely many modes at ever higher frequencies, the oven should glow with infinite power in the ultraviolet. This "ultraviolet catastrophe" obviously does not happen.</p>
+<p>Planck fixed it with a strange assumption: a mode of frequency \(\nu\) can only gain or lose energy in whole packets of size \(h\nu\), where \(h = 6.626\times10^{-34}\) J s is a new constant of nature (<b>Planck's constant</b>). A high-frequency mode then needs a big packet, which the thermal environment can rarely supply, so it stays almost empty. That is exactly the Bose–Einstein behaviour of @b2:eq-c-nth, and it fits the measured glow perfectly.</p>
+<p>The packets turned out to be real:</p>
+<ul>
+<li><b>Photoelectric effect</b> (Einstein, 1905). Light shining on a metal ejects electrons only if its frequency is above a threshold, however intense the light. Explanation: light consists of <b>photons</b>, each of energy \(E = h\nu = \hbar\omega\) (with \(\hbar = h/2\pi\)). One photon kicks out one electron, and a low-frequency photon simply does not have enough energy, however many of them there are.</li>
+<li><b>Atomic spectra</b> (Bohr, 1913). Hot hydrogen emits light only at sharp, specific colours. Explanation: the electron can only have certain energies, and it emits a photon whose energy is the difference between two of them.</li>
+</ul>
+<p>In each case a quantity that classical physics treated as continuous turned out to be discrete: <b>quantised</b>.</p>
+<p>When can we see this discreteness in an engineered device? When the spacing between energy levels, \(\hbar\omega\), is larger than both the thermal energy \(k_BT\) (otherwise heat blurs the levels together) and \(\hbar\gamma\), where \(\gamma\) is the loss rate (otherwise each level is broadened by its short lifetime). A 5 GHz superconducting resonator has \(\hbar\omega/k_B\approx 0.24\) K, so at 20 mK its levels are cleanly resolved; at 4 K they are washed out. An optical photon at 1550 nm has \(\hbar\omega/k_B\approx9300\) K and is quantum even at room temperature.</p>
+<div class="quick"><p>Why can't a very bright red lamp eject electrons from a metal that a dim ultraviolet lamp can?</p>
+<details><summary>Answer</summary><p>Each red photon has too little energy (\(h\nu\) is below the threshold), and electrons absorb photons one at a time. Brightness only means more photons, not bigger ones. One ultraviolet photon carries enough energy on its own.</p></details></div>
 
 <h3 id="sec-q-why-duality">Waves and particles</h3>
-<p>In a double-slit experiment with electrons, photons, neutrons or even large molecules sent one at a time, each particle arrives at a single point on the screen, like a particle. After many arrivals, the pattern of points shows interference fringes, like a wave passing through both slits. Closing one slit removes the fringes. Trying to detect which slit each particle used also removes the fringes, even if the detection is gentle. The consistent description, due to de Broglie, Schrödinger and Born, assigns the particle a complex <b>amplitude</b> for each path, adds the amplitudes, and takes the modulus squared to get a probability:</p>
+<p>The double-slit experiment shows the central mystery in its purest form. Send particles (electrons, photons, neutrons, even large molecules) one at a time toward a wall with two narrow slits, and record where each lands on a screen behind.</p>
+<ol>
+<li>Each particle arrives at a <b>single point</b>, like a particle. You never see half an electron.</li>
+<li>After many arrivals, the points build up a pattern of bright and dark <b>fringes</b>, like a wave that went through both slits and interfered with itself.</li>
+<li>Close one slit and the fringes disappear: you get a single smooth hump.</li>
+<li>Add a detector that records which slit each particle went through, even very gently, and the fringes disappear too.</li>
+</ol>
+<p>Point 4 is the strangest. The particle is not "really" going through one slit while we don't look: if it were, closing the other slit would not change anything. The consistent description, due to de Broglie, Schrödinger and Born, is this. Assign the particle a complex number, an <b>amplitude</b>, for each possible path. Add the amplitudes for paths that end at the same point. The probability is the modulus squared of the sum:</p>
 <div class="eq" id="eq-q-born0">$$ P(x) = \big|\psi_1(x) + \psi_2(x)\big|^2 = |\psi_1|^2 + |\psi_2|^2 + 2\Re\big(\psi_1^*\psi_2\big). $$</div>
-<p>The interference term is what classical probability lacks. Recording which path was taken makes the two paths distinguishable, and distinguishable alternatives add as probabilities, not as amplitudes. That rule (amplitudes for indistinguishable alternatives, probabilities for distinguishable ones) carries most of quantum mechanics, and it is the key to the Hong–Ou–Mandel effect of Book 5 and to decoherence in Chapter 8.</p>
+<p>The first two terms are what each slit alone would give. The third, the <b>interference term</b>, can be positive or negative depending on the relative phase of \(\psi_1\) and \(\psi_2\) (Book 1, Chapter 1): it makes bright fringes where the phases agree and dark fringes where they are opposite. Classical probability has no such term; probabilities are never negative.</p>
+<p>Why does a which-path detector kill the fringes? Because it makes the two paths <b>distinguishable</b>: in principle you could look at the detector and know which way the particle went. The rule is:</p>
+<div class="box"><p><strong>The rule of amplitudes.</strong> For alternatives that are <i>indistinguishable</i> (nothing in the universe records which happened), add amplitudes, then square. For alternatives that are <i>distinguishable</i>, square each amplitude, then add the probabilities.</p></div>
+<p>This one rule carries most of quantum mechanics. It is the key to the Hong–Ou–Mandel effect of Book 5, where two photons become indistinguishable and interfere, and to decoherence in Chapter 8, where the environment "records" a qubit's state and destroys its interference.</p>
+<div class="intuition"><p>You do not need a person to look at the detector. Any physical record anywhere, even a single stray photon that scattered off the particle and flew away, makes the paths distinguishable. This is why quantum behaviour is so fragile at large scales: big objects are constantly being "recorded" by air molecules and light.</p></div>
 
 <h3 id="sec-q-why-sg">Stern–Gerlach and the qubit</h3>
-<p>In 1922 Stern and Gerlach sent silver atoms through an inhomogeneous magnetic field, which deflects a magnetic moment according to its component along the field gradient. Classically, randomly oriented moments should produce a continuous smear. Instead the beam split into exactly two spots, "up" and "down". The atom's magnetic moment along any chosen axis takes only two values. Now chain the devices, as Sakurai does in his textbook [@sakurai2020]:</p>
+<p>Silver atoms behave like tiny bar magnets. In 1922 Stern and Gerlach sent a beam of them through a magnetic field that is stronger at the top than at the bottom. Such a field pushes a magnet up or down depending on how it is tilted: its magnetic moment's component along the field direction. Atoms come out of the oven with random orientations, so classically one expects a continuous vertical smear on the screen. Instead the beam split into exactly <b>two spots</b>, "up" and "down". The atom's magnetic moment along any chosen axis takes only two values.</p>
+<p>Now chain the devices, as Sakurai does in his textbook [@sakurai2020]. Call a magnet oriented along \(z\) a "\(z\)-device", and rotate it to get an "\(x\)-device".</p>
 <ol>
-<li>Select the atoms that went up along \(z\), and measure \(z\) again. All go up. The measurement is repeatable.</li>
-<li>Select \(z\)-up atoms and measure along \(x\). Half go \(x\)-up and half \(x\)-down, at random.</li>
-<li>Select \(z\)-up, then \(x\)-up atoms, and measure \(z\) again. Half go \(z\)-down. The intermediate \(x\) measurement erased the \(z\) information.</li>
+<li>Select the atoms that went up in a \(z\)-device, and send them into a second \(z\)-device. <b>All go up.</b> The measurement is repeatable: the atom "remembers" its answer.</li>
+<li>Select \(z\)-up atoms and send them into an \(x\)-device. <b>Half go \(x\)-up and half \(x\)-down</b>, at random.</li>
+<li>Select \(z\)-up, then from those the \(x\)-up atoms, and measure \(z\) again. <b>Half now go \(z\)-down!</b> The intermediate \(x\) measurement erased the \(z\) information.</li>
 </ol>
-<p>A description that fits all three needs states that are vectors in a two-dimensional space. Write \(\ket{\uparrow_z}\) and \(\ket{\downarrow_z}\) as an orthonormal basis. Experiment 2 says \(|\braket{\uparrow_x}{\uparrow_z}|^2 = \tfrac12\), so we can take \(\ket{\uparrow_x} = (\ket{\uparrow_z}+\ket{\downarrow_z})/\sqrt2\) and \(\ket{\downarrow_x} = (\ket{\uparrow_z}-\ket{\downarrow_z})/\sqrt2\). Repeating with a \(y\) axis requires a third pair of states with overlap \(\tfrac12\) with all four of these. No real vectors can do it; complex ones can: \(\ket{\uparrow_y} = (\ket{\uparrow_z}+\ii\ket{\downarrow_z})/\sqrt2\). This is the strongest elementary argument that quantum amplitudes must be complex.</p>
-<p>Any physical system with two distinguishable states and the ability to be in superpositions of them is a <b>qubit</b>: a spin in a magnetic field, the two lowest levels of an atom, a photon in one of two waveguides, or the two lowest energy levels of a superconducting circuit. The mathematics is identical, which is why quantum computing can be discussed without committing to hardware, and why hardware can be compared on common terms (Book 6).</p>
+<p>Experiment 3 rules out the idea that each atom secretly carries definite values of both its \(z\) and \(x\) magnetisation. Measuring one disturbs the other.</p>
+<p>Let us find the simplest mathematics that fits. Experiment 1 says "up" and "down" along \(z\) are perfectly distinguishable outcomes, so represent them as two perpendicular unit vectors, \(\ket{\uparrow_z}\) and \(\ket{\downarrow_z}\) (Book 1, Chapter 3, for the \(\ket{\,}\) notation): an <b>orthonormal basis</b> of a two-dimensional space. A general state is a combination \(\alpha\ket{\uparrow_z} + \beta\ket{\downarrow_z}\), and by the rule of amplitudes, the probability of finding it "up" is \(|\alpha|^2\).</p>
+<p>Experiment 2 says \(\ket{\uparrow_x}\) has probability \(\tfrac12\) of being found \(z\)-up and \(\tfrac12\) of \(z\)-down. Its overlap with each basis vector has modulus squared \(\tfrac12\), so we can take</p>
+\[ \ket{\uparrow_x} = \frac{\ket{\uparrow_z}+\ket{\downarrow_z}}{\sqrt2}, \qquad \ket{\downarrow_x} = \frac{\ket{\uparrow_z}-\ket{\downarrow_z}}{\sqrt2}. \]
+<p>(These two are perpendicular, as they must be since \(x\)-up and \(x\)-down are distinguishable.) Experiment 3 now makes sense: \(\ket{\uparrow_x}\) is an equal mixture of \(z\)-up and \(z\)-down amplitudes, so measuring \(z\) gives each half the time.</p>
+<p>Now add a \(y\)-device. Experiments show \(y\)-up has probability \(\tfrac12\) of each outcome in a \(z\)-device <i>and</i> in an \(x\)-device. So we need a third pair of states with overlap probability \(\tfrac12\) with all four states above. Try real coefficients: \((\ket{\uparrow_z}+\ket{\downarrow_z})/\sqrt2\) and \((\ket{\uparrow_z}-\ket{\downarrow_z})/\sqrt2\) are already taken, and no other real combination works (exercise 4). Complex coefficients succeed:</p>
+\[ \ket{\uparrow_y} = \frac{\ket{\uparrow_z}+\ii\ket{\downarrow_z}}{\sqrt2}, \qquad \ket{\downarrow_y} = \frac{\ket{\uparrow_z}-\ii\ket{\downarrow_z}}{\sqrt2}. \]
+<p>This is the strongest elementary argument that quantum amplitudes must be <b>complex numbers</b>. Three perpendicular directions in space need three "mutually unbiased" pairs of states, and a two-dimensional space only has room for them if the entries are complex.</p>
+<p>Any physical system with two distinguishable states and the ability to be in superpositions of them is a <b>qubit</b>:</p>
+<ul>
+<li>a spin in a magnetic field (spin qubits in silicon);</li>
+<li>the two lowest levels of an atom or ion (trapped ions, neutral atoms);</li>
+<li>a photon in one of two waveguides, or with one of two polarisations (photonic qubits);</li>
+<li>the two lowest energy levels of a superconducting circuit (transmons).</li>
+</ul>
+<p>The mathematics is identical in every case, which is why quantum computing can be discussed without committing to hardware (Book 4), and why hardware can be compared on common terms (Book 6). The general qubit state \(\alpha\ket0 + \beta\ket1\), with the labels \(\ket0 = \ket{\uparrow_z}\) and \(\ket1 = \ket{\downarrow_z}\), is studied in the next chapter.</p>
 
 <h3 id="sec-q-why-scales">Scales and the limits of the classical picture</h3>
-<p>Planck's constant sets the scale where quantum effects matter: whenever an action (energy × time, or momentum × distance) of a system is comparable to \(\hbar\approx1.05\times10^{-34}\) J s. A transmon has zero-point phase fluctuations of a few tenths of a radian (@b2:eq-c-zpf) and is fully quantum, even though it contains about \(10^{11}\) electrons, because all the Cooper pairs move together as a single collective coordinate. Engineering quantum devices is the art of isolating one such collective coordinate from everything else, coupling it to controls, and protecting it from an environment that constantly tries to measure it. The rest of this book makes those ideas precise.</p>
+<p>When does quantum mechanics matter? Planck's constant sets the scale: quantum effects appear when some "action" of a system (an energy times a time, or a momentum times a distance) is comparable to \(\hbar\approx1.05\times10^{-34}\) J s. For a thrown ball, the action is about \(10^{34}\) times larger and quantum effects are invisible. For an electron in an atom, the action is about \(\hbar\): fully quantum.</p>
+<p>Engineered devices sit in between. A transmon contains about \(10^{11}\) electrons, yet it is fully quantum: its zero-point phase fluctuations are a few tenths of a radian (@b2:eq-c-zpf). How? All the Cooper pairs move together as a single collective coordinate (the phase across the junction), and that one coordinate behaves like a single quantum particle. Engineering quantum devices is the art of three things:</p>
+<ol>
+<li>isolating one such collective coordinate from everything else;</li>
+<li>coupling it to controls, so we can drive and measure it;</li>
+<li>protecting it from an environment that constantly tries to "record" it (point 4 of the double slit).</li>
+</ol>
+<p>Points 2 and 3 pull in opposite directions, and that tension runs through all of quantum hardware design.</p>
+
+<h3 id="sec-q-why-code">Try it in Python</h3>
+<p>Simulate the three Stern–Gerlach experiments with random numbers. A measurement along an axis returns "up" with probability \(|\langle\text{up}|\psi\rangle|^2\) and leaves the atom in the state it was found in.</p>
+<pre class="code"><code>import numpy as np
+rng = np.random.default_rng(1)
+
+s = 1 / np.sqrt(2)
+basis = {   # (up, down) state vectors for each axis, in the z basis
+    "z": (np.array([1, 0]), np.array([0, 1])),
+    "x": (np.array([s, s]), np.array([s, -s])),
+    "y": (np.array([s, 1j * s]), np.array([s, -1j * s])),
+}
+
+def measure(psi, axis):
+    up, down = basis[axis]
+    p_up = abs(np.vdot(up, psi)) ** 2           # Born rule
+    if rng.random() &lt; p_up:
+        return "up", up                        # the state collapses
+    return "down", down
+
+def experiment(axes, N=10000):
+    """Prepare z-up, then measure along each axis in turn, keeping only 'up'
+    results until the last device; report the fraction 'up' at the end."""
+    ups = total = 0
+    for _ in range(N):
+        psi = basis["z"][0]
+        for ax in axes[:-1]:
+            result, psi = measure(psi, ax)
+            if result != "up":
+                break
+        else:
+            result, _ = measure(psi, axes[-1])
+            total += 1
+            ups += result == "up"
+    return ups / total
+
+print("z then z    :", experiment(["z"]))
+print("z then x    :", experiment(["x"]))
+print("z, x-up, z  :", experiment(["x", "z"]))
+print("z then y    :", experiment(["y"]))</code></pre>
+<p>You should see 1.0, then about 0.5, then about 0.5, then about 0.5. Try replacing the \(y\) states by real vectors and check that no choice gives 0.5 against both \(z\) and \(x\).</p>
+
+<div class="eda"><p>Every qubit technology in Book 6 is described, at the top level, by the same two-dimensional complex vector. A design tool can therefore share most of its software (simulation of gates, error models, calibration logic) across platforms, while the physical models underneath (circuit, atomic, photonic) differ. Getting the abstraction boundary right is a design choice the review discusses for EDA flows (@lf:sec-design-extract).</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Energy is exchanged in packets \(\hbar\omega\); quantum effects are visible when \(\hbar\omega\) exceeds \(k_BT\) and \(\hbar\gamma\).</li>
+<li>Amplitudes for indistinguishable alternatives add, then are squared; the interference term is what classical probability lacks.</li>
+<li>Any record of which path was taken destroys interference.</li>
+<li>Stern–Gerlach: two outcomes, measurements disturb each other, and three axes need complex two-component vectors.</li>
+<li>A qubit is any two-level system that can be in superpositions; the mathematics is the same for every platform.</li>
+</ul></div>
 
 <div class="exercises" id="ex-q-why"><h4>Exercises</h4><ol>
 <li>Compute the energy of one photon at 5 GHz and at 1550 nm in joules and in electronvolts, and the corresponding temperature \(E/k_B\).
@@ -35,5 +130,9 @@
 <details><summary>Solution</summary><p>With \(\ket{\uparrow_z}\): \(1/\sqrt2\), probability \(\tfrac12\). With \(\ket{\downarrow_z}\): \(\ii/\sqrt2\), probability \(\tfrac12\). With \(\ket{\uparrow_x}\): \(\tfrac12(1+\ii)\), modulus squared \(\tfrac12\). With \(\ket{\downarrow_x}\): \(\tfrac12(1-\ii)\), modulus squared \(\tfrac12\).</p></details></li>
 <li>In a double slit, amplitudes at a point are \(\psi_1 = a\) and \(\psi_2 = a\,\ee^{\ii\phi}\). Find \(P\) as a function of \(\phi\). If a which-path detector randomises \(\phi\) uniformly, what is the average?
 <details><summary>Solution</summary><p>\(P = 2|a|^2(1+\cos\phi)\), oscillating between 0 and \(4|a|^2\). Averaging over random \(\phi\) gives \(2|a|^2\): the sum of the two single-slit probabilities, with no fringes. Randomised relative phase is exactly what decoherence does.</p></details></li>
+<li>Show that no real unit vector \((a, b)\) has overlap probability \(\tfrac12\) with all four states \(\ket{\uparrow_z},\ket{\downarrow_z},\ket{\uparrow_x},\ket{\downarrow_x}\) other than \(\pm\ket{\uparrow_x}\) or \(\pm\ket{\downarrow_x}\) themselves (which fail against \(x\)).
+<details><summary>Solution</summary><p>Against \(z\): \(a^2 = b^2 = \tfrac12\), so \(a,b = \pm1/\sqrt2\). Then the vector is \(\pm\ket{\uparrow_x}\) or \(\pm\ket{\downarrow_x}\), whose overlap probability with \(\ket{\uparrow_x}\) is 1 or 0, not \(\tfrac12\). So real amplitudes cannot describe a third axis.</p></details></li>
+<li>A thrown cricket ball (0.16 kg, 30 m/s) passes through a 1 m gap. Estimate its de Broglie wavelength \(\lambda = h/p\) and comment.
+<details><summary>Solution</summary><p>\(p = 4.8\) kg m/s, \(\lambda = 6.6\times10^{-34}/4.8\approx1.4\times10^{-34}\) m: about \(10^{-19}\) times the size of a proton. Interference fringes would be utterly unobservable, and the ball is also constantly "recorded" by air and light.</p></details></li>
 </ol></div>
 </section>
