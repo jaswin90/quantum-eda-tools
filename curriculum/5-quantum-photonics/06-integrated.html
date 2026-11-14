@@ -1,53 +1,76 @@
 <section id="sec-p-integrated"><h2>Integrated quantum photonics: platforms, components and fabrication</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>Compare the main material platforms (silicon, silicon nitride, lithium niobate, III–V, glass) for quantum use.</li>
-<li>Know the component library of a photonic chip and the figures of merit of each component.</li>
-<li>Understand how fabrication variation maps to device errors and why active tuning is needed.</li>
+<li>Understand why quantum photonics is moving from optical tables to chips.</li>
+<li>Compare the main material platforms (silicon, silicon nitride, lithium niobate, III–V, glass) and know what each is good for.</li>
+<li>Know the component library of a photonic chip and the figure of merit of each component.</li>
+<li>Understand how fabrication variation turns into device errors, and why every resonant device needs tuning.</li>
 <li>Know what a photonic process design kit (PDK) contains and what quantum circuits need beyond it.</li>
 </ul></div>
+
+<div class="bigpic"><p>Early quantum optics experiments filled optical tables with mirrors, lenses and beam splitters, each aligned by hand. That does not scale to the thousands or millions of components a photonic quantum computer needs. The solution is the same one electronics found sixty years ago: <b>integrated circuits</b>. Waveguides, couplers, phase shifters, sources and detectors are patterned by lithography on a wafer, thousands at a time, in commercial foundries. The price is that every component now carries the imperfections of manufacturing, and, because quantum signals cannot be amplified, those imperfections matter far more than in classical photonics. This chapter surveys the platforms and components, then shows how fabrication variation becomes the central engineering problem.</p></div>
+
+<h3 id="sec-p-int-why">From tables to chips</h3>
+<p>An integrated photonic chip guides light in <b>waveguides</b>: strips of high-refractive-index material (the "core", a few hundred nanometres to a few micrometres wide) surrounded by lower-index "cladding" (@b2:sec-c-optics). Light stays in the core by total internal reflection. On a chip, components are aligned by lithography to nanometre precision, are mechanically stable, and can be replicated by the thousand. A single photonic chip today can contain thousands of components; the same circuit on a table would be impossible to build or keep aligned.</p>
 
 <h3 id="sec-p-int-platforms">Material platforms</h3>
 <figure class="tbl" id="tab-p-platforms"><figcaption>Integrated photonic platforms for quantum technology (typical values; they improve every year).</figcaption>
 <div class="tblwrap"><table>
-<tr><th>Platform</th><th>Index contrast</th><th>Propagation loss</th><th>Nonlinearity</th><th>Phase shifters</th><th>Notes</th></tr>
-<tr><td>Silicon on insulator</td><td>High (3.48/1.44)</td><td>1–2 dB/cm</td><td>\(\chi^{(3)}\), two-photon absorption</td><td>Thermal, carrier</td><td>CMOS foundries, dense, mature PDKs</td></tr>
-<tr><td>Silicon nitride</td><td>Medium (2.0/1.44)</td><td>0.001–0.1 dB/cm</td><td>Weak \(\chi^{(3)}\)</td><td>Thermal (slow)</td><td>Lowest loss; visible to telecom</td></tr>
-<tr><td>Thin-film lithium niobate</td><td>Medium (2.2/1.44)</td><td>0.03–0.3 dB/cm</td><td>Strong \(\chi^{(2)}\)</td><td>Electro-optic (fast)</td><td>Squeezing, fast switches</td></tr>
+<tr><th>Platform</th><th>Index contrast</th><th>Propagation loss</th><th>Nonlinearity</th><th>Phase shifters</th><th>Strengths</th></tr>
+<tr><td>Silicon on insulator</td><td>High (3.48/1.44)</td><td>1–2 dB/cm</td><td>\(\chi^{(3)}\), two-photon absorption</td><td>Thermal, carrier</td><td>CMOS foundries, very compact, mature design kits</td></tr>
+<tr><td>Silicon nitride</td><td>Medium (2.0/1.44)</td><td>0.001–0.1 dB/cm</td><td>Weak \(\chi^{(3)}\)</td><td>Thermal (slow)</td><td>Lowest loss; visible to telecom wavelengths</td></tr>
+<tr><td>Thin-film lithium niobate</td><td>Medium (2.2/1.44)</td><td>0.03–0.3 dB/cm</td><td>Strong \(\chi^{(2)}\)</td><td>Electro-optic (fast)</td><td>Squeezing, fast switches, frequency conversion</td></tr>
 <tr><td>III–V (GaAs, InP)</td><td>High</td><td>1–3 dB/cm</td><td>\(\chi^{(2)}\)</td><td>Electro-optic</td><td>Hosts quantum dots and lasers</td></tr>
-<tr><td>Laser-written glass</td><td>Low</td><td>0.1–0.3 dB/cm</td><td>None</td><td>Thermal</td><td>3D circuits, low coupling loss</td></tr>
+<tr><td>Laser-written glass</td><td>Low</td><td>0.1–0.3 dB/cm</td><td>None</td><td>Thermal</td><td>3D circuits, low fibre-coupling loss</td></tr>
 </table></div></figure>
-<p>No platform does everything. A full photonic quantum computer needs sources (nonlinear material or quantum emitters), low-loss routing (nitride), fast switches (electro-optic), and detectors (superconducting films), which drives <b>heterogeneous integration</b>: bonding or growing different materials on one chip, or co-packaging several chips. PsiQuantum's platform combines silicon and silicon nitride photonics with integrated SNSPDs and barium titanate switches in a commercial foundry; Xanadu combines nitride and lithium-niobate-style squeezers with photon-number-resolving detectors (@lf:sec-land-modalities).</p>
+<p>How to read the table. <b>Index contrast</b> (core index over cladding index) decides how tightly light is confined: high contrast allows micrometre bends and dense circuits but makes light sensitive to roughness on the waveguide walls, which scatters it. <b>Propagation loss</b> decides how far a photon can travel: for delay lines that store photons for nanoseconds (tens of centimetres), only nitride is good enough. <b>Nonlinearity</b> decides whether the material can make photon pairs or squeezed light. <b>Phase shifters</b> decide how circuits are programmed: thermal ones are simple but slow and power-hungry; electro-optic ones are fast enough to route photons based on measurement results in real time.</p>
+<p>No platform does everything, which drives <b>heterogeneous integration</b>: bonding or growing different materials on one chip, or packaging several chips together. PsiQuantum's platform, for example, combines silicon and silicon nitride photonics with integrated superconducting detectors and fast switches in a commercial foundry; Xanadu combines low-loss nitride with squeezed-light sources and photon-number-resolving detectors (@lf:sec-land-modalities).</p>
 
 <h3 id="sec-p-int-components">The component library</h3>
 <ul>
-<li><b>Waveguides and bends</b>: loss per length and per bend; bend radius trades area for radiation loss.</li>
-<li><b>Couplers</b>: directional couplers (splitting ratio depends exponentially on gap), multimode interference couplers (more tolerant, slightly lossier), adiabatic couplers (broadband and tolerant, but long).</li>
-<li><b>Phase shifters</b>: thermo-optic heaters (simple, milliwatts each, slow, crosstalk between neighbours), electro-optic (fast, low power, needs a \(\chi^{(2)}\) material), MEMS (low power, emerging).</li>
-<li><b>Ring resonators</b> as filters, pair sources and modulators; Mach–Zehnder interferometers as tunable couplers and switches.</li>
-<li><b>Fibre and chip couplers</b>: grating couplers (any position on chip, 2–4 dB typical) and edge couplers (sub-dB possible, at the chip edge only).</li>
-<li><b>On-chip detectors</b> and <b>filters</b> to remove pump light, which can be \(10^{10}\) times brighter than the single photons and must be suppressed by 100 dB or more.</li>
+<li><b>Waveguides and bends.</b> Figure of merit: loss per centimetre and per bend. Tighter bends save area but radiate more.</li>
+<li><b>Couplers</b> split light between two waveguides. <i>Directional couplers</i> (two waveguides run side by side, @b2:sec-c-opt-dc) have a splitting ratio that depends exponentially on the gap between them. <i>Multimode interference (MMI) couplers</i> are more tolerant of fabrication errors but slightly lossier. <i>Adiabatic couplers</i> are broadband and tolerant but long.</li>
+<li><b>Phase shifters</b> change the optical path length of a waveguide: <i>thermo-optic</i> (a heater; milliwatts each, microsecond response, heats neighbours), <i>electro-optic</i> (an applied voltage in \(\chi^{(2)}\) material; nanoseconds, low power), <i>MEMS</i> (tiny moving parts; low power, emerging).</li>
+<li><b>Mach–Zehnder interferometers</b> (two couplers with a phase shifter between, @b2:eq-c-mzi): programmable beam splitters and switches, the building block of meshes (Chapter 3).</li>
+<li><b>Ring resonators</b> (@b2:sec-c-opt-ring): filters, pair sources and modulators.</li>
+<li><b>Fibre couplers</b> bring light on and off the chip. <i>Grating couplers</i> can sit anywhere on the chip but typically lose 2–4 dB; <i>edge couplers</i> at the chip facet can get below 1 dB.</li>
+<li><b>Pump filters.</b> Pair sources are driven by pump light that can be \(10^{10}\) times brighter than the single photons; on-chip filters must suppress it by 100 dB or more before the detectors.</li>
+<li><b>On-chip detectors</b>: superconducting nanowires laid along waveguides (Chapter 5).</li>
 </ul>
 
-<h3 id="sec-p-int-var">Variation, tuning and yield</h3>
-<p>A silicon waveguide's effective index changes by about \(2\times10^{-3}\) per nanometre of width. A ring of radius 10 µm then shifts its resonance by roughly 1 nm per nanometre of width error, comparable to its linewidth many times over. Directional couplers' splitting ratios vary with gap and thickness. Lithography and etching produce width and thickness variations of a few nanometres across a wafer, with both a smooth component (wafer-scale gradients) and a random local component (line-edge roughness). Consequences:</p>
+<h3 id="sec-p-int-var">Fabrication variation, tuning and yield</h3>
+<p>Lithography and etching are extremely precise, but not perfect. Waveguide widths and thicknesses vary by a few nanometres across a wafer, with a smooth part (gradients across the wafer) and a random part (roughness, local variations). That sounds tiny, but optical devices are sensitive:</p>
+<div class="example"><p><b>Worked example: how a nanometre moves a ring.</b> A silicon waveguide's effective index changes by about \(2\times10^{-3}\) per nanometre of width. A ring resonates when the round-trip optical length is a whole number of wavelengths, \(n_{\mathrm{eff}}L = m\lambda\), so a relative index change shifts the resonance wavelength by the same relative amount, enhanced by dispersion: \(\Delta\lambda/\lambda\approx\Delta n_{\mathrm{eff}}/n_g\). With \(n_g\approx4.2\) and \(\Delta n_{\mathrm{eff}} = 2\times10^{-3}\): \(\Delta\lambda\approx1550\,\mathrm{nm}\times4.8\times10^{-4}\approx0.7\) nm per nanometre of width. A ring with \(Q = 10^5\) has a linewidth of \(\lambda/Q\approx16\) pm, so a one-nanometre width error moves the resonance by about 45 linewidths. Every ring on the chip is effectively at a random wavelength until tuned.</p></div>
+<p>Consequences:</p>
 <ol>
-<li>Every resonant device needs a <b>tuner</b> and a <b>control loop</b> to find and hold its operating point. Tuning power and crosstalk become system budgets.</li>
-<li>Interferometer meshes must be designed with enough redundancy that fabricated splitting errors can be corrected by programming, or certain unitaries become unreachable.</li>
-<li>Two sources that must emit indistinguishable photons must have their resonances matched, which is a pairing problem on the fabricated distribution.</li>
-<li>Loss itself varies from device to device. In quantum circuits it cannot be compensated by gain, so the statistics of loss, not its mean, decide whether a circuit works.</li>
+<li><b>Every resonant device needs a tuner and a control loop</b> to find and hold its operating point. Tuning power and thermal crosstalk between heaters become system budgets.</li>
+<li><b>Meshes need redundancy.</b> If couplers are fabricated at 47:53 instead of 50:50, some unitaries become unreachable unless the mesh has spare elements to compensate.</li>
+<li><b>Sources must be matched.</b> Two sources that should emit indistinguishable photons must be tuned to the same wavelength: a pairing problem on the fabricated distribution.</li>
+<li><b>Loss varies from device to device</b>, and because quantum signals cannot be amplified, the statistics of loss (especially its worst cases) decide whether a large circuit works, not its average.</li>
 </ol>
+<div class="pitfall"><p>In classical silicon photonics, a 0.5 dB variation in a component's loss is usually harmless: the receiver has margin, or an amplifier compensates. In quantum photonics, a 0.5 dB extra loss on one path in a million can push that path over the error-correction threshold (Chapter 7). Design for quantum photonics is therefore design for the tails of distributions, which is a different discipline from design for typical performance.</p></div>
 
 <h3 id="sec-p-int-pdk">Process design kits</h3>
-<p>Classical silicon photonics has mature design infrastructure [@chrostowski2015; @bogaerts2018]. A foundry's <b>PDK</b> contains the layer stack and design rules, a library of characterised components (with S-parameter models and, increasingly, statistical "corner" models), and verification decks. Designers draw circuits with parametrised cells (open tools such as gdsfactory provide this in Python), simulate components with mode solvers, eigenmode expansion or FDTD, simulate circuits by chaining S-matrices, and verify layouts before tape-out. What quantum use needs beyond this, as the review argues: models of components that classical kits do not contain (SNSPDs, quantum emitters, cryogenic behaviour of phase shifters), statistical models at the tails rather than at the mean, and verification of architecture-level conditions such as path-loss thresholds and source matching (@lf:sec-tools-gap).</p>
+<p>Classical silicon photonics has a mature design infrastructure [@chrostowski2015; @bogaerts2018]. A foundry's <b>process design kit</b> (PDK) contains: the layer stack (materials and thicknesses) and design rules (minimum widths, gaps, bend radii); a library of characterised components, each with an S-parameter model and, increasingly, statistical "corner" models of its variation; and verification decks that check a layout before manufacture. Designers draw circuits with parametrised cells (open tools such as gdsfactory provide these in Python), simulate components with mode solvers, eigenmode expansion or FDTD (Book 7), simulate whole circuits by chaining the components' S-matrices, verify, and send the layout to the foundry.</p>
+<p>What quantum circuits need beyond this, as the review argues (@lf:sec-tools-gap): models of components that classical kits do not contain (superconducting detectors, quantum emitters, cryogenic phase shifters); statistical models at the extreme tails rather than at the mean; and verification of architecture-level conditions such as "every path's loss is below threshold" and "these sources are matched".</p>
 
-<div class="eda"><p>Integrated photonics is the platform where quantum EDA can lean most heavily on existing classical tools: layout, mode solving and circuit simulation are solved problems. The quantum-specific layer is statistical: propagate per-component distributions to an architecture's threshold condition and to a yield, and use measured wafer data to update the models. That is the photonic instance of the review's general thesis.</p></div>
+<div class="eda"><p>Integrated photonics is where quantum design automation can lean most heavily on existing classical tools: layout, mode solving and circuit simulation are solved problems. The quantum-specific layer is statistical: propagate per-component distributions to an architecture's threshold condition and to a yield, and use measured wafer data to keep the models honest. That is the photonic instance of the review's general thesis.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Chips replace optical tables: lithographic alignment, stability and replication by the thousand.</li>
+<li>Silicon is compact, nitride is low-loss, lithium niobate is fast and nonlinear, III–V hosts emitters; real systems combine them.</li>
+<li>Components: waveguides, couplers, phase shifters, MZIs, rings, fibre couplers, filters, detectors; each has a loss and an error budget.</li>
+<li>Nanometre variations shift resonances by many linewidths: every resonant device needs tuning, meshes need redundancy, sources need matching.</li>
+<li>Quantum design is design for the tails of distributions; PDKs need statistical, quantum-specific extensions.</li>
+</ul></div>
 
 <div class="exercises" id="ex-p-integrated"><h4>Exercises</h4><ol>
 <li>A path crosses 8 cm of silicon waveguide at 1.5 dB/cm. Compare with 8 cm of nitride at 0.05 dB/cm.
-<details><summary>Solution</summary><p>Silicon: 12 dB, transmission 6%. Nitride: 0.4 dB, transmission 91%. Long delay lines, needed for multiplexing and for storing photons while measurements are processed, must be nitride or fibre.</p></details></li>
-<li>A chip has 500 thermo-optic phase shifters at 20 mW each for a \(\pi\) shift, with average phase \(\pi/2\). Estimate the heater power. Why is this a problem at cryogenic temperatures?
-<details><summary>Solution</summary><p>About \(500\times10\) mW = 5 W. A 4 K stage of a cryocooler offers roughly 1–2 W, so heaters alone would overwhelm it, and thermal crosstalk between heaters grows. Cryogenic photonics favours electro-optic or MEMS phase shifters.</p></details></li>
-<li>A ring's resonance shifts 1 nm per nm of width. Its linewidth is 20 pm, and the fabricated width varies by ±3 nm (1σ). What tuning range covers 99.7% of rings?
-<details><summary>Solution</summary><p>±3σ = ±9 nm of width, so ±9 nm of resonance shift, 900 linewidths. A heater must cover about 18 nm, or the design must use a free spectral range small enough that the nearest resonance is always within reach (then the range needed is one FSR).</p></details></li>
+<details><summary>Solution</summary><p>Silicon: 12 dB, transmission 6%. Nitride: 0.4 dB, transmission 91%. Long delay lines must be nitride or fibre.</p></details></li>
+<li>A chip has 500 thermo-optic phase shifters at 20 mW each for a \(\pi\) shift, with an average setting of \(\pi/2\). Estimate the total heater power, and explain why this is a problem if the chip must sit at 4 K.
+<details><summary>Solution</summary><p>About \(500\times10\) mW = 5 W. A 4 K cryocooler stage offers roughly 1–2 W, so heaters alone would overwhelm it, and heaters warm their neighbours. Cryogenic photonics favours electro-optic or MEMS phase shifters.</p></details></li>
+<li>A ring's resonance shifts 0.7 nm per nm of width, and the fabricated width varies by ±3 nm (1σ). What tuning range covers 99.7% of rings? How could the design reduce it?
+<details><summary>Solution</summary><p>±3σ = ±9 nm of width → ±6.3 nm of resonance shift, a 12.6 nm range. Alternatively design the ring with a free spectral range below that, so that some resonance is always within one FSR, and tune only up to one FSR; or use wider waveguides, which are less sensitive to width errors.</p></details></li>
+<li>A grating coupler loses 3 dB and an edge coupler 0.8 dB. A photon enters and leaves the chip once. What is the round-trip transmission for each? Why do photonic quantum computers integrate sources and detectors on chip?
+<details><summary>Solution</summary><p>Grating: 6 dB, 25%. Edge: 1.6 dB, 69%. On-chip sources and detectors remove both crossings, saving most of this loss.</p></details></li>
 </ol></div>
 </section>
