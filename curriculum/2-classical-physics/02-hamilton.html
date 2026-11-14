@@ -1,45 +1,109 @@
 <section id="sec-c-hamilton"><h2>Hamiltonian mechanics and phase space</h2>
 <div class="goals"><p>Goals</p><ul>
 <li>Pass from a Lagrangian to a Hamiltonian with the Legendre transform, including the multi-variable case with a capacitance matrix.</li>
-<li>Use Hamilton's equations and phase-space portraits.</li>
+<li>Use Hamilton's equations and picture motion as a flow in phase space.</li>
 <li>Compute Poisson brackets, and see how they become commutators in quantum mechanics.</li>
-<li>Write the Hamiltonian of an LC circuit and of a network in terms of charge and flux.</li>
+<li>Write the Hamiltonian of an LC circuit and of a network in terms of charge and flux, and estimate how "quantum" a circuit is from its impedance.</li>
 </ul></div>
+
+<div class="bigpic"><p>Quantum mechanics is built on the Hamiltonian, the energy written as a function of a coordinate and its momentum. The previous chapter gave us the Lagrangian; this chapter converts it into a Hamiltonian, and shows that the classical rule "how things change in time" has a form (the Poisson bracket) that becomes the quantum commutator almost word for word. By the end you will have written down, classically, the exact Hamiltonian that Book 3 quantises into a qubit and that circuit-design tools diagonalise every day.</p></div>
 
 <h3 id="sec-c-ham-legendre">The Legendre transform</h3>
 <p>The Lagrangian uses positions and velocities. Hamilton's formulation uses positions and <b>conjugate momenta</b>,</p>
 <div class="eq" id="eq-c-momentum">$$ p = \frac{\partial L}{\partial\dot q}, $$</div>
 <p>and replaces \(L\) by the <b>Hamiltonian</b></p>
 <div class="eq" id="eq-c-hamiltonian">$$ H(q,p) = p\,\dot q - L, \qquad \text{with } \dot q \text{ expressed in terms of } p . $$</div>
-<p>This change of variables is the Legendre transform. For \(L = \tfrac12m\dot x^2 - V(x)\), \(p = m\dot x\), so \(\dot x = p/m\) and \(H = p^2/m - (p^2/2m - V) = p^2/2m + V(x)\): the total energy written in terms of momentum. For several variables with a velocity-dependent energy \(T = \tfrac12\dot{\mathbf q}^{\mathsf T}M\dot{\mathbf q}\), the momenta are \(\mathbf p = M\dot{\mathbf q}\) and</p>
+<p>This change of variables is called the <b>Legendre transform</b>. The recipe has three steps:</p>
+<ol>
+<li>Compute \(p = \partial L/\partial\dot q\).</li>
+<li>Solve that for \(\dot q\) as a function of \(p\) (and \(q\)).</li>
+<li>Substitute into \(p\dot q - L\), so that the result contains no \(\dot q\) at all.</li>
+</ol>
+<div class="example"><p><b>Worked example: a particle.</b> For \(L = \tfrac12m\dot x^2 - V(x)\): step 1, \(p = m\dot x\). Step 2, \(\dot x = p/m\). Step 3,</p>
+\[ H = p\cdot\frac pm - \Big(\frac12m\frac{p^2}{m^2} - V\Big) = \frac{p^2}{m} - \frac{p^2}{2m} + V = \frac{p^2}{2m} + V(x). \]
+<p>The Hamiltonian is the total energy, kinetic plus potential, with the kinetic energy written using momentum. That is true whenever the kinetic energy is quadratic in the velocities, which covers every circuit in this series.</p></div>
+<div class="intuition"><p>Why bother switching from velocity to momentum? Because momentum, not velocity, is the quantity paired with position in the deep structure of mechanics (the next two sections). In a circuit the switch is from voltage to <i>charge</i>, and charge is the thing that is conserved on islands and that tunnels through junctions in whole Cooper pairs. The Hamiltonian is written in the variables that physics treats as fundamental.</p></div>
+<p>For several variables with a velocity-dependent energy \(T = \tfrac12\dot{\mathbf q}^{\mathsf T}M\dot{\mathbf q}\) (here \(M\) is a symmetric "mass matrix"), the momenta are \(\mathbf p = M\dot{\mathbf q}\), so \(\dot{\mathbf q} = M^{-1}\mathbf p\), and the same three steps give</p>
 <div class="eq" id="eq-c-hammatrix">$$ H = \tfrac12\,\mathbf p^{\mathsf T}M^{-1}\mathbf p + V(\mathbf q). $$</div>
-<p>Note the <i>inverse</i> mass matrix. In a circuit, \(M\) is the capacitance matrix \(\mathbf C\), the momentum conjugate to node flux is \(Q_i = \partial\mathcal L/\partial\dot\Phi_i = \sum_j C_{ij}\dot\Phi_j\), which is the <b>node charge</b>, and the Hamiltonian is \(H = \tfrac12\mathbf Q^{\mathsf T}\mathbf C^{-1}\mathbf Q + U(\boldsymbol\Phi)\). Every charging energy \(E_C = e^2/2C\) in quantum hardware is an element of \(\mathbf C^{-1}\), not of \(\mathbf C\). A small error in a large capacitance matrix can produce a large error in its inverse when the matrix is ill-conditioned, which is one reason extraction accuracy matters.</p>
+<p>Note the <i>inverse</i> mass matrix. In a circuit, \(M\) is the capacitance matrix \(\mathbf C\), and the momentum conjugate to node flux is</p>
+\[ Q_i = \frac{\partial\mathcal L}{\partial\dot\Phi_i} = \sum_jC_{ij}\dot\Phi_j , \]
+<p>which is the <b>node charge</b> (charge equals capacitance times voltage). The circuit Hamiltonian is \(H = \tfrac12\mathbf Q^{\mathsf T}\mathbf C^{-1}\mathbf Q + U(\boldsymbol\Phi)\). Every <b>charging energy</b> \(E_C = e^2/2C\) quoted for a qubit is built from an element of \(\mathbf C^{-1}\), not of \(\mathbf C\).</p>
+<div class="pitfall"><p>Inverting a matrix can amplify errors. If two islands are strongly coupled, \(\mathbf C\) is nearly singular (its determinant is small), and a 1% error in one entry of \(\mathbf C\) can become a 10% error in \(\mathbf C^{-1}\). This is the "condition number" of Book 1, Chapter 8, at work, and one reason capacitance extraction must be accurate.</p></div>
 
 <h3 id="sec-c-ham-eqs">Hamilton's equations and phase space</h3>
-<p>Varying the action written as \(\int(p\dot q - H)\dd t\) independently in \(q\) and \(p\) gives <b>Hamilton's equations</b>:</p>
+<p>Write the action as \(\int(p\dot q - H)\,\dd t\), treat \(q\) and \(p\) as independent, and vary each. This gives <b>Hamilton's equations</b>:</p>
 <div class="eq" id="eq-c-hameqs">$$ \dot q = \frac{\partial H}{\partial p}, \qquad \dot p = -\frac{\partial H}{\partial q} . $$</div>
-<p>Two first-order equations replace one second-order equation. The state of the system is a point \((q,p)\) in <b>phase space</b>, and the equations define a flow. For the harmonic oscillator \(H = p^2/2m + \tfrac12m\omega^2q^2\), the trajectories are ellipses of constant energy; rescaling \(q\) and \(p\) turns them into circles traversed at angular frequency \(\omega\). That circular motion in phase space, written as one complex number \(\alpha = (m\omega q + \ii p)/\sqrt{2m\hbar\omega}\) rotating as \(\ee^{-\ii\omega t}\), becomes the annihilation operator of the quantum oscillator in Book 3, and the phasor of Book 1.</p>
-<p>Two properties of the flow carry over to quantum mechanics. Energy is conserved when \(H\) does not depend explicitly on time (\(\dot H = \partial_qH\dot q + \partial_pH\dot p = 0\)). And phase-space volume is conserved (<b>Liouville's theorem</b>): a blob of initial conditions can be stretched and folded but never compressed. Its quantum counterpart is the unitarity of time evolution: information is never destroyed in a closed system. Dissipation needs an environment.</p>
+<p>Two first-order equations replace one second-order equation. Check with the particle: \(\dot x = \partial H/\partial p = p/m\) (velocity is momentum over mass) and \(\dot p = -V'(x) = F\) (Newton). Nothing new physically, but a new picture.</p>
+<p>The state of the system at any moment is a single point \((q,p)\) in a plane called <b>phase space</b>. Hamilton's equations assign an arrow to every point (where to move next), so the whole plane flows like a fluid. Knowing the point now determines its whole future.</p>
+<div class="example"><p><b>Worked example: the oscillator in phase space.</b> \(H = p^2/2m + \tfrac12m\omega^2q^2\). Since energy is conserved, each trajectory stays on a curve \(H = E\): an ellipse with semi-axes \(\sqrt{2E/m\omega^2}\) in \(q\) and \(\sqrt{2mE}\) in \(p\). If we rescale the axes, using \(X = q\sqrt{m\omega}\) and \(P = p/\sqrt{m\omega}\), the ellipses become circles, and the point goes round at angular frequency \(\omega\), clockwise. Package the two coordinates into one complex number</p>
+\[ \alpha = \frac{m\omega q + \ii p}{\sqrt{2m\hbar\omega}}, \qquad \alpha(t) = \alpha(0)\,\ee^{-\ii\omega t}. \]
+<p>The whole motion is a complex number spinning at constant speed, which is exactly the phasor of Book 1, Chapter 1. (The \(\hbar\) is a convenient unit that makes \(|\alpha|^2 = E/\hbar\omega\), the energy counted in quanta.) In Book 3, \(\alpha\) becomes the annihilation operator \(\hat a\), and a "coherent state" is a quantum oscillator whose \(\alpha\) is spinning exactly like this.</p></div>
+<p>Two properties of the flow carry over to quantum mechanics:</p>
+<ul>
+<li><b>Energy conservation.</b> If \(H\) does not depend explicitly on time, \(\dot H = \frac{\partial H}{\partial q}\dot q + \frac{\partial H}{\partial p}\dot p = \frac{\partial H}{\partial q}\frac{\partial H}{\partial p} - \frac{\partial H}{\partial p}\frac{\partial H}{\partial q} = 0\).</li>
+<li><b>Liouville's theorem.</b> Take a small blob of initial conditions; as it flows, it can stretch and fold but its area never changes. The quantum counterpart is <i>unitarity</i>: a closed quantum system never loses information. Damping and decoherence therefore always need an environment to carry information away (Chapter 3 and Book 3, Chapter 9).</li>
+</ul>
+<div class="quick"><p>A damped oscillator spirals into the origin of phase space. Does that contradict Liouville's theorem?</p>
+<details><summary>Answer</summary><p>No: Liouville applies to a closed Hamiltonian system. A damped oscillator is losing energy to something else (a resistor, the air). Include that environment and total phase-space volume is conserved; look only at the oscillator and it shrinks.</p></details></div>
 
 <h3 id="sec-c-ham-poisson">Poisson brackets</h3>
-<p>For two functions on phase space, define the <b>Poisson bracket</b></p>
-<div class="eq" id="eq-c-poisson">$$ \{f, g\} = \sum_k\Big(\frac{\partial f}{\partial q_k}\frac{\partial g}{\partial p_k} - \frac{\partial f}{\partial p_k}\frac{\partial g}{\partial q_k}\Big). $$</div>
-<p>Then the time evolution of any quantity is \(\dot f = \{f, H\}\) (plus \(\partial f/\partial t\) if \(f\) depends explicitly on time), and the coordinates satisfy the <b>canonical relations</b> \(\{q_j, p_k\} = \delta_{jk}\), \(\{q_j,q_k\} = \{p_j,p_k\} = 0\). Dirac noticed that the rules of quantum mechanics follow from replacing</p>
+<p>There is a compact way to write how <i>any</i> quantity changes in time. For two functions \(f(q,p)\) and \(g(q,p)\), define the <b>Poisson bracket</b></p>
+<div class="eq" id="eq-c-pbracket">$$ \{f, g\} = \sum_k\Big(\frac{\partial f}{\partial q_k}\frac{\partial g}{\partial p_k} - \frac{\partial f}{\partial p_k}\frac{\partial g}{\partial q_k}\Big). $$</div>
+<p>By the chain rule and Hamilton's equations,</p>
+\[ \dot f = \frac{\partial f}{\partial q}\dot q + \frac{\partial f}{\partial p}\dot p = \frac{\partial f}{\partial q}\frac{\partial H}{\partial p} - \frac{\partial f}{\partial p}\frac{\partial H}{\partial q} = \{f, H\} \]
+<p>(plus \(\partial f/\partial t\) if \(f\) depends explicitly on time). So "the Hamiltonian generates time evolution through the bracket". The coordinates themselves satisfy the <b>canonical relations</b> \(\{q_j, p_k\} = \delta_{jk}\), \(\{q_j,q_k\} = \{p_j,p_k\} = 0\).</p>
+<p>Dirac's great observation was that the rules of quantum mechanics follow from one substitution:</p>
 <div class="eq" id="eq-c-canonical">$$ \{f, g\} \;\longrightarrow\; \frac{1}{\ii\hbar}\,[\hat f, \hat g], \qquad \{q,p\}=1 \;\longrightarrow\; [\hat q,\hat p] = \ii\hbar . $$</div>
-<p>This is <b>canonical quantisation</b>. Applied to a circuit, flux and charge become operators with \([\hat\Phi,\hat Q] = \ii\hbar\). Their fluctuations cannot both vanish, and a circuit at absolute zero still has zero-point fluctuations of voltage and current. That is the physical basis of superconducting qubits, and the reason the Lagrangian-to-Hamiltonian procedure of these two chapters is the first step of every circuit-design flow.</p>
-<div class="box warn"><p><strong>Which variable is the "position"?</strong> For circuits, either flux or charge can play the role of position, as long as the other is its conjugate momentum. With node flux as the coordinate, capacitors are kinetic and inductors potential. With loop charge as the coordinate, the roles swap. The node-flux choice is standard for superconducting circuits because Josephson junctions are naturally functions of flux, but some devices (charge qubits, quantum dots) are more natural in the charge picture.</p></div>
+<p>Here \([\hat f,\hat g] = \hat f\hat g - \hat g\hat f\) is the commutator of two operators (Book 1, Chapter 3). The quantum equation of motion becomes \(\dot{\hat f} = \frac{1}{\ii\hbar}[\hat f,\hat H]\), the Heisenberg equation of Book 3. This recipe is called <b>canonical quantisation</b>: find the classical Hamiltonian and a conjugate pair, promote them to operators with commutator \(\ii\hbar\), and you have the quantum theory.</p>
+<p>Applied to a circuit, flux and charge become operators with \([\hat\Phi,\hat Q] = \ii\hbar\). By the uncertainty principle their fluctuations cannot both be zero, so a circuit cooled to absolute zero still has <b>zero-point fluctuations</b> of voltage and current. That is the physical basis of superconducting qubits.</p>
+<div class="pitfall"><p><b>Which variable is the "position"?</b> For circuits, either flux or charge can play the role of position, as long as the other is its conjugate momentum. With node flux as the coordinate, capacitors are kinetic and inductors potential. With loop charge as the coordinate, the roles swap. The node-flux choice is standard for superconducting circuits because Josephson junctions are naturally functions of flux, but some devices (charge qubits, quantum dots) are more natural in the charge picture.</p></div>
 
 <h3 id="sec-c-ham-lc">The LC oscillator in charge and flux</h3>
-<p>From @eq:c-lclag, \(Q = C\dot\Phi\) and</p>
+<p>From @eq:c-lclag, \(Q = C\dot\Phi\) and the three-step recipe gives</p>
 <div class="eq" id="eq-c-lcham">$$ H = \frac{Q^2}{2C} + \frac{\Phi^2}{2L}. $$</div>
-<p>It is useful to introduce the <b>characteristic impedance</b> \(Z = \sqrt{L/C}\). The oscillator's flux and charge amplitudes at a given energy \(E\) are \(\Phi_{\max} = \sqrt{2LE}\) and \(Q_{\max} = \sqrt{2CE}\), so their ratio is \(\Phi_{\max}/Q_{\max} = Z\). In the quantum ground state the energy is \(\hbar\omega/2\), and the zero-point fluctuations are</p>
+<p>This is the electrostatic energy of the capacitor plus the magnetic energy of the inductor, as it should be. Hamilton's equations are \(\dot\Phi = Q/C\) (the node voltage is charge over capacitance) and \(\dot Q = -\Phi/L = -I\) (the capacitor discharges through the inductor): Kirchhoff's laws.</p>
+<p>A circuit's second key number, after its frequency, is its <b>characteristic impedance</b></p>
+\[ Z = \sqrt{L/C}. \]
+<p>It sets the ratio of flux to charge swings. At energy \(E\), the flux and charge amplitudes are \(\Phi_{\max} = \sqrt{2LE}\) and \(Q_{\max} = \sqrt{2CE}\), so \(\Phi_{\max}/Q_{\max} = Z\). A high-impedance oscillator has big flux (and current-phase) swings and small charge swings; a low-impedance one the opposite. In the quantum ground state the energy is \(\hbar\omega/2\), and the zero-point fluctuations turn out to be</p>
 <div class="eq" id="eq-c-zpf">$$ \Phi_{\mathrm{zpf}} = \sqrt{\frac{\hbar Z}{2}}, \qquad Q_{\mathrm{zpf}} = \sqrt{\frac{\hbar}{2Z}} . $$</div>
-<p>(These come from Book 3; the classical analysis already tells you they scale with \(\sqrt Z\) and \(1/\sqrt Z\).) A circuit with impedance near \(R_Q = h/(2e)^2\approx 6.45\) kΩ has phase fluctuations of order one and is "very quantum"; a 50 Ω circuit has tiny phase fluctuations. Comparing impedances to the resistance quantum is a quick way to judge how nonlinear a junction circuit will be.</p>
+<p>(Book 3 derives these; a quick check is to set \(\Phi^2/2L\) and \(Q^2/2C\) each equal to \(\hbar\omega/4\), half the ground-state energy each.)</p>
+<div class="example"><p><b>Worked example: how quantum is a circuit?</b> A Josephson junction's energy is \(-E_J\cos(2\pi\Phi/\Phi_0)\), where \(\Phi_0 = h/2e\approx2.07\times10^{-15}\) Wb is the flux quantum. The cosine is noticeably nonlinear only when the phase \(\varphi = 2\pi\Phi/\Phi_0\) swings by a sizeable fraction of a radian. Using \(\Phi_{\mathrm{zpf}}\), the phase fluctuation is</p>
+\[ \varphi_{\mathrm{zpf}} = \frac{2\pi}{\Phi_0}\sqrt{\frac{\hbar Z}{2}} = \sqrt{\frac{\pi Z}{R_Q}}\,, \qquad R_Q = \frac{h}{(2e)^2}\approx6.45\ \text{k}\Omega . \]
+<p>For a 50 Ω microwave line, \(\varphi_{\mathrm{zpf}}\approx0.16\) and a junction in it would be only weakly nonlinear; for a transmon with \(Z\approx350\) Ω, \(\varphi_{\mathrm{zpf}}\approx0.4\), enough nonlinearity to make a qubit. So <i>comparing an impedance with the resistance quantum \(R_Q\) tells you at a glance how quantum and how nonlinear a circuit will be.</i></p></div>
 
-<h3 id="sec-c-ham-drive">Driven systems and the interaction picture, classically</h3>
-<p>Adding a drive means adding a time-dependent term, for example a voltage source coupled through a capacitor \(C_d\) contributes \(H_d(t) = (C_d/C_\Sigma)\,V_d(t)\,Q\) to leading order. It is often convenient to separate a Hamiltonian into a simple part \(H_0\), whose motion we know exactly, and a perturbation \(H_1\), and to describe the slow drift of the constants of the \(H_0\) motion caused by \(H_1\). For an oscillator, the constants are the amplitude and phase, combined into a complex amplitude \(\alpha\); a resonant drive makes \(\alpha\) grow linearly in time, an off-resonant drive makes it circle. This classical "rotating-frame" picture becomes exact in quantum mechanics as the interaction picture of Book 3.</p>
+<h3 id="sec-c-ham-drive">Driven systems and the rotating frame, classically</h3>
+<p>Controlling a qubit means driving it. Adding a drive means adding a time-dependent term to \(H\). For example a voltage source \(V_d(t)\) coupled through a small capacitor \(C_d\) contributes, to leading order, \(H_d(t) = (C_d/C_\Sigma)\,V_d(t)\,Q\), where \(C_\Sigma\) is the island's total capacitance.</p>
+<p>A good strategy is to split the Hamiltonian into a simple part \(H_0\), whose motion we know exactly (here the free oscillator), and a small extra part \(H_1\), and to ask how \(H_1\) slowly changes the "constants" of the \(H_0\) motion. For an oscillator those constants are amplitude and phase, packed into \(\alpha\). Without a drive, \(\alpha\ee^{\ii\omega t}\) stays fixed. Viewed in this <b>rotating frame</b> (spinning along with the free motion), a drive at exactly the resonance frequency pushes \(\alpha\) steadily in one direction, so the amplitude grows linearly in time. A drive detuned by \(\Delta\) pushes in a direction that itself rotates at \(\Delta\), so \(\alpha\) traces a small circle and the amplitude grows and shrinks periodically.</p>
+<p>This classical picture becomes exact in quantum mechanics as the <i>interaction picture</i> of Book 3, and the "small circle at the detuning" becomes the Rabi oscillation of a detuned qubit.</p>
+
+<h3 id="sec-c-ham-code">Try it in Python</h3>
+<p>Build the Hamiltonian of two coupled LC circuits from their capacitance and inductance matrices, find the normal-mode frequencies, and see the effect of the coupling capacitor.</p>
+<pre class="code"><code>import numpy as np
+from scipy.linalg import eigh
+
+L1 = L2 = 10e-9            # henries
+C1, C2, Cg = 80e-15, 82e-15, 2e-15   # farads
+
+Cmat = np.array([[C1 + Cg, -Cg], [-Cg, C2 + Cg]])
+Linv = np.diag([1 / L1, 1 / L2])
+
+# Equations of motion: C Phi'' = -Linv Phi.  Normal modes solve Linv v = w^2 C v
+w2, modes = eigh(Linv, Cmat)
+print("mode frequencies (GHz):", np.sqrt(w2) / (2 * np.pi) / 1e9)
+print("uncoupled (GHz):", 1 / np.sqrt(L1 * (C1 + Cg)) / 2 / np.pi / 1e9,
+      1 / np.sqrt(L2 * (C2 + Cg)) / 2 / np.pi / 1e9)
+print("inverse capacitance matrix (units of 1/fF):\n", np.linalg.inv(Cmat) * 1e-15)</code></pre>
+<p>The off-diagonal entry of \(\mathbf C^{-1}\) is the charge–charge coupling. Try making \(C_1 = C_2\): the two modes become symmetric and antisymmetric combinations, split by about \(\omega_0C_g/C\).</p>
 
 <div class="eda"><p>The Hamiltonian \(H = \tfrac12\mathbf Q^{\mathsf T}\mathbf C^{-1}\mathbf Q + U(\boldsymbol\Phi)\) is what circuit-quantisation tools such as scqubits, QuCAT and SQcircuit start from (@lf:sec-design-extract). The design parameters of a qubit (frequency, anharmonicity, couplings) are all functions of \(\mathbf C^{-1}\), \(\mathbf L^{-1}\) and the junction energies. The Jacobian of those functions with respect to the layout is what statistical sign-off needs.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Legendre transform: \(p = \partial L/\partial\dot q\), \(H = p\dot q - L\); for quadratic kinetic energy \(H = \tfrac12\mathbf p^{\mathsf T}M^{-1}\mathbf p + V\).</li>
+<li>Circuits: momentum conjugate to node flux is node charge; charging energies come from \(\mathbf C^{-1}\).</li>
+<li>Hamilton's equations define a flow in phase space; the oscillator is a rotating phasor \(\alpha\).</li>
+<li>\(\dot f = \{f,H\}\); quantisation replaces \(\{\,,\}\) by \([\,,]/\ii\hbar\), giving \([\hat\Phi,\hat Q] = \ii\hbar\).</li>
+<li>Impedance compared with \(R_Q\approx6.45\) kΩ sets the size of quantum phase fluctuations.</li>
+</ul></div>
 
 <div class="exercises" id="ex-c-hamilton"><h4>Exercises</h4><ol>
 <li>Derive Hamilton's equations for \(H = Q^2/2C + \Phi^2/2L\) and show they reproduce Kirchhoff's laws for the LC loop.
@@ -50,5 +114,9 @@
 <details><summary>Solution</summary><p>\(\det\mathbf C = (C+C_g)^2 - C_g^2 = C(C+2C_g)\). \(\mathbf C^{-1} = \frac{1}{C(C+2C_g)}\begin{pmatrix}C+C_g & C_g\\ C_g & C+C_g\end{pmatrix}\). The Hamiltonian contains \(\frac{C_g}{C(C+2C_g)}Q_1Q_2\approx\frac{C_g}{C^2}Q_1Q_2\): a coupling proportional to the product of charges. In quantum form this becomes the exchange coupling \(g(a_1^\dagger a_2 + a_1a_2^\dagger)\) of Book 6.</p></details></li>
 <li>Compute \(Z\), \(\Phi_{\mathrm{zpf}}\) and the ratio \(2\pi\Phi_{\mathrm{zpf}}/\Phi_0\) (with \(\Phi_0 = h/2e\)) for \(L = 10\) nH, \(C = 80\) fF.
 <details><summary>Solution</summary><p>\(Z = \sqrt{10^{-8}/8\times10^{-14}}\approx354\) Ω. \(\Phi_{\mathrm{zpf}} = \sqrt{\hbar Z/2} = \sqrt{1.055\times10^{-34}\times177}\approx1.37\times10^{-16}\) Wb. \(\Phi_0 = 2.07\times10^{-15}\) Wb, so \(2\pi\Phi_{\mathrm{zpf}}/\Phi_0\approx0.41\). The phase fluctuates by about 0.4 radians, large enough that a junction's cosine nonlinearity matters, which is the transmon regime.</p></details></li>
+<li>Do the Legendre transform for \(L = \tfrac12m\dot x^2 + qA\dot x - V(x)\) (a charge in a magnetic vector potential \(A\), one dimension). What is \(p\), and is it equal to \(m\dot x\)?
+<details><summary>Solution</summary><p>\(p = m\dot x + qA\): the canonical momentum is not the mechanical momentum. \(\dot x = (p-qA)/m\) and \(H = (p-qA)^2/2m + V\). This "minimal coupling" is how magnetic flux enters superconducting circuits (flux-tunable SQUIDs, Book 6).</p></details></li>
+<li>Show that \(\{X,P\}=1\) is preserved by the rescaling \(X = q\sqrt{m\omega}\), \(P = p/\sqrt{m\omega}\), and compute \(\{\alpha,\alpha^*\}\) for \(\alpha = (X+\ii P)/\sqrt{2\hbar}\).
+<details><summary>Solution</summary><p>\(\{X,P\} = \sqrt{m\omega}\cdot\frac1{\sqrt{m\omega}}\{q,p\} = 1\). \(\{\alpha,\alpha^*\} = \frac{1}{2\hbar}\{X+\ii P, X-\ii P\} = \frac{1}{2\hbar}(-\ii\{X,P\} + \ii\{P,X\}) = -\ii/\hbar\). With Dirac's rule, \([\hat a,\hat a^\dagger] = \ii\hbar\cdot(-\ii/\hbar) = 1\), the oscillator commutator of Book 3.</p></details></li>
 </ol></div>
 </section>
