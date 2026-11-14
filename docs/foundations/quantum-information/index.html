@@ -87,11 +87,13 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-i-alg2-sim"><span class="tocnum">4.5</span>Hamiltonian simulation</a></li>
 <li class="toc3"><a href="#sec-i-alg2-var"><span class="tocnum">4.6</span>Variational and near-term algorithms</a></li>
 <li class="toc2"><a href="#sec-i-noise"><span class="tocnum">5</span>Noise, fidelity and benchmarking</a></li>
-<li class="toc3"><a href="#sec-i-noise-model"><span class="tocnum">5.1</span>Gate errors as channels</a></li>
-<li class="toc3"><a href="#sec-i-noise-fid"><span class="tocnum">5.2</span>Measures of gate quality</a></li>
-<li class="toc3"><a href="#sec-i-noise-tomo"><span class="tocnum">5.3</span>Tomography</a></li>
-<li class="toc3"><a href="#sec-i-noise-rb"><span class="tocnum">5.4</span>Randomised benchmarking</a></li>
-<li class="toc3"><a href="#sec-i-noise-beyond"><span class="tocnum">5.5</span>Errors the simple models miss</a></li>
+<li class="toc3"><a href="#sec-i-noise-what"><span class="tocnum">5.1</span>What goes wrong in a gate</a></li>
+<li class="toc3"><a href="#sec-i-noise-model"><span class="tocnum">5.2</span>Gate errors as channels</a></li>
+<li class="toc3"><a href="#sec-i-noise-coh"><span class="tocnum">5.3</span>How much error does decoherence force?</a></li>
+<li class="toc3"><a href="#sec-i-noise-fid"><span class="tocnum">5.4</span>Measures of gate quality</a></li>
+<li class="toc3"><a href="#sec-i-noise-tomo"><span class="tocnum">5.5</span>Tomography, and why it does not scale</a></li>
+<li class="toc3"><a href="#sec-i-noise-rb"><span class="tocnum">5.6</span>Randomised benchmarking</a></li>
+<li class="toc3"><a href="#sec-i-noise-beyond"><span class="tocnum">5.7</span>Errors the simple models miss</a></li>
 <li class="toc2"><a href="#sec-i-qec1"><span class="tocnum">6</span>Quantum error correction I: codes and stabilisers</a></li>
 <li class="toc3"><a href="#sec-i-qec1-rep"><span class="tocnum">6.1</span>The repetition code, quantum style</a></li>
 <li class="toc3"><a href="#sec-i-qec1-disc"><span class="tocnum">6.2</span>Discretisation of errors</a></li>
@@ -120,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Quantum Information and Computation</h1>
   <p class="subtitle">Gates and circuits, entanglement, algorithms, noise and benchmarking, quantum error correction and the hardware stack</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">8 chapters · 15 numbered equations · 37 exercises with solutions · about 50 hours of study</p>
+  <p class="meta">8 chapters · 15 numbered equations · 39 exercises with solutions · about 50 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../quantum-mechanics/index.html">Book 3: Quantum Mechanics</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-i-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -485,56 +487,100 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <section id="sec-i-noise"><h2><span class="secnum">5</span> Noise, fidelity and benchmarking</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>Model gate errors as quantum channels, and reduce them to Pauli channels by twirling.</li>
-<li>Define process fidelity, average gate fidelity and their relation, and estimate coherence-limited gate fidelity.</li>
-<li>Understand tomography and why it does not scale, and how randomised benchmarking does.</li>
-<li>Know the error types that matter beyond the simple model: coherent errors, leakage, crosstalk and correlated errors.</li>
+<li>Describe what goes wrong in a real gate, and model it as a quantum channel, especially a Pauli channel.</li>
+<li>Define fidelity and error rate, and estimate the error a gate must have because of finite \(T_1\) and \(T_2\).</li>
+<li>Understand why tomography does not scale and how randomised benchmarking measures gate errors robustly.</li>
+<li>Recognise the errors that simple models miss: coherent errors, leakage, crosstalk, correlated and drifting errors.</li>
 </ul></div>
 
-<h3 id="sec-i-noise-model"><span class="secnum">5.1</span> Gate errors as channels</h3>
-<p>A real gate implements not the ideal unitary \(U\) but a channel \(\tilde{\mathcal U}\). It is convenient to write \(\tilde{\mathcal U} = \mathcal E\circ\mathcal U\): the ideal gate followed by an error channel \(\mathcal E\) (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#eq-q-kraus">Book 3 eq. (34)</a>). A general error channel on \(n\) qubits has \(16^n - 4^n\) real parameters, too many to measure or use. The <b>Pauli channel</b> is the workhorse simplification:</p>
-<div class="eq" id="eq-i-pauli">$$ \mathcal E(\rho) = \sum_{P\in\{I,X,Y,Z\}^{\otimes n}} p_P\,P\rho P, \qquad \sum_Pp_P = 1,  \tag{10}$$</div>
-<p>a random Pauli applied with probabilities \(p_P\). The <b>depolarising</b> channel is the special case with all non-identity Paulis equally likely. Any channel can be converted into a Pauli channel with the same average fidelity by <b>Pauli twirling</b>: surround the gate with random Paulis (and their compensating Paulis afterwards). Twirling is used in experiments (randomised compiling) and justifies Pauli models in error-correction simulations, which is crucial because Pauli errors on Clifford circuits can be simulated efficiently (Chapter 6).</p>
-<p>For a qubit with relaxation and dephasing during a gate of duration \(t_g\), twirling the amplitude- and phase-damping channels gives approximately</p>
-<div class="eq" id="eq-i-coh">$$ p_X = p_Y \approx \frac{t_g}{4T_1}, \qquad p_Z\approx\frac{t_g}{2T_2} - \frac{t_g}{4T_1}, \qquad 1 - \bar F \approx \frac{t_g}{3}\Big(\frac{1}{T_1} + \frac{1}{T_\varphi}\Big)  \tag{11}$$</div>
-<p>(for \(t_g\ll T_1, T_2\); the last expression uses \(1/T_2 = 1/2T_1 + 1/T_\varphi\)). A 25 ns single-qubit gate with \(T_1 = T_\varphi = 100\) µs has a coherence limit of about \(1.7\times10^{-4}\); a 60 ns two-qubit gate on two such qubits about \(8\times10^{-4}\). These coherence limits are the first line of the error budget in the review (<a class="xref ext" href="../../index.html#eq-eps">Lab to Foundry eq. (37)</a>).</p>
+<div class="bigpic"><p>Every real gate is slightly wrong. The qubit loses energy to its surroundings, its frequency jitters, the control pulse is a little too strong or too weak, and neighbouring qubits interfere. To build a useful machine we must answer three questions: how to <i>describe</i> these imperfections in a way that is simple enough to use, how to <i>measure</i> them on a real chip with many qubits, and which imperfections are <i>dangerous</i> for error correction. This chapter answers them. The single most important number it produces, the error rate per gate, is what error correction (Chapters 6–7) consumes and what chip design (Books 6–7) must deliver.</p></div>
 
-<h3 id="sec-i-noise-fid"><span class="secnum">5.2</span> Measures of gate quality</h3>
-<p>The <b>average gate fidelity</b> of an implemented channel \(\tilde{\mathcal U}\) to the target \(U\) is \(\bar F = \int\dd\psi\,\bra\psi U^\dagger\tilde{\mathcal U}(\ketbra\psi\psi)U\ket\psi\), averaged over all pure input states. The <b>process (entanglement) fidelity</b> \(F_e\) is the fidelity of the Choi state of the channel, and for a Pauli channel it is simply \(p_I\). They are related by</p>
+<h3 id="sec-i-noise-what"><span class="secnum">5.1</span> What goes wrong in a gate</h3>
+<p>Think of a single-qubit gate on a superconducting qubit: a 25 ns microwave pulse. Several things happen besides the intended rotation.</p>
+<ul>
+<li><b>Relaxation</b> (\(T_1\)): the qubit may decay from \(\ket1\) to \(\ket0\), giving its energy to the environment (Book 3, <a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-open-lindblad" title="The Lindblad master equation">Book 3 §8.2</a>).</li>
+<li><b>Dephasing</b> (\(T_\varphi\)): the qubit's frequency fluctuates, so the phase between \(\ket0\) and \(\ket1\) drifts randomly.</li>
+<li><b>Control errors</b>: the pulse rotates by \(\pi(1+\epsilon)\) instead of \(\pi\), or about a slightly tilted axis.</li>
+<li><b>Leakage</b>: the pulse excites the qubit's third level \(\ket2\), outside the qubit space.</li>
+<li><b>Crosstalk</b>: the pulse, or the qubit's coupling, also nudges a neighbour.</li>
+</ul>
+<p>We need a mathematical object that captures all of these. That object is the <b>quantum channel</b>.</p>
+
+<h3 id="sec-i-noise-model"><span class="secnum">5.2</span> Gate errors as channels</h3>
+<p>A noisy process maps an input density matrix \(\rho\) (Book 3, Chapter 7) to an output density matrix. Any physically possible such map, a <b>channel</b>, can be written with <b>Kraus operators</b> as \(\mathcal E(\rho) = \sum_kK_k\rho K_k^\dagger\) with \(\sum_kK_k^\dagger K_k = I\) (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#eq-q-kraus">Book 3 eq. (34)</a>). Think of it as: "with some probability, operation \(K_k\) happens", although the \(K_k\) need not be unitary. A real gate is modelled as the ideal unitary \(U\) followed by an error channel: \(\tilde{\mathcal U} = \mathcal E\circ\mathcal U\).</p>
+<p>A general channel on \(n\) qubits has \(16^n - 4^n\) real parameters (12 for one qubit, 240 for two). That is far too many to measure or reason about for a whole processor, so we simplify.</p>
+<p><b>The Pauli channel.</b> The most useful simplification says: after the gate, with some probability, an extra Pauli error (\(X\), \(Y\) or \(Z\) on some qubits) is applied:</p>
+<div class="eq" id="eq-i-pauli">$$ \mathcal E(\rho) = \sum_{P\in\{I,X,Y,Z\}^{\otimes n}} p_P\,P\rho P, \qquad \sum_Pp_P = 1 .  \tag{10}$$</div>
+<p>For one qubit there are just three numbers: \(p_X\) (bit flip), \(p_Z\) (phase flip) and \(p_Y\) (both). The <b>depolarising</b> channel is the special case \(p_X = p_Y = p_Z = p/3\): "with probability \(p\), a random Pauli error". Pauli channels are popular for two reasons. They are easy to simulate on large codes (Chapter 6 shows that Pauli errors on Clifford circuits are classically efficient to track). And any channel can be <i>converted</i> into a Pauli channel with the same average error by <b>Pauli twirling</b>: surround the gate with randomly chosen Paulis before and compensating Paulis after. On average, the off-diagonal "coherent" parts of the error cancel. Experiments use this deliberately ("randomised compiling").</p>
+<div class="intuition"><p>Why Paulis? Because any single-qubit error operator can be expanded as \(e_0I + e_xX + e_yY + e_zZ\), and an error-correcting code that measures its syndrome forces the error to "choose" one of these terms (Chapter 6). So Paulis are the natural alphabet of errors, just as bit flips are for classical bits.</p></div>
+
+<h3 id="sec-i-noise-coh"><span class="secnum">5.3</span> How much error does decoherence force?</h3>
+<p>Suppose a gate takes time \(t_g\), and during it the qubit relaxes and dephases. For an excited qubit, the probability of decaying in time \(t_g\) is about \(t_g/T_1\) (since \(\ee^{-t_g/T_1}\approx1 - t_g/T_1\) for short gates). Converting amplitude damping and dephasing into Pauli probabilities by twirling, and averaging over input states, gives</p>
+<div class="eq" id="eq-i-coh">$$ p_X = p_Y \approx \frac{t_g}{4T_1}, \qquad p_Z\approx\frac{t_g}{2T_2} - \frac{t_g}{4T_1}, \qquad 1 - \bar F \approx \frac{t_g}{3}\Big(\frac{1}{T_1} + \frac{1}{T_\varphi}\Big) ,  \tag{11}$$</div>
+<p>where \(1/T_2 = 1/2T_1 + 1/T_\varphi\) (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#eq-q-blocheq">Book 3 eq. (36)</a>) and \(\bar F\) is the average gate fidelity defined below. Read the last formula as "error ≈ gate time divided by coherence time, times one third". It is the <b>coherence limit</b>: even a perfectly calibrated gate cannot do better.</p>
+<div class="example"><p><b>Worked example: coherence limits.</b> A qubit has \(T_1 = T_\varphi = 100\) µs. A 25 ns single-qubit gate: \(1-\bar F\approx\frac{25\times10^{-9}}{3}\times(10^4 + 10^4) = 1.7\times10^{-4}\). A 60 ns two-qubit gate acts on two such qubits; roughly doubling the single-qubit estimate at the longer duration gives \(2\times\frac{60\times10^{-9}}{3}\times2\times10^4 = 8\times10^{-4}\). The surface code's threshold is about \(10^{-2}\) (Chapter 7), so these qubits are a factor of 10–60 below threshold if control is perfect. Halving gate time or doubling coherence halves the error: this is why both fast gates and long coherence are pursued.</p></div>
+
+<h3 id="sec-i-noise-fid"><span class="secnum">5.4</span> Measures of gate quality</h3>
+<p>How do we summarise "how close" a noisy gate is to the ideal one with one number?</p>
+<ul>
+<li>The <b>average gate fidelity</b> \(\bar F\): prepare a random pure input state \(\ket\psi\), apply the noisy gate, and compute the overlap of the output with the ideal output \(U\ket\psi\); average over all \(\ket\psi\). It answers "on a typical input, how often does the gate do the right thing?".</li>
+<li>The <b>process (entanglement) fidelity</b> \(F_e\): for a Pauli channel it is just \(p_I\), the probability that no error happened. It relates to the average fidelity by</li>
+</ul>
 <div class="eq" id="eq-i-favg">$$ \bar F = \frac{dF_e + 1}{d+1}, \qquad d = 2^n .  \tag{12}$$</div>
-<p>The <b>error rate</b> \(r = 1 - \bar F\) is the number most often quoted. For error correction, though, the average hides what matters: a coherent over-rotation by angle \(\epsilon\) has infidelity of order \(\epsilon^2\), but repeated \(N\) times in phase it builds up to \(N^2\epsilon^2\), while stochastic errors build up only as \(N\epsilon^2\). The worst-case measure, the <b>diamond norm</b> distance, can be as large as \(\sqrt{r}\) for coherent errors. Twirling converts coherent into stochastic errors, which is one reason it is used.</p>
+<p>The <b>error rate</b> \(r = 1 - \bar F\) is the number quoted in papers and press releases ("99.9% two-qubit fidelity" means \(r = 10^{-3}\)). For one qubit, \(r = \tfrac23(p_X+p_Y+p_Z)\): the factor \(\tfrac23\) appears because a random input state is unaffected by some errors (a \(Z\) error does nothing to \(\ket0\)).</p>
+<div class="pitfall"><p>Two gates with the same average fidelity can behave very differently in a long computation. A <b>stochastic</b> error (random Pauli with probability \(p\)) accumulates linearly: after \(N\) gates, error \(\approx Np\). A <b>coherent</b> error (the same small over-rotation \(\epsilon\) every time) adds up in amplitude: after \(N\) gates the rotation error is \(N\epsilon\) and the infidelity \(\approx(N\epsilon)^2/6\), growing as \(N^2\). The average fidelity of one gate, \(\approx\epsilon^2/6\), hides this. The worst-case measure, the "diamond-norm" distance, can be as large as \(\sqrt r\) for coherent errors. This is a major reason experiments randomise their gates (twirling), turning coherent errors into stochastic ones.</p></div>
 
-<h3 id="sec-i-noise-tomo"><span class="secnum">5.3</span> Tomography</h3>
-<p><b>State tomography</b> reconstructs \(\rho\) from measurements in a complete set of bases; <b>process tomography</b> reconstructs a channel from tomography of its outputs for a complete set of inputs. Both need a number of measurement settings exponential in \(n\), and both mix up the errors of the gate under test with the errors of state preparation and measurement (SPAM). They are used for one and two qubits, mostly for diagnosis.</p>
+<h3 id="sec-i-noise-tomo"><span class="secnum">5.5</span> Tomography, and why it does not scale</h3>
+<p><b>State tomography</b> reconstructs \(\rho\) by measuring many copies in several bases (for one qubit: \(X\), \(Y\) and \(Z\), giving the Bloch vector). <b>Process tomography</b> reconstructs a channel by doing state tomography on its outputs for a complete set of inputs. Two problems make it impractical for large systems. The number of settings grows exponentially (\(4^n\) for states, \(16^n\) for processes). And the result mixes the error of the gate with the errors of preparing inputs and measuring outputs (<b>SPAM</b> errors: state preparation and measurement), which are often larger than the gate error itself. Tomography is used on one or two qubits, mostly for diagnosis.</p>
 
-<h3 id="sec-i-noise-rb"><span class="secnum">5.4</span> Randomised benchmarking</h3>
-<p><b>Randomised benchmarking</b> (RB) <span class="cite">[<a href="#ref-magesan2011">12</a>]</span> avoids both problems. Apply a random sequence of \(m\) Clifford gates, followed by the single Clifford that inverts the whole sequence, and measure the probability \(F(m)\) of returning to the initial state. Averaging over random sequences twirls the noise into a depolarising channel with parameter \(p\) per gate, and</p>
+<h3 id="sec-i-noise-rb"><span class="secnum">5.6</span> Randomised benchmarking</h3>
+<p><b>Randomised benchmarking</b> (RB) <span class="cite">[<a href="#ref-magesan2011">12</a>]</span> measures a gate error that is immune to SPAM and scales to many qubits. The recipe:</p>
+<ol>
+<li>Choose a random sequence of \(m\) Clifford gates (Chapter 1: the gates generated by \(H\), \(S\), CNOT).</li>
+<li>Compute the single Clifford gate that undoes the whole sequence (easy classically, by Gottesman–Knill), and append it. Ideally, the qubit returns to its starting state.</li>
+<li>Run it, measure, and record whether the qubit came back ("survival probability").</li>
+<li>Repeat for many random sequences and several lengths \(m\); average.</li>
+</ol>
+<p>Averaging over random Cliffords twirls whatever the noise is into a depolarising channel with some parameter \(p\) per gate. The survival probability therefore decays exponentially in \(m\):</p>
 <div class="eq" id="eq-i-rb">$$ F(m) = A\,p^m + B, \qquad r = \frac{(d-1)(1-p)}{d} .  \tag{13}$$</div>
-<p>SPAM errors only affect \(A\) and \(B\), not the decay rate, so \(r\) is a clean per-gate error (<a class="xref ext" href="../../index.html#eq-rb">Lab to Foundry eq. (29)</a>). <b>Interleaved</b> RB inserts a specific gate between the random Cliffords and compares decay rates to extract that gate's error. <b>Cross-entropy benchmarking</b> uses random non-Clifford circuits and compares measured output distributions with ideal ones; it was used in the 2019 "supremacy" experiment. <b>Simultaneous</b> RB on many qubits at once exposes crosstalk. <a class="xref" href="#fig-i-rb">Figure 1</a> shows a typical RB decay.</p>
+<p>SPAM errors only change the constants \(A\) and \(B\), not the decay rate \(p\), so \(r\) is a clean <b>error per Clifford</b> (<a class="xref ext" href="../../index.html#eq-rb">Lab to Foundry eq. (29)</a>). <a class="xref" href="#fig-i-rb">Figure 1</a> shows typical decays. Variants: <b>interleaved RB</b> inserts one specific gate after each random Clifford and compares decay rates to isolate that gate's error; <b>simultaneous RB</b> runs RB on many qubits at once to expose crosstalk; <b>cross-entropy benchmarking</b> uses random non-Clifford circuits and compares output statistics with simulation.</p>
 <figure id="fig-i-rb">
 <img src="../figures/fig-i-rb.svg" alt="Randomised benchmarking survival probability decaying with sequence length for two error rates.">
-<figcaption><b>Figure 1.</b> Randomised benchmarking decays from <a class="xref" href="#eq-i-rb">(13)</a> for a single qubit (\(d=2\)) with error per Clifford \(r = 10^{-3}\) and \(5\times10^{-3}\), \(A = 0.48\), \(B = 0.5\) (the asymptote, a fully mixed qubit). Points mimic averages over random sequences with shot noise.</figcaption>
+<figcaption><b>Figure 1.</b> Randomised benchmarking decays from <a class="xref" href="#eq-i-rb">(13)</a> for a single qubit (\(d=2\)) with error per Clifford \(r = 10^{-3}\) and \(5\times10^{-3}\), \(A = 0.48\), \(B = 0.5\) (the asymptote is a fully mixed qubit, which "survives" half the time by chance). Points mimic averages over random sequences with shot noise.</figcaption>
 </figure>
+<div class="example"><p><b>Worked example: reading an RB curve.</b> A fit gives \(p = 0.998\) on one qubit. Then \(r = (2-1)(1-0.998)/2 = 10^{-3}\) per Clifford. On many machines a Clifford averages about 1.9 physical pulses, so the error per physical gate is about \(5\times10^{-4}\). If the coherence limit from <a class="xref" href="#eq-i-coh">(11)</a> is \(1.7\times10^{-4}\), then about two thirds of the error comes from something else: calibration, leakage or crosstalk. Comparing measured errors with coherence limits is the first diagnostic step on any new device.</p></div>
 
-<h3 id="sec-i-noise-beyond"><span class="secnum">5.5</span> Errors the simple models miss</h3>
+<h3 id="sec-i-noise-beyond"><span class="secnum">5.7</span> Errors the simple models miss</h3>
 <ul>
-<li><b>Leakage</b>: a transmon has levels above \(\ket1\). Population that leaks into \(\ket2\) is outside the qubit space; it is not a Pauli error, it persists, and it spreads to neighbours through two-qubit gates. Error-correction schemes add "leakage reduction units" to pump it back.</li>
-<li><b>Crosstalk</b>: control of one qubit disturbs another, through stray couplings, shared lines or residual \(ZZ\) interaction (<a class="xref ext" href="../../index.html#eq-zz">Lab to Foundry eq. (7)</a>). It makes errors depend on what neighbours are doing.</li>
-<li><b>Correlated errors</b>: a cosmic ray or radioactive decay deposits energy in the substrate and creates quasiparticles that cause errors on many qubits at once for milliseconds. Correlated errors are particularly damaging to error correction, which assumes independence (<a class="xref ext" href="../../index.html#sec-qec-dem" title="From device data to logical error">Lab to Foundry §9.4</a>).</li>
-<li><b>Drift and non-stationarity</b>: two-level systems move in frequency, so a qubit's \(T_1\) and frequency change over hours. A benchmark is a snapshot.</li>
+<li><b>Leakage.</b> A transmon has levels above \(\ket1\). Population in \(\ket2\) is outside the qubit space; it is not a Pauli error, it persists until reset, and it spreads to neighbours through two-qubit gates. Error-correction schemes add "leakage reduction units" to pump it back.</li>
+<li><b>Crosstalk.</b> Driving one qubit disturbs another, through stray capacitance, shared control lines, or the always-on \(ZZ\) interaction between coupled qubits (<a class="xref ext" href="../../index.html#eq-zz">Lab to Foundry eq. (7)</a>). Errors then depend on what the neighbours are doing.</li>
+<li><b>Correlated errors.</b> A cosmic ray or a radioactive decay in the chip's substrate creates a burst of quasiparticles that causes errors on many qubits at once for about a millisecond. Error correction assumes errors are independent and handles such bursts badly (<a class="xref ext" href="../../index.html#sec-qec-dem" title="From device data to logical error">Lab to Foundry §9.4</a>).</li>
+<li><b>Drift.</b> Microscopic defects (two-level systems) move in frequency, so a qubit's \(T_1\) and frequency change over hours. A benchmark is a snapshot; a device has a <i>distribution</i> of error rates over time.</li>
 </ul>
 
-<div class="eda"><p>Benchmarks are the measured outputs that a predictive design flow must reproduce. The review's proposed die record (<a class="xref ext" href="../../index.html#sec-prob-record" title="Integration: the die record">Lab to Foundry §11.1</a>) links each chip's layout and fabrication data with its measured RB error rates, coherence and crosstalk, so that models can be trained and validated against them.</p></div>
+<div class="eda"><p>Benchmarks are the measured outputs that a predictive design flow must reproduce. The review's proposed "die record" (<a class="xref ext" href="../../index.html#sec-prob-record" title="Integration: the die record">Lab to Foundry §11.1</a>) links each chip's layout and fabrication data with its measured RB errors, coherence and crosstalk, so that models can be trained and validated against real chips rather than against other simulations.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>A noisy gate = ideal unitary followed by an error channel; Pauli channels (random \(X\), \(Y\), \(Z\) with given probabilities) are the workhorse model.</li>
+<li>Coherence limit: error ≈ \(\tfrac{t_g}{3}(1/T_1 + 1/T_\varphi)\) per qubit; faster gates and longer coherence both help.</li>
+<li>Error rate \(r = 1-\bar F\); coherent errors grow quadratically in circuit depth and are hidden by the average.</li>
+<li>Randomised benchmarking fits \(Ap^m + B\) to random Clifford sequences and gives an error per gate that ignores SPAM errors.</li>
+<li>Leakage, crosstalk, correlated bursts and drift are outside the simple model and matter most for error correction.</li>
+</ul></div>
 
 <div class="exercises" id="ex-i-noise"><h4>Exercises</h4><ol>
-<li>A single-qubit depolarising channel with \(p_X = p_Y = p_Z = 10^{-4}\). What are \(F_e\) and \(\bar F\)?
-<details><summary>Solution</summary><p>\(F_e = p_I = 1 - 3\times10^{-4}\). \(\bar F = (2F_e+1)/3 = 1 - 2\times10^{-4}\). The error rate \(r = 2\times10^{-4}\).</p></details></li>
-<li>Estimate the coherence-limited error of a 40 ns CZ gate between two qubits each with \(T_1 = 150\) µs and \(T_\varphi = 200\) µs, using <a class="xref" href="#eq-i-coh">(11)</a> per qubit and adding.
-<details><summary>Solution</summary><p>Per qubit: \(\tfrac{40\,\mathrm{ns}}{3}(1/150 + 1/200)\,\mu\mathrm s^{-1} = 13.3\times0.01167\times10^{-3}\approx1.56\times10^{-4}\). Two qubits: about \(3.1\times10^{-4}\). (For two-qubit gates the prefactor differs slightly because the average is over a 4-dimensional space; this is an estimate.)</p></details></li>
+<li>A single-qubit depolarising channel has \(p_X = p_Y = p_Z = 10^{-4}\). What are \(F_e\), \(\bar F\) and \(r\)?
+<details><summary>Solution</summary><p>\(F_e = p_I = 1 - 3\times10^{-4}\). \(\bar F = (2F_e+1)/3 = 1 - 2\times10^{-4}\). So \(r = 2\times10^{-4}\).</p></details></li>
+<li>Apply the bit-flip channel \(\rho\to(1-p)\rho + pX\rho X\) to \(\ket0\) and to \(\ket+\). Which state is unaffected, and why?
+<details><summary>Solution</summary><p>\(\ket0\): \((1-p)\ketbra00 + p\ketbra11\), a mixture. \(\ket+\): \(X\ket+ = \ket+\), so the output is \(\ketbra{+}{+}\), unchanged. \(\ket+\) is an eigenstate of \(X\), so an \(X\) error does nothing to it. That is why average fidelity is less than \(1-p\): some inputs are immune to some errors.</p></details></li>
+<li>Estimate the coherence-limited error of a 40 ns CZ gate between two qubits each with \(T_1 = 150\) µs and \(T_\varphi = 200\) µs.
+<details><summary>Solution</summary><p>Per qubit: \(\tfrac{40\,\mathrm{ns}}{3}(1/150 + 1/200)\,\mu\mathrm s^{-1} = 13.3\times10^{-3}\times0.01167\approx1.56\times10^{-4}\). Two qubits: about \(3.1\times10^{-4}\).</p></details></li>
 <li>An RB experiment fits \(p = 0.9985\) per Clifford on one qubit. What is \(r\)? If a Clifford averages 1.875 physical gates, what is the error per physical gate?
-<details><summary>Solution</summary><p>\(r = (1 - p)/2 = 7.5\times10^{-4}\). Per gate \(\approx7.5\times10^{-4}/1.875 = 4\times10^{-4}\).</p></details></li>
-<li>A gate over-rotates by \(\epsilon = 0.01\) rad. What is its infidelity, and what is the error after 100 repetitions if the errors add coherently?
-<details><summary>Solution</summary><p>Infidelity of a rotation error \(\epsilon\) is about \(\epsilon^2/6\) on average for a qubit (\(\approx1.7\times10^{-5}\)). After 100 coherent repetitions the angle error is 1 rad, infidelity of order \(1/6\) or more: far worse than \(100\times1.7\times10^{-5} = 1.7\times10^{-3}\) for stochastic errors.</p></details></li>
+<details><summary>Solution</summary><p>\(r = (1-p)/2 = 7.5\times10^{-4}\). Per physical gate \(\approx7.5\times10^{-4}/1.875 = 4\times10^{-4}\).</p></details></li>
+<li>A gate over-rotates by \(\epsilon = 0.01\) rad every time. What is its infidelity? After 100 repetitions in a row, compare the coherent result with what 100 independent stochastic errors of the same single-gate infidelity would give.
+<details><summary>Solution</summary><p>Single gate: \(\epsilon^2/6\approx1.7\times10^{-5}\). Coherent: total rotation error 1 rad, infidelity \(\approx(1)^2/6\approx0.17\) (the small-angle formula is rough here, but the order is right). Stochastic: \(100\times1.7\times10^{-5} = 1.7\times10^{-3}\). The coherent case is a hundred times worse.</p></details></li>
+<li>Why can RB not tell you <i>which kind</i> of error a gate has (for example, \(T_1\) versus over-rotation)? Name an experiment that could.
+<details><summary>Solution</summary><p>Twirling deliberately averages every error into the same depolarising form, so only its size survives. To diagnose the type, use experiments sensitive to specific errors: repeating the same gate many times without randomisation amplifies coherent over-rotations (they grow quadratically), comparing the RB error with the \(T_1\)/\(T_2\) coherence limit separates incoherent from other errors, and gate-set tomography reconstructs the full channel with SPAM separated.</p></details></li>
 </ol></div>
 </section>
 
