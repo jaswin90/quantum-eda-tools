@@ -52,8 +52,15 @@ def load_bib() -> dict:
 MATH = re.compile(r"\$\$.*?\$\$|\\\(.*?\\\)|\\\[.*?\\\]", re.S)
 
 
+CODE = re.compile(r'<pre class="code"><code>(.*?)</code></pre>', re.S)
+
+
 def lint(path: Path, text: str) -> None:
-    """A '<' inside maths starts an HTML tag in the browser; require \\lt (or &lt;) instead."""
+    """A '<' inside maths or code starts an HTML tag in the browser; require \\lt or &lt; instead."""
+    for m in CODE.finditer(text):
+        if "<" in m.group(1):
+            line = text.count("\n", 0, m.start()) + 1
+            sys.exit(f"{path.relative_to(ROOT)}:{line}: '<' inside a code block; write &lt;")
     for m in MATH.finditer(text):
         if re.search(r"<(?!/?(sub|sup|b|i)>)", m.group(0)):
             line = text.count("\n", 0, m.start()) + 1

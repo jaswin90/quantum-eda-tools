@@ -72,7 +72,7 @@ psi = (3*ket0 + 4j*ket1) / 5
 
 print(np.vdot(plus, minus))            # 0: orthogonal
 print(abs(np.vdot(plus, psi))**2)      # 0.5: probability of "+"
-P = np.outer(psi, psi.conj())          # projector |psi><psi|
+P = np.outer(psi, psi.conj())          # projector |psi>&lt;psi|
 print(np.allclose(P.dot(P), P))        # True: P^2 = P
 I = np.outer(plus, plus.conj()) + np.outer(minus, minus.conj())
 print(np.allclose(I, np.eye(2)))       # True: resolution of the identity</code></pre>
