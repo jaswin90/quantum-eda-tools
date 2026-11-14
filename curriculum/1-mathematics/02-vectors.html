@@ -1,60 +1,88 @@
 <section id="sec-m-vectors"><h2>Vector spaces, inner products and Dirac notation</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>Know what a complex vector space, a basis and a dimension are, and why functions can be vectors too.</li>
-<li>Compute inner products, norms and orthogonal projections, and orthonormalise a set of vectors.</li>
-<li>Read and write Dirac's bra–ket notation fluently, including outer products and the resolution of the identity.</li>
+<li>Know what a vector space, a basis and a dimension are, and why lists of complex numbers and even functions are vectors.</li>
+<li>Compute inner products, lengths, angles and projections, and turn any set of vectors into an orthonormal basis.</li>
+<li>Read and write Dirac's bra–ket notation fluently, including outer products, projectors and the resolution of the identity.</li>
 </ul></div>
 
+<div class="bigpic"><p>The state of a quantum system is a <b>vector</b>: a list of complex numbers, one per possible outcome. Measuring the system means asking how much of that vector points along each outcome, which is a question about <b>projections</b> and <b>inner products</b>. The same mathematics describes the modes of a microwave resonator, the coefficients of a Fourier series and the basis functions of a finite-element solver. This chapter builds it from the familiar picture of arrows in space, step by step, and ends with Dirac's notation, the shorthand physicists use for all of it.</p></div>
+
 <h3 id="sec-m-vectors-space">Vectors beyond arrows</h3>
-<p>In school a vector is an arrow with a length and a direction. The idea that survives into quantum mechanics is more abstract and more useful: a <b>vector space</b> is any collection of objects that you can add together and multiply by numbers, with the usual rules (addition is commutative and associative, there is a zero vector, multiplication distributes over addition). When the numbers are complex we have a <b>complex vector space</b>. Examples:</p>
+<p>At school a vector is an arrow with a length and a direction, like a velocity. In components, an arrow in 3D space is a list of three numbers, \((v_1, v_2, v_3)\). Two operations make arrows useful: you can <b>add</b> them (tip to tail, or component by component) and you can <b>scale</b> them by a number (stretch or shrink). The abstract idea of a <b>vector space</b> keeps exactly these two operations and forgets the arrows: a vector space is any collection of objects that can be added and multiplied by numbers, following the usual rules (order of addition does not matter, there is a zero vector, multiplication distributes over addition, and so on). When the numbers are complex we have a <b>complex vector space</b>. Examples you will meet:</p>
 <ul>
-<li>Columns of \(n\) complex numbers, \(\CC^n\). The state of a qubit lives in \(\CC^2\).</li>
-<li>Complex-valued functions \(f(x)\) on an interval, added pointwise. The wavefunction of a particle lives in such a space.</li>
-<li>Polynomials of degree at most \(d\). Useful for exercises, and for the polynomial fits of Book 7.</li>
+<li>Columns of \(n\) complex numbers, called \(\CC^n\). The state of a qubit lives in \(\CC^2\); of two qubits in \(\CC^4\).</li>
+<li>Complex-valued functions \(f(x)\) on an interval, added point by point: \((f+g)(x) = f(x) + g(x)\). The wavefunction of a particle lives in such a space.</li>
+<li>Polynomials of degree at most \(d\). Two polynomials add to a polynomial; a multiple of a polynomial is a polynomial.</li>
 </ul>
-<p>A set of vectors \(\{v_1,\dots,v_k\}\) is <b>linearly independent</b> if no nontrivial combination \(\sum c_iv_i\) is zero. A <b>basis</b> is an independent set that spans the space, so every vector is a unique combination of basis vectors. The number of basis vectors is the <b>dimension</b>. \(\CC^n\) has dimension \(n\); the space of functions on an interval is infinite-dimensional, with bases such as the Fourier modes \(\ee^{2\pi\ii kx/L}\) of Chapter 6.</p>
+<p>A set of vectors is <b>linearly independent</b> if none of them can be built from the others, i.e. the only way to get \(\sum_kc_kv_k = 0\) is with all \(c_k = 0\). A <b>basis</b> is an independent set from which every vector can be built, in exactly one way. The number of basis vectors is the <b>dimension</b>. In 3D space, the three unit arrows along \(x\), \(y\), \(z\) are a basis. \(\CC^n\) has dimension \(n\). The space of functions on an interval is infinite-dimensional: it needs infinitely many basis functions, such as the sines and cosines of Fourier series (Chapter 6).</p>
+<div class="quick"><p>Are \((1, 2)\) and \((2, 4)\) a basis of \(\RR^2\)? What about \((1, 2)\) and \((2, 1)\)?</p>
+<details><summary>Answer</summary><p>No: \((2,4) = 2(1,2)\), so they are dependent and only reach the vectors along one line. Yes: neither is a multiple of the other, so together they reach every point of the plane.</p></details></div>
 
 <h3 id="sec-m-vectors-inner">Inner products, length and angle</h3>
-<p>To talk about length and orthogonality we need an <b>inner product</b>, a rule that takes two vectors and returns a complex number \(\langle u, v\rangle\). On \(\CC^n\) the standard choice is</p>
+<p>Adding and scaling are not enough to talk about length, angle or "how much of one vector points along another". For that we need an <b>inner product</b>: a rule that takes two vectors and returns a number. For real arrows it is the familiar dot product, \(\mathbf u\cdot\mathbf v = u_1v_1 + u_2v_2 + u_3v_3 = |\mathbf u||\mathbf v|\cos\theta\). For complex vectors in \(\CC^n\) the standard choice is</p>
 <div class="eq" id="eq-m-inner">$$ \langle u, v\rangle = \sum_{k=1}^n u_k^*\, v_k , \qquad \|v\| = \sqrt{\langle v, v\rangle} = \Big(\sum_k |v_k|^2\Big)^{1/2}. $$</div>
-<p>The conjugate on the first argument is essential. Without it, \(\langle v,v\rangle\) for \(v = (1,\ii)\) would be \(1 + \ii^2 = 0\), and a nonzero vector would have zero length. With it, \(\langle v,v\rangle = |1|^2+|\ii|^2 = 2\). The defining properties are: linearity in the second argument, \(\langle u, v\rangle = \langle v, u\rangle^*\) (conjugate symmetry), and \(\langle v,v\rangle > 0\) for \(v\ne0\). For functions on \([a,b]\) the same idea gives</p>
+<p>Why the complex conjugate on the first vector? Without it, the "length squared" of \(v = (1,\ii)\) would be \(1\cdot1 + \ii\cdot\ii = 1 - 1 = 0\): a nonzero vector with zero length, which is nonsense. With the conjugate, \(\langle v,v\rangle = |1|^2+|\ii|^2 = 2\), always positive (@eq:m-modsq). The rules an inner product obeys are: it is linear in the second vector; swapping the two vectors conjugates the result, \(\langle u, v\rangle = \langle v, u\rangle^*\); and \(\langle v,v\rangle > 0\) for every nonzero \(v\).</p>
+<p>For functions on \([a,b]\), the sum over components becomes an integral over points:</p>
 <div class="eq" id="eq-m-inner-fn">$$ \langle f, g\rangle = \int_a^b f(x)^*\, g(x)\,\dd x . $$</div>
-<p>Two vectors are <b>orthogonal</b> if \(\langle u,v\rangle=0\). A basis \(\{e_k\}\) is <b>orthonormal</b> if \(\langle e_j, e_k\rangle = \delta_{jk}\) (the Kronecker delta: 1 if \(j=k\), else 0). In an orthonormal basis the coefficients of a vector are just inner products: if \(v = \sum_k c_k e_k\), then taking the inner product with \(e_j\) gives \(c_j = \langle e_j, v\rangle\). This one-line fact is behind Fourier series, quantum measurement and modal analysis of electromagnetic structures alike.</p>
+<p>Two vectors are <b>orthogonal</b> (perpendicular) if \(\langle u,v\rangle = 0\). A vector of length 1 is <b>normalised</b>. A basis \(\{e_k\}\) whose vectors are all normalised and mutually orthogonal, \(\langle e_j, e_k\rangle = \delta_{jk}\) (the <b>Kronecker delta</b>: 1 if \(j = k\), 0 otherwise), is <b>orthonormal</b>.</p>
+<p>Orthonormal bases make life easy. If \(v = \sum_kc_ke_k\), take the inner product with \(e_j\): all terms vanish except \(k = j\), leaving</p>
+\[ c_j = \langle e_j, v\rangle . \]
+<p>To find "how much of \(v\) is along \(e_j\)", just take an inner product. This one-line fact is behind Fourier series, quantum measurement and the modal analysis of electromagnetic structures alike.</p>
+<div class="example"><p><b>Worked example: components in a tilted basis.</b> In \(\RR^2\), use the orthonormal basis \(e_1 = (1,1)/\sqrt2\), \(e_2 = (1,-1)/\sqrt2\) (the usual axes rotated by \(45^\circ\)). Express \(v = (3, 1)\). \(c_1 = \langle e_1, v\rangle = (3+1)/\sqrt2 = 2\sqrt2\); \(c_2 = (3-1)/\sqrt2 = \sqrt2\). Check: \(2\sqrt2\,e_1 + \sqrt2\,e_2 = (2,2) + (1,-1) = (3,1)\) ✓. And the length is preserved: \(\|v\|^2 = 9 + 1 = 10 = (2\sqrt2)^2 + (\sqrt2)^2\). Exactly this calculation, with complex numbers, tells you the probabilities of measuring a qubit in a rotated basis.</p></div>
 <div class="thm"><p><b>Cauchy–Schwarz inequality.</b> \(|\langle u,v\rangle| \le \|u\|\,\|v\|\), with equality only when one vector is a multiple of the other.</p>
-<p><i>Proof.</i> If \(u=0\) it is trivial. Otherwise, let \(w = v - \frac{\langle u, v\rangle}{\|u\|^2}u\), the part of \(v\) orthogonal to \(u\). Then \(0 \le \|w\|^2 = \|v\|^2 - |\langle u,v\rangle|^2/\|u\|^2\), which rearranges to the claim. ∎</p></div>
-<p>Cauchy–Schwarz is the mathematical root of the Heisenberg uncertainty relation (Book 3) and guarantees that quantum probabilities, which are squared inner products of unit vectors, lie between 0 and 1.</p>
+<p><i>Proof.</i> If \(u=0\) it is trivial. Otherwise split \(v\) into its part along \(u\) and the rest: \(w = v - \frac{\langle u, v\rangle}{\|u\|^2}u\) is orthogonal to \(u\). Lengths squared are never negative, so \(0 \le \|w\|^2 = \|v\|^2 - |\langle u,v\rangle|^2/\|u\|^2\), which rearranges to the claim. ∎</p></div>
+<p>In ordinary space this just says \(|\cos\theta|\le1\). In quantum mechanics it guarantees that probabilities, which are squared inner products of unit vectors, lie between 0 and 1, and it is the mathematical root of the Heisenberg uncertainty relation (@b3:sec-q-post-uncert).</p>
 
 <h3 id="sec-m-vectors-gs">Projection and Gram–Schmidt</h3>
-<p>The <b>orthogonal projection</b> of \(v\) onto the direction of a unit vector \(e\) is \(\langle e, v\rangle\, e\). Subtracting projections one at a time turns any independent list into an orthonormal one. This is the <b>Gram–Schmidt</b> procedure: given \(v_1, v_2, \dots\),</p>
+<p>The <b>orthogonal projection</b> of \(v\) onto the direction of a unit vector \(e\) is \(\langle e, v\rangle\,e\): the "shadow" of \(v\) along \(e\). What remains, \(v - \langle e,v\rangle e\), is perpendicular to \(e\). Subtracting projections one at a time turns any independent list of vectors into an orthonormal one. This is the <b>Gram–Schmidt</b> procedure: given \(v_1, v_2, \dots\),</p>
 <div class="eq" id="eq-m-gs">$$ e_1 = \frac{v_1}{\|v_1\|}, \qquad w_k = v_k - \sum_{j\lt k} \langle e_j, v_k\rangle\, e_j, \qquad e_k = \frac{w_k}{\|w_k\|} . $$</div>
-<p>Numerically the same idea, done carefully, is the QR factorisation used inside eigenvalue solvers (Chapter 8).</p>
-<div class="example"><p><b>Worked example.</b> Orthonormalise \(v_1 = (1, 1, 0)\) and \(v_2 = (1, 0, 1)\) in \(\RR^3\).</p>
-<p>\(e_1 = (1,1,0)/\sqrt2\). Then \(\langle e_1, v_2\rangle = 1/\sqrt2\), so \(w_2 = (1,0,1) - \tfrac12(1,1,0) = (\tfrac12, -\tfrac12, 1)\), with norm \(\sqrt{3/2}\). So \(e_2 = (1,-1,2)/\sqrt6\). Check: \(\langle e_1, e_2\rangle = (1 - 1 + 0)/\sqrt{12} = 0\).</p></div>
+<p>In words: take the next vector, remove its components along all the directions you already have, and normalise what is left.</p>
+<div class="example"><p><b>Worked example.</b> Orthonormalise \(v_1 = (1, 1, 0)\) and \(v_2 = (1, 0, 1)\).</p>
+<p>\(e_1 = (1,1,0)/\sqrt2\). Then \(\langle e_1, v_2\rangle = 1/\sqrt2\), so \(w_2 = (1,0,1) - \tfrac{1}{\sqrt2}\cdot\tfrac{(1,1,0)}{\sqrt2} = (\tfrac12, -\tfrac12, 1)\), with length \(\sqrt{3/2}\). So \(e_2 = (1,-1,2)/\sqrt6\). Check: \(\langle e_1, e_2\rangle = (1 - 1 + 0)/\sqrt{12} = 0\) ✓.</p></div>
+<p>Numerically, a careful version of the same idea is the QR factorisation used inside eigenvalue solvers (Chapter 8), and it is how finite-element and mode solvers build well-conditioned bases.</p>
 
 <h3 id="sec-m-vectors-dirac">Dirac notation</h3>
-<p>Quantum mechanics uses a notation, due to Dirac, that makes inner products and projections almost automatic. A vector is written as a <b>ket</b> \(\ket{\psi}\). For each ket there is a <b>bra</b> \(\bra{\psi}\), which in \(\CC^n\) is the conjugate transpose: the row \((\psi_1^*, \dots, \psi_n^*)\). Putting a bra next to a ket makes a "bra-ket", the inner product:</p>
+<p>Quantum mechanics uses a notation invented by Paul Dirac that makes inner products and projections almost automatic. It looks strange at first; it is worth practising until it feels natural, because all of Books 3–6 use it.</p>
+<ul>
+<li>A vector is written as a <b>ket</b>, \(\ket{\psi}\). Think "column vector".</li>
+<li>For each ket there is a <b>bra</b>, \(\bra{\psi}\): its conjugate transpose, a row of conjugated numbers. Think "row vector".</li>
+<li>A bra next to a ket, \(\braket{\phi}{\psi}\) ("bra-ket", hence the name), is the inner product: row times column gives a number.</li>
+</ul>
 <div class="eq" id="eq-m-braket">$$ \ket{\psi} = \begin{pmatrix}\psi_1\\ \vdots\\ \psi_n\end{pmatrix}, \qquad \bra{\phi} = (\phi_1^*, \dots, \phi_n^*), \qquad \braket{\phi}{\psi} = \sum_k \phi_k^*\psi_k . $$</div>
-<p>Putting a ket next to a bra the other way round, \(\ketbra{\psi}{\phi}\), gives a column times a row: an \(n\times n\) matrix, the <b>outer product</b>. Acting on a vector, it does \(\big(\ketbra{\psi}{\phi}\big)\ket{\chi} = \ket{\psi}\braket{\phi}{\chi}\): it measures the overlap of \(\ket\chi\) with \(\ket\phi\) and returns that much of \(\ket\psi\). In particular, for a unit vector \(\ket{e}\), the matrix \(P = \ketbra{e}{e}\) is the projector onto \(\ket e\).</p>
-<p>If \(\{\ket{k}\}\) is an orthonormal basis, then every vector is \(\ket\psi = \sum_k \ket{k}\braket{k}{\psi}\), which means the sum of all the projectors is the identity:</p>
+<p>Putting them the other way round, ket then bra, \(\ketbra{\psi}{\phi}\), is a column times a row: an \(n\times n\) matrix, the <b>outer product</b>. It acts on a vector by "measuring its overlap with \(\phi\) and returning that much of \(\psi\)":</p>
+\[ \big(\ketbra{\psi}{\phi}\big)\ket{\chi} = \ket{\psi}\braket{\phi}{\chi} . \]
+<p>For a unit vector \(\ket e\), the matrix \(P = \ketbra{e}{e}\) is the <b>projector</b> onto \(\ket e\): it returns the shadow \(\ket e\braket{e}{\chi}\). Applying it twice changes nothing more (\(P^2 = P\)), as a projection should.</p>
+<p>If \(\{\ket{k}\}\) is an orthonormal basis, then every vector is the sum of its shadows on the basis vectors, \(\ket\psi = \sum_k \ket{k}\braket{k}{\psi}\). Since that is true for every \(\ket\psi\), the sum of all the projectors must be the identity:</p>
 <div class="eq" id="eq-m-resolution">$$ \sum_k \ketbra{k}{k} = I . $$</div>
-<p>This <b>resolution of the identity</b> is the most used line in quantum mechanics. Inserting it between any bra and ket expresses an abstract quantity in a chosen basis. For instance \(\braket{\phi}{\psi} = \sum_k \braket{\phi}{k}\braket{k}{\psi} = \sum_k \phi_k^*\psi_k\), recovering @eq:m-braket.</p>
-<p>For a qubit the standard (computational) basis is</p>
+<p>This <b>resolution of the identity</b> is the most used line in quantum mechanics. You can insert it anywhere (it is just "1"), and doing so expresses an abstract quantity in a chosen basis. For instance, \(\braket{\phi}{\psi} = \bra\phi I\ket\psi = \sum_k \braket{\phi}{k}\braket{k}{\psi} = \sum_k \phi_k^*\psi_k\), recovering @eq:m-braket.</p>
+<p>For a qubit, the standard ("computational") basis and the "plus/minus" basis are</p>
 \[ \ket0 = \begin{pmatrix}1\\0\end{pmatrix}, \quad \ket1 = \begin{pmatrix}0\\1\end{pmatrix}, \qquad \ket{\pm} = \frac{\ket0 \pm \ket1}{\sqrt2}. \]
-<p>Both \(\{\ket0,\ket1\}\) and \(\{\ket+,\ket-\}\) are orthonormal bases of \(\CC^2\). A general unit vector is \(\alpha\ket0 + \beta\ket1\) with \(|\alpha|^2+|\beta|^2=1\).</p>
-<div class="box"><p><strong>Infinite dimensions, briefly.</strong> For functions, the "basis" \(\ket{x}\) of position states is continuous, sums become integrals and the Kronecker delta becomes the Dirac delta: \(\int \ketbra{x}{x}\,\dd x = I\), \(\braket{x}{x'} = \delta(x-x')\), and \(\braket{x}{\psi} = \psi(x)\) is the wavefunction. The rigorous theory (Hilbert spaces, rigged Hilbert spaces) is more delicate, but for engineering every formula works if you replace \(\sum_k\) by \(\int \dd x\). A space with an inner product that is complete (limits of convergent sequences stay inside) is called a <b>Hilbert space</b>; every finite-dimensional inner-product space is one.</p></div>
+<p>Both are orthonormal bases of \(\CC^2\). A general normalised qubit state is \(\alpha\ket0 + \beta\ket1\) with \(|\alpha|^2+|\beta|^2=1\).</p>
+<div class="example"><p><b>Worked example: Dirac notation in action.</b> For \(\ket\psi = (3\ket0 + 4\ii\ket1)/5\), find \(\braket{+}{\psi}\) and the projector onto \(\ket\psi\).</p>
+<p>\(\bra+ = (\bra0 + \bra1)/\sqrt2\), and \(\braket{0}{0} = 1\), \(\braket01 = 0\), etc., so \(\braket{+}{\psi} = \frac{1}{5\sqrt2}(3 + 4\ii)\). Its modulus squared is \(25/50 = 1/2\): measuring this state in the \(\pm\) basis gives "+" half the time (Book 3). The projector: \(\ketbra\psi\psi = \frac{1}{25}\begin{pmatrix}3\\4\ii\end{pmatrix}(3,\ -4\ii) = \frac{1}{25}\begin{pmatrix}9 & -12\ii\\ 12\ii & 16\end{pmatrix}\). Note the conjugation in the bra.</p></div>
+<div class="box"><p><strong>Infinite dimensions, briefly.</strong> For a particle on a line, the "basis" \(\ket{x}\) of position states is continuous. Sums become integrals and the Kronecker delta becomes the Dirac delta (Chapter 6): \(\int \ketbra{x}{x}\,\dd x = I\), \(\braket{x}{x'} = \delta(x-x')\), and \(\braket{x}{\psi} = \psi(x)\) is the wavefunction. The rigorous theory is delicate, but for engineering every formula works if you replace \(\sum_k\) by \(\int\dd x\). A space with an inner product that is complete (limits of convergent sequences stay inside) is a <b>Hilbert space</b>; every finite-dimensional one is.</p></div>
 
-<div class="eda"><p>The capacitance matrix of a multi-conductor layout and the modes of a 3D electromagnetic simulation are both expressed in bases, and the overlap integrals that couple them are inner products of the form @eq:m-inner-fn. The "energy participation ratio" used to turn a field simulation into a qubit Hamiltonian (@lf:sec-design-extract) is a ratio of such integrals. Understanding projection onto a basis is understanding what those tools compute.</p></div>
+<div class="eda"><p>The capacitance matrix of a layout and the modes of a 3D electromagnetic simulation are both expressed in bases, and the overlap integrals that couple them are inner products like @eq:m-inner-fn. The "energy participation ratio" used to turn a field simulation into a qubit Hamiltonian (@lf:sec-design-extract) is a ratio of such integrals. Understanding projection onto a basis is understanding what those tools compute.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>A vector space is anything you can add and scale; a basis builds every vector uniquely; the dimension counts basis vectors.</li>
+<li>Complex inner product \(\langle u,v\rangle = \sum u_k^*v_k\) (conjugate first); orthonormal bases give components as inner products.</li>
+<li>Projection removes components; Gram–Schmidt builds orthonormal bases.</li>
+<li>Kets are columns, bras conjugated rows; \(\braket\phi\psi\) is a number, \(\ketbra\psi\phi\) a matrix; \(\sum_k\ketbra kk = I\).</li>
+</ul></div>
 
 <div class="exercises" id="ex-m-vectors"><h4>Exercises</h4><ol>
 <li>Compute \(\braket{+}{-}\), \(\braket{0}{+}\) and \(\| \ket0 + \ii\ket1\|\).
-<details><summary>Solution</summary><p>\(\braket{+}{-} = \tfrac12(1\cdot1 + 1\cdot(-1)) = 0\). \(\braket{0}{+} = 1/\sqrt2\). \(\|\ket0+\ii\ket1\| = \sqrt{|1|^2+|\ii|^2} = \sqrt2\).</p></details></li>
+<details><summary>Solution</summary><p>\(\braket{+}{-} = \tfrac12(1 - 1) = 0\). \(\braket{0}{+} = 1/\sqrt2\). \(\|\ket0+\ii\ket1\| = \sqrt{|1|^2+|\ii|^2} = \sqrt2\).</p></details></li>
 <li>Show that \(\ket{\pm\ii} = (\ket0 \pm \ii\ket1)/\sqrt2\) form an orthonormal basis, and expand \(\ket0\) in it.
-<details><summary>Solution</summary><p>The bra of \(\ket{+\ii}\) is \((1, -\ii)/\sqrt2\), so \(\braket{+\ii}{-\ii} = \tfrac12(1\cdot1 + (-\ii)(-\ii)) = \tfrac12(1-1)=0\). Each has norm 1. Coefficients: \(\braket{+\ii}{0} = 1/\sqrt2\) and \(\braket{-\ii}{0}=1/\sqrt2\), so \(\ket0 = (\ket{+\ii}+\ket{-\ii})/\sqrt2\).</p></details></li>
+<details><summary>Solution</summary><p>The bra of \(\ket{+\ii}\) is \((1, -\ii)/\sqrt2\), so \(\braket{+\ii}{-\ii} = \tfrac12(1 + (-\ii)(-\ii)) = \tfrac12(1-1)=0\). Each has norm 1. Coefficients \(\braket{\pm\ii}{0} = 1/\sqrt2\), so \(\ket0 = (\ket{+\ii}+\ket{-\ii})/\sqrt2\).</p></details></li>
 <li>Show that \(P = \ketbra{e}{e}\) satisfies \(P^2 = P\) for a unit vector \(\ket e\), and write \(P\) as a matrix for \(\ket e = \ket+\).
-<details><summary>Solution</summary><p>\(P^2 = \ket e\braket{e}{e}\bra e = \ket e\bra e = P\) because \(\braket ee = 1\). For \(\ket+\): \(\tfrac12\begin{pmatrix}1\\1\end{pmatrix}(1\ \ 1) = \tfrac12\begin{pmatrix}1&1\\1&1\end{pmatrix}\).</p></details></li>
+<details><summary>Solution</summary><p>\(P^2 = \ket e\braket{e}{e}\bra e = \ket e\bra e = P\). For \(\ket+\): \(\tfrac12\begin{pmatrix}1&1\\1&1\end{pmatrix}\).</p></details></li>
 <li>On \([0, L]\) with @eq:m-inner-fn, show that \(\phi_n(x) = \sqrt{2/L}\sin(n\pi x/L)\), \(n=1,2,\dots\), are orthonormal.
-<details><summary>Solution</summary><p>\(\langle\phi_m,\phi_n\rangle = \frac2L\int_0^L\sin\frac{m\pi x}{L}\sin\frac{n\pi x}{L}\dd x = \frac1L\int_0^L\big[\cos\frac{(m-n)\pi x}{L} - \cos\frac{(m+n)\pi x}{L}\big]\dd x\). For \(m\ne n\) both cosines integrate to zero over whole half-periods; for \(m=n\) the first term gives \(L\), so the result is 1. These are the standing waves of a string, of a particle in a box and of a transmission-line resonator.</p></details></li>
+<details><summary>Solution</summary><p>\(\langle\phi_m,\phi_n\rangle = \frac1L\int_0^L\big[\cos\frac{(m-n)\pi x}{L} - \cos\frac{(m+n)\pi x}{L}\big]\dd x\). For \(m\ne n\) both terms integrate to zero; for \(m=n\) the first gives \(L\), so the result is 1. These are the standing waves of a string, a particle in a box and a transmission-line resonator.</p></details></li>
 <li>Prove the triangle inequality \(\|u+v\| \le \|u\|+\|v\|\) from Cauchy–Schwarz.
-<details><summary>Solution</summary><p>\(\|u+v\|^2 = \|u\|^2+\|v\|^2+2\Re\langle u,v\rangle \le \|u\|^2+\|v\|^2+2|\langle u,v\rangle| \le \|u\|^2+\|v\|^2+2\|u\|\|v\| = (\|u\|+\|v\|)^2\).</p></details></li>
+<details><summary>Solution</summary><p>\(\|u+v\|^2 = \|u\|^2+\|v\|^2+2\Re\langle u,v\rangle \le \|u\|^2+\|v\|^2+2\|u\|\|v\| = (\|u\|+\|v\|)^2\).</p></details></li>
+<li>Find the component of \(\ket\psi = (\ket0 + 2\ket1)/\sqrt5\) along \(\ket-\), and the part of \(\ket\psi\) orthogonal to \(\ket-\).
+<details><summary>Solution</summary><p>\(\braket{-}{\psi} = (1 - 2)/\sqrt{10} = -1/\sqrt{10}\). Shadow: \(-\tfrac{1}{\sqrt{10}}\ket-\). Remainder: \(\ket\psi + \tfrac{1}{\sqrt{10}}\ket- = \tfrac{3}{\sqrt{10}}\ket+\) (check: \(\braket+\psi = 3/\sqrt{10}\)). Probabilities 1/10 and 9/10 add to 1.</p></details></li>
 </ol></div>
 </section>
