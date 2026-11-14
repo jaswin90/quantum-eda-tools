@@ -75,6 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-q-dyn-pictures"><span class="tocnum">3.2</span>Pictures</a></li>
 <li class="toc3"><a href="#sec-q-dyn-wave"><span class="tocnum">3.3</span>Wavefunctions</a></li>
 <li class="toc3"><a href="#sec-q-dyn-tunnel"><span class="tocnum">3.4</span>Tunnelling</a></li>
+<li class="toc3"><a href="#sec-q-dyn-code"><span class="tocnum">3.5</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-q-qho"><span class="tocnum">4</span>The quantum harmonic oscillator</a></li>
 <li class="toc3"><a href="#sec-q-qho-ladder"><span class="tocnum">4.1</span>Ladder operators</a></li>
 <li class="toc3"><a href="#sec-q-qho-lc"><span class="tocnum">4.2</span>Quantising an LC circuit</a></li>
@@ -118,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Quantum Mechanics</h1>
   <p class="subtitle">States, measurement, dynamics, the harmonic oscillator, two-level systems, perturbation theory, entanglement and open systems</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">9 chapters · 42 numbered equations · 39 exercises with solutions · about 60 hours of study</p>
+  <p class="meta">9 chapters · 42 numbered equations · 41 exercises with solutions · about 60 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../mathematics/index.html">Book 1: Mathematics</a>, <a href="../classical-physics/index.html">Book 2: Classical Physics</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-q-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -405,38 +406,121 @@ for N in (100, 10_000, 1_000_000):
 <section id="sec-q-dynamics"><h2><span class="secnum">3</span> Dynamics, wavefunctions and tunnelling</h2>
 <div class="goals"><p>Goals</p><ul>
 <li>Solve the Schrödinger equation with the time-evolution operator and energy eigenstates.</li>
-<li>Use the Schrödinger, Heisenberg and interaction pictures.</li>
+<li>Use the Schrödinger, Heisenberg and interaction pictures, and know when each is convenient.</li>
 <li>Work with wavefunctions: the particle in a box, the finite well and the free particle.</li>
 <li>Compute tunnelling through a barrier and see why junction properties depend exponentially on barrier thickness.</li>
 </ul></div>
 
+<div class="bigpic"><p>Chapter 2 said what a state is and what a measurement does. This chapter is about what happens in between: how a state changes in time. The answer is a single equation, Schrödinger's, and for most problems in quantum hardware its solution is a recipe you can carry out by hand or in a few lines of code: find the energy levels, give each a rotating phase, add them up. The second half applies the same equation to particles moving in space, which brings out two purely quantum effects that matter enormously for devices: <b>confinement</b> (a trapped particle can only have certain energies, the basis of quantum dots) and <b>tunnelling</b> (a particle can pass through a wall it classically cannot climb, the basis of every Josephson junction).</p></div>
+
 <h3 id="sec-q-dyn-u"><span class="secnum">3.1</span> The time-evolution operator</h3>
-<p>For a time-independent Hamiltonian, the Schrödinger equation \(\ii\hbar\,\dd\ket\psi/\dd t = H\ket\psi\) is a linear system of the form \(\dot{\mathbf x} = A\mathbf x\) (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-expAt">Book 1 eq. (29)</a>), so</p>
+<p>For a time-independent Hamiltonian, the Schrödinger equation \(\ii\hbar\,\dd\ket\psi/\dd t = H\ket\psi\) is a linear system of the form \(\dot{\mathbf x} = A\mathbf x\), which Book 1 solved with the matrix exponential (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-expAt">Book 1 eq. (29)</a>). So</p>
 <div class="eq" id="eq-q-U">$$ \ket{\psi(t)} = U(t)\ket{\psi(0)}, \qquad U(t) = \ee^{-\ii Ht/\hbar} = \sum_n \ee^{-\ii E_nt/\hbar}\,\ketbra{E_n}{E_n},  \tag{6}$$</div>
-<p>where \(H\ket{E_n} = E_n\ket{E_n}\) is the <b>time-independent Schrödinger equation</b>. The recipe is: find the energy eigenstates, expand the initial state in them, attach a phase \(\ee^{-\ii E_nt/\hbar}\) to each, and add up. Eigenstates themselves only acquire a phase, so all their measurable properties are constant: they are <b>stationary states</b>. Anything that changes in time does so through interference between eigenstates of different energy, at the <b>Bohr frequencies</b> \((E_n - E_m)/\hbar\). A qubit in \((\ket0+\ket1)/\sqrt2\) with splitting \(\hbar\omega_q\) has \(\expval{X}(t) = \cos\omega_qt\): it precesses at the qubit frequency. Because \(H\) is Hermitian, \(U\) is unitary, so norms and probabilities are conserved.</p>
-<p>When \(H\) depends on time (a qubit under a control pulse), \(U\) is the solution of \(\ii\hbar\,\dot U = H(t)U\), \(U(0)=I\). If \(H\) at different times does not commute, \(U\) is not simply \(\ee^{-\ii\int H\dd t/\hbar}\); it is a <b>time-ordered exponential</b>, computed numerically by multiplying many short steps \(U \approx \prod_k\ee^{-\ii H(t_k)\Delta t/\hbar}\). Pulse-level simulators do exactly this.</p>
+<p>where the energy eigenstates satisfy \(H\ket{E_n} = E_n\ket{E_n}\), the <b>time-independent Schrödinger equation</b>. The second form follows from the spectral decomposition of \(H\) (a function of a Hermitian matrix acts on each eigenvalue separately). In words, the recipe is:</p>
+<ol>
+<li>Find the energy eigenstates \(\ket{E_n}\) and energies \(E_n\) (diagonalise \(H\)).</li>
+<li>Expand the initial state: \(\ket{\psi(0)} = \sum_nc_n\ket{E_n}\), with \(c_n = \braket{E_n}{\psi(0)}\).</li>
+<li>Attach a rotating phase to each: \(c_n\to c_n\ee^{-\ii E_nt/\hbar}\).</li>
+<li>Add up: \(\ket{\psi(t)} = \sum_nc_n\ee^{-\ii E_nt/\hbar}\ket{E_n}\).</li>
+</ol>
+<p>Several important facts follow.</p>
+<ul>
+<li><b>Stationary states.</b> An energy eigenstate only acquires an overall phase, which is unobservable. All its measurable properties are constant in time. That is why atoms in their ground state do not radiate, and why a qubit left in \(\ket0\) stays there (in the absence of noise).</li>
+<li><b>Bohr frequencies.</b> Anything that changes in time does so through interference between eigenstates of different energy, at the frequencies \((E_n - E_m)/\hbar\). These are exactly the frequencies at which the system absorbs or emits light, and the frequencies at which a qubit precesses.</li>
+<li><b>Unitarity.</b> Because \(H\) is Hermitian, \(U\) is unitary (\(U^\dagger U = I\)), so the norm, and hence total probability, is conserved.</li>
+</ul>
+<div class="example"><p><b>Worked example: a precessing qubit.</b> A qubit with energy splitting \(\hbar\omega_q\) starts in \((\ket0+\ket1)/\sqrt2\). The two components acquire phases at rates differing by \(\omega_q\), so the relative phase \(\phi\) on the Bloch sphere (Chapter 2) advances steadily: the Bloch vector rotates around the \(z\) axis at the qubit frequency, \(\expval{X}(t) = \cos\omega_qt\) (exercise 1). For a 5 GHz qubit that is five billion turns per second. This is the "free precession" that every qubit control system must keep track of, usually by working in a frame rotating at \(\omega_q\) (Chapter 5).</p></div>
+<p>When \(H\) depends on time (a qubit under a control pulse), \(U\) is the solution of \(\ii\hbar\,\dot U = H(t)U\) with \(U(0)=I\). If the Hamiltonians at different times do not commute, \(U\) is <i>not</i> simply \(\ee^{-\ii\int H\dd t/\hbar}\): the order in which things happen matters, just as rotating a book first about \(x\) then about \(y\) gives a different result from the reverse order. \(U\) is then a <b>time-ordered exponential</b>, computed numerically by multiplying many short steps, latest on the left:</p>
+\[ U \approx \ee^{-\ii H(t_K)\Delta t/\hbar}\cdots\ee^{-\ii H(t_2)\Delta t/\hbar}\,\ee^{-\ii H(t_1)\Delta t/\hbar}. \]
+<p>Pulse-level simulators do exactly this.</p>
 
 <h3 id="sec-q-dyn-pictures"><span class="secnum">3.2</span> Pictures</h3>
-<p>Expectation values \(\bra{\psi(t)}A\ket{\psi(t)} = \bra{\psi(0)}U^\dagger AU\ket{\psi(0)}\) can be computed by evolving the state (the <b>Schrödinger picture</b>) or by evolving the operator, \(A_H(t) = U^\dagger AU\), with fixed states (the <b>Heisenberg picture</b>). Differentiating gives the Heisenberg equation of motion, the quantum version of \(\dot f = \{f,H\}\):</p>
+<p>The measurable quantities are expectation values, \(\bra{\psi(t)}A\ket{\psi(t)} = \bra{\psi(0)}U^\dagger AU\ket{\psi(0)}\). The bracketing can be read two ways:</p>
+<ul>
+<li><b>Schrödinger picture:</b> states move, \(\ket{\psi(t)} = U\ket{\psi(0)}\); operators stay fixed. Natural for simulation.</li>
+<li><b>Heisenberg picture:</b> states stay fixed; operators move, \(A_H(t) = U^\dagger AU\). Natural for comparing with classical physics, because operators then obey equations resembling the classical ones.</li>
+</ul>
+<p>Differentiating \(A_H(t)\) gives the <b>Heisenberg equation of motion</b>, the quantum version of Book 2's \(\dot f = \{f,H\}\) with the Poisson bracket replaced by a commutator:</p>
 <div class="eq" id="eq-q-heisenberg">$$ \frac{\dd A_H}{\dd t} = \frac{\ii}{\hbar}\,[H, A_H] .  \tag{7}$$</div>
-<p>Taking expectation values gives <b>Ehrenfest's theorem</b>: for \(H = p^2/2m+V(x)\), \(\dd\expval x/\dd t = \expval p/m\) and \(\dd\expval p/\dd t = -\expval{V'(x)}\). Average quantities follow Newton's laws when the wavepacket is narrow compared with the scale on which the force varies. That is why harmonic systems, where \(V'\) is linear and \(\expval{V'(x)} = V'(\expval x)\) exactly, behave so classically.</p>
-<p>The <b>interaction picture</b> splits \(H = H_0 + V(t)\), with \(H_0\) simple, and removes the fast \(H_0\) evolution: \(\ket{\tilde\psi} = \ee^{\ii H_0t/\hbar}\ket\psi\) obeys \(\ii\hbar\,\dd\ket{\tilde\psi}/\dd t = \tilde V(t)\ket{\tilde\psi}\) with \(\tilde V = \ee^{\ii H_0t/\hbar}V\ee^{-\ii H_0t/\hbar}\). It is the quantum version of the rotating frame (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-complex-rotframe" title="Rotating frames">Book 1 §1.4</a>) and the starting point of perturbation theory and of the Rabi problem.</p>
+<p>An immediate consequence: anything that commutes with \(H\) is conserved. In particular \(H\) itself (energy).</p>
+<p>Taking expectation values gives <b>Ehrenfest's theorem</b>: for \(H = p^2/2m+V(x)\), \(\dd\expval x/\dd t = \expval p/m\) and \(\dd\expval p/\dd t = -\expval{V'(x)}\). These look like Newton's laws for the average position and momentum. They are exactly Newton's laws only if \(\expval{V'(x)} = V'(\expval x)\), which holds when the wavepacket is narrow compared with the scale on which the force varies, or when the force is linear in \(x\). For harmonic systems (\(V\propto x^2\), \(V'\) linear) it is exact, and that is why oscillators, and the linear circuits of Book 2, behave so classically: a resonator's average voltage obeys the classical circuit equations exactly.</p>
+<p>The <b>interaction picture</b> is a compromise for \(H = H_0 + V(t)\), where \(H_0\) is simple and \(V\) small or slow. Remove the fast, known evolution due to \(H_0\) by defining \(\ket{\tilde\psi} = \ee^{\ii H_0t/\hbar}\ket\psi\). Then</p>
+\[ \ii\hbar\frac{\dd\ket{\tilde\psi}}{\dd t} = \tilde V(t)\ket{\tilde\psi}, \qquad \tilde V = \ee^{\ii H_0t/\hbar}V\ee^{-\ii H_0t/\hbar}. \]
+<p>Only the interesting part, \(V\), drives the change. It is the quantum version of the rotating frame (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-complex-rotframe" title="Rotating frames">Book 1 §1.4</a>, and the classical rotating frame of Book 2, Chapter 2) and the starting point of perturbation theory (Chapter 6) and of the Rabi problem (Chapter 5).</p>
 
 <h3 id="sec-q-dyn-wave"><span class="secnum">3.3</span> Wavefunctions</h3>
-<p>For a particle moving in one dimension, the position basis \(\ket x\) gives the <b>wavefunction</b> \(\psi(x) = \braket x\psi\), with \(|\psi(x)|^2\) the probability density. The momentum operator acts as \(p = -\ii\hbar\,\dd/\dd x\) (which satisfies \([x,p] = \ii\hbar\)), and the time-independent Schrödinger equation becomes</p>
+<p>So far our state spaces were finite (two dimensions for a qubit). A particle moving along a line can be anywhere, so it needs a basis vector \(\ket x\) for every position \(x\): an infinite-dimensional space. The components of the state in this basis form the <b>wavefunction</b> \(\psi(x) = \braket x\psi\), and by the Born rule \(|\psi(x)|^2\) is the <b>probability density</b>: the probability of finding the particle between \(x\) and \(x+\dd x\) is \(|\psi(x)|^2\dd x\). Normalisation becomes \(\int|\psi|^2\dd x = 1\).</p>
+<p>In this language the momentum operator is a derivative, \(p = -\ii\hbar\,\dd/\dd x\) (one checks that it satisfies \([x,p] = \ii\hbar\)), and with \(H = p^2/2m + V(x)\) the time-independent Schrödinger equation becomes a differential equation:</p>
 <div class="eq" id="eq-q-tise">$$ -\frac{\hbar^2}{2m}\,\psi''(x) + V(x)\,\psi(x) = E\,\psi(x) .  \tag{8}$$</div>
-<p>Plane waves \(\ee^{\ii kx}\) are momentum eigenstates with \(p = \hbar k\) and, for a free particle, \(E = \hbar^2k^2/2m\): the de Broglie relation \(\lambda = h/p\). A particle confined to a box \(0\lt x\lt L\) with infinite walls must have \(\psi = 0\) at the walls, so \(\psi_n = \sqrt{2/L}\sin(n\pi x/L)\) (the functions of <a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-vectors" title="Vector spaces, inner products and Dirac notation">Book 1 §2</a>) with</p>
+<p>Read it as: "kinetic energy (curvature of \(\psi\)) plus potential energy equals total energy". Where \(E\gt V\) the solution curves back toward zero and oscillates; where \(E\lt V\) (classically forbidden) it curves away and grows or decays exponentially.</p>
+<p><b>The free particle.</b> With \(V = 0\), plane waves \(\ee^{\ii kx}\) solve it. They are momentum eigenstates with \(p = \hbar k\) and energy \(E = \hbar^2k^2/2m\). Since \(k = 2\pi/\lambda\), this is de Broglie's relation \(\lambda = h/p\): every particle has a wavelength.</p>
+<p><b>The particle in a box.</b> Now confine the particle between infinitely high walls at \(x = 0\) and \(x = L\). It cannot be in the walls, so \(\psi = 0\) there. Inside, \(\psi\) is a combination of \(\ee^{\pm\ii kx}\), and vanishing at both ends forces a standing wave with a whole number of half-wavelengths in the box: \(\psi_n = \sqrt{2/L}\sin(n\pi x/L)\) (the functions of <a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-vectors" title="Vector spaces, inner products and Dirac notation">Book 1 §2</a>, and the guitar string of Book 2). The allowed energies are</p>
 <div class="eq" id="eq-q-box">$$ E_n = \frac{\hbar^2\pi^2n^2}{2mL^2}, \qquad n = 1, 2, \dots  \tag{9}$$</div>
-<p>Confinement quantises energy, and the ground state has nonzero energy (zero-point energy) because a confined particle has uncertain momentum. A quantum dot is a box a few tens of nanometres across, with level spacings of meV, and a gate-defined spin qubit is an electron in such a box (Book 6). For a well of finite depth \(V_0\), the wavefunction leaks into the walls as \(\ee^{-\kappa|x|}\) with \(\kappa = \sqrt{2m(V_0-E)}/\hbar\); the bound states are found by matching \(\psi\) and \(\psi'\) at the edges, which gives a transcendental equation with a finite number of solutions. The same mathematics describes the modes of an optical slab waveguide (<a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-slab">Book 2 eq. (35)</a>).</p>
+<p>Three lessons, all general:</p>
+<ol>
+<li><b>Confinement quantises energy.</b> A free particle can have any energy; a trapped one only specific values.</li>
+<li><b>Zero-point energy.</b> The lowest energy is not zero. A confined particle has uncertain momentum (\(\Delta p\gtrsim\hbar/L\), Chapter 2), and uncertain momentum means kinetic energy.</li>
+<li><b>Smaller boxes, larger spacings,</b> as \(1/L^2\); lighter particles, larger spacings, as \(1/m\).</li>
+</ol>
+<p>A <b>quantum dot</b> is a box a few tens of nanometres across in a semiconductor, with level spacings of meV, and a gate-defined spin qubit is an electron in such a box (Book 6).</p>
+<p><b>The finite well.</b> Real walls have finite height \(V_0\). Inside the wall (\(E\lt V_0\)) the wavefunction does not vanish but decays as \(\ee^{-\kappa|x|}\), with</p>
+\[ \kappa = \sqrt{2m(V_0-E)}/\hbar . \]
+<p>The particle "leaks" a distance \(1/\kappa\) into the classically forbidden region. The bound states are found by matching \(\psi\) and \(\psi'\) at the edges, which gives a transcendental equation with a finite number of solutions: a shallow well has few bound states, at least one. The same mathematics describes the modes of an optical slab waveguide (<a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-slab">Book 2 eq. (35)</a>), where the "leak" is the evanescent field.</p>
 
 <h3 id="sec-q-dyn-tunnel"><span class="secnum">3.4</span> Tunnelling</h3>
-<p>Send a particle of energy \(E\) at a barrier of height \(U > E\) and thickness \(d\). Classically it is reflected. Quantum mechanically, inside the barrier the solution of <a class="xref" href="#eq-q-tise">(8)</a> decays as \(\ee^{-\kappa x}\), and if the barrier is thin some amplitude survives to the far side. Matching wavefunctions at both interfaces gives a transmission probability which, for a thick or high barrier (\(\kappa d\gg1\)), is</p>
+<p>Send a particle of energy \(E\) at a barrier of height \(U \gt E\) and thickness \(d\). Classically it is reflected, always: it does not have the energy to climb over. Quantum mechanically, the wavefunction inside the barrier decays as \(\ee^{-\kappa x}\) but does not vanish, and if the barrier is thin, some amplitude survives to the far side, where it continues as a travelling wave. Matching \(\psi\) and \(\psi'\) at both interfaces gives a transmission probability which, for a thick or high barrier (\(\kappa d\gg1\)), is</p>
 <div class="eq" id="eq-q-tunnel">$$ T \approx \frac{16E(U-E)}{U^2}\,\ee^{-2\kappa d}, \qquad \kappa = \frac{\sqrt{2m(U-E)}}{\hbar} .  \tag{10}$$</div>
-<p>For an electron and a barrier 1 eV above its energy, \(\kappa\approx5.1\) nm\(^{-1}\), so each extra ångström of barrier reduces \(T\) by a factor \(\ee^{-1.02}\approx0.36\). This exponential sensitivity is the central fact of Josephson-junction manufacture. A junction is two superconductors separated by about 1–2 nm of aluminium oxide; its normal-state resistance \(R_n\propto1/T\) and critical current \(I_c\propto1/R_n\) depend exponentially on the oxide thickness (<a class="xref ext" href="../../index.html#eq-tunnel">Lab to Foundry eq. (14)</a>). A fluctuation of a fraction of an ångström across a wafer becomes a percent-level spread in junction energy and a tens-of-MHz spread in qubit frequency (<a class="xref ext" href="../../index.html#sec-var-junction" title="Junction physics: why sub-ångström variation matters">Lab to Foundry §4.1</a>).</p>
-<p>Tunnelling also appears as a <b>design element</b>: the exchange coupling between two spin qubits is set by tunnelling of electrons between neighbouring dots and is exponential in the gate voltage that controls the barrier, and as a <b>loss mechanism</b>: two-level systems in amorphous oxides are atoms tunnelling between two nearby positions (Book 6).</p>
-<div class="example"><p><b>Worked example: barrier sensitivity.</b> Two junctions differ in average oxide thickness by \(\delta d = 0.02\) nm. Using \(\kappa = 5\) nm\(^{-1}\), \(I_c\propto\ee^{-2\kappa d}\) differs by a factor \(\ee^{-2\times5\times0.02} = \ee^{-0.2} = 0.82\): an 18% change from a variation of one tenth of an atomic diameter. Since the transmon frequency scales as \(\sqrt{E_J}\propto\sqrt{I_c}\), the qubits differ by about 9%, roughly 450 MHz at 5 GHz. In practice junction areas and oxidation are controlled to give spreads of 1–3%, but only through careful statistical process control (Book 7).</p></div>
+<p>The prefactor is of order one; everything important is in the exponential. (The factor 2 appears because probability is amplitude squared.) For an electron and a barrier 1 eV above its energy, \(\kappa\approx5.1\) nm\(^{-1}\), so each extra ångström (0.1 nm) of barrier reduces \(T\) by a factor \(\ee^{-1.02}\approx0.36\).</p>
+<p>This exponential sensitivity is the central fact of Josephson-junction manufacture. A junction is two superconductors separated by about 1–2 nm of aluminium oxide; its normal-state resistance \(R_n\propto1/T\) and critical current \(I_c\propto1/R_n\) depend exponentially on the oxide thickness (<a class="xref ext" href="../../index.html#eq-tunnel">Lab to Foundry eq. (14)</a>). A fluctuation of a fraction of an ångström across a wafer becomes a percent-level spread in junction energy and a tens-of-MHz spread in qubit frequency (<a class="xref ext" href="../../index.html#sec-var-junction" title="Junction physics: why sub-ångström variation matters">Lab to Foundry §4.1</a>).</p>
+<div class="example"><p><b>Worked example: barrier sensitivity.</b> Two junctions differ in average oxide thickness by \(\delta d = 0.02\) nm. Using \(\kappa = 5\) nm\(^{-1}\), \(I_c\propto\ee^{-2\kappa d}\) differs by a factor \(\ee^{-2\times5\times0.02} = \ee^{-0.2} = 0.82\): an 18% change from a variation of one tenth of an atomic diameter. Since the transmon frequency scales as \(\sqrt{E_J}\propto\sqrt{I_c}\), the qubits differ by about 9%, roughly 450 MHz at 5 GHz. In practice the oxide is not uniform at this scale and the current flows through the thinnest spots, so junctions average over many of them; spreads of 1–3% are achieved, but only through careful statistical process control (Book 7).</p></div>
+<p>Tunnelling appears in quantum hardware in three roles:</p>
+<ul>
+<li>As a <b>building block</b>: the Josephson junction (Cooper pairs tunnelling through an oxide).</li>
+<li>As a <b>design element</b>: the exchange coupling between two spin qubits is set by electrons tunnelling between neighbouring dots, and is exponential in the gate voltage that controls the barrier, which makes it switchable over orders of magnitude.</li>
+<li>As a <b>loss mechanism</b>: two-level systems in amorphous oxides are atoms tunnelling between two nearby positions, absorbing microwave photons (Book 6).</li>
+</ul>
+<div class="quick"><p>If a barrier's height above the particle energy is quadrupled, by what factor does \(\kappa\) change?</p>
+<details><summary>Answer</summary><p>\(\kappa\propto\sqrt{U-E}\), so it doubles, and the tunnelling exponent \(2\kappa d\) doubles too: thickness and height both matter, but thickness enters linearly and height only as a square root.</p></details></div>
+
+<h3 id="sec-q-dyn-code"><span class="secnum">3.5</span> Try it in Python</h3>
+<p>Solve the particle in a box as a matrix eigenvalue problem (finite differences turn \(\psi''\) into a tridiagonal matrix), then compare the exact and approximate tunnelling probabilities.</p>
+<pre class="code"><code>import numpy as np
+from scipy.linalg import eigh_tridiagonal
+
+hbar, me, eV = 1.054571817e-34, 9.1093837e-31, 1.602176634e-19
+
+# 1) Particle in a box by finite differences: -hbar^2/2m psi'' = E psi
+L, N = 30e-9, 2000
+m = 0.19 * me                               # electron in silicon
+h = L / (N + 1)                             # interior grid, psi = 0 at walls
+diag = np.full(N, hbar**2 / (m * h**2))
+off = np.full(N - 1, -hbar**2 / (2 * m * h**2))
+E = eigh_tridiagonal(diag, off, select="i", select_range=(0, 3))[0]
+exact = [(hbar * np.pi * n) ** 2 / (2 * m * L**2) for n in range(1, 5)]
+for n in range(4):
+    print(f"box level {n+1}: numerical {E[n]/eV*1e3:6.3f} meV, formula {exact[n]/eV*1e3:6.3f} meV")
+
+# 2) Tunnelling through a rectangular barrier: exact versus the thick-barrier formula
+Ee, U = 1.0 * eV, 2.0 * eV
+kappa = np.sqrt(2 * me * (U - Ee)) / hbar
+print(f"kappa = {kappa*1e-9:.2f} per nm")
+for d_nm in (0.5, 1.0, 1.5, 2.0):
+    d = d_nm * 1e-9
+    T_exact = 1 / (1 + U**2 * np.sinh(kappa * d) ** 2 / (4 * Ee * (U - Ee)))
+    T_approx = 16 * Ee * (U - Ee) / U**2 * np.exp(-2 * kappa * d)
+    print(f"d = {d_nm} nm: T exact {T_exact:.3e}, approx {T_approx:.3e}")</code></pre>
+<p>The numerical levels match <a class="xref" href="#eq-q-box">(9)</a> to four digits. Each extra 0.5 nm of barrier divides the transmission by about 170, and the simple formula <a class="xref" href="#eq-q-tunnel">(10)</a> is already excellent at 0.5 nm.</p>
 
 <div class="eda"><p>Pulse-level simulation (solving \(\ii\hbar\dot U = H(t)U\) for a few coupled transmons) is how gate designs are checked before fabrication and how calibration software builds its models. Its inputs are the Hamiltonian parameters that extraction provides; its outputs are gate errors that feed the error-correction model (<a class="xref ext" href="../../index.html#eq-eps">Lab to Foundry eq. (37)</a>). The tunnelling formula <a class="xref" href="#eq-q-tunnel">(10)</a> is the link between a process parameter (oxide thickness) and a design parameter (\(E_J\)).</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>\(U = \ee^{-\ii Ht/\hbar}\): expand in energy eigenstates, give each a phase \(\ee^{-\ii E_nt/\hbar}\), add up.</li>
+<li>Eigenstates are stationary; dynamics happens at Bohr frequencies \((E_n-E_m)/\hbar\); time-dependent \(H\) needs a time-ordered product.</li>
+<li>Heisenberg picture: \(\dot A = \frac{\ii}{\hbar}[H,A]\); averages follow Newton exactly for harmonic systems.</li>
+<li>Interaction picture removes the known fast motion (the rotating frame).</li>
+<li>Confinement quantises energy, \(E_n\propto n^2/mL^2\), with zero-point energy.</li>
+<li>Tunnelling \(T\sim\ee^{-2\kappa d}\): exponential in barrier thickness, hence the spread of junction parameters.</li>
+</ul></div>
 
 <div class="exercises" id="ex-q-dynamics"><h4>Exercises</h4><ol>
 <li>A qubit has \(H = \tfrac{\hbar\omega_q}{2}\,Z\) (with \(\ket0\) the upper level in this sign convention) and starts in \(\ket+\). Find \(\ket{\psi(t)}\) and \(\expval X(t)\), \(\expval Y(t)\).
@@ -447,6 +531,10 @@ for N in (100, 10_000, 1_000_000):
 <details><summary>Solution</summary><p>\(E_1 = \hbar^2\pi^2/(2m^*L^2) = (1.055\times10^{-34})^2\times9.87/(2\times0.19\times9.11\times10^{-31}\times9\times10^{-16})\approx3.5\times10^{-22}\) J \(\approx 2.2\) meV \(\approx 25\) K. Level spacings of a few meV keep a dot's orbital states frozen out at millikelvin temperatures.</p></details></li>
 <li>An oxide barrier has \(U - E = 2\) eV. By what factor does tunnelling change if the thickness increases by 0.1 nm? (Use the free-electron mass.)
 <details><summary>Solution</summary><p>\(\kappa = \sqrt{2\times9.11\times10^{-31}\times3.2\times10^{-19}}/1.055\times10^{-34}\approx7.2\) nm\(^{-1}\). Factor \(\ee^{-2\times7.2\times0.1} = \ee^{-1.44}\approx0.24\).</p></details></li>
+<li>A three-level system has energies \(0\), \(\hbar\omega\), \(3\hbar\omega\). At which frequencies can \(\expval A(t)\) oscillate for a generic observable and initial state?
+<details><summary>Solution</summary><p>At the Bohr frequencies: \(\omega\), \(2\omega\) and \(3\omega\) (the differences between pairs of levels).</p></details></li>
+<li>Show that \(p = -\ii\hbar\,\dd/\dd x\) satisfies \([x,p]\psi = \ii\hbar\psi\) for any \(\psi\).
+<details><summary>Solution</summary><p>\(xp\psi = -\ii\hbar x\psi'\); \(px\psi = -\ii\hbar(x\psi)' = -\ii\hbar(\psi + x\psi')\). Subtracting: \([x,p]\psi = \ii\hbar\psi\).</p></details></li>
 </ol></div>
 </section>
 
