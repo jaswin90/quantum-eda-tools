@@ -2,4 +2,24 @@
 <p>This book is about building qubits. Most of it concerns superconducting circuits, because they are the platform whose design most resembles classical chip design, whose parameters are set by drawn geometry and fabrication process, and which the review treats in most depth. The final chapter applies the same questions (what is the qubit, what sets its parameters, what limits its coherence, what varies in manufacture) to trapped ions, neutral atoms, spin qubits and topological proposals; photonic qubits were the subject of Book 5.</p>
 <p>The chapters follow the path of a designer: superconductivity (why the metal is special), the Josephson junction (the one nonlinear element), circuit quantisation (from a circuit diagram to a Hamiltonian), circuit QED (how qubits are read out and coupled), gates (how they are controlled), and decoherence (what limits them). By the end you should be able to take the parameters of a real transmon processor, explain where each number comes from, and say what a 1% change in each fabrication input would do. That is the starting point of the review's §3–§5.</p>
 <p>Prerequisites: Book 2 (especially the circuit Lagrangian, transmission lines and thermal noise), Book 3 (oscillators, two-level systems, perturbation theory, open systems) and Book 5 Chapter 4 (Jaynes–Cummings). The engineer's guide by Krantz <i>et al.</i> [@krantz2019] and the review of circuit QED by Blais <i>et al.</i> [@blais2021] are the best companions.</p>
+<h3 id="sec-h-pre-terms">Words you will meet</h3>
+<p>Skim this list now and come back to it while reading.</p>
+<dl class="terms">
+<dt>Superconductor</dt><dd>A metal that, below a critical temperature \(T_c\), carries current with no resistance; its electrons form Cooper pairs.</dd>
+<dt>Cooper pair</dt><dd>Two electrons bound together by lattice vibrations; the charge carriers of a superconductor (charge \(2e\)).</dd>
+<dt>Gap \(\Delta\)</dt><dd>The minimum energy to break a Cooper pair (per resulting quasiparticle); about 180 µeV in aluminium.</dd>
+<dt>Quasiparticle</dt><dd>An excitation of a superconductor left behind when a pair breaks; a source of qubit loss.</dd>
+<dt>Josephson junction</dt><dd>Two superconductors separated by a ~1–2 nm insulator; a lossless nonlinear inductor with energy \(-E_J\cos\varphi\).</dd>
+<dt>\(E_J\), \(E_C\)</dt><dd>Josephson energy (depth of the junction's potential) and charging energy (cost of adding one electron); their ratio decides the qubit type.</dd>
+<dt>SQUID</dt><dd>Two junctions in a loop; a junction whose \(E_J\) is tuned by magnetic flux.</dd>
+<dt>Flux quantum \(\Phi_0\)</dt><dd>\(h/2e\approx2.07\times10^{-15}\) Wb: the unit in which flux through a superconducting loop is quantised.</dd>
+<dt>Transmon</dt><dd>A junction shunted by a large capacitance (\(E_J/E_C\approx50\)); the most widely used superconducting qubit.</dd>
+<dt>Anharmonicity \(\alpha\)</dt><dd>How much the \(1\to2\) transition differs from \(0\to1\); lets a pulse drive only the qubit transition.</dd>
+<dt>Resonator</dt><dd>A length of superconducting transmission line with a sharp resonance; used to read out and couple qubits.</dd>
+<dt>Dispersive shift \(\chi\)</dt><dd>The qubit-state-dependent shift of a resonator's frequency; the basis of readout.</dd>
+<dt>Purcell decay</dt><dd>Qubit energy leaking out through its readout resonator.</dd>
+<dt>Coupler</dt><dd>A circuit element (often a tunable transmon) that switches the interaction between two qubits on and off.</dd>
+<dt>Participation ratio</dt><dd>The fraction of a mode's electric energy stored in a given material region; multiplied by that region's loss tangent it gives loss.</dd>
+<dt>TLS</dt><dd>Two-level system: a microscopic defect in an amorphous material that absorbs microwave energy; the main source of qubit loss.</dd>
+</dl>
 </section>
