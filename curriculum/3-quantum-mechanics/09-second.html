@@ -6,28 +6,99 @@
 <li>Prepare the ground for photons (Book 5) and Cooper pairs (Book 6).</li>
 </ul></div>
 
+<div class="bigpic"><p>Photons, electrons and Cooper pairs come in huge numbers, and all photons (or all electrons) are perfectly identical: there is no way, even in principle, to label one and follow it. That single fact has dramatic consequences. Electrons refuse to share a state, which builds the periodic table and makes metals and semiconductors work. Photons prefer to share, which makes lasers, two-photon interference and photonic quantum computing work. This chapter introduces the bookkeeping that handles many identical particles, "second quantisation", which is just the ladder operators of Chapter 4 with one ladder per mode. It ends with a first look at superconductivity, the quantum state of matter that superconducting qubits are built from.</p></div>
+
 <h3 id="sec-q-sec-ident">Identical particles</h3>
-<p>Two electrons cannot be labelled: swapping them must leave every probability unchanged, so the two-particle state can at most change sign under exchange. Nature uses both options. <b>Bosons</b> (photons, phonons, helium-4 atoms, Cooper pairs as composite objects) have symmetric states; <b>fermions</b> (electrons, protons, neutrons) have antisymmetric states. For two particles in single-particle states \(\ket a\) and \(\ket b\),</p>
+<p>Two electrons cannot be labelled. If we write a two-particle state as \(\psi(x_1, x_2)\), swapping the particles must leave every probability unchanged: \(|\psi(x_2,x_1)|^2 = |\psi(x_1,x_2)|^2\). So under exchange the state can at most change by a phase, and since swapping twice is doing nothing, that phase squares to 1: it is \(+1\) or \(-1\). Nature uses both options:</p>
+<ul>
+<li><b>Bosons</b> have symmetric states (\(+1\)): photons, phonons, helium-4 atoms, and Cooper pairs as composite objects.</li>
+<li><b>Fermions</b> have antisymmetric states (\(-1\)): electrons, protons, neutrons, quarks.</li>
+</ul>
+<p>(A deep result, the spin–statistics theorem, says particles with integer spin are bosons and half-integer spin fermions.) For two particles in single-particle states \(\ket a\) and \(\ket b\), with subscripts labelling "particle 1" and "particle 2",</p>
 <div class="eq" id="eq-q-sym">$$ \ket{\psi_\pm} = \frac{1}{\sqrt2}\big(\ket a_1\ket b_2 \pm \ket b_1\ket a_2\big) . $$</div>
-<p>For fermions, \(a = b\) gives zero: two fermions cannot occupy the same state (<b>Pauli exclusion</b>). That fills the energy levels of atoms and solids one electron per state and gives metals their Fermi energy. For bosons, the symmetric combination enhances the probability of two particles in the same state relative to distinguishable particles: bosons <b>bunch</b>. Two identical photons arriving at a beam splitter always leave together, the Hong–Ou–Mandel effect (Book 5), and the macroscopic occupation of a single state by bosons underlies lasers, Bose–Einstein condensates and superconductivity.</p>
+<p><b>Fermions: Pauli exclusion.</b> Put \(a = b\) in the minus sign: the state is zero. Two fermions cannot occupy the same state. This is why atoms have shell structure (electrons fill levels one per state, two per orbital counting spin), why solids have a Fermi energy, and why a quantum dot fills electron by electron (Book 6).</p>
+<p><b>Bosons: bunching.</b> The symmetric combination makes two bosons <i>more</i> likely to be found in the same state than two distinguishable particles would be. Bosons <b>bunch</b>. The most striking example: two identical photons arriving simultaneously at the two inputs of a 50:50 beam splitter always leave <i>together</i> through the same output, never one in each. This is the <b>Hong–Ou–Mandel effect</b> (Book 5); the Python example below reproduces it. The two ways of getting "one photon in each output" (both transmitted, both reflected) are indistinguishable and their amplitudes cancel, by Chapter 1's rule of amplitudes. At the macroscopic end, bosons' preference for sharing states underlies lasers, Bose–Einstein condensates and superconductivity.</p>
+<div class="quick"><p>If the two photons in a Hong–Ou–Mandel experiment have different colours, does the effect still happen?</p>
+<details><summary>Answer</summary><p>No. Different colours make them distinguishable in principle, so the two paths no longer interfere and each output gets one photon half the time. The depth of the HOM dip is therefore a standard test of how identical a source's photons are.</p></details></div>
 
 <h3 id="sec-q-sec-fock">Second quantisation</h3>
-<p>Symmetrising wavefunctions by hand becomes unmanageable for many particles. Instead, specify how many particles occupy each single-particle mode \(k\): \(\ket{n_1, n_2, \dots}\). Introduce, for each mode, an annihilation operator \(c_k\) and creation operator \(c_k^\dagger\). For bosons they behave like the oscillator ladder operators of Chapter 4, one oscillator per mode, with</p>
+<p>Symmetrising wavefunctions by hand becomes unmanageable for many particles: for \(N\) particles there are \(N!\) permutations to sum. The modern approach changes the question. Instead of asking "where is particle 1?", which is meaningless for identical particles, specify <i>how many</i> particles occupy each single-particle mode \(k\) (an orbital, a cavity mode, a lattice site): \(\ket{n_1, n_2, \dots}\). This occupation-number basis is called <b>Fock space</b>.</p>
+<p>Then introduce, for each mode, an annihilation operator \(c_k\) (remove one particle from mode \(k\)) and a creation operator \(c_k^\dagger\) (add one). For <b>bosons</b> (written \(b\)) they behave exactly like the oscillator ladder operators of Chapter 4, one independent oscillator per mode:</p>
 <div class="eq" id="eq-q-ccr">$$ [b_j, b_k^\dagger] = \delta_{jk}, \qquad [b_j,b_k] = 0 . $$</div>
-<p>For fermions the commutators are replaced by <b>anticommutators</b>,</p>
+<p>For <b>fermions</b> the commutators are replaced by <b>anticommutators</b>, \(\{A,B\} = AB + BA\):</p>
 <div class="eq" id="eq-q-car">$$ \{c_j, c_k^\dagger\} = \delta_{jk}, \qquad \{c_j,c_k\} = 0 \;\Rightarrow\; (c_k^\dagger)^2 = 0 , $$</div>
-<p>so each fermionic mode holds 0 or 1 particle. Exchange symmetry is now automatic: it is built into the algebra. A one-body operator such as kinetic energy becomes \(\sum_{jk}h_{jk}c_j^\dagger c_k\) ("remove a particle from mode \(k\), put it in mode \(j\), with amplitude \(h_{jk}\)"), and a two-body interaction becomes a sum of terms with two creation and two annihilation operators. The name "second quantisation" is historical: the field is quantised, not the particle twice.</p>
-<p>For photons, the modes are the electromagnetic eigenmodes of a cavity or waveguide, and \(a_k^\dagger\) creates a photon in mode \(k\). The free field is \(H = \sum_k\hbar\omega_k(a_k^\dagger a_k + \tfrac12)\): one oscillator per mode, exactly as foreshadowed in @b1:sec-m-ode-pde. Linear optical elements (beam splitters, phase shifters) act as linear transformations of the mode operators, \(a_j\to\sum_kU_{jk}a_k\), which is why a beam splitter's S-matrix (@b2:eq-c-bs) is also its quantum description (Book 5).</p>
+<p>so trying to add a second fermion to an occupied mode gives zero: each fermionic mode holds 0 or 1 particle. Pauli exclusion is now built into the algebra, and so is the minus sign under exchange (\(c_j^\dagger c_k^\dagger = -c_k^\dagger c_j^\dagger\)). You never symmetrise by hand again.</p>
+<p>Operators are written in the same language:</p>
+<ul>
+<li>A <b>one-body</b> operator, such as kinetic energy or an external potential, becomes \(\sum_{jk}h_{jk}c_j^\dagger c_k\). Read it as "remove a particle from mode \(k\), put it in mode \(j\), with amplitude \(h_{jk}\)". The diagonal terms \(h_{kk}c_k^\dagger c_k\) count particles in mode \(k\) times their energy.</li>
+<li>A <b>two-body</b> interaction, such as Coulomb repulsion, becomes a sum of terms with two creation and two annihilation operators: two particles scatter from modes \(k,l\) into \(i,j\).</li>
+</ul>
+<p>The name "second quantisation" is historical and misleading: nothing is quantised twice. It is quantum mechanics of many identical particles, written in the occupation-number basis.</p>
+<p><b>Photons.</b> For light, the modes are the electromagnetic eigenmodes of a cavity or waveguide (Book 2, Chapters 5–7), and \(a_k^\dagger\) creates a photon in mode \(k\). The free field is</p>
+\[ H = \sum_k\hbar\omega_k\big(a_k^\dagger a_k + \tfrac12\big): \]
+<p>one harmonic oscillator per mode, exactly as foreshadowed in @b1:sec-m-ode-pde. Linear optical elements (beam splitters, phase shifters, interferometers) act as linear transformations of the mode operators, \(a_j\to\sum_kU_{jk}a_k\), with the <i>same</i> unitary matrix \(U\) as the classical field. That is why a beam splitter's classical S-matrix (@b2:eq-c-bs) is also its quantum description, and why Book 5 can design quantum photonic circuits with classical tools, then add quantum states of light at the inputs.</p>
 
 <h3 id="sec-q-sec-tb">Hopping and bands</h3>
-<p>Electrons in a crystal or in an array of quantum dots hop between neighbouring sites. The <b>tight-binding</b> Hamiltonian for a chain of sites with on-site energy \(\epsilon\) and hopping amplitude \(t\) is</p>
+<p>Electrons in a crystal, or in an array of quantum dots, sit mostly on sites (atoms or dots) but can tunnel (Chapter 3) to neighbouring sites. The <b>tight-binding</b> Hamiltonian for a chain of sites with on-site energy \(\epsilon\) and hopping amplitude \(t\) is</p>
 <div class="eq" id="eq-q-tb">$$ H = \sum_j\epsilon\,c_j^\dagger c_j - t\sum_j\big(c_j^\dagger c_{j+1} + c_{j+1}^\dagger c_j\big). $$</div>
-<p>Plane-wave modes \(c_k = N^{-1/2}\sum_j\ee^{-\ii kja}c_j\) diagonalise it with energies \(E(k) = \epsilon - 2t\cos ka\): a <b>band</b> of width \(4t\). Many atomic orbitals give many bands, separated by gaps. Fermions fill the lowest states up to the Fermi energy; if it falls inside a band the material is a metal, if in a gap an insulator or semiconductor. Two dots with one electron each, with hopping \(t\) and on-site repulsion \(U\) (the <b>Hubbard model</b>), have an effective spin–spin interaction \(J = 4t^2/U\) from second-order perturbation theory (Chapter 6). That exchange coupling is the two-qubit gate of silicon spin qubits (@lf:sec-mod-spin), and its exponential dependence on gate voltage through \(t\) is a central manufacturing sensitivity.</p>
+<p>The first term is the energy of sitting on a site; the second moves a particle one site left or right. Because the chain looks the same from every site, the eigenstates are waves spread over the whole chain. Plane-wave modes \(c_k = N^{-1/2}\sum_j\ee^{-\ii kja}c_j\) (a discrete Fourier transform, Book 1, Chapter 6, with \(a\) the site spacing) diagonalise it, with energies</p>
+\[ E(k) = \epsilon - 2t\cos ka . \]
+<p>The single level \(\epsilon\) has spread into a <b>band</b> of width \(4t\). Stronger hopping, wider band. Many atomic orbitals give many bands, separated by gaps where no states exist. Fermions fill the lowest states one per state (times two for spin) up to the <b>Fermi energy</b>:</p>
+<ul>
+<li>if the Fermi energy falls inside a band, electrons can move into nearby empty states with tiny energy cost: a <b>metal</b>;</li>
+<li>if it falls in a gap, the band below is full and nothing can move without a big energy kick: an <b>insulator</b> or, if the gap is small, a <b>semiconductor</b>.</li>
+</ul>
+<div class="example"><p><b>Worked example: exchange between two dots.</b> Two quantum dots with one electron each, hopping \(t\) between them and an on-site repulsion \(U\) if both electrons sit on the same dot (the <b>Hubbard model</b>). If the spins are opposite, an electron can briefly hop onto its neighbour's dot (cost \(U\)) and hop back; if the spins are parallel, Pauli exclusion forbids it. Second-order perturbation theory (Chapter 6) gives the energy lowering \(\sim t^2/U\) only for the antiparallel case, which is an effective spin–spin interaction with strength</p>
+\[ J = \frac{4t^2}{U}. \]
+<p>That exchange coupling is the two-qubit gate of silicon spin qubits (@lf:sec-mod-spin). Since \(t\) is a tunnelling amplitude, exponential in the barrier, \(J\) depends exponentially on the gate voltage that sets the barrier: easy to switch on and off, and a central manufacturing sensitivity (exercise 3).</p></div>
 
 <h3 id="sec-q-sec-sc">A first look at superconductivity</h3>
-<p>In some metals at low temperature, a weak attraction between electrons mediated by lattice vibrations binds electrons near the Fermi surface into <b>Cooper pairs</b> of opposite momentum and spin. Pairs behave, collectively, like bosons and condense into a single macroscopic quantum state described by a complex order parameter \(\Psi = |\Psi|\ee^{\ii\varphi}\). The BCS theory [@bcs1957] shows that breaking a pair costs at least \(2\Delta\), where the gap \(\Delta\approx1.76k_BT_c\), so at temperatures far below \(T_c\) the condensate cannot be excited by small perturbations: it flows without resistance. The phase \(\varphi\) of the condensate is a single, macroscopic quantum variable. Two superconductors separated by a thin barrier have a phase difference across it, and Cooper pairs tunnel through the barrier with an energy that depends on that difference as \(-E_J\cos\varphi\). That is the Josephson junction, with which Book 6 begins.</p>
+<p>In some metals at low temperature, something remarkable happens. A weak attraction between electrons, mediated by vibrations of the crystal lattice (one electron slightly distorts the lattice, and the distortion attracts another), binds electrons near the Fermi energy into <b>Cooper pairs</b> of opposite momentum and spin. A pair has integer spin, so pairs behave collectively like bosons, and like bosons they all crowd into a single macroscopic quantum state, described by a complex order parameter</p>
+\[ \Psi = |\Psi|\,\ee^{\ii\varphi}. \]
+<p>The BCS theory [@bcs1957] shows that breaking a pair costs at least \(2\Delta\), where the energy gap is \(\Delta\approx1.76k_BT_c\). At temperatures far below \(T_c\) neither heat nor small perturbations can supply that energy, so the condensate cannot be scattered: it flows without resistance. This is why superconducting resonators have \(Q\) of a million where copper has a few thousand (Book 2, Chapter 5).</p>
+<p>The phase \(\varphi\) of the condensate is a single, macroscopic quantum variable shared by \(10^{11}\) electrons. Two superconductors separated by a thin insulating barrier (1–2 nm of aluminium oxide) each have their own phase. Cooper pairs tunnel through the barrier (Chapter 3) with an energy that depends on the phase difference as</p>
+\[ U(\varphi) = -E_J\cos\varphi . \]
+<p>That is the <b>Josephson junction</b>: a nonlinear, lossless inductor. Put it in parallel with a capacitor and you have the quantum pendulum of Book 2, Chapter 1, with the Kerr nonlinearity of Chapter 4 that makes a qubit. Book 6 begins there.</p>
+
+<h3 id="sec-q-sec-code">Try it in Python</h3>
+<p>Reproduce the Hong–Ou–Mandel effect with bosonic ladder operators, and check the tight-binding band formula against numerical diagonalisation.</p>
+<pre class="code"><code>import numpy as np
+from scipy.linalg import expm
+
+# 1) Hong-Ou-Mandel: two photons meet at a 50:50 beam splitter
+N = 3                                          # 0, 1 or 2 photons per mode
+a1 = np.diag(np.sqrt(np.arange(1, N)), 1)
+I = np.eye(N)
+a, b = np.kron(a1, I), np.kron(I, a1)           # two bosonic modes
+BS = expm(1j * np.pi / 4 * (a.T @ b + a @ b.T))  # 50:50 beam splitter
+def fock(n, m):
+    v = np.zeros(N * N); v[n * N + m] = 1; return v
+out = BS @ fock(1, 1)                           # one photon in each input
+for n, m in [(2, 0), (1, 1), (0, 2)]:
+    print(f"P(output {n},{m}) = {abs(fock(n, m) @ out)**2:.3f}")
+print("distinguishable photons would give P(1,1) = 0.5")
+
+# 2) Tight-binding chain: numerical spectrum versus the band formula
+Ns, eps, t = 40, 0.0, 1.0
+H = eps * np.eye(Ns) - t * (np.eye(Ns, k=1) + np.eye(Ns, k=-1))
+H[0, -1] = H[-1, 0] = -t                        # ring: periodic boundary
+E_num = np.sort(np.linalg.eigvalsh(H))
+k = 2 * np.pi * np.arange(Ns) / Ns              # allowed wavevectors (a = 1)
+E_band = np.sort(eps - 2 * t * np.cos(k))
+print("max |numerical - formula| =", np.max(np.abs(E_num - E_band)))
+print("band from", E_num.min(), "to", E_num.max(), "(width 4t)")</code></pre>
+<p>The coincidence probability \(P(1,1)\) is exactly zero: the photons always leave together. The tight-binding energies match \(\epsilon - 2t\cos ka\) to machine precision.</p>
 
 <div class="eda"><p>Second quantisation is the notation of every Hamiltonian a quantum design tool writes down: \(a_i^\dagger a_j\) for resonator and qubit couplings, \(c_j^\dagger c_{j+1}\) for dot arrays, \(a^\dagger a^\dagger aa\) for Kerr nonlinearities. Being fluent in it is a prerequisite for reading the hardware literature and the review's @lf:eq-multi.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Identical particles are bosons (symmetric) or fermions (antisymmetric).</li>
+<li>Fermions obey Pauli exclusion; bosons bunch (Hong–Ou–Mandel).</li>
+<li>Second quantisation: occupation numbers and per-mode creation/annihilation operators; commutators for bosons, anticommutators for fermions.</li>
+<li>Photons: one oscillator per mode; linear optics transforms mode operators by the classical unitary.</li>
+<li>Tight binding: hopping \(t\) spreads levels into bands of width \(4t\); exchange \(J = 4t^2/U\) couples spin qubits.</li>
+<li>Superconductivity: Cooper pairs condense into one state with a macroscopic phase; a junction gives \(-E_J\cos\varphi\).</li>
+</ul></div>
 
 <div class="exercises" id="ex-q-second"><h4>Exercises</h4><ol>
 <li>Show that \(c^\dagger c\) has eigenvalues 0 and 1 for a fermionic mode.
@@ -36,5 +107,9 @@
 <details><summary>Solution</summary><p>In the basis \(c_1^\dagger\ket{0}, c_2^\dagger\ket0\), \(H = \begin{pmatrix}\epsilon & -t\\-t&\epsilon\end{pmatrix}\). Eigenstates \((1,\pm1)/\sqrt2\) with energies \(\epsilon\mp t\): bonding and antibonding orbitals, split by \(2t\).</p></details></li>
 <li>Estimate \(J = 4t^2/U\) for \(t = 10\) µeV and \(U = 2\) meV, in MHz. If \(t\) depends on a barrier gate as \(t\propto\ee^{-V/V_0}\) with \(V_0 = 10\) mV, how much does \(J\) change for a 1 mV shift?
 <details><summary>Solution</summary><p>\(J = 4\times10^{-10}/2\times10^{-3}\) eV \(= 0.2\) µeV, i.e. \(0.2\times10^{-6}\times1.6\times10^{-19}/6.63\times10^{-34}\approx48\) MHz. \(J\propto t^2\propto\ee^{-2V/V_0}\), so a 1 mV shift changes \(J\) by \(\ee^{-0.2}\approx0.82\), an 18% change.</p></details></li>
+<li>Show that \(c_1^\dagger c_2^\dagger = -c_2^\dagger c_1^\dagger\) implies the two-fermion state \(c_1^\dagger c_2^\dagger\ket0\) changes sign when the modes are swapped, and that \(c_1^\dagger c_1^\dagger\ket0 = 0\).
+<details><summary>Solution</summary><p>Swapping the labels gives \(c_2^\dagger c_1^\dagger\ket0 = -c_1^\dagger c_2^\dagger\ket0\): antisymmetric. Setting \(j = k\) in \(\{c_j^\dagger,c_k^\dagger\} = 0\) gives \(2(c_1^\dagger)^2 = 0\).</p></details></li>
+<li>Aluminium has \(T_c = 1.2\) K. Estimate its gap \(\Delta\) in µeV and the frequency of a photon that can break a Cooper pair.
+<details><summary>Solution</summary><p>\(\Delta\approx1.76\times8.62\times10^{-5}\,\mathrm{eV/K}\times1.2\,\mathrm K\approx182\) µeV. Breaking a pair needs \(2\Delta\approx364\) µeV, a photon of \(2\Delta/h\approx88\) GHz. Qubit-frequency photons (5 GHz) cannot break pairs, but stray infrared and higher-frequency radiation can, creating quasiparticles.</p></details></li>
 </ol></div>
 </section>
