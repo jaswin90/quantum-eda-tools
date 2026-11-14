@@ -57,9 +57,13 @@ document.addEventListener("DOMContentLoaded", function () {
   <ol>
 <li class="toc2"><a href="#sec-p-preface">How to use this book</a></li>
 <li class="toc2"><a href="#sec-p-field"><span class="tocnum">1</span>Quantising the electromagnetic field</a></li>
-<li class="toc3"><a href="#sec-p-field-modes"><span class="tocnum">1.1</span>Modes are oscillators</a></li>
-<li class="toc3"><a href="#sec-p-field-op"><span class="tocnum">1.2</span>The field operator and vacuum fluctuations</a></li>
-<li class="toc3"><a href="#sec-p-field-travel"><span class="tocnum">1.3</span>Travelling modes</a></li>
+<li class="toc3"><a href="#sec-p-field-recap"><span class="tocnum">1.1</span>What we already know</a></li>
+<li class="toc3"><a href="#sec-p-field-modes"><span class="tocnum">1.2</span>Step 1: modes are oscillators</a></li>
+<li class="toc3"><a href="#sec-p-field-quant"><span class="tocnum">1.3</span>Step 2: quantise each mode</a></li>
+<li class="toc3"><a href="#sec-p-field-photon"><span class="tocnum">1.4</span>Step 3: photons</a></li>
+<li class="toc3"><a href="#sec-p-field-op"><span class="tocnum">1.5</span>The field operator and vacuum fluctuations</a></li>
+<li class="toc3"><a href="#sec-p-field-travel"><span class="tocnum">1.6</span>Travelling modes</a></li>
+<li class="toc3"><a href="#sec-p-field-io"><span class="tocnum">1.7</span>Input–output relations</a></li>
 <li class="toc2"><a href="#sec-p-states"><span class="tocnum">2</span>Quantum states of light</a></li>
 <li class="toc3"><a href="#sec-p-st-quad"><span class="tocnum">2.1</span>Quadratures and phase space</a></li>
 <li class="toc3"><a href="#sec-p-st-zoo"><span class="tocnum">2.2</span>The main states</a></li>
@@ -102,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Quantum Photonics</h1>
   <p class="subtitle">The quantised field, states of light, linear optics, light–matter interaction, sources and detectors, integrated photonics and photonic quantum computing</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">7 chapters · 13 numbered equations · 22 exercises with solutions · about 45 hours of study</p>
+  <p class="meta">7 chapters · 13 numbered equations · 24 exercises with solutions · about 45 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../classical-physics/index.html">Book 2: Classical Physics</a>, <a href="../quantum-mechanics/index.html">Book 3: Quantum Mechanics</a>, <a href="../quantum-information/index.html">Book 4: Quantum Computing</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-p-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -113,39 +117,81 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <section id="sec-p-field"><h2><span class="secnum">1</span> Quantising the electromagnetic field</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>Expand the field in a cavity in normal modes and show that each mode is a harmonic oscillator.</li>
-<li>Write the quantised field operator, and compute vacuum fluctuations and the single-photon field strength.</li>
-<li>Extend the picture to travelling modes in waveguides, and state quantum input–output relations.</li>
+<li>See why the electromagnetic field in a box is a set of independent harmonic oscillators, one per mode.</li>
+<li>Quantise each mode and understand what a photon is: one quantum of excitation of one mode.</li>
+<li>Write the electric-field operator, and compute vacuum fluctuations and the field of a single photon.</li>
+<li>Extend the picture to light travelling in waveguides, and state the quantum input–output relations.</li>
 </ul></div>
 
-<h3 id="sec-p-field-modes"><span class="secnum">1.1</span> Modes are oscillators</h3>
-<p>Inside a cavity with perfectly conducting walls, Maxwell's equations have discrete solutions, the eigenmodes \(\mathbf u_k(\mathbf r)\) of <a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-curlcurl">Book 2 eq. (24)</a>, with frequencies \(\omega_k\). Normalise them so that \(\int\varepsilon(\mathbf r)|\mathbf u_k|^2\dd V = 1\), and expand any field configuration in them: \(\mathbf E(\mathbf r,t) = \sum_k q_k(t)\,\omega_k\,\mathbf u_k(\mathbf r)\) up to constants. Substituting into the field energy \(\tfrac12\int(\varepsilon|\mathbf E|^2 + |\mathbf B|^2/\mu)\dd V\) and using orthogonality gives a sum of independent oscillators,</p>
+<div class="bigpic"><p>Light is an electromagnetic wave. Light is also made of particles, photons. Quantum optics reconciles the two with a simple observation: inside any cavity or waveguide, the electromagnetic field can be broken into independent <b>modes</b> (standing or travelling wave patterns), and each mode behaves mathematically exactly like a mass on a spring. Quantising a mass on a spring gives equally spaced energy levels (Book 3); quantising a mode gives the same, and each step up the ladder is one photon. Everything in this book, from beam splitters to photonic quantum computers, is built on that one idea.</p></div>
+
+<h3 id="sec-p-field-recap"><span class="secnum">1.1</span> What we already know</h3>
+<p>Three earlier results come together here.</p>
+<ul>
+<li>From Book 2 (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-max-waves" title="Electromagnetic waves">Book 2 §5.2</a>): in a closed metal box, Maxwell's equations allow only certain field patterns, the <b>eigenmodes</b> \(\mathbf u_k(\mathbf r)\), each oscillating at its own frequency \(\omega_k\). A general field is a sum of modes, like a guitar string's motion is a sum of harmonics.</li>
+<li>From Book 2 (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-lag-circuit" title="The Lagrangian of a circuit">Book 2 §1.4</a>): an LC circuit is a harmonic oscillator, with electric energy in the capacitor playing the role of potential energy and magnetic energy in the inductor playing the role of kinetic energy (or vice versa).</li>
+<li>From Book 3 (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-qho" title="The quantum harmonic oscillator">Book 3 §4</a>): a quantum harmonic oscillator has energies \(\hbar\omega(n+\tfrac12)\), raised and lowered by \(a^\dagger\) and \(a\) with \([a,a^\dagger] = 1\).</li>
+</ul>
+<p>The argument of this chapter is: (1) each mode of the field is an oscillator, (2) so quantise it like one, (3) and interpret the quanta as photons.</p>
+
+<h3 id="sec-p-field-modes"><span class="secnum">1.2</span> Step 1: modes are oscillators</h3>
+<p>Expand the field in a cavity in its modes: \(\mathbf E(\mathbf r,t) = \sum_kq_k(t)\,\omega_k\,\mathbf u_k(\mathbf r)\) (the factor \(\omega_k\) is a convenient normalisation), with the mode shapes normalised so that \(\int\varepsilon(\mathbf r)|\mathbf u_k|^2\dd V = 1\). Each amplitude \(q_k(t)\) oscillates at \(\omega_k\). Substitute into the total field energy \(\tfrac12\int(\varepsilon|\mathbf E|^2 + |\mathbf B|^2/\mu)\dd V\). Because different modes are orthogonal (the integral of \(\mathbf u_j\cdot\mathbf u_k\) vanishes for \(j\ne k\)), all cross terms disappear, and the energy is a sum over modes, each of the form</p>
 <div class="eq" id="eq-p-modes">$$ H = \sum_k\Big(\frac{p_k^2}{2} + \frac12\omega_k^2q_k^2\Big),  \tag{1}$$</div>
-<p>with \(q_k\) related to the electric field amplitude and \(p_k\) to the magnetic one. The electric and magnetic energies play the roles of potential and kinetic energy, exactly as capacitor and inductor did for the LC circuit (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-lag-circuit" title="The Lagrangian of a circuit">Book 2 §1.4</a>). Quantising each oscillator (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-qho" title="The quantum harmonic oscillator">Book 3 §4</a>) gives</p>
+<p>with \(q_k\) related to the electric field amplitude of mode \(k\) and \(p_k = \dot q_k\) related to its magnetic field. That is exactly the energy of a collection of independent masses on springs (unit mass, spring constant \(\omega_k^2\)). The electric energy plays the role of the spring's potential energy, the magnetic energy the role of kinetic energy, and energy sloshes between them twice per cycle, just as in an LC circuit.</p>
+<div class="intuition"><p>A guitar string vibrating in a mixture of its fundamental and harmonics can be described by one amplitude per harmonic, and each amplitude oscillates independently. The electromagnetic field in a box is the same, with "harmonics" replaced by "modes". The only difference is that there are infinitely many modes, at ever higher frequencies.</p></div>
+
+<h3 id="sec-p-field-quant"><span class="secnum">1.3</span> Step 2: quantise each mode</h3>
+<p>Quantum mechanically, each oscillator's position and momentum become operators with \([q_k, p_k] = \ii\hbar\), and the ladder operators of Book 3 diagonalise each term (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#eq-q-hqho">Book 3 eq. (12)</a>):</p>
 <div class="eq" id="eq-p-hfield">$$ H = \sum_k\hbar\omega_k\Big(a_k^\dagger a_k + \frac12\Big), \qquad [a_j, a_k^\dagger] = \delta_{jk} .  \tag{2}$$</div>
-<p>A <b>photon</b> is one quantum of excitation of one mode. "Which mode" is as much a part of a photon's identity as its frequency: a photon in a different spatial mode, polarisation, time bin or frequency band is a different photon and does not interfere with the first. Much of photonic engineering is about making photons occupy exactly the intended mode.</p>
+<p>Different modes commute: they are independent quantum systems. The state of the whole field is a tensor product of one oscillator state per mode. The most important states are the number (Fock) states \(\ket{n_1, n_2, \dots}\): \(n_1\) quanta in mode 1, \(n_2\) in mode 2, and so on, with energy \(\sum_k\hbar\omega_k(n_k+\tfrac12)\).</p>
 
-<h3 id="sec-p-field-op"><span class="secnum">1.2</span> The field operator and vacuum fluctuations</h3>
-<p>The electric field becomes an operator,</p>
+<h3 id="sec-p-field-photon"><span class="secnum">1.4</span> Step 3: photons</h3>
+<p>A <b>photon</b> is one quantum of excitation of one mode: \(a_k^\dagger\) "creates a photon in mode \(k\)", adding energy \(\hbar\omega_k\). This explains the particle-like behaviour of light (energy arrives in packets of \(\hbar\omega\), as in the photoelectric effect, <a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-why-energy" title="Energy comes in packets">Book 3 §1.1</a>) without giving up the wave picture: the mode is the wave, the excitation number is the particle count.</p>
+<div class="pitfall"><p>A photon is not a tiny ball that travels along a ray. It is an excitation of a <i>mode</i>, and the mode's shape (in space, in time, in frequency and in polarisation) is part of the photon's identity. Two photons in different modes are different kinds of photon: they do not interfere with each other. Much of photonic engineering, as later chapters show, is about making photons occupy exactly the intended mode so that they interfere perfectly.</p></div>
+<p>The \(\tfrac12\hbar\omega_k\) per mode is the <b>zero-point energy</b>. Summed over infinitely many modes it diverges, but only energy <i>differences</i> are measurable in the situations we care about, so it is usually dropped. Its physical consequences, vacuum fluctuations, are not dropped, as we now see.</p>
+
+<h3 id="sec-p-field-op"><span class="secnum">1.5</span> The field operator and vacuum fluctuations</h3>
+<p>Writing \(q_k\) in terms of \(a_k\) and \(a_k^\dagger\) turns the electric field into an operator:</p>
 <div class="eq" id="eq-p-efield">$$ \hat{\mathbf E}(\mathbf r) = \ii\sum_k\mathcal E_k\big(a_k\,\mathbf f_k(\mathbf r) - a_k^\dagger\,\mathbf f_k^*(\mathbf r)\big), \qquad \mathcal E_k = \sqrt{\frac{\hbar\omega_k}{2\varepsilon_0V_k}} ,  \tag{3}$$</div>
-<p>where \(\mathbf f_k\) is the mode shape normalised to a maximum of one and \(V_k = \int\varepsilon_r|\mathbf f_k|^2\dd V\) is the <b>mode volume</b>. In the vacuum, \(\expval{\hat{\mathbf E}} = 0\) but \(\expval{\hat{\mathbf E}^2}\ne0\): every mode has zero-point fluctuations of amplitude \(\mathcal E_k\). The <b>single-photon field</b> \(\mathcal E_k\) is the key figure of merit for coupling light to matter: an atom or qubit with dipole moment \(d\) couples to the mode with strength \(\hbar g = d\,\mathcal E_k\). Small mode volumes give large fields. A micropillar cavity with \(V\sim\lambda^3\) at 900 nm has \(\mathcal E\sim10^4\) V/m. A superconducting coplanar resonator at 5 GHz has a single-photon voltage of about a microvolt across a gap of about 10 µm, a field of only 0.1 V/m. Circuit QED nevertheless reaches couplings of \(g/2\pi\sim100\) MHz because its "atom" is a transmon with an enormous effective dipole: its Cooper pairs move across tens of micrometres rather than an ångström (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-qho-lc" title="Quantising an LC circuit">Book 3 §4.2</a>).</p>
-<p>Vacuum fluctuations are not a curiosity. They cause spontaneous emission (Chapter 4), they are the noise floor of every optical measurement (the shot noise of a coherent beam is vacuum noise beating with the beam), and they set the "added noise" of amplifiers at the quantum limit (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-th-johnson" title="Johnson–Nyquist noise">Book 2 §8.3</a>).</p>
+<p>where \(\mathbf f_k\) is the mode shape scaled so that its maximum is 1, and \(V_k = \int\varepsilon_r|\mathbf f_k|^2\dd V\) is the <b>mode volume</b>, the effective volume the mode occupies. Two consequences:</p>
+<ul>
+<li><b>Vacuum fluctuations.</b> In the vacuum state \(\ket0\), \(\expval{\hat{\mathbf E}} = 0\), but \(\expval{\hat{\mathbf E}^2}\ne0\): the field fluctuates with amplitude about \(\mathcal E_k\) in every mode. This is the same zero-point motion that keeps a quantum oscillator from being exactly at rest. Vacuum fluctuations cause spontaneous emission (Chapter 4), set the noise floor of every optical measurement, and set the minimum noise any amplifier must add (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-th-johnson" title="Johnson–Nyquist noise">Book 2 §8.3</a>).</li>
+<li><b>The single-photon field.</b> \(\mathcal E_k\) is the field strength associated with one photon in the mode. It grows as the mode volume shrinks: squeezing the same energy \(\hbar\omega\) into a smaller volume makes the field stronger. This is the key figure of merit for making light interact strongly with an atom or qubit: an emitter with dipole moment \(d\) couples to the mode with strength \(\hbar g = d\,\mathcal E_k\) (Chapter 4).</li>
+</ul>
+<div class="example"><p><b>Worked example: how strong is one photon?</b> A tiny optical cavity at \(\lambda = 930\) nm with mode volume \(V = (1\,\mu\mathrm m)^3\). Then \(\omega = 2\pi c/\lambda = 2.03\times10^{15}\) s\(^{-1}\), \(\hbar\omega = 2.14\times10^{-19}\) J, and</p>
+\[ \mathcal E = \sqrt{\frac{2.14\times10^{-19}}{2\times8.85\times10^{-12}\times10^{-18}}}\approx1.1\times10^5\ \mathrm{V/m}. \]
+<p>A hundred kilovolts per metre from a single photon, because the volume is so small. Spread over a cubic centimetre instead, the same photon would give only about 0.1 V/m. For comparison, a superconducting coplanar resonator at 5 GHz has a single-photon voltage of about a microvolt across a gap of about 10 µm, a field of only about 0.1 V/m. Circuit QED nevertheless reaches very strong coupling because its "atom" is a transmon with an enormous effective dipole: its Cooper pairs move across tens of micrometres rather than an ångström (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-qho-lc" title="Quantising an LC circuit">Book 3 §4.2</a>).</p></div>
 
-<h3 id="sec-p-field-travel"><span class="secnum">1.3</span> Travelling modes</h3>
-<p>In a waveguide or a transmission line there is a continuum of modes labelled by frequency (and direction). The appropriate operators are \(a(\omega)\) with \([a(\omega), a^\dagger(\omega')] = \delta(\omega-\omega')\), or their Fourier transforms \(a(t)\), which annihilate a photon passing a point at time \(t\), normalised so that \(\expval{a^\dagger(t)a(t)}\) is the photon flux (photons per second). A single photon in a wavepacket \(\xi(t)\) is \(\int\xi(t)a^\dagger(t)\dd t\ket0\) with \(\int|\xi|^2 = 1\). Its temporal shape is part of its mode: two single photons interfere perfectly only if their wavepackets overlap completely (Chapter 3).</p>
-<p>A cavity mode \(a\) coupled to a waveguide at rate \(\kappa\) obeys the quantum version of the input–output relations of <a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-inout">Book 2 eq. (14)</a>:</p>
+<h3 id="sec-p-field-travel"><span class="secnum">1.6</span> Travelling modes</h3>
+<p>Light in a fibre, a waveguide or a transmission line is not confined in a box; it travels. There is then a <b>continuum</b> of modes labelled by frequency (and direction). The appropriate operators are \(a(\omega)\), with \([a(\omega), a^\dagger(\omega')] = \delta(\omega-\omega')\), or their Fourier transforms \(a(t)\), which annihilate a photon passing a given point at time \(t\). They are normalised so that \(\expval{a^\dagger(t)a(t)}\) is the <b>photon flux</b>, photons per second.</p>
+<p>A single photon travelling down a waveguide has a <b>wavepacket</b>: a time profile \(\xi(t)\), with \(\int|\xi|^2\dd t = 1\). Its state is \(\int\xi(t)a^\dagger(t)\dd t\ket0\). The wavepacket is part of the photon's mode, so two photons interfere perfectly only if their wavepackets overlap completely, in arrival time, duration, frequency and shape (Chapter 3).</p>
+
+<h3 id="sec-p-field-io"><span class="secnum">1.7</span> Input–output relations</h3>
+<p>A cavity mode \(a\) that leaks into a waveguide at rate \(\kappa\) obeys the quantum version of the input–output equations of Book 2 (<a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-inout">Book 2 eq. (14)</a>):</p>
 <div class="eq" id="eq-p-inout">$$ \dot a = -\frac{\ii}{\hbar}[a, H_{\mathrm{sys}}] - \frac\kappa2a + \sqrt\kappa\,a_{\mathrm{in}}(t), \qquad a_{\mathrm{out}}(t) = a_{\mathrm{in}}(t) - \sqrt\kappa\,a(t) .  \tag{4}$$</div>
-<p>The input operator \(a_{\mathrm{in}}\) carries the vacuum fluctuations of the waveguide into the cavity even when nothing is sent in. That noise term is what preserves the commutation relations as the cavity decays, and it is the quantum origin of the fluctuation–dissipation theorem. Every lossy element, from a waveguide with scattering loss to an attenuator in a cryostat, mixes in vacuum (or thermal) noise in the same way, a fact that becomes the beam-splitter model of loss in Chapter 3.</p>
+<p>Read it line by line. The first term is the cavity's own dynamics. The second makes the cavity field decay at rate \(\kappa/2\) (energy at rate \(\kappa\)). The third feeds in whatever arrives along the waveguide. The output is the reflected input plus what leaks out of the cavity. The striking quantum feature is the input operator \(a_{\mathrm{in}}\): even when nothing is sent in, it carries the <i>vacuum fluctuations</i> of the waveguide into the cavity. Without that term, the cavity's commutator \([a,a^\dagger]\) would decay to zero along with the field, which quantum mechanics forbids. So <b>loss always comes with noise</b>: any lossy element (a leaky cavity, a lossy waveguide, an attenuator) mixes in vacuum or thermal fluctuations. This is the quantum origin of the fluctuation–dissipation theorem, and it becomes the "beam-splitter model of loss" in Chapter 3.</p>
 
-<div class="eda"><p>Photonic and microwave EDA meet here: the same eigenmode solvers compute optical cavity modes and microwave resonator modes, and the same mode volume and participation integrals decide coupling strengths in both. A field solver that reports \(V_k\) and \(\mathbf f_k\) at the emitter location reports \(g\).</p></div>
+<div class="eda"><p>Photonic and microwave design tools meet here. The same eigenmode solvers compute optical cavity modes and microwave resonator modes, and the same mode-volume and participation integrals decide coupling strengths in both. A field solver that reports the mode shape \(\mathbf f_k\) and volume \(V_k\) at an emitter's location reports its coupling \(g\).</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>The field in a cavity is a sum of modes; its energy is a sum of independent harmonic oscillators, one per mode.</li>
+<li>Quantising each mode gives \(H = \sum\hbar\omega_k(a_k^\dagger a_k + \tfrac12)\); a photon is one excitation of one mode, and its mode is part of its identity.</li>
+<li>The field operator has vacuum fluctuations; the single-photon field \(\mathcal E = \sqrt{\hbar\omega/2\varepsilon_0V}\) grows as the mode volume shrinks.</li>
+<li>Travelling photons are wavepackets; perfect interference needs perfectly overlapping wavepackets.</li>
+<li>Input–output relations: loss always comes with injected noise (at least vacuum fluctuations).</li>
+</ul></div>
 
 <div class="exercises" id="ex-p-field"><h4>Exercises</h4><ol>
-<li>Compute the single-photon field \(\mathcal E\) for a mode of volume \(V = (1\,\mu\mathrm m)^3\) at \(\lambda = 930\) nm in vacuum.
-<details><summary>Solution</summary><p>\(\omega = 2\pi c/\lambda = 2.03\times10^{15}\) s\(^{-1}\). \(\mathcal E = \sqrt{\hbar\omega/2\varepsilon_0V} = \sqrt{2.14\times10^{-19}/(2\times8.85\times10^{-12}\times10^{-18})}\approx1.1\times10^5\) V/m.</p></details></li>
-<li>An atom with dipole moment \(d = 3ea_0\) (\(a_0 = 0.053\) nm) sits at the field maximum of that mode. What is \(g/2\pi\)?
-<details><summary>Solution</summary><p>\(d = 3\times1.6\times10^{-19}\times5.3\times10^{-11} = 2.5\times10^{-29}\) C m. \(g = d\mathcal E/\hbar = 2.5\times10^{-29}\times1.1\times10^5/1.055\times10^{-34}\approx2.6\times10^{10}\) s\(^{-1}\), so \(g/2\pi\approx4\) GHz. Real quantum-dot cavities reach tens of GHz because quantum dots have larger dipoles.</p></details></li>
-<li>Show that the output field of a lossless cavity (no internal loss) satisfies \([a_{\mathrm{out}}(t), a_{\mathrm{out}}^\dagger(t')] = \delta(t-t')\) in the steady state for an empty cavity.
-<details><summary>Solution</summary><p>For an empty cavity (no \(H_{\mathrm{sys}}\) beyond the frame), \(a\) is a linear filter of \(a_{\mathrm{in}}\); in the frequency domain \(a_{\mathrm{out}}(\omega) = r(\omega)a_{\mathrm{in}}(\omega)\) with \(|r| = 1\) (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-osc-loss" title="Loss: internal and external">Book 2 §3.1</a>, exercise 2). A unit-modulus filter preserves the commutator \(\delta(\omega-\omega')\), and hence its Fourier transform \(\delta(t-t')\).</p></details></li>
+<li>What is the energy of one photon at 1550 nm and at 5 GHz, in joules and electronvolts? How many 1550 nm photons per second are in a 1 mW laser beam?
+<details><summary>Solution</summary><p>1550 nm: \(\hbar\omega = hc/\lambda = 1.28\times10^{-19}\) J = 0.80 eV. 5 GHz: \(3.3\times10^{-24}\) J = 20.7 µeV. 1 mW: \(10^{-3}/1.28\times10^{-19}\approx7.8\times10^{15}\) photons per second. Single-photon experiments work with a million times fewer.</p></details></li>
+<li>An atom with dipole moment \(d = 3ea_0\) (\(a_0 = 0.053\) nm) sits at the field maximum of the mode in the worked example. What is \(g/2\pi\)?
+<details><summary>Solution</summary><p>\(d = 3\times1.6\times10^{-19}\times5.3\times10^{-11} = 2.5\times10^{-29}\) C m. \(g = d\mathcal E/\hbar = 2.5\times10^{-29}\times1.1\times10^5/1.055\times10^{-34}\approx2.6\times10^{10}\) s\(^{-1}\), so \(g/2\pi\approx4\) GHz.</p></details></li>
+<li>By what factor does \(\mathcal E\) change if the mode volume is reduced 100-fold? If the frequency doubles at fixed volume?
+<details><summary>Solution</summary><p>\(\mathcal E\propto\sqrt{\omega/V}\): 100 times smaller volume gives 10 times larger field; doubling frequency gives \(\sqrt2\) times larger.</p></details></li>
+<li>A single photon has a Gaussian wavepacket of duration 50 ps. Roughly what is its spectral width, and why does this matter for interfering it with a photon of 500 ps duration?
+<details><summary>Solution</summary><p>By the time–frequency relation (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-fourier-transform" title="The Fourier transform">Book 1 §6.2</a>), spectral width \(\sim1/(2\pi\times50\,\mathrm{ps})\approx3\) GHz. A 500 ps photon has a ten times narrower spectrum. Their wavepackets overlap poorly in both time and frequency, so they are partly distinguishable and interfere imperfectly.</p></details></li>
+<li>Show that the output field of an empty, lossless cavity satisfies \([a_{\mathrm{out}}(t), a_{\mathrm{out}}^\dagger(t')] = \delta(t-t')\).
+<details><summary>Solution</summary><p>For an empty cavity, \(a_{\mathrm{out}}(\omega) = r(\omega)a_{\mathrm{in}}(\omega)\) with \(|r| = 1\) (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-osc-loss" title="Loss: internal and external">Book 2 §3.1</a>, exercise 2). A filter of unit modulus preserves the commutator \(\delta(\omega-\omega')\), and hence its Fourier transform \(\delta(t-t')\). The output is a legitimate free field, as it must be.</p></details></li>
 </ol></div>
 </section>
 
