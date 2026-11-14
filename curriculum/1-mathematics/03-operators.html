@@ -64,6 +64,24 @@
 <div class="eq" id="eq-m-svd">$$ M = V\,\Sigma\,W^\dagger , $$</div>
 <p>with \(V, W\) unitary and \(\Sigma\) diagonal with non-negative <b>singular values</b> \(s_1\ge s_2\ge\dots\). Read it as: rotate (\(W^\dagger\)), stretch along the axes (\(\Sigma\)), rotate again (\(V\)). The singular values are the square roots of the eigenvalues of \(M^\dagger M\). The SVD gives the best low-rank approximation of a matrix (keep the largest singular values), the condition number \(s_1/s_n\) that controls numerical error (Chapter 8), and, in Book 3, the Schmidt decomposition that measures entanglement.</p>
 
+<h3 id="sec-m-op-code">Try it in Python</h3>
+<p><code>np.linalg.eigh</code> diagonalises Hermitian matrices (returning real eigenvalues in increasing order and orthonormal eigenvectors as columns); <code>scipy.linalg.expm</code> computes matrix exponentials.</p>
+<pre class="code"><code>import numpy as np
+from scipy.linalg import expm
+X = np.array([[0, 1], [1, 0]]); Z = np.diag([1, -1])
+
+# Avoided crossing: scan the detuning of two coupled modes (GHz)
+g = 0.05
+for d in (-0.4, -0.1, 0.0, 0.1, 0.4):
+    H = np.array([[5.0 + d, g], [g, 5.0]])
+    print(d, np.linalg.eigh(H)[0])     # never closer than 2g = 0.1
+
+# A qubit rotation from the matrix exponential
+theta = np.pi / 2
+U = expm(-1j * theta / 2 * X)
+print(np.round(U, 3))                  # cos(pi/4) I - i sin(pi/4) X</code></pre>
+<p>Plot the two eigenvalues against <code>d</code> to see the avoided crossing of the worked example.</p>
+
 <div class="eda"><p>A finite-element simulation of a chip produces a generalised eigenvalue problem \(\mathbf A\mathbf e = \lambda\mathbf B\mathbf e\) with millions of unknowns (@lf:sec-design-extract). Its eigenvalues are mode frequencies squared, and its eigenvectors are field patterns. Everything in this chapter, from the spectral theorem to avoided crossings, is what the solver does at enormous scale. The sensitivity of an eigenvalue to a design parameter (@lf:eq-adjoint) follows from the same argument used above to show eigenvalues are real.</p></div>
 
 <div class="keypoints"><p></p><ul>

@@ -63,6 +63,23 @@
 </table></div></figure>
 <p>(\(\nabla^2 = \partial_x^2 + \partial_y^2 + \partial_z^2\) adds up the curvature in each direction.) The classic analytic method is <b>separation of variables</b>. For the wave equation on a string of length \(L\) with fixed ends, try \(u(x,t) = X(x)T(t)\). Substituting and dividing by \(XT\) gives \(X''/X = T''/(c^2T)\). The left side depends only on \(x\), the right only on \(t\), so both must equal the same constant, call it \(-k^2\). Then \(X = \sin kx\), and the fixed ends require \(kL = n\pi\); and \(T = \cos(ckt + \phi)\). The allowed frequencies \(\omega_n = n\pi c/L\) are the <b>modes</b> of the string, of a half-wave transmission-line resonator and of an optical cavity. Any motion is a sum of modes, each behaving like an independent harmonic oscillator. That observation, made quantum, is how light is quantised in Book 5.</p>
 
+<h3 id="sec-m-ode-code">Try it in Python</h3>
+<p>The solution \(\mathbf x(t) = \ee^{At}\mathbf x(0)\) can be computed directly, or a numerical integrator can step the equation forward. Both should agree.</p>
+<pre class="code"><code>import numpy as np
+from scipy.linalg import expm
+from scipy.integrate import solve_ivp
+
+w0, gamma = 2*np.pi*1.0, 0.2                      # 1 Hz oscillator, light damping
+A = np.array([[0, 1], [-w0**2, -gamma]])
+x0 = np.array([1.0, 0.0])
+print(np.linalg.eigvals(A))                       # -0.1 +/- 6.28j: decay and oscillation
+for t in (0.5, 1.0, 5.0):
+    print(t, expm(A*t).dot(x0)[0])                # exact solution at time t
+
+sol = solve_ivp(lambda t, x: A.dot(x), (0, 5), x0, rtol=1e-9, atol=1e-12)
+print(sol.y[0, -1])                               # agrees with the exact value at t = 5</code></pre>
+<p>Change <code>gamma</code> to <code>4*np.pi</code> (critical damping) and to <code>20</code> (overdamped) and watch the eigenvalues become real.</p>
+
 <div class="eda"><p>When a design tool reports "mode 3 at 7.21 GHz with \(Q = 2.4\times10^5\)", it has solved a huge version of \(\dot{\mathbf x}=A\mathbf x\) and read off an eigenvalue \(\lambda = -\gamma/2 + \ii\omega\): the imaginary part is the frequency and the real part the loss, so \(Q = \omega/\gamma = -\Im\lambda/(2\Re\lambda)\). Unwanted package modes (@lf:sec-pkg-modes) are simply eigenvalues that landed too close to a qubit frequency.</p></div>
 
 <div class="keypoints"><p></p><ul>

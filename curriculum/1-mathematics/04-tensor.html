@@ -44,6 +44,19 @@
 <p>In components: \((\Tr_B M)_{ii'} = \sum_j M_{ij,\,i'j}\), i.e. keep the \(A\) indices and sum over matching \(B\) indices. It is like computing a marginal probability distribution by summing over the variable you do not care about.</p>
 <div class="example"><p><b>Worked example: half of an entangled pair.</b> Write the projector \(\ketbra{\Phi^+}{\Phi^+} = \frac12(\ketbra{00}{00}+\ketbra{00}{11}+\ketbra{11}{00}+\ketbra{11}{11})\). Tracing out \(B\) keeps only terms whose \(B\) labels match (the first and last): \(\Tr_B = \frac12(\ketbra00 + \ketbra11) = I/2\). Each half of the entangled pair, on its own, is in the state of maximal ignorance: a 50:50 random bit with no phase information. The whole is perfectly known; the parts are completely random. In Book 3 this becomes the explanation of decoherence, where \(B\) is the environment.</p></div>
 
+<h3 id="sec-m-tensor-code">Try it in Python</h3>
+<p><code>np.kron</code> is the tensor product. A partial trace can be done by reshaping the density matrix into a four-index array and summing over the matching \(B\) indices.</p>
+<pre class="code"><code>import numpy as np
+k0, k1 = np.array([1, 0]), np.array([0, 1])
+bell = (np.kron(k0, k0) + np.kron(k1, k1)) / np.sqrt(2)
+C = bell.reshape(2, 2)                         # coefficient matrix c_ij
+print(np.linalg.det(C))                        # 0.5: entangled
+print(np.linalg.svd(C)[1])                     # Schmidt coefficients [0.707, 0.707]
+
+rho = np.outer(bell, bell.conj()).reshape(2, 2, 2, 2)   # indices i, j, i', j'
+rhoA = np.einsum('ijkj->ik', rho)                       # sum over matching j
+print(rhoA)                                             # identity / 2</code></pre>
+
 <div class="eda"><p>A processor's Hamiltonian is a sum of local terms on a tensor-product space whose dimension is exponential in the number of qubits. Circuit-level tools such as scqubits and QuTiP (@lf:sec-design-extract) build these operators with Kronecker products and truncate each subsystem to a few levels. Knowing how fast the space grows tells you which simulations are feasible on a laptop (a handful of transmons with a few levels each) and which need approximations.</p></div>
 
 <div class="keypoints"><p></p><ul>

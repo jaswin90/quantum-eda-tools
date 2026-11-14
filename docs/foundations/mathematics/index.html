@@ -63,11 +63,13 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-complex-phasor"><span class="tocnum">1.3</span>Oscillations and phasors</a></li>
 <li class="toc3"><a href="#sec-m-complex-rotframe"><span class="tocnum">1.4</span>Rotating frames</a></li>
 <li class="toc3"><a href="#sec-m-complex-why"><span class="tocnum">1.5</span>Why quantum amplitudes are complex</a></li>
+<li class="toc3"><a href="#sec-m-complex-code"><span class="tocnum">1.6</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-vectors"><span class="tocnum">2</span>Vector spaces, inner products and Dirac notation</a></li>
 <li class="toc3"><a href="#sec-m-vectors-space"><span class="tocnum">2.1</span>Vectors beyond arrows</a></li>
 <li class="toc3"><a href="#sec-m-vectors-inner"><span class="tocnum">2.2</span>Inner products, length and angle</a></li>
 <li class="toc3"><a href="#sec-m-vectors-gs"><span class="tocnum">2.3</span>Projection and Gram–Schmidt</a></li>
 <li class="toc3"><a href="#sec-m-vectors-dirac"><span class="tocnum">2.4</span>Dirac notation</a></li>
+<li class="toc3"><a href="#sec-m-vectors-code"><span class="tocnum">2.5</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-operators"><span class="tocnum">3</span>Linear operators, eigenvalues and the matrix exponential</a></li>
 <li class="toc3"><a href="#sec-m-op-maps"><span class="tocnum">3.1</span>Matrices are linear maps</a></li>
 <li class="toc3"><a href="#sec-m-op-adjoint"><span class="tocnum">3.2</span>The adjoint, Hermitian and unitary matrices</a></li>
@@ -76,12 +78,14 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-op-pauli"><span class="tocnum">3.5</span>The Pauli matrices</a></li>
 <li class="toc3"><a href="#sec-m-op-exp"><span class="tocnum">3.6</span>Functions of matrices and the exponential</a></li>
 <li class="toc3"><a href="#sec-m-op-svd"><span class="tocnum">3.7</span>Singular value decomposition</a></li>
+<li class="toc3"><a href="#sec-m-op-code"><span class="tocnum">3.8</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-tensor"><span class="tocnum">4</span>Tensor products and composite systems</a></li>
 <li class="toc3"><a href="#sec-m-tensor-why"><span class="tocnum">4.1</span>Why a new product is needed</a></li>
 <li class="toc3"><a href="#sec-m-tensor-def"><span class="tocnum">4.2</span>Definition and rules</a></li>
 <li class="toc3"><a href="#sec-m-tensor-ent"><span class="tocnum">4.3</span>Product vectors and entangled vectors</a></li>
 <li class="toc3"><a href="#sec-m-tensor-exp"><span class="tocnum">4.4</span>The exponential wall</a></li>
 <li class="toc3"><a href="#sec-m-tensor-ptrace"><span class="tocnum">4.5</span>The partial trace</a></li>
+<li class="toc3"><a href="#sec-m-tensor-code"><span class="tocnum">4.6</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-ode"><span class="tocnum">5</span>Differential equations and linear dynamics</a></li>
 <li class="toc3"><a href="#sec-m-ode-first"><span class="tocnum">5.1</span>First-order equations: decay</a></li>
 <li class="toc3"><a href="#sec-m-ode-osc"><span class="tocnum">5.2</span>The harmonic oscillator</a></li>
@@ -89,6 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-ode-driven"><span class="tocnum">5.4</span>Driven oscillators and resonance</a></li>
 <li class="toc3"><a href="#sec-m-ode-systems"><span class="tocnum">5.5</span>Systems of linear equations: \(\dot{\mathbf x} = A\mathbf x\)</a></li>
 <li class="toc3"><a href="#sec-m-ode-pde"><span class="tocnum">5.6</span>Partial differential equations</a></li>
+<li class="toc3"><a href="#sec-m-ode-code"><span class="tocnum">5.7</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-fourier"><span class="tocnum">6</span>Fourier analysis, linear systems and spectra</a></li>
 <li class="toc3"><a href="#sec-m-fourier-series"><span class="tocnum">6.1</span>Fourier series: periodic signals</a></li>
 <li class="toc3"><a href="#sec-m-fourier-transform"><span class="tocnum">6.2</span>The Fourier transform: any signal</a></li>
@@ -96,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-fourier-lti"><span class="tocnum">6.4</span>Linear time-invariant systems and convolution</a></li>
 <li class="toc3"><a href="#sec-m-fourier-dft"><span class="tocnum">6.5</span>Sampling and the discrete Fourier transform</a></li>
 <li class="toc3"><a href="#sec-m-fourier-psd"><span class="tocnum">6.6</span>Noise and spectral densities</a></li>
+<li class="toc3"><a href="#sec-m-fourier-code"><span class="tocnum">6.7</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-prob"><span class="tocnum">7</span>Probability, statistics and inference</a></li>
 <li class="toc3"><a href="#sec-m-prob-basics"><span class="tocnum">7.1</span>Random variables, expectation and variance</a></li>
 <li class="toc3"><a href="#sec-m-prob-dists"><span class="tocnum">7.2</span>The distributions that matter</a></li>
@@ -103,6 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-prob-yield"><span class="tocnum">7.4</span>Independence and why yield collapses</a></li>
 <li class="toc3"><a href="#sec-m-prob-bayes"><span class="tocnum">7.5</span>Bayes' theorem and inference</a></li>
 <li class="toc3"><a href="#sec-m-prob-mc"><span class="tocnum">7.6</span>Monte Carlo methods</a></li>
+<li class="toc3"><a href="#sec-m-prob-code"><span class="tocnum">7.7</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-numerics"><span class="tocnum">8</span>Numerical methods and optimisation</a></li>
 <li class="toc3"><a href="#sec-m-num-float"><span class="tocnum">8.1</span>Floating point and conditioning</a></li>
 <li class="toc3"><a href="#sec-m-num-linear"><span class="tocnum">8.2</span>Solving linear systems and eigenproblems</a></li>
@@ -110,6 +117,15 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-num-lsq"><span class="tocnum">8.4</span>Least squares and fitting</a></li>
 <li class="toc3"><a href="#sec-m-num-opt"><span class="tocnum">8.5</span>Optimisation</a></li>
 <li class="toc3"><a href="#sec-m-num-adjoint"><span class="tocnum">8.6</span>Gradients of simulations: the adjoint method</a></li>
+<li class="toc3"><a href="#sec-m-num-code"><span class="tocnum">8.7</span>Try it in Python</a></li>
+<li class="toc2"><a href="#sec-m-worked"><span class="tocnum">9</span>Putting it together: the mathematics of measuring a resonator</a></li>
+<li class="toc3"><a href="#sec-m-w-model"><span class="tocnum">9.1</span>Step 1: the model (Chapters 1 and 5)</a></li>
+<li class="toc3"><a href="#sec-m-w-response"><span class="tocnum">9.2</span>Step 2: the predicted response (Chapters 1 and 6)</a></li>
+<li class="toc3"><a href="#sec-m-w-time"><span class="tocnum">9.3</span>Step 3: the same physics in the time domain (Chapters 5 and 6)</a></li>
+<li class="toc3"><a href="#sec-m-w-coupled"><span class="tocnum">9.4</span>Step 4: a neighbour shifts the answer (Chapter 3)</a></li>
+<li class="toc3"><a href="#sec-m-w-noise"><span class="tocnum">9.5</span>Step 5: noise and how many sweeps (Chapter 7)</a></li>
+<li class="toc3"><a href="#sec-m-w-fit"><span class="tocnum">9.6</span>Step 6: fitting and uncertainty (Chapters 7 and 8)</a></li>
+<li class="toc3"><a href="#sec-m-w-decide"><span class="tocnum">9.7</span>Step 7: from numbers to decisions</a></li>
     <li class="toc2"><a href="#references">References</a></li>
   </ol>
 </nav>
@@ -120,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Mathematics for Quantum Engineering</h1>
   <p class="subtitle">Complex numbers, linear algebra, differential equations, Fourier analysis, probability and numerical methods, taught with quantum devices in mind</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">8 chapters · 40 numbered equations · 50 exercises with solutions · about 40 hours of study</p>
+  <p class="meta">9 chapters · 40 numbered equations · 54 exercises with solutions · about 40 hours of study</p>
   <p class="meta prereq">Before this book: school algebra and some calculus. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-m-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -221,6 +237,22 @@ document.addEventListener("DOMContentLoaded", function () {
 <p>Real numbers with signs would allow some cancellation, so why complex? Two reasons that will become clear later. Time evolution is a continuous rotation of phases, \(\ee^{-\ii Et/\hbar}\), which needs a whole circle of phases, not just \(\pm1\). And describing a spin, which can point along three perpendicular directions in space, needs three mutually "perpendicular" families of states in a two-dimensional space, which real numbers cannot supply (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-why-sg" title="Stern–Gerlach and the qubit">Book 3 §1.3</a>).</p>
 <div class="pitfall"><p>Only <i>relative</i> phases between amplitudes are observable. Multiplying every amplitude by the same \(\ee^{\ii\chi}\) leaves every probability \(|c_1+c_2|^2\) unchanged, so a "global phase" means nothing physically. Changing the phase of just one amplitude changes the cross term and is very much observable. Confusing the two is a common early mistake.</p></div>
 
+<h3 id="sec-m-complex-code"><span class="secnum">1.6</span> Try it in Python</h3>
+<p>Python has complex numbers built in (it writes \(\ii\) as <code>1j</code>). Use it to check every hand calculation in this chapter.</p>
+<pre class="code"><code>import cmath, math
+z = 1 + 1j*math.sqrt(3)
+print(abs(z), cmath.phase(z))          # modulus 2, phase pi/3 = 1.047
+print(z**6)                            # (64+0j) up to rounding
+print(cmath.exp(1j*math.pi))           # Euler: -1 (+ tiny rounding)
+
+# Phasor analysis of an RC circuit (engineering convention, 1j for j)
+R, C = 1e3, 1e-9
+for f in (1e4, 159e3, 1e7):
+    w = 2*math.pi*f
+    Z = R + 1/(1j*w*C)
+    print(f, abs(Z), math.degrees(cmath.phase(Z)))</code></pre>
+<p>Try changing the frequency and watch the impedance move from capacitor-like (large, \(-90^\circ\)) to resistor-like (1 kΩ, \(0^\circ\)), passing \(-45^\circ\) at the corner frequency.</p>
+
 <div class="eda"><p>Every simulated quantity in a superconducting-chip design flow, from an impedance \(Z(\omega)\) to a scattering parameter \(S_{21}\), is a complex number at each frequency. Its modulus tells you how much signal passes; its phase tells you the delay and, near a resonance, the frequency and linewidth. Reading a resonator's response as a circle in the complex plane, rather than as a dip in a magnitude plot, is how loss is extracted from measurements (Book 2, <a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-tline" title="Transmission lines, resonators and microwave networks">Book 2 §6</a>).</p></div>
 
 <div class="keypoints"><p></p><ul>
@@ -313,6 +345,21 @@ document.addEventListener("DOMContentLoaded", function () {
 <p>\(\bra+ = (\bra0 + \bra1)/\sqrt2\), and \(\braket{0}{0} = 1\), \(\braket01 = 0\), etc., so \(\braket{+}{\psi} = \frac{1}{5\sqrt2}(3 + 4\ii)\). Its modulus squared is \(25/50 = 1/2\): measuring this state in the \(\pm\) basis gives "+" half the time (Book 3). The projector: \(\ketbra\psi\psi = \frac{1}{25}\begin{pmatrix}3\\4\ii\end{pmatrix}(3,\ -4\ii) = \frac{1}{25}\begin{pmatrix}9 & -12\ii\\ 12\ii & 16\end{pmatrix}\). Note the conjugation in the bra.</p></div>
 <div class="box"><p><strong>Infinite dimensions, briefly.</strong> For a particle on a line, the "basis" \(\ket{x}\) of position states is continuous. Sums become integrals and the Kronecker delta becomes the Dirac delta (Chapter 6): \(\int \ketbra{x}{x}\,\dd x = I\), \(\braket{x}{x'} = \delta(x-x')\), and \(\braket{x}{\psi} = \psi(x)\) is the wavefunction. The rigorous theory is delicate, but for engineering every formula works if you replace \(\sum_k\) by \(\int\dd x\). A space with an inner product that is complete (limits of convergent sequences stay inside) is a <b>Hilbert space</b>; every finite-dimensional one is.</p></div>
 
+<h3 id="sec-m-vectors-code"><span class="secnum">2.5</span> Try it in Python</h3>
+<p>NumPy represents kets as arrays; <code>np.vdot(a, b)</code> computes \(\braket ab\), conjugating the first argument automatically.</p>
+<pre class="code"><code>import numpy as np
+ket0, ket1 = np.array([1, 0]), np.array([0, 1])
+plus  = (ket0 + ket1) / np.sqrt(2)
+minus = (ket0 - ket1) / np.sqrt(2)
+psi = (3*ket0 + 4j*ket1) / 5
+
+print(np.vdot(plus, minus))            # 0: orthogonal
+print(abs(np.vdot(plus, psi))**2)      # 0.5: probability of "+"
+P = np.outer(psi, psi.conj())          # projector |psi><psi|
+print(np.allclose(P.dot(P), P))        # True: P^2 = P
+I = np.outer(plus, plus.conj()) + np.outer(minus, minus.conj())
+print(np.allclose(I, np.eye(2)))       # True: resolution of the identity</code></pre>
+
 <div class="eda"><p>The capacitance matrix of a layout and the modes of a 3D electromagnetic simulation are both expressed in bases, and the overlap integrals that couple them are inner products like <a class="xref" href="#eq-m-inner-fn">(7)</a>. The "energy participation ratio" used to turn a field simulation into a qubit Hamiltonian (<a class="xref ext" href="../../index.html#sec-design-extract" title="Extraction: three formulations">Lab to Foundry §3.3</a>) is a ratio of such integrals. Understanding projection onto a basis is understanding what those tools compute.</p></div>
 
 <div class="keypoints"><p></p><ul>
@@ -404,6 +451,24 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="eq" id="eq-m-svd">$$ M = V\,\Sigma\,W^\dagger ,  \tag{20}$$</div>
 <p>with \(V, W\) unitary and \(\Sigma\) diagonal with non-negative <b>singular values</b> \(s_1\ge s_2\ge\dots\). Read it as: rotate (\(W^\dagger\)), stretch along the axes (\(\Sigma\)), rotate again (\(V\)). The singular values are the square roots of the eigenvalues of \(M^\dagger M\). The SVD gives the best low-rank approximation of a matrix (keep the largest singular values), the condition number \(s_1/s_n\) that controls numerical error (Chapter 8), and, in Book 3, the Schmidt decomposition that measures entanglement.</p>
 
+<h3 id="sec-m-op-code"><span class="secnum">3.8</span> Try it in Python</h3>
+<p><code>np.linalg.eigh</code> diagonalises Hermitian matrices (returning real eigenvalues in increasing order and orthonormal eigenvectors as columns); <code>scipy.linalg.expm</code> computes matrix exponentials.</p>
+<pre class="code"><code>import numpy as np
+from scipy.linalg import expm
+X = np.array([[0, 1], [1, 0]]); Z = np.diag([1, -1])
+
+# Avoided crossing: scan the detuning of two coupled modes (GHz)
+g = 0.05
+for d in (-0.4, -0.1, 0.0, 0.1, 0.4):
+    H = np.array([[5.0 + d, g], [g, 5.0]])
+    print(d, np.linalg.eigh(H)[0])     # never closer than 2g = 0.1
+
+# A qubit rotation from the matrix exponential
+theta = np.pi / 2
+U = expm(-1j * theta / 2 * X)
+print(np.round(U, 3))                  # cos(pi/4) I - i sin(pi/4) X</code></pre>
+<p>Plot the two eigenvalues against <code>d</code> to see the avoided crossing of the worked example.</p>
+
 <div class="eda"><p>A finite-element simulation of a chip produces a generalised eigenvalue problem \(\mathbf A\mathbf e = \lambda\mathbf B\mathbf e\) with millions of unknowns (<a class="xref ext" href="../../index.html#sec-design-extract" title="Extraction: three formulations">Lab to Foundry §3.3</a>). Its eigenvalues are mode frequencies squared, and its eigenvectors are field patterns. Everything in this chapter, from the spectral theorem to avoided crossings, is what the solver does at enormous scale. The sensitivity of an eigenvalue to a design parameter (<a class="xref ext" href="../../index.html#eq-adjoint">Lab to Foundry eq. (12)</a>) follows from the same argument used above to show eigenvalues are real.</p></div>
 
 <div class="keypoints"><p></p><ul>
@@ -477,6 +542,19 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="eq" id="eq-m-ptrace">$$ \Tr_B M = \sum_j \big(I\otimes\bra j\big)\, M\, \big(I\otimes\ket j\big), \qquad \Tr_B(A\otimes B) = A\,\Tr(B).  \tag{23}$$</div>
 <p>In components: \((\Tr_B M)_{ii'} = \sum_j M_{ij,\,i'j}\), i.e. keep the \(A\) indices and sum over matching \(B\) indices. It is like computing a marginal probability distribution by summing over the variable you do not care about.</p>
 <div class="example"><p><b>Worked example: half of an entangled pair.</b> Write the projector \(\ketbra{\Phi^+}{\Phi^+} = \frac12(\ketbra{00}{00}+\ketbra{00}{11}+\ketbra{11}{00}+\ketbra{11}{11})\). Tracing out \(B\) keeps only terms whose \(B\) labels match (the first and last): \(\Tr_B = \frac12(\ketbra00 + \ketbra11) = I/2\). Each half of the entangled pair, on its own, is in the state of maximal ignorance: a 50:50 random bit with no phase information. The whole is perfectly known; the parts are completely random. In Book 3 this becomes the explanation of decoherence, where \(B\) is the environment.</p></div>
+
+<h3 id="sec-m-tensor-code"><span class="secnum">4.6</span> Try it in Python</h3>
+<p><code>np.kron</code> is the tensor product. A partial trace can be done by reshaping the density matrix into a four-index array and summing over the matching \(B\) indices.</p>
+<pre class="code"><code>import numpy as np
+k0, k1 = np.array([1, 0]), np.array([0, 1])
+bell = (np.kron(k0, k0) + np.kron(k1, k1)) / np.sqrt(2)
+C = bell.reshape(2, 2)                         # coefficient matrix c_ij
+print(np.linalg.det(C))                        # 0.5: entangled
+print(np.linalg.svd(C)[1])                     # Schmidt coefficients [0.707, 0.707]
+
+rho = np.outer(bell, bell.conj()).reshape(2, 2, 2, 2)   # indices i, j, i', j'
+rhoA = np.einsum('ijkj->ik', rho)                       # sum over matching j
+print(rhoA)                                             # identity / 2</code></pre>
 
 <div class="eda"><p>A processor's Hamiltonian is a sum of local terms on a tensor-product space whose dimension is exponential in the number of qubits. Circuit-level tools such as scqubits and QuTiP (<a class="xref ext" href="../../index.html#sec-design-extract" title="Extraction: three formulations">Lab to Foundry §3.3</a>) build these operators with Kronecker products and truncate each subsystem to a few levels. Knowing how fast the space grows tells you which simulations are feasible on a laptop (a handful of transmons with a few levels each) and which need approximations.</p></div>
 
@@ -567,6 +645,23 @@ document.addEventListener("DOMContentLoaded", function () {
 <tr><td>Schrödinger</td><td>\(\ii\hbar\,\partial_t\psi = -\frac{\hbar^2}{2m}\nabla^2\psi + V\psi\)</td><td>Electrons in dots, tunnelling, every quantum system</td></tr>
 </table></div></figure>
 <p>(\(\nabla^2 = \partial_x^2 + \partial_y^2 + \partial_z^2\) adds up the curvature in each direction.) The classic analytic method is <b>separation of variables</b>. For the wave equation on a string of length \(L\) with fixed ends, try \(u(x,t) = X(x)T(t)\). Substituting and dividing by \(XT\) gives \(X''/X = T''/(c^2T)\). The left side depends only on \(x\), the right only on \(t\), so both must equal the same constant, call it \(-k^2\). Then \(X = \sin kx\), and the fixed ends require \(kL = n\pi\); and \(T = \cos(ckt + \phi)\). The allowed frequencies \(\omega_n = n\pi c/L\) are the <b>modes</b> of the string, of a half-wave transmission-line resonator and of an optical cavity. Any motion is a sum of modes, each behaving like an independent harmonic oscillator. That observation, made quantum, is how light is quantised in Book 5.</p>
+
+<h3 id="sec-m-ode-code"><span class="secnum">5.7</span> Try it in Python</h3>
+<p>The solution \(\mathbf x(t) = \ee^{At}\mathbf x(0)\) can be computed directly, or a numerical integrator can step the equation forward. Both should agree.</p>
+<pre class="code"><code>import numpy as np
+from scipy.linalg import expm
+from scipy.integrate import solve_ivp
+
+w0, gamma = 2*np.pi*1.0, 0.2                      # 1 Hz oscillator, light damping
+A = np.array([[0, 1], [-w0**2, -gamma]])
+x0 = np.array([1.0, 0.0])
+print(np.linalg.eigvals(A))                       # -0.1 +/- 6.28j: decay and oscillation
+for t in (0.5, 1.0, 5.0):
+    print(t, expm(A*t).dot(x0)[0])                # exact solution at time t
+
+sol = solve_ivp(lambda t, x: A.dot(x), (0, 5), x0, rtol=1e-9, atol=1e-12)
+print(sol.y[0, -1])                               # agrees with the exact value at t = 5</code></pre>
+<p>Change <code>gamma</code> to <code>4*np.pi</code> (critical damping) and to <code>20</code> (overdamped) and watch the eigenvalues become real.</p>
 
 <div class="eda"><p>When a design tool reports "mode 3 at 7.21 GHz with \(Q = 2.4\times10^5\)", it has solved a huge version of \(\dot{\mathbf x}=A\mathbf x\) and read off an eigenvalue \(\lambda = -\gamma/2 + \ii\omega\): the imaginary part is the frequency and the real part the loss, so \(Q = \omega/\gamma = -\Im\lambda/(2\Re\lambda)\). Unwanted package modes (<a class="xref ext" href="../../index.html#sec-pkg-modes" title="The package is a microwave cavity">Lab to Foundry §6.1</a>) are simply eigenvalues that landed too close to a qubit frequency.</p></div>
 
@@ -660,6 +755,21 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="eq" id="eq-m-psd">$$ S_x(\omega) = \int_{-\infty}^\infty C(\tau)\,\ee^{\ii\omega\tau}\,\dd\tau, \qquad \expval{x^2} = \frac{1}{2\pi}\int S_x(\omega)\,\dd\omega .  \tag{34}$$</div>
 <p>It tells you how the noise power is spread over frequency. <b>White noise</b> has a flat spectrum (no memory: \(C(\tau)\) is a spike at zero); resistor noise is white over a huge range (Book 2). <b>\(1/f\) noise</b>, with \(S\propto1/|\omega|\), has power at all time scales, growing towards slow fluctuations; it causes the slow wandering of qubit frequencies. Book 3 shows that a qubit acts as a spectrum analyser: its energy relaxation samples the noise at its own frequency, while its dephasing samples noise near zero frequency. Specifying noise as a spectral density is therefore how the hardware books connect physical noise sources to error rates.</p>
 <div class="box warn"><p><strong>One-sided and two-sided spectra.</strong> Physicists often use the two-sided density above, defined for positive and negative \(\omega\). Engineers often quote a one-sided density over positive frequencies only, which is twice as large, and per hertz rather than per radian per second. Factors of 2 and \(2\pi\) in noise formulas almost always come from this.</p></div>
+
+<h3 id="sec-m-fourier-code"><span class="secnum">6.7</span> Try it in Python</h3>
+<p>The FFT turns a sampled signal into its spectrum. Here a decaying 50 MHz tone is sampled at 1 GS/s; its spectrum shows a Lorentzian peak whose width matches the decay rate.</p>
+<pre class="code"><code>import numpy as np
+fs, N = 1e9, 2**16                              # 1 GS/s, 65.5 us record
+t = np.arange(N) / fs
+gamma = 2*np.pi*1e6                             # energy decay rate (1 MHz linewidth)
+x = np.exp(-gamma*t/2) * np.cos(2*np.pi*50e6*t)
+X = np.fft.rfft(x)
+f = np.fft.rfftfreq(N, 1/fs)
+P = abs(X)**2
+k = P.argmax()
+half = f[P >= P[k]/2]
+print(f[k], half.max() - half.min())           # peak at 50 MHz, width about 1 MHz</code></pre>
+<p>Halve <code>gamma</code> and the measured width halves: linewidth equals decay rate. Shorten the record (smaller <code>N</code>) until the width you measure is set by the record length rather than by the physics: that is the resolution limit \(1/(N\Delta t)\).</p>
 
 <div class="eda"><p>Electromagnetic solvers work either in time (launch an impulse, record the ringing, Fourier transform) or in frequency (one solve per frequency). The pole–residue fits used to compress a simulated response into a small model (vector fitting, <a class="xref ext" href="../../index.html#sec-design-scale" title="The scaling wall">Lab to Foundry §3.5</a>) are rational transfer functions whose poles are the circuit's resonances. Passivity, the condition that a circuit cannot create energy, becomes a condition on the transfer function, and checking it is part of sign-off.</p></div>
 
@@ -755,6 +865,24 @@ document.addEventListener("DOMContentLoaded", function () {
 <p>When a probability or average is too hard to compute by formula, <b>simulate it</b>: draw random samples \(X_1,\dots,X_n\) from the distribution and average \(g(X_i)\). The error falls as \(\sigma_g/\sqrt n\) regardless of how many variables are involved, which makes Monte Carlo the workhorse of yield analysis. Its weakness is rare events: to estimate a failure probability of \(10^{-6}\) to 10% precision, you need about \(10^8\) samples, because almost none fail. <b>Importance sampling</b> fixes this by drawing samples from a distribution \(q(x)\) concentrated near the failures and correcting each by the weight \(p(x)/q(x)\). Error-correction simulations that estimate logical error rates of \(10^{-10}\), and statistical sign-off of large chips, both depend on such techniques.</p>
 <div class="example"><p><b>Worked example: estimating \(\pi\).</b> Throw \(n\) random points uniformly into a unit square; the fraction landing inside the quarter circle \(x^2+y^2 \lt 1\) estimates \(\pi/4\). Each point succeeds with probability \(p = 0.785\), so the standard error of \(\pi\) is \(4\sqrt{p(1-p)/n}\approx1.6/\sqrt n\): 10,000 points give \(\pi\pm0.016\). The same recipe, "sample, count, divide", estimates the probability that a randomly fabricated chip has no frequency collisions (Book 7).</p></div>
 
+<h3 id="sec-m-prob-code"><span class="secnum">7.7</span> Try it in Python</h3>
+<p>Monte Carlo makes every formula in this chapter testable. Here we check the \(1/\sqrt n\) law and the yield curve of <a class="xref" href="#fig-m-yield">Figure 2</a>.</p>
+<pre class="code"><code>import numpy as np
+from math import erf, sqrt
+rng = np.random.default_rng(0)
+
+# 1/sqrt(n): spread of the estimated probability from n shots
+p = 0.3
+for n in (100, 10000):
+    est = rng.binomial(n, p, size=2000) / n
+    print(n, est.std(), sqrt(p*(1-p)/n))       # simulated vs formula
+
+# Yield of N qubits with window +/- k sigma
+Phi = lambda x: 0.5*(1 + erf(x/sqrt(2)))
+k, N = 3.0, 100
+sims = (abs(rng.standard_normal((20000, N))) &lt; k).all(axis=1).mean()
+print(sims, (2*Phi(k) - 1)**N)                 # both about 0.76</code></pre>
+
 <div class="eda"><p>Almost every open problem in the review is a statistics problem in disguise: chance-constrained frequency allocation (which design maximises the probability of no collisions?), hierarchical Bayesian prediction of cold parameters from warm data, Bayesian experimental design for scarce cryogenic test time, and simulation-based inference of noise models. This chapter supplies the vocabulary; Book 7 supplies the methods.</p></div>
 
 <div class="keypoints"><p></p><ul>
@@ -833,6 +961,22 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="eq" id="eq-m-adjoint">$$ \frac{\partial f}{\partial p_k} = \mathbf c^{\mathsf T}\partial_k\mathbf u = -\boldsymbol\lambda^{\mathsf T}(\partial_kA)\,\mathbf u, \qquad A^{\mathsf T}\boldsymbol\lambda = \mathbf c .  \tag{40}$$</div>
 <p>One forward solve for \(\mathbf u\), one "adjoint" solve for \(\boldsymbol\lambda\), and then each component of the gradient is a cheap matrix product, however many parameters there are. The same trick for eigenvalue problems gives the eigenvalue-sensitivity formula used in the review (<a class="xref ext" href="../../index.html#eq-adjoint">Lab to Foundry eq. (12)</a>), and it is the same mathematics as back-propagation in neural networks. Adjoint gradients are what make "inverse design" of photonic and microwave components practical.</p>
 
+<h3 id="sec-m-num-code"><span class="secnum">8.7</span> Try it in Python</h3>
+<p>The finite-difference matrix of <a class="xref" href="#eq-m-fd">(38)</a> in a few lines, with a convergence study and Richardson extrapolation of the lowest eigenvalue (exact value \(\pi^2\)).</p>
+<pre class="code"><code>import numpy as np
+def lowest_eig(N):
+    h = 1.0 / (N + 1)
+    A = (np.diag(2*np.ones(N)) - np.diag(np.ones(N-1), 1) - np.diag(np.ones(N-1), -1)) / h**2
+    return np.linalg.eigvalsh(A)[0]
+
+vals = [lowest_eig(N) for N in (9, 19, 39)]      # h = 0.1, 0.05, 0.025
+print(vals, np.pi**2)
+d1, d2 = vals[1] - vals[0], vals[2] - vals[1]
+p = np.log2(d1 / d2)                              # observed order, about 2
+extrap = vals[2] + d2 / (2**p - 1)
+print(p, extrap)                                  # extrapolation lands very close to pi^2</code></pre>
+<p>Notice that the extrapolated value from three coarse grids is more accurate than the finest grid alone. Production solvers do the same with adaptive meshes.</p>
+
 <div class="eda"><p>Electronic design automation is, in large part, applied numerical linear algebra and optimisation at scale: sparse solvers for extraction, model-order reduction to compress what the solver produced (<a class="xref ext" href="../../index.html#sec-design-scale" title="The scaling wall">Lab to Foundry §3.5</a>), and constrained optimisation for placement and frequency allocation. Quantum EDA inherits all of it, and adds tighter accuracy targets and statistics. This chapter is the minimum toolkit for reading those sections of the review critically.</p></div>
 
 <div class="keypoints"><p></p><ul>
@@ -856,6 +1000,92 @@ document.addEventListener("DOMContentLoaded", function () {
 <details><summary>Solution</summary><p>Setting the derivative \(-2\sum x_k(y_k - \beta x_k)\) to zero gives the result: \(\langle\mathbf x,\mathbf y\rangle/\langle\mathbf x,\mathbf x\rangle\), the coefficient of the projection of \(\mathbf y\) onto \(\mathbf x\).</p></details></li>
 <li>Run gradient descent by hand on \(f(x) = (x-3)^2\) from \(x = 0\) with step \(\eta = 0.25\). What happens with \(\eta = 1.1\)?
 <details><summary>Solution</summary><p>\(f' = 2(x-3)\). With \(\eta = 0.25\): \(x\to x - 0.5(x-3)\): 0, 1.5, 2.25, 2.625, ... halving the distance to 3 each step. With \(\eta = 1.1\): \(x\to x - 2.2(x-3)\), so the distance to 3 is multiplied by \(-1.2\) each step: the iterates overshoot and diverge. Step size matters.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-m-worked"><h2><span class="secnum">9</span> Putting it together: the mathematics of measuring a resonator</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Use every tool of this book on one realistic task: characterising a superconducting microwave resonator.</li>
+<li>See how complex numbers, differential equations, eigenvalues, Fourier analysis, probability and fitting fit together in practice.</li>
+<li>Learn the workflow you will use again and again: model → prediction → measurement → fit → uncertainty → decision.</li>
+</ul></div>
+
+<div class="bigpic"><p>Mathematics sticks when it is used. This chapter follows one everyday task in a quantum lab: a newly fabricated chip contains a microwave resonator, and we want to know its frequency and how lossy it is (its quality factors), with honest error bars. Doing this needs nearly every chapter of this book: a differential equation for the resonator, complex numbers and phasors for its response, eigenvalues when it couples to a neighbour, Fourier analysis to connect time and frequency, statistics for the noise, and least-squares fitting for the answer. The same workflow, at larger scale, is what the design tools of Book 7 and the review automate.</p></div>
+
+<h3 id="sec-m-w-model"><span class="secnum">9.1</span> Step 1: the model (Chapters 1 and 5)</h3>
+<p>A resonator is a damped harmonic oscillator. Its complex amplitude \(a(t)\), whose squared modulus is the stored energy, obeys a first-order equation (the "slowly varying" form of Chapter 5's oscillator, written in a frame rotating at the drive frequency, Chapter 1):</p>
+\[ \dot a = -\Big(\ii\delta + \frac{\kappa}{2}\Big)a + \sqrt{\kappa_e}\,a_{\mathrm{in}}, \qquad \kappa = \kappa_i + \kappa_e , \]
+<p>where \(\delta = \omega_0 - \omega\) is the detuning between resonance and drive, \(\kappa_i\) the internal loss rate (what we want to know: materials quality), \(\kappa_e\) the rate of coupling to the measurement line, and \(a_{\mathrm{in}}\) the incoming signal. Every term is either a decay (Chapter 5, first-order equations) or a rotation (Chapter 1, phases).</p>
+
+<h3 id="sec-m-w-response"><span class="secnum">9.2</span> Step 2: the predicted response (Chapters 1 and 6)</h3>
+<p>Drive at a steady frequency, so that after a few lifetimes \(a\) is constant: set \(\dot a = 0\). Then \(a = \sqrt{\kappa_e}\,a_{\mathrm{in}}/(\ii\delta + \kappa/2)\). In a "notch" geometry, the transmitted signal past the resonator is the incoming wave minus what the resonator radiates back into the line, \(S_{21} = 1 - \sqrt{\kappa_e}\,a/a_{\mathrm{in}}\):</p>
+\[ S_{21}(\omega) = 1 - \frac{\kappa_e}{\kappa_i+\kappa_e + 2\ii(\omega_0-\omega)} . \]
+<p>(Dividing top and bottom by \(\omega_0\) gives the form with quality factors, <a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-notch">Book 2 eq. (34)</a>.) Three predictions follow directly, using only complex-number reasoning:</p>
+<ul>
+<li><b>Depth.</b> On resonance (\(\omega = \omega_0\)), \(S_{21} = 1 - \kappa_e/\kappa = \kappa_i/\kappa\). A very lossy resonator barely dips; a critically coupled one (\(\kappa_i = \kappa_e\)) dips to ½.</li>
+<li><b>Width.</b> The dip in \(|S_{21}|^2\) has a Lorentzian shape of full width \(\kappa\) (Chapter 6: "linewidth equals decay rate").</li>
+<li><b>Circle.</b> As \(\omega\) sweeps, \(S_{21}\) traces a circle in the complex plane, passing through 1 far from resonance, with diameter \(\kappa_e/\kappa\). This follows because \(z\mapsto1/(\text{const} + \ii x)\) maps a straight line to a circle, a classical fact about complex functions.</li>
+</ul>
+<div class="intuition"><p>The circle separates the two loss rates. The <i>width</i> of the resonance gives the total \(\kappa = \kappa_i+\kappa_e\); the <i>diameter</i> of the circle gives the fraction \(\kappa_e/\kappa\). Two measurable features, two unknowns. That is why experimentalists plot \(S_{21}\) in the complex plane, not just its magnitude: the phase carries half the information.</p></div>
+
+<h3 id="sec-m-w-time"><span class="secnum">9.3</span> Step 3: the same physics in the time domain (Chapters 5 and 6)</h3>
+<p>Instead of sweeping frequency, we could switch off a resonant drive and watch the stored energy ring down: \(|a(t)|^2 = |a(0)|^2\ee^{-\kappa t}\) (first-order decay at rate \(\kappa\)). The Fourier transform of a decay \(\ee^{-\kappa t/2}\) is a Lorentzian of width \(\kappa\) (Chapter 6), so the time and frequency measurements must agree. A frequency sweep is usually easier for high-\(Q\) resonators (the ring-down can last tens of microseconds and needs fast electronics); a ring-down is better when the resonance is too narrow to sweep finely.</p>
+<div class="example"><p><b>Worked numbers.</b> Design target: \(\omega_0/2\pi = 6.000\) GHz, \(Q_e = \omega_0/\kappa_e = 2\times10^5\), and we hope for \(Q_i = 10^6\). Then \(\kappa_e/2\pi = 30\) kHz, \(\kappa_i/2\pi = 6\) kHz, \(\kappa/2\pi = 36\) kHz. Prediction: linewidth 36 kHz, dip to \(\kappa_i/\kappa = 0.17\) (−15.6 dB), circle diameter 0.83, energy lifetime \(1/\kappa = 4.4\) µs.</p></div>
+
+<h3 id="sec-m-w-coupled"><span class="secnum">9.4</span> Step 4: a neighbour shifts the answer (Chapter 3)</h3>
+<p>Suppose a second, unintended mode of the chip (for example a "slot mode" of the ground plane) sits at 6.010 GHz and couples to our resonator with strength \(g/2\pi = 1\) MHz. Our resonator is no longer an isolated oscillator; the pair is described by the \(2\times2\) matrix of Chapter 3. With detuning \(\Delta/2\pi = -10\) MHz, the eigenvalues shift by about \(g^2/|\Delta| = 0.1\) MHz: the resonator appears at 5.9999 GHz instead of 6.0000. The eigenvector is about \((1, g/\Delta) = (1, 0.1)\): 1% of the energy (\(0.1^2\)) now sits in the other mode. If that mode is lossy, our resonator inherits 1% of its loss rate, which can dominate a high-\(Q\) measurement. Unexpectedly low \(Q_i\) is often a symptom of exactly this, and spotting it needs the avoided-crossing reasoning of Chapter 3.</p>
+
+<h3 id="sec-m-w-noise"><span class="secnum">9.5</span> Step 5: noise and how many sweeps (Chapter 7)</h3>
+<p>The measured \(S_{21}\) at each frequency has Gaussian noise from the amplifiers (Chapter 7, and Book 2). If one sweep has noise of standard deviation \(\sigma = 0.02\) per point, averaging \(n\) sweeps reduces it to \(0.02/\sqrt n\). How precisely can we then determine \(\kappa_i\)? Roughly, the uncertainty in a fitted width scales with the noise divided by the depth of the feature and the square root of the number of points across it. A useful rule from experience: to measure \(Q_i\) to 5%, the dip must be measured with a signal-to-noise ratio of a few hundred across a few dozen points within the linewidth. That fixes the frequency step (about 1 kHz here) and the number of averages.</p>
+<div class="pitfall"><p>Low drive power is required for honest \(Q_i\) (Book 6: microscopic defects saturate at high power and hide their loss), but low power means a weak signal and more noise. Measurements at single-photon power can need hours of averaging. That trade-off, accuracy against measurement time, is the same one the review discusses for cold test of whole chips (<a class="xref ext" href="../../index.html#sec-test-scarce" title="Cold test is the scarce resource">Lab to Foundry §7.2</a>).</p></div>
+
+<h3 id="sec-m-w-fit"><span class="secnum">9.6</span> Step 6: fitting and uncertainty (Chapters 7 and 8)</h3>
+<p>We fit the model \(S_{21}(\omega;\,\omega_0,\kappa_i,\kappa_e)\) (plus a few nuisance parameters for cable delay and amplitude) to the measured complex data by nonlinear least squares (Chapter 8): minimise \(\sum_k|S_{21}^{\mathrm{meas}}(\omega_k) - S_{21}^{\mathrm{model}}(\omega_k)|^2\). With Gaussian noise this is maximum likelihood (Chapter 7). Good starting values come from the data directly: \(\omega_0\) from the deepest point, \(\kappa\) from the half-power width, \(\kappa_e/\kappa\) from the circle diameter. The fit's uncertainty comes from the curvature of the cost near its minimum (or from repeating the measurement), and is propagated to derived quantities such as \(Q_i = \omega_0/\kappa_i\) with <a class="xref" href="#eq-m-propagation">(36)</a>.</p>
+<div class="example"><p><b>Try it: simulate and fit.</b> The code generates noisy notch data for the worked numbers above, then fits it. Run it several times with different seeds to see the scatter of the fitted \(Q_i\): that scatter <i>is</i> the measurement uncertainty.</p>
+<pre class="code"><code>import numpy as np
+from scipy.optimize import least_squares
+
+f0, ki, ke = 6.000e9, 6e3, 30e3                 # Hz; kappa/2pi values
+f = f0 + np.linspace(-150e3, 150e3, 301)
+def s21(p, f):
+    f0, ki, ke = p
+    return 1 - ke / (ki + ke + 2j*(f0 - f))
+
+rng = np.random.default_rng(3)
+noise = 0.02 * (rng.standard_normal(f.size) + 1j*rng.standard_normal(f.size))
+data = s21((f0, ki, ke), f) + noise
+
+def resid(p):
+    r = s21(p, f) - data
+    return np.concatenate([r.real, r.imag])
+
+fit = least_squares(resid, x0=(f0 + 2e3, 10e3, 20e3), x_scale=(1e3, 1e3, 1e3))
+f0_fit, ki_fit, ke_fit = fit.x
+print("Qi =", f0_fit / ki_fit, " Qe =", f0_fit / ke_fit)</code></pre>
+<p>With this noise level the fitted \(Q_i\) typically lands within a few percent of \(10^6\), while \(Q_e\) is determined to about 1%. Raise the noise to <code>0.1</code> (closer to a single-photon measurement) and the \(Q_i\) scatter grows to tens of percent while \(Q_e\) stays well determined: internal loss is the small part of the total and the hardest to measure, exactly as experimentalists find.</p></div>
+
+<h3 id="sec-m-w-decide"><span class="secnum">9.7</span> Step 7: from numbers to decisions</h3>
+<p>Suppose the fit gives \(Q_i = (8.5\pm1.2)\times10^5\). Is the fabrication process good enough for qubits that need \(Q_i\ge10^6\)? The honest answer is a probability: if the uncertainty is Gaussian, the chance that the true value exceeds \(10^6\) is \(1 - \Phi((10 - 8.5)/1.2) = 1 - \Phi(1.25)\approx11\%\) (Chapter 7). Measuring ten resonators across the wafer, rather than measuring one more precisely, also reveals the spread between devices, which matters more for yield (Chapter 7's yield argument). This shift, from "what is the number?" to "what is the distribution, and what should we do given it?", is the core of the review's approach to quantum chip design.</p>
+
+<div class="eda"><p>Resonator characterisation is the simplest instance of the loop the review wants to automate: a model predicts a response from design parameters, a measurement tests it, a fit extracts parameters with uncertainty, and the result updates the process model and the next design (<a class="xref ext" href="../../index.html#sec-prob-record" title="Integration: the die record">Lab to Foundry §11.1</a>). Every step uses this book's mathematics.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>A resonator is a damped oscillator; its steady response is a complex Lorentzian that traces a circle.</li>
+<li>Width gives total loss; circle diameter gives the coupling fraction; together they separate internal and external \(Q\).</li>
+<li>Time-domain ring-down and frequency-domain width are Fourier partners and must agree.</li>
+<li>Couplings to neighbouring modes shift frequencies by \(g^2/\Delta\) and can import loss.</li>
+<li>Noise falls as \(1/\sqrt n\); fits give parameters with uncertainties; decisions use probabilities, not single numbers.</li>
+</ul></div>
+
+<div class="exercises" id="ex-m-worked"><h4>Exercises</h4><ol>
+<li>For the worked numbers, compute \(|S_{21}|\) on resonance and at a detuning of one half-linewidth (\(|\omega - \omega_0| = \kappa/2\)).
+<details><summary>Solution</summary><p>On resonance \(|S_{21}| = \kappa_i/\kappa = 6/36 = 0.167\). At \(\omega_0 - \omega = \kappa/2\): \(S_{21} = 1 - \kappa_e/(\kappa + \ii\kappa) = 1 - \frac{30}{36}\cdot\frac{1}{1+\ii} = 1 - 0.833(0.5 - 0.5\ii) = 0.583 + 0.417\ii\), modulus 0.717.</p></details></li>
+<li>Show that \(S_{21} = 1 - \frac{\kappa_e/\kappa}{1 + \ii x}\) (with \(x = 2(\omega_0-\omega)/\kappa\)) lies on a circle with centre \(1 - \kappa_e/2\kappa\) and radius \(\kappa_e/2\kappa\).
+<details><summary>Solution</summary><p>\(\frac{1}{1+\ii x} = \frac{1 - \ii x}{1 + x^2}\). Its distance from \(\tfrac12\) is \(\big|\frac{1 - \ii x}{1+x^2} - \tfrac12\big| = \big|\frac{1 - x^2 - 2\ii x}{2(1+x^2)}\big| = \frac{\sqrt{(1-x^2)^2 + 4x^2}}{2(1+x^2)} = \tfrac12\). So \(1/(1+\ii x)\) lies on the circle of radius ½ centred at ½; scaling by \(\kappa_e/\kappa\) and subtracting from 1 gives the stated circle.</p></details></li>
+<li>If the parasitic mode in Step 4 has \(Q = 10^3\) at 6.01 GHz and 1% of our resonator's energy lives in it, what internal \(Q\) would we measure even if our resonator were otherwise perfect?
+<details><summary>Solution</summary><p>Inherited loss rate \(\approx0.01\times\omega/10^3 = \omega\times10^{-5}\), so \(Q_i\approx10^5\): a tenfold underestimate of a \(10^6\) resonator. Diagnosing such hidden couplings is part of measurement and design.</p></details></li>
+<li>Ten resonators on one wafer give \(Q_i\) values (in units of \(10^5\)): 9.1, 7.8, 10.4, 8.9, 6.2, 9.7, 8.4, 11.0, 7.5, 9.0. Estimate the mean, the standard deviation and the standard error of the mean.
+<details><summary>Solution</summary><p>Mean 8.80. Deviations squared sum to about 17.9; sample variance \(17.9/9 = 1.99\), standard deviation 1.41. Standard error \(1.41/\sqrt{10} = 0.45\). So the wafer's average \(Q_i\) is \((8.8\pm0.45)\times10^5\), while individual devices spread by \(\pm1.4\times10^5\).</p></details></li>
 </ol></div>
 </section>
 

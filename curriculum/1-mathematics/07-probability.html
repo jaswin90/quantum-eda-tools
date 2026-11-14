@@ -65,6 +65,24 @@
 <p>When a probability or average is too hard to compute by formula, <b>simulate it</b>: draw random samples \(X_1,\dots,X_n\) from the distribution and average \(g(X_i)\). The error falls as \(\sigma_g/\sqrt n\) regardless of how many variables are involved, which makes Monte Carlo the workhorse of yield analysis. Its weakness is rare events: to estimate a failure probability of \(10^{-6}\) to 10% precision, you need about \(10^8\) samples, because almost none fail. <b>Importance sampling</b> fixes this by drawing samples from a distribution \(q(x)\) concentrated near the failures and correcting each by the weight \(p(x)/q(x)\). Error-correction simulations that estimate logical error rates of \(10^{-10}\), and statistical sign-off of large chips, both depend on such techniques.</p>
 <div class="example"><p><b>Worked example: estimating \(\pi\).</b> Throw \(n\) random points uniformly into a unit square; the fraction landing inside the quarter circle \(x^2+y^2 \lt 1\) estimates \(\pi/4\). Each point succeeds with probability \(p = 0.785\), so the standard error of \(\pi\) is \(4\sqrt{p(1-p)/n}\approx1.6/\sqrt n\): 10,000 points give \(\pi\pm0.016\). The same recipe, "sample, count, divide", estimates the probability that a randomly fabricated chip has no frequency collisions (Book 7).</p></div>
 
+<h3 id="sec-m-prob-code">Try it in Python</h3>
+<p>Monte Carlo makes every formula in this chapter testable. Here we check the \(1/\sqrt n\) law and the yield curve of @fig:m-yield.</p>
+<pre class="code"><code>import numpy as np
+from math import erf, sqrt
+rng = np.random.default_rng(0)
+
+# 1/sqrt(n): spread of the estimated probability from n shots
+p = 0.3
+for n in (100, 10000):
+    est = rng.binomial(n, p, size=2000) / n
+    print(n, est.std(), sqrt(p*(1-p)/n))       # simulated vs formula
+
+# Yield of N qubits with window +/- k sigma
+Phi = lambda x: 0.5*(1 + erf(x/sqrt(2)))
+k, N = 3.0, 100
+sims = (abs(rng.standard_normal((20000, N))) &lt; k).all(axis=1).mean()
+print(sims, (2*Phi(k) - 1)**N)                 # both about 0.76</code></pre>
+
 <div class="eda"><p>Almost every open problem in the review is a statistics problem in disguise: chance-constrained frequency allocation (which design maximises the probability of no collisions?), hierarchical Bayesian prediction of cold parameters from warm data, Bayesian experimental design for scarce cryogenic test time, and simulation-based inference of noise models. This chapter supplies the vocabulary; Book 7 supplies the methods.</p></div>
 
 <div class="keypoints"><p></p><ul>

@@ -65,6 +65,21 @@
 <p>It tells you how the noise power is spread over frequency. <b>White noise</b> has a flat spectrum (no memory: \(C(\tau)\) is a spike at zero); resistor noise is white over a huge range (Book 2). <b>\(1/f\) noise</b>, with \(S\propto1/|\omega|\), has power at all time scales, growing towards slow fluctuations; it causes the slow wandering of qubit frequencies. Book 3 shows that a qubit acts as a spectrum analyser: its energy relaxation samples the noise at its own frequency, while its dephasing samples noise near zero frequency. Specifying noise as a spectral density is therefore how the hardware books connect physical noise sources to error rates.</p>
 <div class="box warn"><p><strong>One-sided and two-sided spectra.</strong> Physicists often use the two-sided density above, defined for positive and negative \(\omega\). Engineers often quote a one-sided density over positive frequencies only, which is twice as large, and per hertz rather than per radian per second. Factors of 2 and \(2\pi\) in noise formulas almost always come from this.</p></div>
 
+<h3 id="sec-m-fourier-code">Try it in Python</h3>
+<p>The FFT turns a sampled signal into its spectrum. Here a decaying 50 MHz tone is sampled at 1 GS/s; its spectrum shows a Lorentzian peak whose width matches the decay rate.</p>
+<pre class="code"><code>import numpy as np
+fs, N = 1e9, 2**16                              # 1 GS/s, 65.5 us record
+t = np.arange(N) / fs
+gamma = 2*np.pi*1e6                             # energy decay rate (1 MHz linewidth)
+x = np.exp(-gamma*t/2) * np.cos(2*np.pi*50e6*t)
+X = np.fft.rfft(x)
+f = np.fft.rfftfreq(N, 1/fs)
+P = abs(X)**2
+k = P.argmax()
+half = f[P >= P[k]/2]
+print(f[k], half.max() - half.min())           # peak at 50 MHz, width about 1 MHz</code></pre>
+<p>Halve <code>gamma</code> and the measured width halves: linewidth equals decay rate. Shorten the record (smaller <code>N</code>) until the width you measure is set by the record length rather than by the physics: that is the resolution limit \(1/(N\Delta t)\).</p>
+
 <div class="eda"><p>Electromagnetic solvers work either in time (launch an impulse, record the ringing, Fourier transform) or in frequency (one solve per frequency). The pole–residue fits used to compress a simulated response into a small model (vector fitting, @lf:sec-design-scale) are rational transfer functions whose poles are the circuit's resonances. Passivity, the condition that a circuit cannot create energy, becomes a condition on the transfer function, and checking it is part of sign-off.</p></div>
 
 <div class="keypoints"><p></p><ul>

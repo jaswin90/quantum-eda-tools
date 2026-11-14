@@ -1,0 +1,85 @@
+<section id="sec-m-worked"><h2>Putting it together: the mathematics of measuring a resonator</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Use every tool of this book on one realistic task: characterising a superconducting microwave resonator.</li>
+<li>See how complex numbers, differential equations, eigenvalues, Fourier analysis, probability and fitting fit together in practice.</li>
+<li>Learn the workflow you will use again and again: model → prediction → measurement → fit → uncertainty → decision.</li>
+</ul></div>
+
+<div class="bigpic"><p>Mathematics sticks when it is used. This chapter follows one everyday task in a quantum lab: a newly fabricated chip contains a microwave resonator, and we want to know its frequency and how lossy it is (its quality factors), with honest error bars. Doing this needs nearly every chapter of this book: a differential equation for the resonator, complex numbers and phasors for its response, eigenvalues when it couples to a neighbour, Fourier analysis to connect time and frequency, statistics for the noise, and least-squares fitting for the answer. The same workflow, at larger scale, is what the design tools of Book 7 and the review automate.</p></div>
+
+<h3 id="sec-m-w-model">Step 1: the model (Chapters 1 and 5)</h3>
+<p>A resonator is a damped harmonic oscillator. Its complex amplitude \(a(t)\), whose squared modulus is the stored energy, obeys a first-order equation (the "slowly varying" form of Chapter 5's oscillator, written in a frame rotating at the drive frequency, Chapter 1):</p>
+\[ \dot a = -\Big(\ii\delta + \frac{\kappa}{2}\Big)a + \sqrt{\kappa_e}\,a_{\mathrm{in}}, \qquad \kappa = \kappa_i + \kappa_e , \]
+<p>where \(\delta = \omega_0 - \omega\) is the detuning between resonance and drive, \(\kappa_i\) the internal loss rate (what we want to know: materials quality), \(\kappa_e\) the rate of coupling to the measurement line, and \(a_{\mathrm{in}}\) the incoming signal. Every term is either a decay (Chapter 5, first-order equations) or a rotation (Chapter 1, phases).</p>
+
+<h3 id="sec-m-w-response">Step 2: the predicted response (Chapters 1 and 6)</h3>
+<p>Drive at a steady frequency, so that after a few lifetimes \(a\) is constant: set \(\dot a = 0\). Then \(a = \sqrt{\kappa_e}\,a_{\mathrm{in}}/(\ii\delta + \kappa/2)\). In a "notch" geometry, the transmitted signal past the resonator is the incoming wave minus what the resonator radiates back into the line, \(S_{21} = 1 - \sqrt{\kappa_e}\,a/a_{\mathrm{in}}\):</p>
+\[ S_{21}(\omega) = 1 - \frac{\kappa_e}{\kappa_i+\kappa_e + 2\ii(\omega_0-\omega)} . \]
+<p>(Dividing top and bottom by \(\omega_0\) gives the form with quality factors, @b2:eq-c-notch.) Three predictions follow directly, using only complex-number reasoning:</p>
+<ul>
+<li><b>Depth.</b> On resonance (\(\omega = \omega_0\)), \(S_{21} = 1 - \kappa_e/\kappa = \kappa_i/\kappa\). A very lossy resonator barely dips; a critically coupled one (\(\kappa_i = \kappa_e\)) dips to ½.</li>
+<li><b>Width.</b> The dip in \(|S_{21}|^2\) has a Lorentzian shape of full width \(\kappa\) (Chapter 6: "linewidth equals decay rate").</li>
+<li><b>Circle.</b> As \(\omega\) sweeps, \(S_{21}\) traces a circle in the complex plane, passing through 1 far from resonance, with diameter \(\kappa_e/\kappa\). This follows because \(z\mapsto1/(\text{const} + \ii x)\) maps a straight line to a circle, a classical fact about complex functions.</li>
+</ul>
+<div class="intuition"><p>The circle separates the two loss rates. The <i>width</i> of the resonance gives the total \(\kappa = \kappa_i+\kappa_e\); the <i>diameter</i> of the circle gives the fraction \(\kappa_e/\kappa\). Two measurable features, two unknowns. That is why experimentalists plot \(S_{21}\) in the complex plane, not just its magnitude: the phase carries half the information.</p></div>
+
+<h3 id="sec-m-w-time">Step 3: the same physics in the time domain (Chapters 5 and 6)</h3>
+<p>Instead of sweeping frequency, we could switch off a resonant drive and watch the stored energy ring down: \(|a(t)|^2 = |a(0)|^2\ee^{-\kappa t}\) (first-order decay at rate \(\kappa\)). The Fourier transform of a decay \(\ee^{-\kappa t/2}\) is a Lorentzian of width \(\kappa\) (Chapter 6), so the time and frequency measurements must agree. A frequency sweep is usually easier for high-\(Q\) resonators (the ring-down can last tens of microseconds and needs fast electronics); a ring-down is better when the resonance is too narrow to sweep finely.</p>
+<div class="example"><p><b>Worked numbers.</b> Design target: \(\omega_0/2\pi = 6.000\) GHz, \(Q_e = \omega_0/\kappa_e = 2\times10^5\), and we hope for \(Q_i = 10^6\). Then \(\kappa_e/2\pi = 30\) kHz, \(\kappa_i/2\pi = 6\) kHz, \(\kappa/2\pi = 36\) kHz. Prediction: linewidth 36 kHz, dip to \(\kappa_i/\kappa = 0.17\) (−15.6 dB), circle diameter 0.83, energy lifetime \(1/\kappa = 4.4\) µs.</p></div>
+
+<h3 id="sec-m-w-coupled">Step 4: a neighbour shifts the answer (Chapter 3)</h3>
+<p>Suppose a second, unintended mode of the chip (for example a "slot mode" of the ground plane) sits at 6.010 GHz and couples to our resonator with strength \(g/2\pi = 1\) MHz. Our resonator is no longer an isolated oscillator; the pair is described by the \(2\times2\) matrix of Chapter 3. With detuning \(\Delta/2\pi = -10\) MHz, the eigenvalues shift by about \(g^2/|\Delta| = 0.1\) MHz: the resonator appears at 5.9999 GHz instead of 6.0000. The eigenvector is about \((1, g/\Delta) = (1, 0.1)\): 1% of the energy (\(0.1^2\)) now sits in the other mode. If that mode is lossy, our resonator inherits 1% of its loss rate, which can dominate a high-\(Q\) measurement. Unexpectedly low \(Q_i\) is often a symptom of exactly this, and spotting it needs the avoided-crossing reasoning of Chapter 3.</p>
+
+<h3 id="sec-m-w-noise">Step 5: noise and how many sweeps (Chapter 7)</h3>
+<p>The measured \(S_{21}\) at each frequency has Gaussian noise from the amplifiers (Chapter 7, and Book 2). If one sweep has noise of standard deviation \(\sigma = 0.02\) per point, averaging \(n\) sweeps reduces it to \(0.02/\sqrt n\). How precisely can we then determine \(\kappa_i\)? Roughly, the uncertainty in a fitted width scales with the noise divided by the depth of the feature and the square root of the number of points across it. A useful rule from experience: to measure \(Q_i\) to 5%, the dip must be measured with a signal-to-noise ratio of a few hundred across a few dozen points within the linewidth. That fixes the frequency step (about 1 kHz here) and the number of averages.</p>
+<div class="pitfall"><p>Low drive power is required for honest \(Q_i\) (Book 6: microscopic defects saturate at high power and hide their loss), but low power means a weak signal and more noise. Measurements at single-photon power can need hours of averaging. That trade-off, accuracy against measurement time, is the same one the review discusses for cold test of whole chips (@lf:sec-test-scarce).</p></div>
+
+<h3 id="sec-m-w-fit">Step 6: fitting and uncertainty (Chapters 7 and 8)</h3>
+<p>We fit the model \(S_{21}(\omega;\,\omega_0,\kappa_i,\kappa_e)\) (plus a few nuisance parameters for cable delay and amplitude) to the measured complex data by nonlinear least squares (Chapter 8): minimise \(\sum_k|S_{21}^{\mathrm{meas}}(\omega_k) - S_{21}^{\mathrm{model}}(\omega_k)|^2\). With Gaussian noise this is maximum likelihood (Chapter 7). Good starting values come from the data directly: \(\omega_0\) from the deepest point, \(\kappa\) from the half-power width, \(\kappa_e/\kappa\) from the circle diameter. The fit's uncertainty comes from the curvature of the cost near its minimum (or from repeating the measurement), and is propagated to derived quantities such as \(Q_i = \omega_0/\kappa_i\) with @eq:m-propagation.</p>
+<div class="example"><p><b>Try it: simulate and fit.</b> The code generates noisy notch data for the worked numbers above, then fits it. Run it several times with different seeds to see the scatter of the fitted \(Q_i\): that scatter <i>is</i> the measurement uncertainty.</p>
+<pre class="code"><code>import numpy as np
+from scipy.optimize import least_squares
+
+f0, ki, ke = 6.000e9, 6e3, 30e3                 # Hz; kappa/2pi values
+f = f0 + np.linspace(-150e3, 150e3, 301)
+def s21(p, f):
+    f0, ki, ke = p
+    return 1 - ke / (ki + ke + 2j*(f0 - f))
+
+rng = np.random.default_rng(3)
+noise = 0.02 * (rng.standard_normal(f.size) + 1j*rng.standard_normal(f.size))
+data = s21((f0, ki, ke), f) + noise
+
+def resid(p):
+    r = s21(p, f) - data
+    return np.concatenate([r.real, r.imag])
+
+fit = least_squares(resid, x0=(f0 + 2e3, 10e3, 20e3), x_scale=(1e3, 1e3, 1e3))
+f0_fit, ki_fit, ke_fit = fit.x
+print("Qi =", f0_fit / ki_fit, " Qe =", f0_fit / ke_fit)</code></pre>
+<p>With this noise level the fitted \(Q_i\) typically lands within a few percent of \(10^6\), while \(Q_e\) is determined to about 1%. Raise the noise to <code>0.1</code> (closer to a single-photon measurement) and the \(Q_i\) scatter grows to tens of percent while \(Q_e\) stays well determined: internal loss is the small part of the total and the hardest to measure, exactly as experimentalists find.</p></div>
+
+<h3 id="sec-m-w-decide">Step 7: from numbers to decisions</h3>
+<p>Suppose the fit gives \(Q_i = (8.5\pm1.2)\times10^5\). Is the fabrication process good enough for qubits that need \(Q_i\ge10^6\)? The honest answer is a probability: if the uncertainty is Gaussian, the chance that the true value exceeds \(10^6\) is \(1 - \Phi((10 - 8.5)/1.2) = 1 - \Phi(1.25)\approx11\%\) (Chapter 7). Measuring ten resonators across the wafer, rather than measuring one more precisely, also reveals the spread between devices, which matters more for yield (Chapter 7's yield argument). This shift, from "what is the number?" to "what is the distribution, and what should we do given it?", is the core of the review's approach to quantum chip design.</p>
+
+<div class="eda"><p>Resonator characterisation is the simplest instance of the loop the review wants to automate: a model predicts a response from design parameters, a measurement tests it, a fit extracts parameters with uncertainty, and the result updates the process model and the next design (@lf:sec-prob-record). Every step uses this book's mathematics.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>A resonator is a damped oscillator; its steady response is a complex Lorentzian that traces a circle.</li>
+<li>Width gives total loss; circle diameter gives the coupling fraction; together they separate internal and external \(Q\).</li>
+<li>Time-domain ring-down and frequency-domain width are Fourier partners and must agree.</li>
+<li>Couplings to neighbouring modes shift frequencies by \(g^2/\Delta\) and can import loss.</li>
+<li>Noise falls as \(1/\sqrt n\); fits give parameters with uncertainties; decisions use probabilities, not single numbers.</li>
+</ul></div>
+
+<div class="exercises" id="ex-m-worked"><h4>Exercises</h4><ol>
+<li>For the worked numbers, compute \(|S_{21}|\) on resonance and at a detuning of one half-linewidth (\(|\omega - \omega_0| = \kappa/2\)).
+<details><summary>Solution</summary><p>On resonance \(|S_{21}| = \kappa_i/\kappa = 6/36 = 0.167\). At \(\omega_0 - \omega = \kappa/2\): \(S_{21} = 1 - \kappa_e/(\kappa + \ii\kappa) = 1 - \frac{30}{36}\cdot\frac{1}{1+\ii} = 1 - 0.833(0.5 - 0.5\ii) = 0.583 + 0.417\ii\), modulus 0.717.</p></details></li>
+<li>Show that \(S_{21} = 1 - \frac{\kappa_e/\kappa}{1 + \ii x}\) (with \(x = 2(\omega_0-\omega)/\kappa\)) lies on a circle with centre \(1 - \kappa_e/2\kappa\) and radius \(\kappa_e/2\kappa\).
+<details><summary>Solution</summary><p>\(\frac{1}{1+\ii x} = \frac{1 - \ii x}{1 + x^2}\). Its distance from \(\tfrac12\) is \(\big|\frac{1 - \ii x}{1+x^2} - \tfrac12\big| = \big|\frac{1 - x^2 - 2\ii x}{2(1+x^2)}\big| = \frac{\sqrt{(1-x^2)^2 + 4x^2}}{2(1+x^2)} = \tfrac12\). So \(1/(1+\ii x)\) lies on the circle of radius ½ centred at ½; scaling by \(\kappa_e/\kappa\) and subtracting from 1 gives the stated circle.</p></details></li>
+<li>If the parasitic mode in Step 4 has \(Q = 10^3\) at 6.01 GHz and 1% of our resonator's energy lives in it, what internal \(Q\) would we measure even if our resonator were otherwise perfect?
+<details><summary>Solution</summary><p>Inherited loss rate \(\approx0.01\times\omega/10^3 = \omega\times10^{-5}\), so \(Q_i\approx10^5\): a tenfold underestimate of a \(10^6\) resonator. Diagnosing such hidden couplings is part of measurement and design.</p></details></li>
+<li>Ten resonators on one wafer give \(Q_i\) values (in units of \(10^5\)): 9.1, 7.8, 10.4, 8.9, 6.2, 9.7, 8.4, 11.0, 7.5, 9.0. Estimate the mean, the standard deviation and the standard error of the mean.
+<details><summary>Solution</summary><p>Mean 8.80. Deviations squared sum to about 17.9; sample variance \(17.9/9 = 1.99\), standard deviation 1.41. Standard error \(1.41/\sqrt{10} = 0.45\). So the wafer's average \(Q_i\) is \((8.8\pm0.45)\times10^5\), while individual devices spread by \(\pm1.4\times10^5\).</p></details></li>
+</ol></div>
+</section>

@@ -65,6 +65,22 @@
 <p>Real numbers with signs would allow some cancellation, so why complex? Two reasons that will become clear later. Time evolution is a continuous rotation of phases, \(\ee^{-\ii Et/\hbar}\), which needs a whole circle of phases, not just \(\pm1\). And describing a spin, which can point along three perpendicular directions in space, needs three mutually "perpendicular" families of states in a two-dimensional space, which real numbers cannot supply (@b3:sec-q-why-sg).</p>
 <div class="pitfall"><p>Only <i>relative</i> phases between amplitudes are observable. Multiplying every amplitude by the same \(\ee^{\ii\chi}\) leaves every probability \(|c_1+c_2|^2\) unchanged, so a "global phase" means nothing physically. Changing the phase of just one amplitude changes the cross term and is very much observable. Confusing the two is a common early mistake.</p></div>
 
+<h3 id="sec-m-complex-code">Try it in Python</h3>
+<p>Python has complex numbers built in (it writes \(\ii\) as <code>1j</code>). Use it to check every hand calculation in this chapter.</p>
+<pre class="code"><code>import cmath, math
+z = 1 + 1j*math.sqrt(3)
+print(abs(z), cmath.phase(z))          # modulus 2, phase pi/3 = 1.047
+print(z**6)                            # (64+0j) up to rounding
+print(cmath.exp(1j*math.pi))           # Euler: -1 (+ tiny rounding)
+
+# Phasor analysis of an RC circuit (engineering convention, 1j for j)
+R, C = 1e3, 1e-9
+for f in (1e4, 159e3, 1e7):
+    w = 2*math.pi*f
+    Z = R + 1/(1j*w*C)
+    print(f, abs(Z), math.degrees(cmath.phase(Z)))</code></pre>
+<p>Try changing the frequency and watch the impedance move from capacitor-like (large, \(-90^\circ\)) to resistor-like (1 kΩ, \(0^\circ\)), passing \(-45^\circ\) at the corner frequency.</p>
+
 <div class="eda"><p>Every simulated quantity in a superconducting-chip design flow, from an impedance \(Z(\omega)\) to a scattering parameter \(S_{21}\), is a complex number at each frequency. Its modulus tells you how much signal passes; its phase tells you the delay and, near a resonance, the frequency and linewidth. Reading a resonator's response as a circle in the complex plane, rather than as a dip in a magnitude plot, is how loss is extracted from measurements (Book 2, @b2:sec-c-tline).</p></div>
 
 <div class="keypoints"><p></p><ul>

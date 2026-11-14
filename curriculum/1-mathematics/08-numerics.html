@@ -50,6 +50,22 @@
 <div class="eq" id="eq-m-adjoint">$$ \frac{\partial f}{\partial p_k} = \mathbf c^{\mathsf T}\partial_k\mathbf u = -\boldsymbol\lambda^{\mathsf T}(\partial_kA)\,\mathbf u, \qquad A^{\mathsf T}\boldsymbol\lambda = \mathbf c . $$</div>
 <p>One forward solve for \(\mathbf u\), one "adjoint" solve for \(\boldsymbol\lambda\), and then each component of the gradient is a cheap matrix product, however many parameters there are. The same trick for eigenvalue problems gives the eigenvalue-sensitivity formula used in the review (@lf:eq-adjoint), and it is the same mathematics as back-propagation in neural networks. Adjoint gradients are what make "inverse design" of photonic and microwave components practical.</p>
 
+<h3 id="sec-m-num-code">Try it in Python</h3>
+<p>The finite-difference matrix of @eq:m-fd in a few lines, with a convergence study and Richardson extrapolation of the lowest eigenvalue (exact value \(\pi^2\)).</p>
+<pre class="code"><code>import numpy as np
+def lowest_eig(N):
+    h = 1.0 / (N + 1)
+    A = (np.diag(2*np.ones(N)) - np.diag(np.ones(N-1), 1) - np.diag(np.ones(N-1), -1)) / h**2
+    return np.linalg.eigvalsh(A)[0]
+
+vals = [lowest_eig(N) for N in (9, 19, 39)]      # h = 0.1, 0.05, 0.025
+print(vals, np.pi**2)
+d1, d2 = vals[1] - vals[0], vals[2] - vals[1]
+p = np.log2(d1 / d2)                              # observed order, about 2
+extrap = vals[2] + d2 / (2**p - 1)
+print(p, extrap)                                  # extrapolation lands very close to pi^2</code></pre>
+<p>Notice that the extrapolated value from three coarse grids is more accurate than the finest grid alone. Production solvers do the same with adaptive meshes.</p>
+
 <div class="eda"><p>Electronic design automation is, in large part, applied numerical linear algebra and optimisation at scale: sparse solvers for extraction, model-order reduction to compress what the solver produced (@lf:sec-design-scale), and constrained optimisation for placement and frequency allocation. Quantum EDA inherits all of it, and adds tighter accuracy targets and statistics. This chapter is the minimum toolkit for reading those sections of the review critically.</p></div>
 
 <div class="keypoints"><p></p><ul>

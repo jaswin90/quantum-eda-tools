@@ -62,6 +62,21 @@
 <p>\(\bra+ = (\bra0 + \bra1)/\sqrt2\), and \(\braket{0}{0} = 1\), \(\braket01 = 0\), etc., so \(\braket{+}{\psi} = \frac{1}{5\sqrt2}(3 + 4\ii)\). Its modulus squared is \(25/50 = 1/2\): measuring this state in the \(\pm\) basis gives "+" half the time (Book 3). The projector: \(\ketbra\psi\psi = \frac{1}{25}\begin{pmatrix}3\\4\ii\end{pmatrix}(3,\ -4\ii) = \frac{1}{25}\begin{pmatrix}9 & -12\ii\\ 12\ii & 16\end{pmatrix}\). Note the conjugation in the bra.</p></div>
 <div class="box"><p><strong>Infinite dimensions, briefly.</strong> For a particle on a line, the "basis" \(\ket{x}\) of position states is continuous. Sums become integrals and the Kronecker delta becomes the Dirac delta (Chapter 6): \(\int \ketbra{x}{x}\,\dd x = I\), \(\braket{x}{x'} = \delta(x-x')\), and \(\braket{x}{\psi} = \psi(x)\) is the wavefunction. The rigorous theory is delicate, but for engineering every formula works if you replace \(\sum_k\) by \(\int\dd x\). A space with an inner product that is complete (limits of convergent sequences stay inside) is a <b>Hilbert space</b>; every finite-dimensional one is.</p></div>
 
+<h3 id="sec-m-vectors-code">Try it in Python</h3>
+<p>NumPy represents kets as arrays; <code>np.vdot(a, b)</code> computes \(\braket ab\), conjugating the first argument automatically.</p>
+<pre class="code"><code>import numpy as np
+ket0, ket1 = np.array([1, 0]), np.array([0, 1])
+plus  = (ket0 + ket1) / np.sqrt(2)
+minus = (ket0 - ket1) / np.sqrt(2)
+psi = (3*ket0 + 4j*ket1) / 5
+
+print(np.vdot(plus, minus))            # 0: orthogonal
+print(abs(np.vdot(plus, psi))**2)      # 0.5: probability of "+"
+P = np.outer(psi, psi.conj())          # projector |psi><psi|
+print(np.allclose(P.dot(P), P))        # True: P^2 = P
+I = np.outer(plus, plus.conj()) + np.outer(minus, minus.conj())
+print(np.allclose(I, np.eye(2)))       # True: resolution of the identity</code></pre>
+
 <div class="eda"><p>The capacitance matrix of a layout and the modes of a 3D electromagnetic simulation are both expressed in bases, and the overlap integrals that couple them are inner products like @eq:m-inner-fn. The "energy participation ratio" used to turn a field simulation into a qubit Hamiltonian (@lf:sec-design-extract) is a ratio of such integrals. Understanding projection onto a basis is understanding what those tools compute.</p></div>
 
 <div class="keypoints"><p></p><ul>
