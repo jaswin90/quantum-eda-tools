@@ -2,39 +2,109 @@
 <div class="goals"><p>Goals</p><ul>
 <li>Describe spin-½ and any two-level system with Pauli operators, and picture its dynamics as rotation on the Bloch sphere.</li>
 <li>Solve the driven two-level system: rotating frame, rotating-wave approximation and the Rabi formula.</li>
-<li>Understand Ramsey interference as a frequency measurement, and how pulse area sets a gate.</li>
+<li>Understand how pulse area and phase set a gate.</li>
+<li>Understand Ramsey interference as a frequency measurement.</li>
 </ul></div>
 
+<div class="bigpic"><p>This is the chapter where a qubit is actually controlled. A qubit sitting alone just precesses; to compute with it we shine a microwave (or laser) pulse on it, and the pulse rotates its Bloch vector. Which rotation you get depends on three knobs of the pulse: its frequency, its strength times duration (the "area"), and its phase. Learning to read those three knobs off a pulse is learning how every single-qubit gate on every platform works. The key tools are the rotating frame (which turns a fast-oscillating problem into a still one) and the Rabi formula (which predicts the result of any constant pulse).</p></div>
+
 <h3 id="sec-q-spin-pauli">Two-level Hamiltonians and precession</h3>
-<p>An electron's spin has magnetic moment \(\boldsymbol\mu = -\tfrac{g\mu_B}{\hbar}\mathbf S\) with \(\mathbf S = \tfrac\hbar2\boldsymbol\sigma\) and \(g\approx2\). In a field \(\mathbf B\) its energy is \(H = -\boldsymbol\mu\cdot\mathbf B = \tfrac{g\mu_B}{2}\mathbf B\cdot\boldsymbol\sigma\). More generally, any Hermitian \(2\times2\) Hamiltonian can be written (@b1:sec-m-op-pauli)</p>
+<p>The original two-level system is an electron's <b>spin</b>: an intrinsic angular momentum that behaves like a tiny bar magnet. Its magnetic moment is \(\boldsymbol\mu = -\tfrac{g\mu_B}{\hbar}\mathbf S\), where \(\mathbf S = \tfrac\hbar2\boldsymbol\sigma\) is the spin operator built from the Pauli matrices \(\boldsymbol\sigma = (X, Y, Z)\), \(\mu_B = 9.274\times10^{-24}\) J/T is the Bohr magneton and \(g\approx2\). In a magnetic field \(\mathbf B\) its energy is \(H = -\boldsymbol\mu\cdot\mathbf B = \tfrac{g\mu_B}{2}\mathbf B\cdot\boldsymbol\sigma\).</p>
+<p>More generally, any Hermitian \(2\times2\) matrix is a real combination of \(I\), \(X\), \(Y\), \(Z\) (@b1:sec-m-op-pauli). The \(I\) part only shifts all energies equally and has no effect on dynamics, so any two-level Hamiltonian can be written</p>
 <div class="eq" id="eq-q-h2">$$ H = \frac{\hbar}{2}\,\boldsymbol\Omega\cdot\boldsymbol\sigma \quad(\text{plus a multiple of } I), $$</div>
-<p>with a real vector \(\boldsymbol\Omega\). By @b1:eq-m-paulirot, \(U(t) = \ee^{-\ii t\,\boldsymbol\Omega\cdot\boldsymbol\sigma/2}\) is a rotation by angle \(|\boldsymbol\Omega|t\) about the axis \(\hat{\boldsymbol\Omega}\). In the Heisenberg picture the Bloch vector obeys</p>
+<p>with a real vector \(\boldsymbol\Omega = (\Omega_x,\Omega_y,\Omega_z)\). Its two energies are \(\pm\hbar|\boldsymbol\Omega|/2\), so the level splitting is \(\hbar|\boldsymbol\Omega|\). By @b1:eq-m-paulirot, the evolution \(U(t) = \ee^{-\ii t\,\boldsymbol\Omega\cdot\boldsymbol\sigma/2}\) is a <b>rotation of the Bloch sphere</b> by angle \(|\boldsymbol\Omega|t\) about the axis \(\hat{\boldsymbol\Omega}\). In the Heisenberg picture the Bloch vector obeys</p>
 <div class="eq" id="eq-q-precess">$$ \frac{\dd\mathbf r}{\dd t} = \boldsymbol\Omega\times\mathbf r , $$</div>
-<p>the same equation as a classical magnetic moment precessing in a field (Larmor precession). For an electron \(|\boldsymbol\Omega|/2\pi = g\mu_BB/h\approx28\) GHz per tesla, the frequency of a silicon spin qubit in a field of a fraction of a tesla. For a superconducting qubit the "field" is not magnetic, but the mathematics is identical: the two lowest levels with splitting \(\hbar\omega_q\) give \(H = -\tfrac{\hbar\omega_q}{2}Z\) (with \(\ket0\) the lower level), and a superposition precesses about \(z\) at \(\omega_q\).</p>
+<p>the same equation as a spinning top or a classical magnet in a field: the vector sweeps around the axis \(\boldsymbol\Omega\) like the hand of a clock, at angular speed \(|\boldsymbol\Omega|\). This is <b>Larmor precession</b>.</p>
+<ul>
+<li>For an electron, \(|\boldsymbol\Omega|/2\pi = g\mu_BB/h\approx28\) GHz per tesla. A silicon spin qubit in a field of a fraction of a tesla works at 10–20 GHz.</li>
+<li>For a superconducting qubit the "field" is not magnetic, but the mathematics is identical. Its two lowest levels, split by \(\hbar\omega_q\), give \(H = -\tfrac{\hbar\omega_q}{2}Z\) (with \(\ket0\) the lower level), so \(\boldsymbol\Omega = -\omega_q\hat z\), and a superposition precesses about \(z\) at \(\omega_q\).</li>
+</ul>
+<div class="intuition"><p>The Bloch sphere turns all of single-qubit quantum mechanics into geometry. "The Hamiltonian" becomes "an arrow \(\boldsymbol\Omega\)"; "time evolution" becomes "spin the sphere around that arrow at speed \(|\boldsymbol\Omega|\)". If you can picture rotations of a globe, you can predict any single-qubit experiment.</p></div>
 
 <h3 id="sec-q-spin-drive">The driven qubit</h3>
-<p>To control a qubit we drive it near its frequency. For a superconducting qubit, a microwave voltage on a capacitively coupled line adds a term proportional to the charge, which in the two-level subspace is proportional to \(X\):</p>
+<p>Left alone, the qubit's Bloch vector just circles the \(z\) axis; its populations never change. To flip it from \(\ket0\) to \(\ket1\) we need a field with an \(x\) or \(y\) component. For a superconducting qubit, a microwave voltage on a capacitively coupled line adds a term proportional to the charge, which in the two-level subspace is proportional to \(X\):</p>
 <div class="eq" id="eq-q-drive">$$ H(t) = -\frac{\hbar\omega_q}{2}Z + \hbar\Omega_R\cos(\omega_dt + \phi)\,X . $$</div>
-<p>\(\Omega_R\) is the <b>Rabi frequency</b>, proportional to the drive amplitude, and \(\omega_d\) the drive frequency. Move to a frame rotating at \(\omega_d\) about \(z\) (the interaction picture with \(H_0 = -\tfrac{\hbar\omega_d}{2}Z\)). Using \(\ee^{-\ii\omega_dtZ/2}X\ee^{\ii\omega_dtZ/2} = X\cos\omega_dt + Y\sin\omega_dt\) and expanding the cosine, the drive term contains pieces oscillating at \(\omega_d-\omega_d = 0\) and at \(2\omega_d\). Dropping the fast terms is the <b>rotating-wave approximation</b> (RWA), valid when \(\Omega_R\ll\omega_d\) (@b1:sec-m-complex-euler). The result is time-independent:</p>
+<p>Three knobs: \(\Omega_R\) is the <b>Rabi frequency</b>, proportional to the drive amplitude; \(\omega_d\) the drive frequency; \(\phi\) the drive phase.</p>
+<p>The drive is tiny (\(\Omega_R/2\pi\sim\) 10–50 MHz) compared with the precession (\(\omega_q/2\pi\sim5\) GHz). A tiny push applied at a random moment of the precession would average out. But a push that oscillates <i>in step</i> with the precession adds up, like pushing a swing at the right moment each cycle. To see this, step onto the merry-go-round: move to a frame rotating at \(\omega_d\) about \(z\) (the interaction picture of Chapter 3 with \(H_0 = -\tfrac{\hbar\omega_d}{2}Z\)).</p>
+<p>In that frame, the \(Z\) term shrinks to the mismatch \(\omega_q-\omega_d\). The drive term becomes, using \(\ee^{-\ii\omega_dtZ/2}X\ee^{\ii\omega_dtZ/2} = X\cos\omega_dt + Y\sin\omega_dt\) and the product formula for cosines, a sum of pieces oscillating at \(\omega_d-\omega_d = 0\) (static) and at \(2\omega_d\) (very fast). The fast pieces push one way then the other ten billion times a second and average to almost nothing. Dropping them is the <b>rotating-wave approximation</b> (RWA), valid when \(\Omega_R\ll\omega_d\) (@b1:sec-m-complex-euler). The result is time-independent:</p>
 <div class="eq" id="eq-q-rwa">$$ \tilde H = -\frac{\hbar\Delta}{2}Z + \frac{\hbar\Omega_R}{2}\big(\cos\phi\,X + \sin\phi\,Y\big), \qquad \Delta = \omega_q - \omega_d . $$</div>
-<p>In the rotating frame the qubit sees a static effective field with a \(z\) component equal to the detuning and an \(xy\) component equal to the Rabi frequency, pointing in a direction set by the drive phase \(\phi\). Its Bloch vector precesses about this field at the <b>generalised Rabi frequency</b> \(\Omega = \sqrt{\Omega_R^2+\Delta^2}\). Starting in \(\ket0\), the probability of finding \(\ket1\) is the <b>Rabi formula</b>:</p>
+<p>In the rotating frame the qubit sees a <b>static effective field</b>: a \(z\) component equal to the detuning \(\Delta\), and an \(xy\) component equal to the Rabi frequency, pointing at angle \(\phi\) in the \(xy\) plane. Its Bloch vector precesses about this field at the <b>generalised Rabi frequency</b> \(\Omega = \sqrt{\Omega_R^2+\Delta^2}\). Starting in \(\ket0\) (north pole), the probability of finding \(\ket1\) is the <b>Rabi formula</b>:</p>
 <div class="eq" id="eq-q-rabi">$$ P_1(t) = \frac{\Omega_R^2}{\Omega_R^2+\Delta^2}\,\sin^2\!\Big(\frac{\sqrt{\Omega_R^2+\Delta^2}}{2}\,t\Big). $$</div>
-<p>On resonance the population oscillates completely between \(\ket0\) and \(\ket1\); off resonance the oscillation is faster but incomplete (@fig:q-rabi). This is the quantum counterpart of the energy exchange between coupled oscillators in @b2:sec-c-osc-coupled, with the same Lorentzian envelope \(\Omega_R^2/(\Omega_R^2+\Delta^2)\).</p>
+<p>Geometrically: on resonance (\(\Delta = 0\)) the effective field lies in the equator, so the Bloch vector swings through the south pole and back: full oscillation. Off resonance the field tilts up toward the pole; the vector circles a tilted axis and never reaches the south pole, but goes round faster (@fig:q-rabi). This is the quantum counterpart of the energy exchange between coupled oscillators in @b2:sec-c-osc-coupled, with the same Lorentzian envelope \(\Omega_R^2/(\Omega_R^2+\Delta^2)\).</p>
 <figure id="fig-q-rabi">
 <img src="../figures/fig-q-rabi.svg" alt="Excited-state probability versus time for detunings of zero, one and two Rabi frequencies.">
 <figcaption>Rabi oscillations from @eq:q-rabi for detuning \(\Delta = 0\), \(\Omega_R\) and \(2\Omega_R\). A resonant pulse of duration \(\pi/\Omega_R\) (dashed line) inverts the qubit; detuning reduces the contrast and speeds up the oscillation.</figcaption>
 </figure>
+<div class="example"><p><b>Worked example: spectroscopy.</b> Hold the pulse length fixed at the \(\pi\)-pulse time \(\pi/\Omega_R\) and sweep the drive frequency. @eq:q-rabi traces out a peak centred on \(\omega_q\) with a width of order \(\Omega_R\). This is how an unknown qubit's frequency is first found ("qubit spectroscopy"); a weaker drive gives a narrower peak and a more precise answer, down to the limit set by the qubit's coherence.</p></div>
 
 <h3 id="sec-q-spin-gates">Pulses as rotations</h3>
-<p>On resonance (\(\Delta=0\)) a pulse of constant amplitude for a time \(t\) rotates the Bloch vector by the angle \(\theta = \Omega_Rt\) about an axis in the \(xy\) plane at angle \(\phi\). For a shaped envelope \(\Omega_R(t)\) the rotation angle is the <b>pulse area</b> \(\theta = \int\Omega_R(t)\,\dd t\). A "\(\pi\) pulse" (\(\theta = \pi\)) about \(x\) is the gate \(X\) up to phase; a "\(\pi/2\) pulse" creates an equal superposition. Choosing \(\phi = 0\) or \(\pi/2\) selects rotations about \(x\) or \(y\). Rotations about \(z\) can be done "virtually" by shifting the phase of all subsequent pulses, which is free and exact. These three facts make arbitrary single-qubit gates (Book 4).</p>
-<p>The approximations above hide two engineering problems. First, the RWA neglects the counter-rotating terms, which shift the qubit frequency slightly (the Bloch–Siegert shift, \(\approx\Omega_R^2/4\omega_q\)). Second, a real transmon has a third level only \(|\alpha|\) below the drive, and a fast pulse leaks into it (@b1:sec-m-fourier-transform). Pulse shaping (DRAG) addresses the second; calibration absorbs the first (Book 6).</p>
+<p>On resonance (\(\Delta=0\)) a pulse of constant amplitude for a time \(t\) rotates the Bloch vector by the angle \(\theta = \Omega_Rt\) about an axis in the \(xy\) plane at angle \(\phi\). For a shaped envelope \(\Omega_R(t)\) (real pulses have smooth rises and falls) the rotation angle is the <b>pulse area</b></p>
+\[ \theta = \int\Omega_R(t)\,\dd t . \]
+<p>The vocabulary used in every lab:</p>
+<ul>
+<li>A <b>\(\pi\) pulse</b> (\(\theta = \pi\)) about \(x\) swaps \(\ket0\leftrightarrow\ket1\): the gate \(X\) up to a global phase (exercise 3).</li>
+<li>A <b>\(\pi/2\) pulse</b> takes \(\ket0\) to the equator: an equal superposition.</li>
+<li>The <b>phase</b> \(\phi\) chooses the axis: \(\phi = 0\) for \(x\), \(\phi = \pi/2\) for \(y\). It is set simply by delaying the microwave carrier.</li>
+<li>Rotations about \(z\) need no pulse at all: shifting the phase of all subsequent pulses by \(\varphi\) is equivalent to rotating the qubit by \(-\varphi\) about \(z\). This <b>virtual Z gate</b> is free and exact.</li>
+</ul>
+<p>Rotations about \(x\), \(y\) and \(z\) by arbitrary angles combine to make any single-qubit gate (Book 4).</p>
+<div class="pitfall"><p>The approximations above hide two engineering problems. First, the RWA neglects the counter-rotating terms, which shift the qubit frequency slightly (the Bloch–Siegert shift, about \(\Omega_R^2/4\omega_q\)): tens of kHz for typical pulses, enough to matter for high-fidelity gates. Second, a real transmon has a third level only \(|\alpha|\) below the drive frequency, and a fast pulse, having a broad spectrum, leaks into it (@b1:sec-m-fourier-transform). Pulse shaping (DRAG) addresses the second; calibration absorbs the first (Book 6).</p></div>
 
 <h3 id="sec-q-spin-ramsey">Ramsey interference</h3>
-<p>Apply a \(\pi/2\) pulse, wait a time \(\tau\) with no drive, and apply a second \(\pi/2\) pulse. In the rotating frame, during the wait the Bloch vector precesses about \(z\) by the angle \(\Delta\tau\). The second pulse converts that phase into population:</p>
+<p>The most precise way to measure a frequency is not spectroscopy but an interference experiment. Apply a \(\pi/2\) pulse, wait a time \(\tau\) with no drive, and apply a second \(\pi/2\) pulse. Follow the Bloch vector in the frame rotating with the drive:</p>
+<ol>
+<li>The first pulse tips it from the north pole onto the equator.</li>
+<li>During the wait, if the drive is detuned by \(\Delta\), the vector drifts around the equator by the angle \(\Delta\tau\) (it precesses at \(\omega_q\), the frame at \(\omega_d\)).</li>
+<li>The second pulse rotates by another 90°. If the vector has not drifted, it lands on the south pole; if it drifted by 180°, back on the north pole.</li>
+</ol>
+<p>The result converts the accumulated phase into population:</p>
 <div class="eq" id="eq-q-ramsey">$$ P_1(\tau) = \frac{1+\cos(\Delta\tau)}{2} . $$</div>
-<p>The fringes oscillate at the detuning, so a Ramsey experiment measures the qubit frequency with a precision that improves with the longest usable \(\tau\). It is the principle of atomic clocks and the standard way to calibrate qubit frequencies. Its fringes decay because of dephasing, which Chapter 8 analyses; the decay time is \(T_2^*\).</p>
+<p>Plotted against \(\tau\), these "Ramsey fringes" oscillate at the detuning. Measuring the fringe frequency measures \(\omega_q - \omega_d\), with a precision that improves with the longest usable \(\tau\): a 10 µs wait resolves frequency differences of order 10 kHz. It is the principle of atomic clocks and the standard way to calibrate qubit frequencies.</p>
+<p>In reality the fringes decay with \(\tau\), because the qubit frequency jitters slightly from shot to shot and the phases smear out. The decay time is called \(T_2^*\), and Chapter 8 analyses it. Inserting a \(\pi\) pulse halfway (a "Hahn echo") reverses the drift and cancels slow jitter, giving a longer \(T_2\).</p>
+<div class="quick"><p>In a Ramsey experiment with \(\Delta = 0\) exactly, what does \(P_1(\tau)\) look like?</p>
+<details><summary>Answer</summary><p>Constant at 1 (two \(\pi/2\) pulses make a \(\pi\) pulse), slowly decaying toward \(\tfrac12\) as dephasing smears the phase. With no fringes it is hard to tell a small \(\Delta\) from decay, which is why experimenters detune deliberately by a few MHz.</p></details></div>
+
+<h3 id="sec-q-spin-code">Try it in Python</h3>
+<p>Simulate a driven qubit <i>in the lab frame</i>, with no rotating-wave approximation, and compare with the Rabi formula.</p>
+<pre class="code"><code>import numpy as np
+from scipy.integrate import solve_ivp
+
+# Units: time in ns, angular frequencies in rad/ns (2*pi*GHz)
+wq = 2 * np.pi * 5.0                 # qubit frequency 5 GHz
+WR = 2 * np.pi * 0.025               # Rabi frequency 25 MHz
+X = np.array([[0, 1], [1, 0]], complex)
+Z = np.array([[1, 0], [0, -1]], complex)
+
+def p1_lab(detuning_MHz, T=40.0):
+    """Full lab-frame simulation, no rotating-wave approximation."""
+    wd = wq - 2 * np.pi * detuning_MHz * 1e-3
+    def rhs(t, psi):
+        H = -wq / 2 * Z + WR * np.cos(wd * t) * X      # hbar = 1
+        return -1j * H @ psi
+    psi0 = np.array([1, 0], complex)                  # |0>, the lower level
+    sol = solve_ivp(rhs, (0, T), psi0, t_eval=[T], rtol=1e-9, atol=1e-11)
+    return abs(sol.y[1, -1]) ** 2
+
+def p1_rabi(detuning_MHz, T=40.0):
+    D = 2 * np.pi * detuning_MHz * 1e-3
+    W = np.sqrt(WR**2 + D**2)
+    return WR**2 / W**2 * np.sin(W * T / 2) ** 2
+
+for T in (10, 20, 30, 40):
+    print(f"t = {T} ns on resonance: simulated P1 = {p1_lab(0, T):.4f}, Rabi formula = {p1_rabi(0, T):.4f}")
+for d in (5, 25):
+    print(f"t = 20 ns, detuned {d} MHz: simulated {p1_lab(d, 20):.4f}, formula {p1_rabi(d, 20):.4f}")</code></pre>
+<p>The 20 ns pulse is a \(\pi\) pulse, and a 5 MHz detuning costs 4% (exercise 2). The RWA error is in the fourth decimal place here; raise <code>WR</code> to a sizeable fraction of <code>wq</code> and watch the formula fail.</p>
 
 <div class="eda"><p>Calibration software performs Rabi and Ramsey experiments on every qubit, fits @eq:q-rabi and @eq:q-ramsey, and updates the drive amplitudes and frequencies. The number of such experiments grows with qubit count and drift, and it is one of the review's arguments for designs that need less calibration (@lf:sec-test-cal).</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Any qubit Hamiltonian is \(\tfrac\hbar2\boldsymbol\Omega\cdot\boldsymbol\sigma\): the Bloch vector rotates about \(\boldsymbol\Omega\) at rate \(|\boldsymbol\Omega|\).</li>
+<li>In the frame rotating with the drive (and with the RWA) the qubit sees a static field: \(\Delta\) along \(z\), \(\Omega_R\) in the \(xy\) plane at the drive phase.</li>
+<li>Rabi formula: amplitude \(\Omega_R^2/(\Omega_R^2+\Delta^2)\), rate \(\sqrt{\Omega_R^2+\Delta^2}\).</li>
+<li>Gates: rotation angle = pulse area, axis = drive phase; \(Z\) rotations are virtual.</li>
+<li>Ramsey: \(\pi/2\)–wait–\(\pi/2\) turns phase into population and measures frequency; fringes decay with \(T_2^*\).</li>
+</ul></div>
 
 <div class="exercises" id="ex-q-spin"><h4>Exercises</h4><ol>
 <li>An electron spin in silicon (\(g = 2\)) sits in a 0.5 T field. What is its qubit frequency?
@@ -45,5 +115,9 @@
 <details><summary>Solution</summary><p>\(U = \ee^{-\ii(\Omega_Rt/2)X} = \cos(\pi/2) I - \ii\sin(\pi/2)X = -\ii X\).</p></details></li>
 <li>In a Ramsey experiment the fringe period is 400 ns. What is the detuning between drive and qubit? Can you tell its sign from this experiment alone?
 <details><summary>Solution</summary><p>\(|\Delta|/2\pi = 1/400\,\mathrm{ns} = 2.5\) MHz. \(\cos(\Delta\tau)\) is even in \(\Delta\), so the sign is ambiguous; a second Ramsey experiment with a known deliberate detuning, or a phase advance on the second pulse, resolves it.</p></details></li>
+<li>A Gaussian pulse has \(\Omega_R(t) = \Omega_0\ee^{-t^2/2\sigma^2}\) with \(\sigma = 5\) ns. What peak \(\Omega_0/2\pi\) gives a \(\pi\) pulse?
+<details><summary>Solution</summary><p>Area \(\Omega_0\sigma\sqrt{2\pi} = \pi\), so \(\Omega_0 = \sqrt{\pi/2}/\sigma = 0.25\) rad/ns, i.e. \(\Omega_0/2\pi\approx40\) MHz.</p></details></li>
+<li>Estimate the Bloch–Siegert shift for \(\Omega_R/2\pi = 50\) MHz and \(\omega_q/2\pi = 5\) GHz.
+<details><summary>Solution</summary><p>\(\Omega_R^2/4\omega_q\) in frequency units: \(50^2/(4\times5000) = 0.125\) MHz, i.e. 125 kHz. Small but larger than a typical Ramsey resolution, so calibrations account for it.</p></details></li>
 </ol></div>
 </section>
