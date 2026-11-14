@@ -75,10 +75,10 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-f-em-epr"><span class="tocnum">3.5</span>From fields to Hamiltonian</a></li>
 <li class="toc3"><a href="#sec-f-em-mor"><span class="tocnum">3.6</span>Model-order reduction and passivity</a></li>
 <li class="toc2"><a href="#sec-f-yield"><span class="tocnum">4</span>Variability and yield</a></li>
-<li class="toc3"><a href="#sec-f-y-sources"><span class="tocnum">4.1</span>Sources and structure of variation</a></li>
+<li class="toc3"><a href="#sec-f-y-sources"><span class="tocnum">4.1</span>Where variation comes from, and its structure</a></li>
 <li class="toc3"><a href="#sec-f-y-defect"><span class="tocnum">4.2</span>Defect-limited yield</a></li>
 <li class="toc3"><a href="#sec-f-y-param"><span class="tocnum">4.3</span>Parametric yield</a></li>
-<li class="toc3"><a href="#sec-f-y-collide"><span class="tocnum">4.4</span>Frequency collisions: a worked model</a></li>
+<li class="toc3"><a href="#sec-f-y-collide"><span class="tocnum">4.4</span>Frequency collisions, step by step</a></li>
 <li class="toc3"><a href="#sec-f-y-design"><span class="tocnum">4.5</span>Designing for yield</a></li>
 <li class="toc2"><a href="#sec-f-pkg"><span class="tocnum">5</span>Packaging, cryogenics and test</a></li>
 <li class="toc3"><a href="#sec-f-pkg-pkg"><span class="tocnum">5.1</span>The package</a></li>
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Making Quantum Chips: Fabrication, Simulation, Yield and Design Automation</h1>
   <p class="subtitle">Cleanroom processes, classical EDA, electromagnetic simulation, variability and yield, cryogenic packaging and test, and statistical learning for manufacturing</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">7 chapters · 8 numbered equations · 22 exercises with solutions · about 45 hours of study</p>
+  <p class="meta">7 chapters · 8 numbered equations · 24 exercises with solutions · about 45 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../mathematics/index.html">Book 1: Mathematics</a>, <a href="../classical-physics/index.html">Book 2: Classical Physics</a>, <a href="../quantum-hardware/index.html">Book 6: Quantum Hardware</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-f-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -358,53 +358,88 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <section id="sec-f-yield"><h2><span class="secnum">4</span> Variability and yield</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>Classify sources of variation (global, spatially correlated, local random) and model them.</li>
-<li>Use defect-limited yield models (Poisson, negative binomial) and parametric yield.</li>
-<li>Build and analyse a frequency-collision yield model for a qubit lattice.</li>
-<li>Understand sensitivity-based statistical design, chance constraints and post-fabrication trimming.</li>
+<li>Break manufacturing variation into its parts (lot, wafer, spatial gradient, local random) and know why the distinction matters.</li>
+<li>Compute defect-limited yield with the Poisson and negative-binomial models.</li>
+<li>Compute parametric yield by propagating variation through a design with its Jacobian.</li>
+<li>Build the frequency-collision yield model for a qubit lattice step by step, and see why yield collapses over a narrow range of process spread.</li>
+<li>Know the strategies for designing for yield: centring, robustness, tunability, trimming, chance constraints.</li>
 </ul></div>
 
-<h3 id="sec-f-y-sources"><span class="secnum">4.1</span> Sources and structure of variation</h3>
-<p>A manufactured parameter \(x\) (a junction resistance, a film thickness, a linewidth) can be decomposed as</p>
-<div class="eq" id="eq-f-var">$$ x(\mathbf r, w, l) = x_0 + \delta_{\mathrm{lot}}(l) + \delta_{\mathrm{wafer}}(w) + g_w(\mathbf r) + \epsilon(\mathbf r),  \tag{3}$$</div>
-<p>a target, lot-to-lot and wafer-to-wafer offsets, a smooth spatial pattern across the wafer \(g_w(\mathbf r)\) (from deposition and oxidation non-uniformity, typically radial), and a local random part \(\epsilon\) that is uncorrelated between devices beyond some short correlation length (Pelgrom mismatch, <a class="xref" href="#eq-f-pelgrom">(2)</a>). The decomposition matters because the parts behave differently. Global offsets move every qubit together and are cheap to correct by recentring the process. Smooth gradients are partly predictable from neighbouring test structures. Local randomness is irreducible except by design (larger devices) or by post-fabrication trimming. A <b>nested variance model</b> estimates each component's size from wafer test data, which is the starting point of the hierarchical models of Chapter 6.</p>
+<div class="bigpic"><p>"Yield" is the fraction of manufactured chips that work. For classical chips it is the number that decides whether a product makes money. For quantum chips it is even more critical, because a processor needs <i>every</i> one of its hundreds of qubits to land inside narrow windows, and the probability that all of them do falls exponentially with their number (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-prob-yield" title="Independence and why yield collapses">Book 1 §7.4</a>). This chapter builds the models that predict yield: first for random defects that kill chips outright, then for the gradual variation that pushes parameters out of specification, and finally for the frequency collisions that are the central yield problem of superconducting processors. These are the models behind the review's §4.</p></div>
+
+<h3 id="sec-f-y-sources"><span class="secnum">4.1</span> Where variation comes from, and its structure</h3>
+<p>Any manufactured parameter \(x\) (a junction resistance, a film thickness, a linewidth) can be written as a sum of contributions at different scales:</p>
+<div class="eq" id="eq-f-var">$$ x(\mathbf r, w, l) = x_0 + \delta_{\mathrm{lot}}(l) + \delta_{\mathrm{wafer}}(w) + g_w(\mathbf r) + \epsilon(\mathbf r) .  \tag{3}$$</div>
+<p>Read it from left to right:</p>
+<ul>
+<li>\(x_0\): the target.</li>
+<li>\(\delta_{\mathrm{lot}}\): a shift shared by a batch ("lot") of wafers processed together (same chemicals, same tool state).</li>
+<li>\(\delta_{\mathrm{wafer}}\): a shift for each wafer.</li>
+<li>\(g_w(\mathbf r)\): a smooth pattern across the wafer, often radial (deposition and oxidation are less uniform at the edge).</li>
+<li>\(\epsilon(\mathbf r)\): local random variation, uncorrelated between devices more than a short distance apart (Pelgrom mismatch, <a class="xref" href="#eq-f-pelgrom">(2)</a>).</li>
+</ul>
+<p>The parts behave differently, and each needs a different response. Global shifts (lot, wafer) move every device together and can be corrected by re-centring the process, or measured on a few devices and subtracted. Smooth gradients can be predicted from nearby test structures. Local randomness cannot be predicted at all, only reduced by design (larger devices) or corrected device by device (trimming). A <b>nested variance model</b> estimates each component's size from test data; it is the starting point of the hierarchical models of Chapter 6.</p>
+<div class="example"><p><b>Worked example: decomposing variance.</b> Junction resistances on 20 wafers have total standard deviation 3%. Averaging per wafer shows wafer means scattered by 2%; within each wafer, a radial fit explains 1.5%, leaving 1.5% local scatter. Check: \(\sqrt{2^2 + 1.5^2 + 1.5^2} = 2.9\%\). Implication: measuring a few junctions per wafer and correcting the wafer offset removes the 2%, and modelling the radial pattern removes another 1.5%, leaving only the 1.5% local part for trimming or design margins.</p></div>
 
 <h3 id="sec-f-y-defect"><span class="secnum">4.2</span> Defect-limited yield</h3>
-<p>Random <b>defects</b> (particles, resist residues, shorts, opens) kill a die if one lands in a critical area \(A\). If defects are scattered independently with density \(D_0\), the number in the critical area is Poisson and the yield is</p>
+<p>Random <b>defects</b> (particles, resist residues, shorts, opens) kill a die if one lands in a sensitive region of area \(A\) (the <b>critical area</b>). If defects land independently at density \(D_0\) per unit area, the number in the critical area follows a Poisson distribution with mean \(AD_0\) (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-prob-dists" title="The distributions that matter">Book 1 §7.2</a>), and the probability of zero defects is</p>
 <div class="eq" id="eq-f-poisson">$$ Y_{\mathrm{Poisson}} = \ee^{-AD_0}, \qquad Y_{\mathrm{NB}} = \Big(1 + \frac{AD_0}{\alpha}\Big)^{-\alpha} .  \tag{4}$$</div>
-<p>Real defects cluster, which the <b>negative binomial</b> model captures with a clustering parameter \(\alpha\) (small \(\alpha\) means strong clustering, and \(\alpha\to\infty\) recovers Poisson) <span class="cite">[<a href="#ref-stapper1983">16</a>]</span>. Clustering helps large dies: if defects bunch together, more dies escape them entirely (<a class="xref" href="#fig-f-defect">Figure 1</a>). For quantum chips the "critical area" includes not only shorts and opens but anything that ruins a qubit: a junction that failed to form, a TLS strongly coupled to a qubit, a trapped vortex near a SQUID. Error correction can tolerate a few dead qubits by routing around them, at a cost in effective code distance (<a class="xref ext" href="../../index.html#sec-qec-dem" title="From device data to logical error">Lab to Foundry §9.4</a>), which turns a binary yield into a graded one.</p>
+<p>Real defects <b>cluster</b> (a bad patch of resist ruins a whole area), which the <b>negative binomial</b> model captures with a clustering parameter \(\alpha\): small \(\alpha\) means strong clustering; \(\alpha\to\infty\) recovers Poisson <span class="cite">[<a href="#ref-stapper1983">16</a>]</span>. Clustering helps large dies: if defects bunch together, more dies escape them entirely (<a class="xref" href="#fig-f-defect">Figure 1</a>).</p>
 <figure id="fig-f-defect">
 <img src="../figures/fig-f-defect.svg" alt="Die yield versus critical area for Poisson and negative-binomial defect models.">
 <figcaption><b>Figure 1.</b> Defect-limited yield from <a class="xref" href="#eq-f-poisson">(4)</a> for \(D_0 = 0.1\) defects per cm\(^2\): Poisson (independent defects) and negative binomial with \(\alpha = 2\) and \(\alpha = 0.5\) (clustered). Large dies lose yield rapidly under the Poisson model; clustering softens the loss.</figcaption>
 </figure>
+<p>For quantum chips the "critical area" includes not only shorts and opens but anything that ruins a qubit: a junction that failed to form, a two-level defect strongly coupled to a qubit (<a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-d-tls" title="Two-level systems">Book 6 §6.3</a>), a trapped vortex near a SQUID. Error correction can tolerate a few dead qubits by routing around them, at a cost in effective code distance (<a class="xref ext" href="../../index.html#sec-qec-dem" title="From device data to logical error">Lab to Foundry §9.4</a>), which turns a pass/fail yield into a graded one.</p>
 
 <h3 id="sec-f-y-param"><span class="secnum">4.3</span> Parametric yield</h3>
-<p>Even without defects, a die fails if its parameters land outside specification. For a parameter vector \(\boldsymbol\theta\) (frequencies, couplings, anharmonicities) produced from process variables \(\mathbf x\) by the design map \(\boldsymbol\theta = f(\mathbf x)\), the <b>parametric yield</b> is</p>
+<p>Even without defects, a die fails if its parameters land outside specification. Let \(\mathbf x\) be the process variables (junction resistances, film thicknesses...) with a probability distribution \(p(\mathbf x)\), and \(\boldsymbol\theta = f(\mathbf x)\) the device parameters (frequencies, couplings...) computed from them by the design (the "design map", Books 6 and this one). The <b>parametric yield</b> is</p>
 <div class="eq" id="eq-f-paryield">$$ Y = \Pr_{\mathbf x\sim p(\mathbf x)}\big[f(\mathbf x)\in\mathcal A\big] ,  \tag{5}$$</div>
-<p>where \(\mathcal A\) is the acceptable region. Linearising \(f\) around the nominal design with its Jacobian \(\mathbf J\), the parameter covariance is \(\mathbf J\Sigma_x\mathbf J^{\mathsf T}\) (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-propagation">Book 1 eq. (36)</a>), and when \(\mathcal A\) is a box or a polytope the yield is a multivariate Gaussian probability, computed by Monte Carlo or by bounding methods. Design centring moves the nominal point to maximise \(Y\); design for robustness reduces \(\|\mathbf J\|\), the sensitivity, where the physics allows.</p>
+<p>where \(\mathcal A\) is the acceptable region (all specifications met). When variations are small, linearise \(f\) around the nominal design with its <b>Jacobian</b> \(\mathbf J = \partial\boldsymbol\theta/\partial\mathbf x\): the parameter covariance is \(\mathbf J\Sigma_x\mathbf J^{\mathsf T}\) (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-propagation">Book 1 eq. (36)</a>). If the specifications are a box (each parameter within limits), the yield is a multivariate Gaussian probability, computed by Monte Carlo or with bounds.</p>
+<p>Two standard design moves follow. <b>Design centring</b> moves the nominal point to the middle of the acceptable region, maximising margin in every direction. <b>Robust design</b> reduces \(\|\mathbf J\|\), the sensitivity, where physics allows: for example, larger junctions (Pelgrom), or operating flux-tunable qubits at a sweet spot where \(\partial\omega/\partial\Phi = 0\).</p>
 
-<h3 id="sec-f-y-collide"><span class="secnum">4.4</span> Frequency collisions: a worked model</h3>
-<p>Consider a square lattice of fixed-frequency transmons coupled for cross-resonance gates, with neighbouring qubits designed to differ by \(\mu\) and each frequency independently Gaussian with standard deviation \(\sigma\) around its target. For each coupled pair, the detuning \(\Delta = f_i - f_j\) is Gaussian with mean \(\mu\) and variance \(2\sigma^2\). A pair fails if \(\Delta\) lands in any forbidden window \((c_k - w_k, c_k + w_k)\): near zero (degeneracy), near \(\pm\alpha/2\) (two-photon transitions) and outside the straddling regime (gates too slow) <span class="cite">[<a href="#ref-brink2018">17</a>, <a href="#ref-hertzberg2021">18</a>]</span>. The per-pair failure probability is</p>
-<div class="eq" id="eq-f-pedge">$$ p_{\mathrm{edge}}(\sigma) = \sum_k\Big[\Phi\Big(\frac{c_k + w_k - \mu}{\sqrt2\sigma}\Big) - \Phi\Big(\frac{c_k - w_k - \mu}{\sqrt2\sigma}\Big)\Big] + \Pr\big(|\Delta| > \Delta_{\max}\big) ,  \tag{6}$$</div>
-<p>and, neglecting correlations between edges that share a qubit (and spectator conditions involving three qubits), the probability that a chip with \(E\) couplings has no collision is \(Y\approx(1-p_{\mathrm{edge}})^E\). This is the model behind the review's <a class="xref ext" href="../../index.html#fig-yield">Lab to Foundry Figure 3</a>. Its lessons are stark: because \(E\) grows with qubit count, holding yield fixed requires \(p_{\mathrm{edge}}\propto1/E\), and because \(p_{\mathrm{edge}}\) depends on \(\sigma\) through Gaussian tails, yield collapses over a narrow range of \(\sigma\). At \(\sigma\approx\) 50 MHz (about a 2% junction spread), essentially no large lattice is collision-free; at \(\sigma\approx\) 10–15 MHz, hundred-qubit lattices become feasible. Correlated edges and spectator conditions make the true yield lower; Monte Carlo over the whole lattice gives the exact number for a given model.</p>
+<h3 id="sec-f-y-collide"><span class="secnum">4.4</span> Frequency collisions, step by step</h3>
+<p>Now the model behind the review's <a class="xref ext" href="../../index.html#fig-yield">Lab to Foundry Figure 3</a>. Consider a square lattice of fixed-frequency transmons coupled for cross-resonance gates (<a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-g-cr" title="Cross-resonance">Book 6 §5.4</a>).</p>
+<p><b>Step 1: the design.</b> Neighbouring qubits are designed to differ in frequency by \(\mu\) (say 100 MHz), using a repeating pattern of a few frequencies.</p>
+<p><b>Step 2: the variation.</b> Each qubit's fabricated frequency is Gaussian with standard deviation \(\sigma\) around its target, independently (mostly from junction spread, <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-jj-sens" title="Why junctions are hard to make reproducibly">Book 6 §2.5</a>). For a coupled pair, the detuning \(\Delta = f_i - f_j\) is then Gaussian with mean \(\mu\) and variance \(2\sigma^2\) (variances of independent variables add).</p>
+<p><b>Step 3: the forbidden windows.</b> A pair fails if \(\Delta\) lands in any forbidden window \((c_k - w_k, c_k + w_k)\): near zero (the qubits swap energy), near \(\pm\alpha/2\) (two-photon transitions), and outside the range where the gate is fast enough <span class="cite">[<a href="#ref-brink2018">17</a>, <a href="#ref-hertzberg2021">18</a>]</span>.</p>
+<p><b>Step 4: the per-pair failure probability.</b> For each window, the probability that a Gaussian lands in an interval is a difference of cumulative normal distributions \(\Phi\) (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-prob-dists" title="The distributions that matter">Book 1 §7.2</a>):</p>
+<div class="eq" id="eq-f-pedge">$$ p_{\mathrm{edge}}(\sigma) = \sum_k\Big[\Phi\Big(\frac{c_k + w_k - \mu}{\sqrt2\sigma}\Big) - \Phi\Big(\frac{c_k - w_k - \mu}{\sqrt2\sigma}\Big)\Big] + \Pr\big(|\Delta| > \Delta_{\max}\big) .  \tag{6}$$</div>
+<p><b>Step 5: the chip.</b> If edges failed independently, a chip with \(E\) couplings would be collision-free with probability \(Y\approx(1-p_{\mathrm{edge}})^E\approx\ee^{-Ep_{\mathrm{edge}}}\). (Edges sharing a qubit are actually correlated, and some conditions involve three qubits; Monte Carlo over the whole lattice gives the exact number for a given model.)</p>
+<div class="example"><p><b>Worked example: how fast yield collapses.</b> One forbidden window \(|\Delta| \lt 17\) MHz, \(\mu = 100\) MHz, 200 couplings.</p>
+<p>At \(\sigma = 30\) MHz: \(\sqrt2\sigma = 42.4\); \(p_{\mathrm{edge}} = \Phi((17-100)/42.4) - \Phi((-17-100)/42.4) = \Phi(-1.96) - \Phi(-2.76) = 0.0250 - 0.0029 = 0.022\). Then \(Y = (1-0.022)^{200}\approx1.1\%\).</p>
+<p>At \(\sigma = 18\) MHz: \(\sqrt2\sigma = 25.5\); \(p_{\mathrm{edge}}\approx\Phi(-3.26)\approx5.6\times10^{-4}\); \(Y\approx\ee^{-0.11}\approx90\%\).</p>
+<p>Reducing \(\sigma\) by a factor of 1.7 takes yield from 1% to 90%. Because \(p_{\mathrm{edge}}\) comes from Gaussian tails, yield is a steep cliff in \(\sigma\), and because \(E\) grows with qubit count, the cliff moves to smaller \(\sigma\) as chips grow: holding yield requires \(p_{\mathrm{edge}}\propto1/E\). At \(\sigma\approx50\) MHz (about 2% junction spread), essentially no large fixed-frequency lattice is collision-free.</p></div>
 
 <h3 id="sec-f-y-design"><span class="secnum">4.5</span> Designing for yield</h3>
 <ul>
-<li><b>Frequency allocation</b>: choose the target pattern (how many distinct frequencies, which detunings) to maximise yield, not to hit a nominal optimum. With uncertainty this is a <b>chance-constrained</b> optimisation, \(\max\ Y(\boldsymbol\theta_0)\) or \(\min\ \text{cost}\) subject to \(\Pr[\text{constraints met}]\ge1-\epsilon\) <span class="cite">[<a href="#ref-morvan2022">19</a>, <a href="#ref-luedtke2008">20</a>]</span>.</li>
-<li><b>Tunability</b>: flux-tunable qubits or couplers absorb fabrication error at the cost of noise and wiring.</li>
-<li><b>Trimming</b>: measure each junction warm, then laser-anneal it towards target. Trimming reduces \(\sigma\) from about 2% to below 0.5% in demonstrated processes <span class="cite">[<a href="#ref-zhang2022">21</a>]</span>, but it costs test time and depends on predicting cold frequencies from warm resistance, which is itself statistical (<a class="xref ext" href="../../index.html#sec-var-trim" title="Post-fabrication trimming">Lab to Foundry §4.4</a>).</li>
-<li><b>Architecture</b>: tunable couplers widen collision windows; codes and compilers that can skip bad edges convert a hard yield into a graded one.</li>
+<li><b>Frequency allocation</b>: choose the target pattern (how many distinct frequencies, which detunings) to maximise yield under the fabrication distribution, not to hit a nominal optimum. With uncertainty this is a <b>chance-constrained</b> optimisation: maximise performance subject to \(\Pr[\text{all constraints met}]\ge1-\epsilon\) <span class="cite">[<a href="#ref-morvan2022">19</a>, <a href="#ref-luedtke2008">20</a>]</span>.</li>
+<li><b>Tunability</b>: flux-tunable qubits or couplers absorb fabrication error, at the cost of wiring and flux noise (<a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-g-coupler" title="Tunable couplers and the CZ gate">Book 6 §5.3</a>).</li>
+<li><b>Trimming</b>: measure each junction warm, then laser-anneal it towards target. Demonstrated processes reduce frequency spread from about 2% to below 0.5% <span class="cite">[<a href="#ref-zhang2022">21</a>]</span>, at the cost of test time, and only as well as cold frequencies can be predicted from warm resistance, which is itself statistical (<a class="xref ext" href="../../index.html#sec-var-trim" title="Post-fabrication trimming">Lab to Foundry §4.4</a>).</li>
+<li><b>Architecture</b>: tunable couplers widen collision windows; codes and compilers that can skip bad couplings convert a hard pass/fail yield into a graded one.</li>
 </ul>
+<div class="pitfall"><p>Optimising the <i>nominal</i> design and then "adding margin" is not the same as optimising yield. A nominal optimum often sits close to the edge of a constraint (because pushing a parameter improves performance until it hits a limit). Under variation, a design slightly back from that edge can have dramatically higher yield at almost the same nominal performance. Yield-aware design optimises the expected outcome over the distribution, which requires the statistical models of Chapter 6.</p></div>
 
-<div class="eda"><p>This chapter is a compressed version of the review's §4 (<a class="xref ext" href="../../index.html#sec-var" title="Variability, frequency allocation and yield">Lab to Foundry §4</a>). The open problems there (statistical sign-off with calibrated uncertainty, chance-constrained allocation with correlated variation, warm-to-cold prediction) all start from the models here, with data from real production lines.</p></div>
+<div class="eda"><p>This chapter is a compressed version of the review's §4 (<a class="xref ext" href="../../index.html#sec-var" title="Variability, frequency allocation and yield">Lab to Foundry §4</a>). Its open problems (statistical sign-off with calibrated uncertainty, chance-constrained allocation with correlated variation, warm-to-cold prediction for trimming) all start from these models, fed with data from real production lines.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Variation = lot + wafer + smooth gradient + local random; each part needs a different correction.</li>
+<li>Defect yield: \(\ee^{-AD_0}\) (Poisson), softened by clustering (negative binomial).</li>
+<li>Parametric yield = probability that the design map sends the process distribution into spec; linearise with the Jacobian.</li>
+<li>Collision yield \(\approx(1-p_{\mathrm{edge}})^E\) with \(p_{\mathrm{edge}}\) from Gaussian tails: a steep cliff in \(\sigma\) that tightens as chips grow.</li>
+<li>Design for yield with centring, robustness, tunability, trimming and chance-constrained allocation.</li>
+</ul></div>
 
 <div class="exercises" id="ex-f-yield"><h4>Exercises</h4><ol>
 <li>A 1 cm² die with \(D_0 = 0.1\) cm\(^{-2}\): compute Poisson yield and negative-binomial yield with \(\alpha = 0.5\). Repeat for 4 cm².
-<details><summary>Solution</summary><p>1 cm²: Poisson \(\ee^{-0.1} = 0.905\); NB \((1 + 0.2)^{-0.5} = 0.913\). 4 cm²: Poisson \(\ee^{-0.4} = 0.670\); NB \((1+0.8)^{-0.5} = 0.745\).</p></details></li>
-<li>With a single forbidden window at \(\Delta\in(-17, 17)\) MHz, \(\mu = 100\) MHz and \(\sigma = 30\) MHz, compute \(p_{\mathrm{edge}}\) and the yield of a lattice with 200 edges (ignore other windows).
-<details><summary>Solution</summary><p>\(\sqrt2\sigma = 42.4\). \(\Phi((17-100)/42.4) - \Phi((-17-100)/42.4) = \Phi(-1.96) - \Phi(-2.76) = 0.0250 - 0.0029 = 0.0221\). \(Y = (1-0.0221)^{200}\approx\ee^{-4.47}\approx1.1\%\).</p></details></li>
+<details><summary>Solution</summary><p>1 cm²: Poisson \(\ee^{-0.1} = 0.905\); NB \((1+0.2)^{-0.5} = 0.913\). 4 cm²: Poisson \(\ee^{-0.4} = 0.670\); NB \((1+0.8)^{-0.5} = 0.745\).</p></details></li>
+<li>With a single forbidden window \(|\Delta| \lt 17\) MHz, \(\mu = 100\) MHz and \(\sigma = 30\) MHz, compute \(p_{\mathrm{edge}}\) and the yield with 200 edges.
+<details><summary>Solution</summary><p>\(p_{\mathrm{edge}} = \Phi(-1.96) - \Phi(-2.76) = 0.0221\); \(Y = (1-0.0221)^{200}\approx1.1\%\).</p></details></li>
 <li>In the previous exercise, what \(\sigma\) gives 90% yield?
-<details><summary>Solution</summary><p>Need \(p_{\mathrm{edge}}\approx\ln(1/0.9)/200 = 5.3\times10^{-4}\). Dominated by the upper edge of the window: \(\Phi((17-100)/\sqrt2\sigma)\approx5.3\times10^{-4}\) gives \(83/(\sqrt2\sigma)\approx3.27\), \(\sigma\approx18\) MHz. A factor 1.7 in \(\sigma\) changes yield from 1% to 90%.</p></details></li>
+<details><summary>Solution</summary><p>Need \(p_{\mathrm{edge}}\approx\ln(1/0.9)/200 = 5.3\times10^{-4}\). Dominated by the upper edge: \(\Phi((17-100)/\sqrt2\sigma) = 5.3\times10^{-4}\) gives \(83/(\sqrt2\sigma) = 3.27\), \(\sigma\approx18\) MHz.</p></details></li>
+<li>A qubit frequency depends on \(E_J\) and \(C\) as \(f\propto\sqrt{E_J/C}\). With independent relative spreads of 2% in \(E_J\) and 1% in \(C\), what is the frequency spread at 5 GHz? Which spread should the process team attack first?
+<details><summary>Solution</summary><p>Relative spread \(\tfrac12\sqrt{0.02^2+0.01^2} = 1.12\%\), i.e. 56 MHz. The \(E_J\) term contributes 80% of the variance, so junction control comes first.</p></details></li>
+<li>Why does doubling the number of qubits on a chip (at fixed \(\sigma\)) roughly square the collision yield, and what does that imply for scaling?
+<details><summary>Solution</summary><p>The number of couplings \(E\) roughly doubles, and \(Y\approx(1-p_{\mathrm{edge}})^E\), so \(Y_{2E} = Y_E^2\). A 90% chip becomes 81%, then 66%, 43%... with each doubling. Scaling requires \(p_{\mathrm{edge}}\) to fall in proportion to \(1/E\), i.e. tighter fabrication, wider windows (tunable couplers), or trimming.</p></details></li>
 </ol></div>
 </section>
 
