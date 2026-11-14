@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-q-pert-td"><span class="tocnum">6.4</span>Time-dependent perturbation theory</a></li>
 <li class="toc3"><a href="#sec-q-pert-golden"><span class="tocnum">6.5</span>Fermi's golden rule and noise-induced transitions</a></li>
 <li class="toc3"><a href="#sec-q-pert-var"><span class="tocnum">6.6</span>The variational method and numerics</a></li>
+<li class="toc3"><a href="#sec-q-pert-code"><span class="tocnum">6.7</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-q-composite"><span class="tocnum">7</span>Density matrices, composite systems and entanglement</a></li>
 <li class="toc3"><a href="#sec-q-comp-rho"><span class="tocnum">7.1</span>The density matrix</a></li>
 <li class="toc3"><a href="#sec-q-comp-reduced"><span class="tocnum">7.2</span>Subsystems and the partial trace</a></li>
@@ -121,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Quantum Mechanics</h1>
   <p class="subtitle">States, measurement, dynamics, the harmonic oscillator, two-level systems, perturbation theory, entanglement and open systems</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">9 chapters · 42 numbered equations · 44 exercises with solutions · about 60 hours of study</p>
+  <p class="meta">9 chapters · 42 numbered equations · 46 exercises with solutions · about 60 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../mathematics/index.html">Book 1: Mathematics</a>, <a href="../classical-physics/index.html">Book 2: Classical Physics</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-q-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -793,43 +794,115 @@ for d in (5, 25):
 <section id="sec-q-pert"><h2><span class="secnum">6</span> Approximation methods: perturbation theory and effective Hamiltonians</h2>
 <div class="goals"><p>Goals</p><ul>
 <li>Compute first- and second-order energy shifts, and handle degenerate levels.</li>
-<li>Derive effective Hamiltonians by eliminating far-detuned states (the Schrieffer–Wolff idea), including the dispersive shift.</li>
+<li>Derive effective Hamiltonians by eliminating far-detuned states (the Schrieffer–Wolff idea), including the dispersive shift used for qubit readout.</li>
 <li>Use time-dependent perturbation theory and Fermi's golden rule to compute transition rates from a noise spectrum.</li>
 <li>Know the variational principle and when numerical diagonalisation is better.</li>
 </ul></div>
 
+<div class="bigpic"><p>Real devices are never exactly solvable. A qubit is coupled to a resonator, which is coupled to a feedline, near another qubit, all slightly nonlinear. Yet the numbers on a qubit's datasheet (frequency, anharmonicity, coupling, dispersive shift, \(T_1\)) are simple formulas. Where do they come from? From <b>perturbation theory</b>: start from a problem you can solve, treat the rest as a small correction, and expand. This chapter gives the three formulas that produce almost every number in superconducting-qubit design: the second-order energy shift, the effective Hamiltonian (the dispersive shift of readout), and Fermi's golden rule (decay rates from noise). It also tells you when these formulas fail, which is the most useful thing to know about them.</p></div>
+
 <h3 id="sec-q-pert-nd"><span class="secnum">6.1</span> Non-degenerate perturbation theory</h3>
-<p>Few Hamiltonians can be diagonalised exactly. Perturbation theory treats \(H = H_0 + \lambda V\), where \(H_0\) has known eigenstates \(\ket{n}\) with energies \(E_n\), and \(\lambda V\) is small. Expanding eigenvalues and eigenvectors in powers of \(\lambda\) and matching orders gives, for a non-degenerate level,</p>
+<p>Few Hamiltonians can be diagonalised exactly. Perturbation theory treats \(H = H_0 + \lambda V\), where \(H_0\) has known eigenstates \(\ket{n}\) with energies \(E_n\), and \(\lambda V\) is small. (The bookkeeping parameter \(\lambda\) tracks the order; set it to 1 at the end.) Write the exact energies and eigenvectors as power series in \(\lambda\), substitute into \(H\ket{n'} = E_n'\ket{n'}\), and match powers of \(\lambda\). For a non-degenerate level the result is</p>
 <div class="eq" id="eq-q-pt">$$ E_n' = E_n + \bra nV\ket n + \sum_{m\ne n}\frac{|\bra mV\ket n|^2}{E_n - E_m} + O(V^3), \qquad \ket{n'} = \ket n + \sum_{m\ne n}\frac{\bra mV\ket n}{E_n-E_m}\ket m + \dots  \tag{24}$$</div>
-<p>(setting \(\lambda=1\)). The first-order shift is the average of the perturbation in the unperturbed state. The second-order shift is a sum over virtual transitions to other levels, each weighted by its matrix element squared over the energy denominator. Two rules of thumb follow. Levels <i>repel</i>: a level is pushed down by everything above it and up by everything below it. And the expansion is valid only when \(|\bra mV\ket n|\ll|E_n-E_m|\); when two coupled levels approach each other, the second-order formula diverges and must be replaced by exact diagonalisation of the nearly degenerate pair. You saw exactly this structure in the avoided crossing of <a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-op-eigen" title="Eigenvalues and eigenvectors">Book 1 §3.3</a>.</p>
+<p>Read it term by term:</p>
+<ul>
+<li><b>First order:</b> \(\bra nV\ket n\), the average of the perturbation in the unperturbed state. If you slightly change a spring constant, the energy changes by the average extra potential energy.</li>
+<li><b>Second order:</b> a sum over "virtual transitions": the perturbation briefly takes the system from \(n\) to another state \(m\) and back. Each contributes its matrix element squared, divided by the energy cost \(E_n - E_m\).</li>
+<li><b>State correction:</b> the state acquires a small admixture of each \(\ket m\), with amplitude matrix element over energy gap. This "dressing" is why a qubit coupled to a resonator is slightly photon-like.</li>
+</ul>
+<p>Two rules of thumb follow.</p>
+<ol>
+<li><b>Levels repel.</b> For the lowest level all denominators \(E_n - E_m\) are negative, so second order always pushes it down; in general a level is pushed down by everything above it and up by everything below it.</li>
+<li><b>Validity.</b> The expansion works only when \(|\bra mV\ket n|\ll|E_n-E_m|\). When two coupled levels approach each other, the second-order term blows up, and you must instead diagonalise the nearly degenerate pair exactly. You saw exactly this structure in the avoided crossing of <a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-op-eigen" title="Eigenvalues and eigenvectors">Book 1 §3.3</a> and in coupled oscillators (Book 2, Chapter 3).</li>
+</ol>
+<div class="example"><p><b>Worked example: a two-level check.</b> \(H = \begin{pmatrix}0 & g\\ g & \Delta\end{pmatrix}\). Second order gives the lower level at \(g^2/(0-\Delta) = -g^2/\Delta\). The exact eigenvalue is \(\tfrac\Delta2 - \tfrac12\sqrt{\Delta^2+4g^2}\). With \(g = 0.1\), \(\Delta = 1\): perturbation theory \(-0.0100\), exact \(-0.0099\). With \(g = 0.5\), \(\Delta = 1\): perturbation theory \(-0.25\), exact \(-0.207\), already 20% off. The ratio \(g/\Delta\) tells you how much to trust the formula.</p></div>
 
 <h3 id="sec-q-pert-deg"><span class="secnum">6.2</span> Degenerate levels</h3>
-<p>If several states share an energy, the denominators vanish. The fix is to first diagonalise \(V\) within the degenerate subspace: the "right" zeroth-order states are those in which \(V\) is diagonal, and the first-order shifts are its eigenvalues there. Two identical qubits coupled by \(g(\sigma_+\sigma_-' + \sigma_-\sigma_+')\) have degenerate states \(\ket{01}\) and \(\ket{10}\); the coupling splits them into \((\ket{01}\pm\ket{10})/\sqrt2\) at \(\pm g\). That splitting is what an iSWAP-type gate uses.</p>
+<p>If several states share an energy, some denominators vanish and <a class="xref" href="#eq-q-pt">(24)</a> is useless. The fix: the perturbation decides which combinations of the degenerate states are the "right" starting point. First diagonalise \(V\) <i>within</i> the degenerate subspace; its eigenvectors are the correct zeroth-order states, and its eigenvalues are the first-order shifts.</p>
+<div class="example"><p><b>Worked example: two identical qubits.</b> Two qubits with the same frequency, coupled by \(g(\sigma_+\sigma_-' + \sigma_-\sigma_+')\) (one excitation hops from one to the other). The states \(\ket{01}\) and \(\ket{10}\) have the same energy. Within that pair the coupling is the matrix \(\begin{pmatrix}0&g\\g&0\end{pmatrix}\), with eigenvectors \((\ket{01}\pm\ket{10})/\sqrt2\) and eigenvalues \(\pm g\). The coupling splits the pair by \(2g\), and an excitation placed in one qubit oscillates to the other in a time \(\pi/2g\). That swap is what an iSWAP-type two-qubit gate uses.</p></div>
 
 <h3 id="sec-q-pert-sw"><span class="secnum">6.3</span> Effective Hamiltonians and the dispersive regime</h3>
-<p>Often we care only about a low-energy subspace (the two qubit levels, or the states with no excitation in a resonator), and other states are far away. We want an <b>effective Hamiltonian</b> acting only on the subspace that includes, to second order, the effect of virtual excursions outside it. The systematic method is the <b>Schrieffer–Wolff transformation</b> <span class="cite">[<a href="#ref-schrieffer1966">2</a>, <a href="#ref-bravyi2011sw">3</a>]</span>: find an anti-Hermitian \(S\) such that \(\ee^{S}H\ee^{-S}\) has no matrix elements between the subspace and the rest, to the desired order. Using the Baker–Campbell–Hausdorff expansion (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-bch">Book 1 eq. (19)</a>), if \(V\) couples the subspaces and \([S, H_0] = -V\), then</p>
+<p>Often we care only about a low-energy subspace (the two qubit levels, or the states with no excitation in a resonator), and the other states are far away in energy. We want an <b>effective Hamiltonian</b> acting only on that subspace, which includes, to second order, the effect of brief virtual excursions outside it. The systematic method is the <b>Schrieffer–Wolff transformation</b> <span class="cite">[<a href="#ref-schrieffer1966">2</a>, <a href="#ref-bravyi2011sw">3</a>]</span>: find a small change of basis \(\ee^{S}\) (with \(S\) anti-Hermitian, so \(\ee^S\) is unitary) such that \(\ee^{S}H\ee^{-S}\) has no matrix elements between the subspace and the rest, to the desired order. Using the Baker–Campbell–Hausdorff expansion (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-bch">Book 1 eq. (19)</a>), if \(V\) couples the subspaces and \(S\) is chosen so that \([S, H_0] = -V\), then</p>
 <div class="eq" id="eq-q-sw">$$ H_{\mathrm{eff}} = H_0 + \tfrac12[S, V] + O(V^3) .  \tag{25}$$</div>
-<p>The result is the matrix version of the second-order formula in <a class="xref" href="#eq-q-pt">(24)</a>.</p>
-<div class="example"><p><b>Worked example: the dispersive shift.</b> A qubit (frequency \(\omega_q\)) couples to a resonator (frequency \(\omega_r\)) by the Jaynes–Cummings interaction \(g(a^\dagger\sigma_- + a\sigma_+)\), and they are far detuned, \(|\Delta| = |\omega_q-\omega_r|\gg g\). The state \(\ket{1_q, n}\) (qubit excited, \(n\) photons) couples to \(\ket{0_q, n+1}\) with matrix element \(g\sqrt{n+1}\) and energy difference \(\hbar\Delta\); the state \(\ket{0_q,n}\) couples to \(\ket{1_q, n-1}\) with \(g\sqrt n\) and difference \(-\hbar\Delta\). Second-order shifts are \(+\hbar g^2(n+1)/\Delta\) and \(-\hbar g^2n/\Delta\) respectively. Collecting terms,</p>
+<p>The result is the matrix version of the second-order formula in <a class="xref" href="#eq-q-pt">(24)</a>: within the subspace, every pair of states gets an extra coupling via each outside state, matrix element times matrix element over energy gap. You rarely need to compute \(S\) explicitly; the practical recipe is "second-order perturbation theory, applied to every state of the subspace at once".</p>
+<div class="example"><p><b>Worked example: the dispersive shift.</b> A qubit (frequency \(\omega_q\)) couples to a resonator (frequency \(\omega_r\)) by the <b>Jaynes–Cummings</b> interaction \(\hbar g(a^\dagger\sigma_- + a\sigma_+)\): the qubit can drop to its ground state while putting a photon into the resonator, or the reverse. Let them be far detuned, \(|\Delta| = |\omega_q-\omega_r|\gg g\), so no real exchange happens. Look at two families of states:</p>
+<ul>
+<li>\(\ket{1_q, n}\) (qubit excited, \(n\) photons) couples to \(\ket{0_q, n+1}\), with matrix element \(\hbar g\sqrt{n+1}\) and energy difference \(\hbar\Delta\). Its second-order shift is \(+\hbar g^2(n+1)/\Delta\).</li>
+<li>\(\ket{0_q,n}\) couples to \(\ket{1_q, n-1}\), with \(\hbar g\sqrt n\) and difference \(-\hbar\Delta\). Its shift is \(-\hbar g^2n/\Delta\).</li>
+</ul>
+<p>Collecting these into an operator,</p>
 <div class="eq" id="eq-q-dispersive">$$ H_{\mathrm{eff}} = \hbar\Big(\omega_r + \chi\,\sigma_z\Big)a^\dagger a + \frac{\hbar}{2}\big(\omega_q + \chi\big)\sigma_z, \qquad \chi = \frac{g^2}{\Delta},  \tag{26}$$</div>
-<p>with \(\sigma_z = +1\) for the excited qubit. The resonator frequency depends on the qubit state: \(\omega_r\pm\chi\). Probing the resonator therefore measures the qubit without exchanging energy with it, the basis of dispersive readout. The qubit frequency also depends on the photon number, \(\omega_q + 2\chi n\) (the <b>AC Stark shift</b>), so photons in the resonator dephase the qubit. For a transmon, whose third level is close, the same calculation including that level gives the review's <a class="xref ext" href="../../index.html#eq-chi">Lab to Foundry eq. (6)</a>, with the factor \(\alpha/(\Delta+\alpha)\).</p></div>
+<p>with \(\sigma_z = +1\) for the excited qubit. Two readings of the same equation:</p>
+<ol>
+<li><b>The resonator frequency depends on the qubit state:</b> \(\omega_r\pm\chi\). Send a microwave tone at the resonator, and the reflected phase tells you the qubit's state without the qubit ever absorbing energy. This is <b>dispersive readout</b>, used by essentially every superconducting quantum computer.</li>
+<li><b>The qubit frequency depends on the photon number:</b> \(\omega_q + 2\chi n\), the <b>AC Stark shift</b>. Stray photons in the resonator, each arriving at random (Book 2, Chapter 8), make the qubit frequency jitter, which dephases it.</li>
+</ol>
+<p>For a transmon, whose third level is close, the same calculation including that level gives the review's <a class="xref ext" href="../../index.html#eq-chi">Lab to Foundry eq. (6)</a>, with the extra factor \(\alpha/(\Delta+\alpha)\). The Python example below checks both formulas against exact diagonalisation.</p></div>
+<div class="pitfall"><p>Every coefficient of an effective Hamiltonian (\(\chi\), the residual \(ZZ\) coupling \(\zeta\) between neighbouring qubits, Stark shifts) has denominators that are detunings. Near a "collision", where two transitions come close in frequency, the denominator is small, the formula predicts something huge, and the truth is something else (an avoided crossing). A design tool must check \(g/\Delta\) before trusting a perturbative number.</p></div>
 
 <h3 id="sec-q-pert-td"><span class="secnum">6.4</span> Time-dependent perturbation theory</h3>
-<p>Now let a weak perturbation \(V(t)\) act on a system initially in \(\ket i\). In the interaction picture, to first order, the amplitude to find the system in \(\ket f\) at time \(t\) is</p>
+<p>Now let a weak, time-varying perturbation \(V(t)\) act on a system that starts in state \(\ket i\). How likely is it to end up in \(\ket f\)? In the interaction picture (Chapter 3), integrate the Schrödinger equation once, assuming the amplitude of \(\ket i\) stays close to 1. To first order the amplitude of \(\ket f\) at time \(t\) is</p>
 <div class="eq" id="eq-q-tdpt">$$ c_f(t) = -\frac{\ii}{\hbar}\int_0^t \bra fV(t')\ket i\,\ee^{\ii\omega_{fi}t'}\,\dd t', \qquad \omega_{fi} = \frac{E_f - E_i}{\hbar} .  \tag{27}$$</div>
-<p>The transition probability \(|c_f|^2\) is the squared Fourier transform of the perturbation at the transition frequency. A perturbation with no spectral content at \(\omega_{fi}\) cannot drive the transition, which is why pulse spectra matter (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-fourier-transform" title="The Fourier transform: any signal">Book 1 §6.2</a>).</p>
+<p>The integral is a Fourier transform (Book 1, Chapter 6): the transition probability \(|c_f|^2\) is the squared spectrum of the perturbation at the transition frequency \(\omega_{fi}\). A perturbation with no spectral content at \(\omega_{fi}\) cannot drive the transition. This has practical consequences: a control pulse for one qubit must have negligible spectrum at a neighbour's frequency, and at the qubit's own \(1\to2\) transition (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-fourier-transform" title="The Fourier transform: any signal">Book 1 §6.2</a>).</p>
 
 <h3 id="sec-q-pert-golden"><span class="secnum">6.5</span> Fermi's golden rule and noise-induced transitions</h3>
-<p>If the final states form a continuum (a lossy line, the phonons of a crystal, the modes of free space), the probability grows linearly in time and defines a <b>rate</b>. For a constant coupling to a continuum of density \(\rho(E_f)\):</p>
+<p>If the final states form a <b>continuum</b> (the modes of a lossy line, the phonons of a crystal, the modes of free space), something remarkable happens: the probability of having left \(\ket i\) grows linearly in time, defining a constant <b>rate</b>. For a constant coupling to a continuum with density of states \(\rho(E_f)\) (states per unit energy):</p>
 <div class="eq" id="eq-q-golden">$$ \Gamma_{i\to f} = \frac{2\pi}{\hbar}\,|\bra fV\ket i|^2\,\rho(E_f) .  \tag{28}$$</div>
-<p>An equivalent form is more useful for engineering. Suppose a qubit couples to a fluctuating classical or quantum quantity \(\lambda(t)\) through \(V = \hbar\lambda(t)\,X/2\) (transverse noise). Averaging \(|c_f|^2\) over the noise, using the autocorrelation function and the Wiener–Khinchin theorem (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-psd">Book 1 eq. (34)</a>), gives</p>
+<p>This is <b>Fermi's golden rule</b>: rate = coupling squared times the number of places to go. Exponential decay of an excited atom, and the \(T_1\) of a qubit, come from here.</p>
+<p>An equivalent form is more useful for engineering. Suppose a qubit couples to a randomly fluctuating quantity \(\lambda(t)\) (a voltage, a flux, a charge) through \(V = \hbar\lambda(t)\,X/2\) ("transverse" noise, which can flip the qubit). Square <a class="xref" href="#eq-q-tdpt">(27)</a>, average over the noise, and use the autocorrelation function and the Wiener–Khinchin theorem (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-psd">Book 1 eq. (34)</a>). The result is</p>
 <div class="eq" id="eq-q-gamma1">$$ \Gamma_{\downarrow} = \frac14\,S_\lambda(+\omega_q), \qquad \Gamma_{\uparrow} = \frac14\,S_\lambda(-\omega_q),  \tag{29}$$</div>
-<p>with \(S_\lambda\) the two-sided spectral density (quantum noise distinguishes positive and negative frequencies: the environment can absorb energy from the qubit or give energy to it). The qubit is a spectrum analyser: its relaxation rate measures the noise at its own frequency. For a quantum environment in equilibrium, \(S(-\omega)/S(\omega) = \ee^{-\hbar\omega/k_BT}\), which guarantees that the qubit relaxes to the Boltzmann distribution. Combined with the fluctuation–dissipation theorem (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-th-johnson" title="Johnson–Nyquist noise">Book 2 §8.3</a>), <a class="xref" href="#eq-q-gamma1">(29)</a> lets a classical circuit simulation predict \(T_1\): a qubit of capacitance \(C\) seeing an admittance \(Y(\omega)\) relaxes at \(\Gamma_1\approx\Re Y(\omega_q)/C\). Purcell decay through a readout resonator and loss through a drive line are both computed this way.</p>
+<p>with \(S_\lambda\) the two-sided spectral density. (Quantum noise distinguishes positive and negative frequencies: at positive frequency the environment absorbs energy from the qubit, at negative frequency it gives energy to it.)</p>
+<div class="intuition"><p>The qubit is a <b>spectrum analyser</b> tuned to its own frequency: its decay rate measures the noise power at exactly \(\omega_q\). Noise at other frequencies does not cause relaxation. Move the qubit frequency and you probe a different part of the environment's spectrum, which is how experimenters map out loss mechanisms.</p></div>
+<p>For an environment in thermal equilibrium, \(S(-\omega)/S(\omega) = \ee^{-\hbar\omega/k_BT}\) (detailed balance), which guarantees that the qubit relaxes to the Boltzmann distribution of Book 2. Combined with the fluctuation–dissipation theorem (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-th-johnson" title="Johnson–Nyquist noise">Book 2 §8.3</a>), <a class="xref" href="#eq-q-gamma1">(29)</a> lets a <i>classical</i> circuit simulation predict \(T_1\): a qubit of capacitance \(C\) seeing an admittance \(Y(\omega)\) relaxes at</p>
+\[ \Gamma_1\approx\frac{\Re Y(\omega_q)}{C} . \]
+<p>Purcell decay through a readout resonator, loss through a drive line, and radiation into the package are all computed this way (exercise 4).</p>
 
 <h3 id="sec-q-pert-var"><span class="secnum">6.6</span> The variational method and numerics</h3>
-<p>For any normalised trial state, \(\bra\psi H\ket\psi\ge E_0\). Minimising over a family of trial states gives an upper bound on the ground-state energy that is often accurate. The variational principle underlies the variational quantum eigensolver of Book 4 and many computational chemistry methods. For small systems, though, the most reliable method is direct: represent \(H\) in a truncated basis (Fock states for oscillators, charge states for a transmon) and diagonalise numerically. This is what scqubits and similar packages do, and it is exact up to truncation error, which can be checked by enlarging the basis.</p>
+<p>A different kind of approximation. For any normalised trial state, \(\bra\psi H\ket\psi\ge E_0\): no state has a lower average energy than the ground state. (Expand \(\ket\psi\) in eigenstates; the average is a weighted mean of the \(E_n\), all \(\ge E_0\).) So: guess a family of states with adjustable parameters, compute the average energy, and minimise. The minimum is an upper bound on \(E_0\), often an accurate one. The variational principle underlies the variational quantum eigensolver of Book 4 and many computational chemistry methods.</p>
+<p>For small systems, though, the most reliable method is direct: represent \(H\) as a matrix in a truncated basis (Fock states for oscillators, charge states for a transmon) and diagonalise it numerically. This is what scqubits and similar packages do. It is exact up to truncation error, which you check by enlarging the basis until the answer stops changing. Modern practice is to use perturbative formulas for intuition and quick design, and exact numerics for sign-off.</p>
+
+<h3 id="sec-q-pert-code"><span class="secnum">6.7</span> Try it in Python</h3>
+<p>Compute the dispersive shift exactly by diagonalising a qubit coupled to a resonator, and compare with the two-level formula \(g^2/\Delta\) and the transmon formula.</p>
+<pre class="code"><code>import numpy as np
+
+def dressed_chi(wq, wr, g, alpha, levels, N=12):
+    """Exact dispersive shift from diagonalising qubit (levels) x resonator (N).
+    All quantities in GHz (frequency units, h = 1)."""
+    b = np.diag(np.sqrt(np.arange(1, levels)), 1)      # qubit lowering
+    a = np.diag(np.sqrt(np.arange(1, N)), 1)           # resonator lowering
+    Iq, Ir = np.eye(levels), np.eye(N)
+    nq = b.T @ b
+    Hq = wq * nq + alpha / 2 * (nq @ nq - nq)
+    H = (np.kron(Hq, Ir) + wr * np.kron(Iq, a.T @ a)
+         + g * (np.kron(b.T, a) + np.kron(b, a.T)))
+    E, V = np.linalg.eigh(H)
+    def energy(q, n):                                   # dressed state with
+        idx = q * N + n                                 # most overlap on |q,n>
+        return E[np.argmax(np.abs(V[idx, :]) ** 2)]
+    f_r0 = energy(0, 1) - energy(0, 0)                  # resonator, qubit in 0
+    f_r1 = energy(1, 1) - energy(1, 0)                  # resonator, qubit in 1
+    return (f_r1 - f_r0) / 2
+
+wr, g, alpha = 7.0, 0.1, -0.25
+for wq in (5.0, 5.5, 6.0, 6.5):
+    D = wq - wr
+    two_level = g**2 / D
+    transmon = g**2 / D * alpha / (D + alpha)
+    print(f"wq = {wq} GHz: exact 2-level {1e3*dressed_chi(wq, wr, g, 0, 2):7.2f} MHz "
+          f"(g^2/D = {1e3*two_level:7.2f}); exact transmon {1e3*dressed_chi(wq, wr, g, alpha, 4):6.2f} MHz "
+          f"(formula {1e3*transmon:6.2f})")</code></pre>
+<p>Far from the resonator the formulas agree with exact diagonalisation to a few percent. At \(\Delta/2\pi = -0.5\) GHz (\(g/\Delta = 0.2\)) the transmon formula is 10% off. And the transmon's \(\chi\) is several times smaller than the two-level formula predicts: using \(g^2/\Delta\) for a transmon is a classic mistake.</p>
 
 <div class="eda"><p>Effective Hamiltonians are the language in which device parameters are specified: \(\omega_q\), \(\alpha\), \(g\), \(\chi\) and \(\zeta\) are all coefficients of a Schrieffer–Wolff expansion. Their formulas (<a class="xref ext" href="../../index.html#eq-chi">Lab to Foundry eq. (6)</a>, <a class="xref ext" href="../../index.html#eq-zz">Lab to Foundry eq. (7)</a>) assume particular regimes; a design tool that applies them outside their validity (for example near a collision, where denominators are small) gives wrong answers silently. Checking against exact diagonalisation is part of sign-off.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Second-order shift: \(\sum|V_{mn}|^2/(E_n-E_m)\); levels repel; valid only when \(|V_{mn}|\ll|E_n-E_m|\).</li>
+<li>Degenerate levels: diagonalise \(V\) inside the degenerate subspace first.</li>
+<li>Effective Hamiltonians fold far-away states into the subspace; the dispersive shift \(\chi = g^2/\Delta\) (times \(\alpha/(\Delta+\alpha)\) for a transmon) enables readout.</li>
+<li>Transition amplitude = Fourier transform of the perturbation at the transition frequency.</li>
+<li>Golden rule: rates from coupling squared times density of states; \(\Gamma_\downarrow = \tfrac14S(\omega_q)\); \(\Gamma_1\approx\Re Y/C\).</li>
+<li>Variational bound \(\expval H\ge E_0\); exact diagonalisation in a truncated basis for sign-off.</li>
+</ul></div>
 
 <div class="exercises" id="ex-q-pert"><h4>Exercises</h4><ol>
 <li>For \(H = \begin{pmatrix}0 & g\\ g & \Delta\end{pmatrix}\) with \(g\ll\Delta\), compute the second-order shift of the lower level and compare with the exact eigenvalue.
@@ -840,6 +913,10 @@ for d in (5, 25):
 <details><summary>Solution</summary><p>\(c_f = -\frac{\ii V_{fi}}{\hbar}\frac{\ee^{\ii\omega_{fi}t}-1}{\ii\omega_{fi}}\), and \(|\ee^{\ii\omega t}-1|^2 = 4\sin^2(\omega t/2)\). For large \(t\), \(\sin^2(\omega t/2)/\omega^2\to\frac{\pi t}{2}\delta(\omega)\), which gives the golden rule.</p></details></li>
 <li>A transmon (\(C = 80\) fF) at 5 GHz sees a 50 Ω drive line through a coupling capacitor \(C_c = 0.05\) fF. With \(\Re Y\approx\omega^2C_c^2R\) for small \(C_c\), estimate the \(T_1\) limit from the drive line.
 <details><summary>Solution</summary><p>\(\omega = 3.14\times10^{10}\). \(\Re Y \approx (3.14\times10^{10})^2(5\times10^{-17})^2\times50 = 9.9\times10^{20}\times2.5\times10^{-33}\times50\approx1.2\times10^{-10}\) S. \(\Gamma_1 = \Re Y/C\approx1.5\times10^3\) s\(^{-1}\), so \(T_1\approx0.65\) ms. Drive lines must be coupled weakly, at the cost of needing more drive power.</p></details></li>
+<li>Use the trial wavefunction \(\psi(x)\propto\ee^{-x^2/4s^2}\) for \(H = p^2/2m + \tfrac12m\omega^2x^2\). Given \(\expval{p^2} = \hbar^2/4s^2\) and \(\expval{x^2} = s^2\), minimise over \(s\).
+<details><summary>Solution</summary><p>\(\expval H = \hbar^2/8ms^2 + \tfrac12m\omega^2s^2\). Setting the derivative to zero: \(s^2 = \hbar/2m\omega = x_{\mathrm{zpf}}^2\), giving \(\expval H = \hbar\omega/2\): the exact ground state, because the trial family contained it.</p></details></li>
+<li>For the dispersive Hamiltonian with \(\chi/2\pi = -1\) MHz, how much does the qubit frequency shift if the resonator holds 5 photons? What does that imply for a resonator with a fluctuating thermal population of 0.01 photons?
+<details><summary>Solution</summary><p>\(2\chi n/2\pi = -10\) MHz for \(n=5\). A thermal population of 0.01 photons means the qubit frequency occasionally jumps by \(2\chi\) when a photon arrives; this random telegraph shift dephases the qubit, at a rate that Book 6 and <a class="xref ext" href="../../index.html#eq-dephase">Lab to Foundry eq. (28)</a> quantify.</p></details></li>
 </ol></div>
 </section>
 
