@@ -1,44 +1,123 @@
 <section id="sec-c-maxwell"><h2>Maxwell's equations, waves and materials</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>State Maxwell's equations in differential and integral form and derive the wave equation.</li>
-<li>Describe plane waves, the speed of light in a medium, impedance of free space and the Poynting vector.</li>
+<li>State Maxwell's equations in differential and integral form, and say in words what each one means.</li>
+<li>Derive the wave equation and describe plane waves, the speed of light in a medium, the impedance of free space and the Poynting vector.</li>
+<li>Find the resonant modes of a metal box, and see why a chip package can ring right among the qubit frequencies.</li>
 <li>Model lossy dielectrics with a complex permittivity and loss tangent, and lossy metals with the skin depth.</li>
 <li>Know the phenomenology of superconductors that matters for microwave design: zero DC resistance, the London penetration depth and kinetic inductance.</li>
 </ul></div>
 
+<div class="bigpic"><p>Chapter 4 treated fields that do not change in time. Qubits live at 4–8 GHz, where fields oscillate billions of times a second, and then electric and magnetic fields feed each other and travel as waves. A quantum chip is small compared with a 60 mm vacuum wavelength but not compared with the 18 mm wavelength inside silicon, so wave effects (box modes, radiation, resonances in wiring) matter. This chapter gives the four equations that govern all of it, then the material properties (losses in insulators, metals and superconductors) that decide how long microwave energy survives on a chip.</p></div>
+
 <h3 id="sec-c-max-eqs">The four equations</h3>
-<p>Faraday found that a changing magnetic flux induces a voltage around a loop, and Maxwell found that a changing electric field acts like a current. Adding these to Gauss's and Ampère's laws gives <b>Maxwell's equations</b>, which in a linear medium with permittivity \(\varepsilon\) and permeability \(\mu\) read</p>
+<p>Two experimental discoveries complete what Chapter 4 began. Faraday found that a <i>changing</i> magnetic flux induces a voltage around a loop (this is how generators and transformers work). Maxwell realised that a <i>changing</i> electric field acts like a current, producing a magnetic field even in empty space. Adding these to Gauss's and Ampère's laws gives <b>Maxwell's equations</b>. In a linear medium with permittivity \(\varepsilon\) and permeability \(\mu\):</p>
 <div class="eq" id="eq-c-maxwell">$$ \nabla\cdot(\varepsilon\mathbf E) = \rho, \quad \nabla\cdot\mathbf B = 0, \quad \nabla\times\mathbf E = -\frac{\partial\mathbf B}{\partial t}, \quad \nabla\times\mathbf B = \mu\mathbf J + \mu\varepsilon\frac{\partial\mathbf E}{\partial t}. $$</div>
-<p>In integral form, the third says that the voltage around a loop equals minus the rate of change of flux through it, \(\oint\mathbf E\cdot\dd\boldsymbol\ell = -\dot\Phi\): this is why we called \(\Phi = \int V\dd t\) a "flux" in Chapter 1. Flux quantisation in superconducting loops (Book 6) and the flux-tuning of qubits both rest on this law.</p>
+<p>In words, one per equation:</p>
+<ol>
+<li><b>Gauss:</b> electric field lines start and end on charges.</li>
+<li><b>No magnetic charges:</b> magnetic field lines always close on themselves.</li>
+<li><b>Faraday:</b> a changing magnetic field creates a circulating electric field.</li>
+<li><b>Ampère–Maxwell:</b> currents <i>and</i> changing electric fields create a circulating magnetic field.</li>
+</ol>
+<p>Equations 3 and 4 together are the engine of waves: a changing \(\mathbf B\) makes \(\mathbf E\), whose change makes \(\mathbf B\), and so on, a disturbance that propagates on its own.</p>
+<p>In integral form, Faraday's law says that the voltage around a loop equals minus the rate of change of the flux through it:</p>
+\[ \oint\mathbf E\cdot\dd\boldsymbol\ell = -\frac{\dd\Phi}{\dd t}. \]
+<p>So a voltage is a rate of change of flux, which is why Chapter 1 called \(\Phi = \int V\,\dd t\) a "flux" even for a circuit node. Flux quantisation in superconducting loops (Book 6) and the flux-tuning of qubits both rest on this law.</p>
 
 <h3 id="sec-c-max-waves">Electromagnetic waves</h3>
-<p>In a region without charges or currents, take the curl of Faraday's law and use the identity \(\nabla\times\nabla\times\mathbf E = \nabla(\nabla\cdot\mathbf E) - \nabla^2\mathbf E\) with \(\nabla\cdot\mathbf E = 0\):</p>
+<p>In a region without charges or currents, take the curl of Faraday's law, substitute Ampère–Maxwell, and use the vector identity \(\nabla\times\nabla\times\mathbf E = \nabla(\nabla\cdot\mathbf E) - \nabla^2\mathbf E\) with \(\nabla\cdot\mathbf E = 0\). The result is the <b>wave equation</b>:</p>
 <div class="eq" id="eq-c-wave">$$ \nabla^2\mathbf E = \mu\varepsilon\,\frac{\partial^2\mathbf E}{\partial t^2}, \qquad v = \frac1{\sqrt{\mu\varepsilon}} = \frac{c}{\sqrt{\varepsilon_r\mu_r}} . $$</div>
-<p>Maxwell recognised \(1/\sqrt{\mu_0\varepsilon_0}\approx3\times10^8\) m/s as the speed of light. Light, microwaves and radio are the same phenomenon at different frequencies. A <b>plane wave</b> \(\mathbf E = \mathbf E_0\ee^{\ii(\mathbf k\cdot\mathbf r - \omega t)}\) has \(|\mathbf k| = \omega/v = 2\pi/\lambda\), with \(\mathbf E\), \(\mathbf B\) and \(\mathbf k\) mutually perpendicular. The ratio \(|\mathbf E|/|\mathbf H|\) (with \(\mathbf H = \mathbf B/\mu\)) is the <b>wave impedance</b> \(\eta = \sqrt{\mu/\varepsilon}\), equal to \(\eta_0\approx377\) Ω in vacuum. Energy flows along the <b>Poynting vector</b> \(\mathbf S = \mathbf E\times\mathbf H\), whose time average gives the intensity.</p>
-<p>For time-harmonic fields (\(\propto\ee^{-\ii\omega t}\)) the wave equation becomes the <b>Helmholtz equation</b>, and inside a closed metal box only discrete frequencies satisfy the boundary conditions (tangential \(\mathbf E = 0\) on a perfect conductor). These are the box's <b>eigenmodes</b>, found by solving</p>
+<p>Any shape \(f(x - vt)\) solves the one-dimensional version, moving at speed \(v\) without changing shape. Maxwell computed \(1/\sqrt{\mu_0\varepsilon_0}\approx3\times10^8\) m/s, recognised it as the measured speed of light, and concluded that light is an electromagnetic wave. Light, microwaves and radio are the same phenomenon at different frequencies. In a material light slows by the factor \(n = \sqrt{\varepsilon_r\mu_r}\), the <b>refractive index</b> (Chapter 7); for microwaves in silicon \(n\approx\sqrt{11.45}\approx3.4\).</p>
+<p>The simplest wave is a <b>plane wave</b>, \(\mathbf E = \mathbf E_0\ee^{\ii(\mathbf k\cdot\mathbf r - \omega t)}\) (the physical field is the real part, Book 1). Its properties:</p>
+<ul>
+<li>The <b>wave vector</b> \(\mathbf k\) points in the direction of travel, with \(|\mathbf k| = \omega/v = 2\pi/\lambda\).</li>
+<li>\(\mathbf E\), \(\mathbf B\) and \(\mathbf k\) are mutually perpendicular: the wave is <b>transverse</b>. The direction of \(\mathbf E\) is the <b>polarisation</b>.</li>
+<li>The ratio \(|\mathbf E|/|\mathbf H|\), with \(\mathbf H = \mathbf B/\mu\), is the <b>wave impedance</b> \(\eta = \sqrt{\mu/\varepsilon}\), equal to \(\eta_0\approx377\) Ω in vacuum. This is the "impedance of free space" that an antenna (or an accidentally radiating qubit) couples to.</li>
+<li>Energy flows along the <b>Poynting vector</b> \(\mathbf S = \mathbf E\times\mathbf H\) (watts per square metre); its time average is the intensity.</li>
+</ul>
+<p>For fields oscillating at a single frequency (\(\propto\ee^{-\ii\omega t}\)) the time derivative becomes \(-\ii\omega\), and the wave equation becomes the <b>Helmholtz equation</b> \(\nabla^2\mathbf E + k^2\mathbf E = 0\). Inside a closed metal box, the field must also satisfy a boundary condition: on a perfect conductor the tangential component of \(\mathbf E\) is zero (Chapter 4). Only discrete frequencies can then fit, just as only certain notes fit on a guitar string. These are the box's <b>eigenmodes</b>, found by solving</p>
 <div class="eq" id="eq-c-curlcurl">$$ \nabla\times\big(\mu^{-1}\nabla\times\mathbf E\big) = \omega^2\varepsilon\,\mathbf E . $$</div>
-<p>This is exactly the eigenproblem a 3D electromagnetic eigenmode solver discretises (@lf:eq-curl). For a rectangular box of sides \(a,b\) the lowest modes have \(f = \frac{v}{2}\sqrt{(m/a)^2+(n/b)^2}\), which places the first mode of a 10 mm chip cavity filled with silicon near 6 GHz, right among the qubits (@lf:eq-box).</p>
+<p>This is a generalised eigenvalue problem (Book 1, Chapter 2): the operator on the left plays the role of a stiffness, \(\varepsilon\) of a mass, and \(\omega^2\) the eigenvalue. It is exactly what a 3D electromagnetic eigenmode solver discretises (@lf:eq-curl).</p>
+<div class="example"><p><b>Worked example: the chip's own box mode.</b> For a thin rectangular box of sides \(a\) and \(b\) (height much smaller), with \(\mathbf E\) pointing vertically, the modes are</p>
+\[ f_{mn} = \frac{v}{2}\sqrt{\Big(\frac ma\Big)^2+\Big(\frac nb\Big)^2}, \qquad m,n = 1,2,\dots \]
+<p>(half-wavelengths fitting across each side). A 10 mm × 10 mm cavity filled with silicon has \(v = c/3.38\) and \(f_{11} = \frac{8.86\times10^7}{2}\sqrt2/0.01\approx6.3\) GHz, right among the qubits (@lf:eq-box). A qubit coupled to this mode leaks energy into it, or two distant qubits talk through it. This is why packages are designed with pillars, vias and small cavities to push box modes above about 10 GHz.</p></div>
 
 <h3 id="sec-c-max-dielectric">Lossy dielectrics</h3>
-<p>Real dielectrics absorb a little energy each cycle because their microscopic dipoles lag behind the field. This is captured by a complex permittivity,</p>
+<p>Real dielectrics absorb a little energy each cycle because their microscopic dipoles lag slightly behind the oscillating field. A lag is a phase shift, and Book 1 taught us to describe phase shifts with complex numbers. So the loss is captured by a complex permittivity,</p>
 <div class="eq" id="eq-c-losstan">$$ \varepsilon = \varepsilon' + \ii\varepsilon'' = \varepsilon'(1 + \ii\tan\delta), \qquad \tan\delta = \frac{\varepsilon''}{\varepsilon'} . $$</div>
-<p>(With the physicists' \(\ee^{-\ii\omega t}\) convention used here, loss appears as a positive imaginary part; engineering texts using \(\ee^{+j\omega t}\) write \(\varepsilon'-j\varepsilon''\). Either way \(\varepsilon''>0\) means absorption.) The average power dissipated per unit volume is \(\tfrac12\omega\varepsilon''|\mathbf E|^2\), while the stored energy density is \(\tfrac14\varepsilon'|\mathbf E|^2\) on average in the electric field. If the material fills a resonator completely, the quality factor is therefore \(Q = 1/\tan\delta\). Crystalline sapphire and high-resistivity silicon have \(\tan\delta\) below \(10^{-6}\) at millikelvin temperatures. Amorphous oxides have \(10^{-3}\) or worse, dominated by microscopic <b>two-level systems</b> (Book 6) that saturate at high power and high temperature [@gao2008].</p>
+<p>\(\varepsilon'\) stores energy; \(\varepsilon''\) dissipates it. The <b>loss tangent</b> \(\tan\delta\) is the ratio, and \(\delta\) is the small angle by which the polarisation lags the field.</p>
+<div class="pitfall"><p>Sign conventions differ. With the physicists' \(\ee^{-\ii\omega t}\) convention used here, loss appears as a positive imaginary part. Engineering texts and most simulators use \(\ee^{+j\omega t}\) and write \(\varepsilon'-j\varepsilon''\). Either way \(\varepsilon''\gt0\) means absorption. When entering material data into a solver, check which convention it expects.</p></div>
+<p>The average power dissipated per unit volume is \(\tfrac12\omega\varepsilon''|\mathbf E|^2\), while the stored electric energy density is on average \(\tfrac14\varepsilon'|\mathbf E|^2\). If the material fills a resonator completely, these combine (exercise 2) to</p>
+\[ Q = \frac{1}{\tan\delta}. \]
+<p>If it fills only a fraction \(p\) of the electric energy, \(1/Q = p\tan\delta\): the participation ratio of Chapter 4. Typical values at millikelvin temperatures and single-photon powers:</p>
+<figure class="tbl" id="tab-c-losstan"><figcaption>Approximate microwave loss tangents at millikelvin temperatures.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Material</th><th>\(\tan\delta\)</th><th>Role on a chip</th></tr>
+<tr><td>Crystalline sapphire</td><td>\(\lt10^{-7}\)</td><td>substrate</td></tr>
+<tr><td>High-resistivity silicon</td><td>\(\sim10^{-7}\)–\(10^{-6}\)</td><td>substrate</td></tr>
+<tr><td>Amorphous oxides (AlO\(_x\), SiO\(_x\), Nb\(_2\)O\(_5\))</td><td>\(\sim10^{-3}\)</td><td>surface layers, junction barrier</td></tr>
+<tr><td>Deposited SiO\(_2\), resists, residues</td><td>\(10^{-3}\)–\(10^{-2}\)</td><td>to be avoided near fields</td></tr>
+</table></div></figure>
+<p>The loss of amorphous oxides is dominated by microscopic <b>two-level systems</b> (TLS): atoms that can tunnel between two nearby positions and absorb a microwave photon (Book 6). A peculiar feature: TLS loss <i>saturates</i> at high power and high temperature, so a resonator measured with a strong signal looks better than it is at single-photon level [@gao2008]. Materials characterisation must therefore be done at low power.</p>
 
 <h3 id="sec-c-max-metal">Normal metals and the skin effect</h3>
-<p>In a metal with conductivity \(\sigma\), the current \(\mathbf J = \sigma\mathbf E\) dominates the displacement current at microwave frequencies, and the wave equation becomes a diffusion equation. Fields decay into the metal over the <b>skin depth</b></p>
+<p>In a metal with conductivity \(\sigma\), an electric field drives a current \(\mathbf J = \sigma\mathbf E\) (Ohm's law). At microwave frequencies this real current is enormously larger than Maxwell's displacement current \(\varepsilon\,\partial\mathbf E/\partial t\), and the wave equation turns into a diffusion equation: fields do not propagate into the metal, they decay. The decay length is the <b>skin depth</b></p>
 <div class="eq" id="eq-c-skin">$$ \delta_s = \sqrt{\frac{2}{\mu_0\sigma\omega}} , $$</div>
-<p>about 1 µm for copper at 5 GHz. Current flows only in this thin layer, so the effective resistance of a conductor rises as \(\sqrt\omega\), and the surface resistance is \(R_s = 1/(\sigma\delta_s)\). A copper resonator at room temperature has \(Q\) of only a few thousand at microwave frequencies, which is why quantum devices use superconductors.</p>
+<p>about 1 µm for copper at 5 GHz. Current flows only in this thin layer at the surface, so the effective resistance of a conductor rises as \(\sqrt\omega\). A convenient summary is the <b>surface resistance</b> \(R_s = 1/(\sigma\delta_s)\), in ohms per square. A copper resonator at room temperature has \(Q\) of only a few thousand at microwave frequencies, a million times too lossy for qubits. That is why quantum devices use superconductors.</p>
+<div class="quick"><p>The skin depth scales as \(1/\sqrt\omega\). By what factor does it change from 1 GHz to 100 GHz?</p>
+<details><summary>Answer</summary><p>By \(\sqrt{100} = 10\): it shrinks tenfold (2 µm to 0.2 µm for copper).</p></details></div>
 
 <h3 id="sec-c-max-super">Superconductors, phenomenologically</h3>
-<p>Below a critical temperature \(T_c\) (1.2 K for aluminium, 9.2 K for niobium, 4.4 K for tantalum), certain metals lose all DC resistance and expel magnetic fields. For microwave design four facts are enough here; Book 6 explains their microscopic origin.</p>
+<p>Below a critical temperature \(T_c\) (1.2 K for aluminium, 9.2 K for niobium, 4.4 K for tantalum), certain metals lose all DC resistance and expel magnetic fields (the Meissner effect). For microwave design four facts are enough here; Book 6 explains their microscopic origin in Cooper pairs.</p>
 <ol>
-<li><b>Penetration depth.</b> Magnetic fields penetrate only a distance \(\lambda_L\) (the London penetration depth, 50–100 nm in Al and Nb). Inside, the London equation \(\nabla^2\mathbf B = \mathbf B/\lambda_L^2\) makes the field decay exponentially.</li>
-<li><b>Kinetic inductance.</b> The supercurrent is carried by paired electrons with mass. Their kinetic energy \(\tfrac12 n_s m v^2\) adds to the magnetic energy and acts as an extra inductance. For a film of thickness \(t\ll\lambda_L\), the <b>sheet kinetic inductance</b> is \(L_k\approx\mu_0\lambda_L^2/t\) per square. Disordered films such as NbN, NbTiN and granular Al have \(L_k\) of tens to thousands of pH per square and are used to make compact high-impedance resonators and "superinductors".</li>
-<li><b>Finite loss at finite frequency.</b> At \(T>0\) a small population of unpaired quasiparticles absorbs microwave energy, giving a surface resistance that falls exponentially with temperature (roughly \(\propto\ee^{-\Delta/k_BT}\), with gap \(\Delta\approx1.76k_BT_c\)). At 20 mK and 5 GHz, aluminium's intrinsic loss is negligible compared with dielectric loss; the practical limits are surfaces, interfaces and non-equilibrium quasiparticles.</li>
+<li><b>Penetration depth.</b> Magnetic fields penetrate only a distance \(\lambda_L\), the London penetration depth: 50–100 nm in Al and Nb. Inside, the London equation \(\nabla^2\mathbf B = \mathbf B/\lambda_L^2\) makes the field decay exponentially. This is the superconducting analogue of the skin depth, but it does not depend on frequency and comes with almost no loss.</li>
+<li><b>Kinetic inductance.</b> The supercurrent is carried by paired electrons that have mass. When current flows, they carry kinetic energy \(\tfrac12 n_s m v^2\) per volume, which adds to the magnetic energy and acts as an extra inductance (inductance is energy per current squared). For a film of thickness \(t\ll\lambda_L\), the <b>sheet kinetic inductance</b> is \(L_k\approx\mu_0\lambda_L^2/t\) per square. Disordered films such as NbN, NbTiN and granular aluminium have large \(\lambda_L\) and \(L_k\) of tens to thousands of pH per square; they are used to make compact high-impedance resonators and "superinductors". Kinetic inductance also depends on temperature and current, which makes it useful (detectors, parametric amplifiers) and a nuisance (frequency drift).</li>
+<li><b>Finite loss at finite frequency.</b> At \(T\gt0\) a small population of unpaired electrons (<b>quasiparticles</b>) absorbs microwave energy, giving a surface resistance that falls exponentially with temperature (roughly \(\propto\ee^{-\Delta/k_BT}\), with energy gap \(\Delta\approx1.76k_BT_c\)). At 20 mK and 5 GHz, aluminium's intrinsic loss is negligible compared with dielectric loss; the practical limits are surfaces, interfaces and "non-equilibrium" quasiparticles created by stray infrared light and cosmic rays.</li>
 <li><b>Flux quantisation.</b> The flux through a superconducting loop is quantised in units of \(\Phi_0 = h/2e\approx2.07\times10^{-15}\) Wb. This is the basis of SQUIDs and flux-tunable qubits.</li>
 </ol>
+<div class="intuition"><p>Why can a superconductor carry current with no resistance yet still have inductance? Resistance is friction: energy lost. Inductance is inertia: energy stored, and given back. Cooper pairs flow without friction, but they still have inertia, and at high frequency (reversing direction billions of times a second) that inertia shows up as kinetic inductance.</p></div>
+
+<h3 id="sec-c-max-code">Try it in Python</h3>
+<p>List the box modes of two chip cavities, and the skin depth of copper at a few frequencies.</p>
+<pre class="code"><code>import numpy as np
+
+c0, mu0 = 299792458.0, 4e-7 * np.pi
+
+def box_modes(a, b, eps_r, fmax):
+    """Lowest modes of a thin rectangular box (height much smaller than a, b).
+    Field vertical, so mode indices m, n >= 1 and none along the height."""
+    v = c0 / np.sqrt(eps_r)
+    out = []
+    for m in range(1, 10):
+        for n in range(1, 10):
+            f = v / 2 * np.sqrt((m / a) ** 2 + (n / b) ** 2)
+            if f &lt; fmax:
+                out.append((f / 1e9, m, n))
+    return sorted(out)
+
+print("10 mm x 10 mm, filled with silicon:")
+for f, m, n in box_modes(10e-3, 10e-3, 11.45, 12e9):
+    print(f"   TM{m}{n}: {f:5.2f} GHz")
+print("20 mm x 15 mm, filled with silicon:")
+for f, m, n in box_modes(20e-3, 15e-3, 11.45, 8e9):
+    print(f"   TM{m}{n}: {f:5.2f} GHz")
+
+# Skin depth of copper versus frequency
+sigma = 6e7
+for f in (1e6, 1e9, 5e9, 10e9):
+    d = np.sqrt(2 / (mu0 * sigma * 2 * np.pi * f))
+    print(f"copper skin depth at {f/1e9:6.3f} GHz: {d*1e6:6.2f} um")</code></pre>
+<p>The larger chip has five modes below 8 GHz. Bigger chips (more qubits) have lower, denser box modes: one reason scaling up is hard, and why large processors use through-silicon vias and segmented packages. A real chip is only partly filled with silicon (there is vacuum above it), so true modes sit somewhat higher; a 3D solver gives the exact answer.</p>
 
 <div class="eda"><p>The full-wave formulation of extraction in the review (@lf:sec-design-extract) solves @eq:c-curlcurl with material models for \(\varepsilon\), \(\tan\delta\) and the superconductor's surface impedance. Kinetic inductance and the effective permittivity of the substrate are known only to a few percent, a "model-form" uncertainty that mesh refinement cannot remove. A design tool should propagate it into the predicted frequencies.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Maxwell's four equations; Faraday's law makes voltage the rate of change of flux.</li>
+<li>Waves travel at \(c/\sqrt{\varepsilon_r\mu_r}\), transverse, with impedance \(\eta_0\approx377\) Ω in vacuum; power flows along \(\mathbf E\times\mathbf H\).</li>
+<li>A closed box has discrete eigenmodes; a centimetre chip has box modes in the qubit band.</li>
+<li>Dielectric loss: \(\tan\delta = \varepsilon''/\varepsilon'\), \(1/Q = p\tan\delta\); amorphous oxides (TLS) are the worst offenders.</li>
+<li>Metals: skin depth \(\sqrt{2/\mu_0\sigma\omega}\). Superconductors: penetration depth, kinetic inductance \(\mu_0\lambda_L^2/t\), quasiparticle loss, flux quantum \(h/2e\).</li>
+</ul></div>
 
 <div class="exercises" id="ex-c-maxwell"><h4>Exercises</h4><ol>
 <li>What is the wavelength of a 5 GHz wave in vacuum and in silicon (\(\varepsilon_r = 11.45\))? Compare with a 10 mm chip.
@@ -49,5 +128,9 @@
 <details><summary>Solution</summary><p>\(\delta_s = \sqrt{2/(4\pi\times10^{-7}\times6\times10^7\times2\pi\times5\times10^9)}\approx0.92\,\mu\)m. \(R_s = 1/(\sigma\delta_s)\approx18\) mΩ per square.</p></details></li>
 <li>A NbTiN film 10 nm thick has \(\lambda_L = 300\) nm. Estimate \(L_k\) per square, and the kinetic inductance of a 1 µm wide, 1 mm long wire.
 <details><summary>Solution</summary><p>\(L_k\approx\mu_0\lambda_L^2/t = 1.257\times10^{-6}\times9\times10^{-14}/10^{-8}\approx11\) pH/□. The wire has 1000 squares, so about 11 nH, roughly ten times its geometric inductance. This is how compact high-impedance resonators are made.</p></details></li>
+<li>A plane wave in vacuum has electric field amplitude 1 V/m. What is the magnetic field amplitude \(B\), and the average intensity?
+<details><summary>Solution</summary><p>\(H = E/\eta_0 = 2.65\) mA/m, \(B = \mu_0H = E/c\approx3.3\) nT. Average intensity \(\tfrac12E^2/\eta_0\approx1.3\) mW/m².</p></details></li>
+<li>Estimate the superconducting gap \(\Delta\) of aluminium and the factor \(\ee^{-\Delta/k_BT}\) at 20 mK and at 200 mK.
+<details><summary>Solution</summary><p>\(\Delta\approx1.76k_B\times1.2\) K, so \(\Delta/k_B\approx2.1\) K. At 20 mK, \(\ee^{-105}\approx10^{-46}\): utterly negligible. At 200 mK, \(\ee^{-10.6}\approx2.5\times10^{-5}\): quasiparticle loss starts to matter, one reason aluminium devices degrade above about 150 mK.</p></details></li>
 </ol></div>
 </section>
