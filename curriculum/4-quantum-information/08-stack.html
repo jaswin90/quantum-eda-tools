@@ -1,37 +1,76 @@
 <section id="sec-i-stack"><h2>From program to pulses: the quantum computing stack</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>Follow a quantum program through compilation: decomposition into native gates, mapping and routing onto hardware connectivity, and scheduling.</li>
-<li>Understand how gates become control pulses and how the control electronics and calibration loop work.</li>
-<li>See where the hardware constraints of Books 5–7 enter the software stack.</li>
+<li>Name the layers of a quantum computer, from algorithm to chip, and what passes between them.</li>
+<li>Follow a circuit through compilation: decomposition into native gates, mapping and routing onto the chip's connectivity, and scheduling.</li>
+<li>Understand how a gate becomes an analogue microwave pulse, and how readout signals become bits.</li>
+<li>Understand calibration and why it becomes a scaling bottleneck, and the options for control electronics at scale.</li>
 </ul></div>
 
-<h3 id="sec-i-stack-layers">The layers</h3>
-<p>A quantum computer is a stack. At the top, an algorithm expressed as a circuit of abstract gates. Below it, a <b>compiler</b> that rewrites the circuit for a specific device. Then a <b>pulse layer</b> that turns each native gate into analogue waveforms, the <b>control electronics</b> that generate and digitise those waveforms, the <b>cryogenic wiring</b> that carries them, and the <b>chip</b>. For fault-tolerant machines, an error-correction layer sits between the algorithm and the physical gates: logical operations become lattice-surgery schedules, syndromes stream to real-time decoders, and corrections are tracked in software (the "Pauli frame") rather than applied physically.</p>
+<div class="bigpic"><p>A quantum computer is not just a chip. It is a stack of hardware and software layers, like a classical computer: a program written by a person, a compiler that rewrites it for one particular machine, software that turns each gate into a precisely shaped analogue signal, electronics that generate those signals, cables that carry them into a refrigerator, and finally the qubits. Measurement signals travel back up the same stack. Every layer consumes a <i>model</i> of the layer below it. This chapter walks down the stack, and in doing so shows exactly where the chip-design questions of Books 6–7 meet the computing questions of this book.</p></div>
 
-<h3 id="sec-i-stack-compile">Compilation</h3>
-<p>Compilation has three main steps.</p>
-<ol>
-<li><b>Decomposition</b> into the device's native gate set, for example \(\{R_z(\theta), \sqrt X, \mathrm{CZ}\}\). Arbitrary two-qubit unitaries need at most three CNOT-equivalent gates (the KAK or Cartan decomposition), and single-qubit runs merge into one rotation.</li>
-<li><b>Mapping and routing.</b> Logical circuit qubits are assigned to physical qubits, and because a two-qubit gate needs the two qubits to be coupled, SWAPs are inserted to bring interacting qubits together. Optimal routing is NP-hard; heuristics (such as SABRE) are used. On a square grid, routing can multiply the two-qubit gate count by a factor of several, which is a strong argument for higher connectivity or for codes and algorithms adapted to the grid.</li>
-<li><b>Scheduling and optimisation.</b> Gates are scheduled in parallel where hardware allows, subject to crosstalk constraints (some neighbouring gates should not run simultaneously), and the compiler cancels redundant gates. Noise-aware compilers use per-qubit calibration data to prefer the best qubits and couplers.</li>
-</ol>
-<p>The compiler therefore consumes a <b>device model</b>: the coupling graph, native gates, their durations and error rates, crosstalk restrictions and readout fidelities. That same model, predicted before fabrication, is what a design tool should output. Closing that loop (design tools producing the device model that compilers consume) is one of the integration opportunities identified in the review.</p>
+<h3 id="sec-i-stack-layers">The layers</h3>
+<figure class="tbl" id="tab-i-stack"><figcaption>Layers of a quantum computer and what passes between them.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Layer</th><th>Works with</th><th>Needs from the layer below</th></tr>
+<tr><td>Algorithm</td><td>Abstract circuit of ideal gates</td><td>Number of qubits, available gate set</td></tr>
+<tr><td>Error correction (fault-tolerant machines)</td><td>Logical qubits, lattice surgery, magic states, decoding</td><td>Physical error rates, cycle time, connectivity</td></tr>
+<tr><td>Compiler</td><td>Native gates on physical qubits</td><td>Coupling graph, native gates, durations, error rates, crosstalk rules</td></tr>
+<tr><td>Pulse layer</td><td>Analogue waveforms per gate</td><td>Qubit frequencies, Hamiltonian, line distortions</td></tr>
+<tr><td>Control electronics</td><td>DACs, ADCs, mixers, FPGAs</td><td>Wiring, attenuation, amplification chain</td></tr>
+<tr><td>Cryostat and package</td><td>Cables, filters, amplifiers</td><td>Heat and noise budgets</td></tr>
+<tr><td>Chip</td><td>Qubits, couplers, resonators</td><td>Fabrication process</td></tr>
+</table></div></figure>
+<p>For fault-tolerant machines, the error-correction layer sits between the algorithm and the physical gates: logical operations become lattice-surgery schedules, syndromes stream down to the real-time decoder, and corrections are usually not applied physically but tracked in software (the "Pauli frame") and accounted for when results are interpreted.</p>
+
+<h3 id="sec-i-stack-compile">Compilation, step by step</h3>
+<p><b>Step 1: decomposition.</b> The algorithm uses whatever gates are convenient (Toffoli, controlled rotations, the QFT). The device offers a small native set, for example \(\{R_z(\theta), \sqrt X, \mathrm{CZ}\}\). The compiler rewrites every gate in native ones. Useful facts: any single-qubit gate is three native rotations (Euler angles, Chapter 1); any two-qubit unitary needs at most three CNOT-equivalent gates plus single-qubit gates (the "KAK" decomposition); a Toffoli costs six CNOTs. Consecutive single-qubit gates on the same qubit merge into one rotation.</p>
+<p><b>Step 2: mapping and routing.</b> The circuit's qubits must be assigned to physical qubits on the chip. A two-qubit gate can only run between physically coupled qubits; on a square grid each qubit has at most four neighbours. When the circuit needs a gate between distant qubits, the compiler inserts <b>SWAP</b> gates to move states next to each other. Finding the minimum number of SWAPs is NP-hard, so heuristics are used (SABRE is a widely used one).</p>
+<div class="example"><p><b>Worked example: the cost of routing.</b> On a line of four qubits A–B–C–D, the circuit asks for a CNOT between A and D. Option: SWAP A with B (now A's state is at position B), SWAP again with C (now at C, adjacent to D), apply the CNOT, and either swap back or update the mapping. Two SWAPs = six CNOTs, plus the original: seven two-qubit gates where the abstract circuit had one. If each costs \(10^{-3}\) error, routing raised this operation's error sevenfold. Better initial placement (put A and D next to each other if they interact often) or a chip with more connectivity reduces the overhead. This trade-off between connectivity (a chip-design choice) and routing overhead (a software cost) recurs throughout the field.</p></div>
+<p><b>Step 3: scheduling.</b> Gates on disjoint qubits can run at the same time, but not always: two gates on neighbouring pairs may interfere through crosstalk, so the compiler respects rules such as "these two couplers must not be active simultaneously". Noise-aware compilers also use the latest calibration data to route through the best qubits and couplers.</p>
+<p>So the compiler consumes a <b>device model</b>: coupling graph, native gates, their durations and errors, crosstalk rules, readout fidelities. Today it comes from measurements of the finished chip. A design tool that could <i>predict</i> that model before fabrication would let architects evaluate compiled performance at design time.</p>
 
 <h3 id="sec-i-stack-pulses">Gates become pulses</h3>
-<p>For a superconducting qubit, a single-qubit gate is a shaped microwave pulse of tens of nanoseconds at the qubit frequency, with Gaussian or cosine envelope plus a DRAG correction (Book 6); a two-qubit gate is a flux pulse on a coupler or a cross-resonance drive. Pulses are synthesised digitally at an intermediate frequency, converted by fast DACs, and mixed up to 4–8 GHz with a local oscillator (or synthesised directly by RF DACs). Readout is a pulse on a resonator, whose transmitted signal is amplified, mixed down, digitised and integrated to a single number per shot, then thresholded into "0" or "1". Every step adds distortion (filters, cable dispersion, mixer imbalance), which is calibrated and pre-compensated (@b1:sec-m-fourier-lti). <b>Optimal control</b> methods (GRAPE, Krotov, gradient-based pulse optimisation) search for pulse shapes that maximise gate fidelity under a model Hamiltonian, and depend on that model being accurate.</p>
+<p>For a superconducting qubit:</p>
+<ul>
+<li>A <b>single-qubit gate</b> is a microwave pulse at the qubit frequency (4–8 GHz), lasting 20–40 ns, with a smooth envelope (Gaussian or cosine) plus a small "DRAG" correction on the out-of-phase component that suppresses leakage to the third level (Book 6). The rotation angle is set by the area of the envelope and the axis by the phase of the carrier (@b3:sec-q-spin-gates).</li>
+<li>A <b>two-qubit gate</b> is a flux pulse on a tunable coupler or a microwave drive at a neighbour's frequency (cross-resonance), lasting 20–200 ns.</li>
+<li><b>Readout</b> is a pulse of a few hundred ns on the qubit's readout resonator. The transmitted signal's phase depends on the qubit state (Book 6, @b6:sec-h-cqed); it is amplified, converted down in frequency, digitised, and integrated to a single number per shot, which is compared with a threshold to give "0" or "1".</li>
+</ul>
+<p>How the waveforms are made: a digital signal processor computes samples at an "intermediate frequency" of a few hundred MHz; fast digital-to-analogue converters (DACs) turn them into voltages; an analogue mixer shifts them up to the qubit frequency using a local oscillator (or, increasingly, RF DACs synthesise 4–8 GHz directly). Every element distorts the signal a little: filters and cables smear sharp edges, mixers leak the local oscillator and create mirror images. Calibration measures these distortions and the software pre-distorts the waveform to compensate, which is convolution and deconvolution in the language of @b1:sec-m-fourier-lti.</p>
+<p><b>Optimal control</b> goes further: algorithms such as GRAPE treat the pulse samples as parameters and optimise them to maximise simulated gate fidelity under a model Hamiltonian. They are only as good as that model, which again comes from the chip's measured or extracted parameters.</p>
 
 <h3 id="sec-i-stack-cal">Calibration</h3>
-<p>Before a processor can run anything, every qubit's frequency, \(\pi\)-pulse amplitude, DRAG coefficient, readout frequency and discrimination threshold, and every two-qubit gate's parameters, must be measured and set. The experiments are those of Book 3 (Rabi, Ramsey, echo) and Chapter 5 (RB), organised as a dependency graph: you cannot calibrate a two-qubit gate before both single-qubit gates are good. Parameters drift as two-level systems move, so calibration is repeated, partly every few hours. For thousands of qubits, calibration time and robustness become system-level constraints, and a chip whose parameters land closer to design needs less of it (@lf:sec-test-cal).</p>
+<p>Before a processor can run anything, dozens of parameters per qubit must be measured and set: qubit frequency, \(\pi\)-pulse amplitude, DRAG coefficient, readout frequency, readout power and the threshold that separates "0" from "1", plus several parameters for each two-qubit gate. The experiments are those of Book 3 (Rabi, Ramsey, echo, @b3:sec-q-spin) and Chapter 5 (randomised benchmarking), organised as a <b>dependency graph</b>: you cannot calibrate a two-qubit gate until both single-qubit gates work, and you cannot calibrate those until you know the frequencies.</p>
+<p>Parameters drift as microscopic defects in the materials shift (Book 6), so calibration is repeated: some parameters every few hours, others daily. For a few qubits this is a nuisance; for thousands it is a system-level constraint on uptime. A chip whose fabricated parameters land closer to the design needs narrower search ranges and fewer iterations, which is a concrete economic argument for better design and process control (@lf:sec-test-cal).</p>
 
 <h3 id="sec-i-stack-elec">Control electronics and scaling</h3>
-<p>Today most systems use one or more coaxial lines per qubit from room-temperature electronics, which does not scale to a million qubits (Book 2, @b2:sec-c-th-cryo). Paths forward include multiplexed readout (many resonators on one feedline, already standard), frequency-multiplexed drives, cryogenic CMOS controllers at 4 K, single-flux-quantum logic close to the chip, and photonic links that carry control signals optically into the refrigerator. Each moves complexity into the cryostat and adds heat and noise sources near the qubits, so system design becomes a joint optimisation of chip, package, wiring and electronics (@lf:sec-pkg-wiring).</p>
+<p>Today most systems use one or more coaxial cables per qubit, from room-temperature electronics racks down into the dilution refrigerator. Each cable brings heat and thermal noise (Book 2, @b2:sec-c-th-cryo), and refrigerators have limited cooling power and physical space. That does not scale to a million qubits. The main directions:</p>
+<ul>
+<li><b>Multiplexing</b>: many readout resonators at slightly different frequencies on one line (standard today), and frequency-multiplexed drives.</li>
+<li><b>Cryogenic CMOS</b>: controller chips at 4 K close to the qubits, generating pulses locally from a few digital inputs.</li>
+<li><b>Superconducting digital logic</b> (single-flux-quantum circuits) next to the qubit chip.</li>
+<li><b>Optical links</b>: carrying control signals into the refrigerator as light in fibres, which conduct far less heat.</li>
+</ul>
+<p>Each option moves complexity into the cryostat and adds heat and noise sources near the qubits, so system design becomes a joint optimisation of chip layout, package, wiring and electronics (@lf:sec-pkg-wiring).</p>
 
-<div class="eda"><p>Classical EDA succeeded because each layer of the stack consumed a well-defined model from the layer below: standard-cell libraries with timing, power and noise characterisation. The quantum stack lacks most of these interfaces. A compiler's device model, a decoder's detector error model and a pulse optimiser's Hamiltonian are all re-derived by hand from measurements today. A quantum PDK would supply them from design and process data.</p></div>
+<div class="eda"><p>Classical EDA succeeded because each layer of the stack consumed a well-defined model of the layer below, such as standard-cell libraries with timing, power and noise data. The quantum stack lacks most of these interfaces: a compiler's device model, a decoder's detector error model and a pulse optimiser's Hamiltonian are re-derived by hand from measurements. A quantum process design kit would supply them from design and process data, which is the review's central proposal.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>The stack: algorithm → (error correction) → compiler → pulses → electronics → cryostat → chip; each layer consumes a model of the one below.</li>
+<li>Compilation decomposes into native gates, routes with SWAPs onto limited connectivity (a real cost), and schedules around crosstalk.</li>
+<li>Gates are shaped microwave or flux pulses; readout is a resonator pulse turned into a bit by amplification, digitisation and thresholding.</li>
+<li>Calibration is a dependency graph of experiments that must be repeated as devices drift; it scales badly and rewards predictable fabrication.</li>
+<li>Wiring and electronics must move into the cryostat or be multiplexed to reach large qubit counts.</li>
+</ul></div>
 
 <div class="exercises" id="ex-i-stack"><h4>Exercises</h4><ol>
-<li>A circuit needs CNOTs between qubits that are, on average, 3 hops apart on a grid. Roughly how many CNOTs does routing add per original CNOT if each SWAP costs 3 CNOTs and you swap one qubit along the path?
-<details><summary>Solution</summary><p>Two SWAPs bring the qubits adjacent (3 hops → 1), costing 6 CNOTs, plus the original: about 7 CNOTs, a sevenfold increase (less with clever routing and reuse of moved qubits).</p></details></li>
-<li>Calibrating one qubit takes 10 minutes of experiments, and each coupler 15 minutes. Estimate full calibration time for 1,000 qubits on a square grid if done sequentially, and argue why parallelism is limited.
-<details><summary>Solution</summary><p>About 2,000 couplers: \(1000\times10 + 2000\times15 = 40{,}000\) minutes, about 28 days. Parallel calibration is limited by crosstalk between simultaneous experiments and by shared control lines, so real systems use careful parallel scheduling and automated dependency graphs. This is why predictable fabrication, which reduces the search ranges, has system-level value.</p></details></li>
+<li>A circuit needs CNOTs between qubits that are, on average, 3 hops apart on a grid. Roughly how many CNOTs does routing add per original CNOT if each SWAP costs 3 CNOTs and you move one qubit along the path?
+<details><summary>Solution</summary><p>Two SWAPs bring the qubits adjacent (3 hops → 1), costing 6 CNOTs, plus the original: about 7, a sevenfold increase (less with clever placement and reuse of moved qubits).</p></details></li>
+<li>Calibrating one qubit takes 10 minutes of experiments and each coupler 15 minutes. Estimate the time to calibrate 1,000 qubits on a square grid if done one after another. Why is full parallelism not possible?
+<details><summary>Solution</summary><p>About 2,000 couplers: \(1000\times10 + 2000\times15 = 40{,}000\) minutes ≈ 28 days. Parallel calibration is limited by crosstalk between simultaneous experiments and by shared control and readout lines, so real systems schedule experiments in carefully chosen parallel groups.</p></details></li>
+<li>A readout pulse lasts 400 ns and the qubit has \(T_1 = 100\) µs. Roughly what fraction of excited qubits decay during readout and are misreported as 0?
+<details><summary>Solution</summary><p>\(1 - \ee^{-0.4/100}\approx0.4\%\) (counting decays in the first half of the window as the ones that flip the result, the error is about half this, 0.2%). This sets a floor on readout error unless readout is made faster.</p></details></li>
+<li>An arbitrary waveform generator samples at 2 GS/s. What is the highest frequency it can produce directly, and why are qubit pulses made at an intermediate frequency and mixed up?
+<details><summary>Solution</summary><p>The Nyquist limit is 1 GHz (@b1:sec-m-fourier-dft), below the 4–8 GHz qubit band. So the pulse shape is generated at a few hundred MHz and a mixer shifts it to the qubit frequency; equivalently, the waveform is the envelope in a frame rotating near the qubit frequency.</p></details></li>
 </ol></div>
 </section>
