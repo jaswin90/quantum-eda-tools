@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Mathematics for Quantum Engineering</h1>
   <p class="subtitle">Complex numbers, linear algebra, differential equations, Fourier analysis, probability and numerical methods, taught with quantum devices in mind</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">9 chapters · 40 numbered equations · 54 exercises with solutions · about 40 hours of study</p>
+  <p class="meta">9 chapters · 40 numbered equations · 57 exercises with solutions · about 40 hours of study</p>
   <p class="meta prereq">Before this book: school algebra and some calculus. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-m-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -302,6 +302,8 @@ for f in (1e4, 159e3, 1e7):
 <details><summary>Solution</summary><p>Multiply top and bottom by \(1 + \ii\): \((2+\ii)(1+\ii)/2 = (2 + 3\ii - 1)/2 = 0.5 + 1.5\ii\). Polar: \(|2+\ii| = \sqrt5\), \(|1-\ii| = \sqrt2\), ratio \(\sqrt{2.5} = 1.58\), and \(|0.5+1.5\ii| = \sqrt{2.5}\) ✓. Angles: \(26.6^\circ - (-45^\circ) = 71.6^\circ\), and \(\arctan3 = 71.6^\circ\) ✓.</p></details></li>
 <li>An inductor \(L = 10\) nH and a capacitor \(C = 1\) pF are in series. At what frequency is the total impedance zero, and what is special about it?
 <details><summary>Solution</summary><p>\(Z = \ii\omega L + 1/(\ii\omega C) = \ii(\omega L - 1/\omega C)\), zero when \(\omega = 1/\sqrt{LC} = 10^{10}\) rad/s, i.e. 1.6 GHz. That is the LC resonance frequency (Chapter 5, Book 2): the inductor's and capacitor's impedances cancel.</p></details></li>
+<li>Two equal waves of amplitude 1 arrive with relative phase \(\phi\). For what \(\phi\) is the total power equal to that of a single wave?
+<details><summary>Solution</summary><p>\(|1+\ee^{\ii\phi}|^2 = 2 + 2\cos\phi = 1\) gives \(\cos\phi = -\tfrac12\), \(\phi = 2\pi/3\) (120°). The two arrows and their sum form an equilateral triangle.</p></details></li>
 </ol></div>
 </section>
 
@@ -648,6 +650,8 @@ print(rhoA)                                             # identity / 2</code></p
 <details><summary>Solution</summary><p>\(3^{20}\approx3.5\times10^9\); at 16 bytes per amplitude, about 56 GB.</p></details></li>
 <li>Compute \((H\otimes I)\ket{00}\) and then apply \(\mathrm{CNOT} = \ketbra00\otimes I + \ketbra11\otimes X\). Is the result entangled?
 <details><summary>Solution</summary><p>\((H\otimes I)\ket{00} = (\ket{00}+\ket{10})/\sqrt2\). CNOT leaves \(\ket{00}\) and maps \(\ket{10}\to\ket{11}\): \((\ket{00}+\ket{11})/\sqrt2 = \ket{\Phi^+}\), entangled. This two-gate circuit is how entanglement is made on a quantum computer (Book 4).</p></details></li>
+<li>Write \(I\otimes Z\) as a \(4\times4\) matrix and find its eigenvalue on each of \(\ket{00},\ket{01},\ket{10},\ket{11}\).
+<details><summary>Solution</summary><p>\(I\otimes Z = \mathrm{diag}(1,-1,1,-1)\): eigenvalue \(+1\) when the second qubit is \(\ket0\) and \(-1\) when it is \(\ket1\), whatever the first qubit does.</p></details></li>
 </ol></div>
 </section>
 
@@ -779,6 +783,8 @@ print(sol.y[0, -1])                               # agrees with the exact value 
 <details><summary>Solution</summary><p>\(v\approx1.20\times10^8\) m/s, \(f_n = nv/2L = n\times6.0\) GHz: 6, 12 and 18 GHz.</p></details></li>
 <li>A mass–spring system has \(\omega_0/2\pi = 1\) kHz and \(Q = 50\). How long does its energy take to fall to 1/e? How many oscillations is that?
 <details><summary>Solution</summary><p>\(\gamma = \omega_0/Q = 2\pi\times1000/50 = 126\) s\(^{-1}\); energy lifetime \(1/\gamma = 8\) ms, i.e. 8 oscillations (\(Q/2\pi\)).</p></details></li>
+<li>An eigenmode solver reports two modes at \(s/2\pi = -2\,\text{kHz} + \ii\,5.1\,\text{GHz}\) and \(-50\,\text{kHz} + \ii\,6.3\,\text{GHz}\). Find each \(Q\). Which would make a better readout resonator, and which a better qubit environment?
+<details><summary>Solution</summary><p>\(Q = \omega/2\sigma\): \(5.1\times10^9/4\times10^3\approx1.3\times10^6\) and \(6.3\times10^9/10^5 = 6.3\times10^4\). The low-\(Q\) mode (fast, strongly coupled to the outside) suits readout; the high-\(Q\) mode loses energy slowly and is a better home for stored quantum information.</p></details></li>
 </ol></div>
 </section>
 

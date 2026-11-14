@@ -126,5 +126,7 @@ print(sol.y[0, -1])                               # agrees with the exact value 
 <details><summary>Solution</summary><p>\(v\approx1.20\times10^8\) m/s, \(f_n = nv/2L = n\times6.0\) GHz: 6, 12 and 18 GHz.</p></details></li>
 <li>A mass–spring system has \(\omega_0/2\pi = 1\) kHz and \(Q = 50\). How long does its energy take to fall to 1/e? How many oscillations is that?
 <details><summary>Solution</summary><p>\(\gamma = \omega_0/Q = 2\pi\times1000/50 = 126\) s\(^{-1}\); energy lifetime \(1/\gamma = 8\) ms, i.e. 8 oscillations (\(Q/2\pi\)).</p></details></li>
+<li>An eigenmode solver reports two modes at \(s/2\pi = -2\,\text{kHz} + \ii\,5.1\,\text{GHz}\) and \(-50\,\text{kHz} + \ii\,6.3\,\text{GHz}\). Find each \(Q\). Which would make a better readout resonator, and which a better qubit environment?
+<details><summary>Solution</summary><p>\(Q = \omega/2\sigma\): \(5.1\times10^9/4\times10^3\approx1.3\times10^6\) and \(6.3\times10^9/10^5 = 6.3\times10^4\). The low-\(Q\) mode (fast, strongly coupled to the outside) suits readout; the high-\(Q\) mode loses energy slowly and is a better home for stored quantum information.</p></details></li>
 </ol></div>
 </section>
