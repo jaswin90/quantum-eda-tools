@@ -134,10 +134,12 @@ def fmt_entry(e: dict[str, str]) -> str:
 
 
 # ---------------------------------------------------------------- assembly
-def main() -> None:
-    bib = parse_bib(BIB.read_text())
-    body = "\n".join(p.read_text() for p in sorted(SECTIONS.glob("*.html")))
+def assemble(body: str, bib: dict[str, dict[str, str]], xref_hook=None) -> dict:
+    """Number sections, equations, figures and tables; resolve cross-references and citations.
 
+    Returns the processed body, the table of contents, the reference list and the label map.
+    xref_hook(body) -> body runs after local labels are known and before local references are
+    resolved, so a caller can rewrite references to other documents first."""
     # -- section numbering -------------------------------------------------
     labels: dict[str, str] = {}
     toc: list[tuple[int, str, str, str]] = []
@@ -217,6 +219,8 @@ def main() -> None:
             sys.exit(f"unresolved reference @{m.group(1)}:{m.group(2)}")
         return f'<a class="xref" href="#{key}">{labels[key]}</a>'
 
+    if xref_hook:
+        body = xref_hook(body)
     body = re.sub(r"@(sec|fig|tab|eq):([A-Za-z0-9_-]+)", xref, body)
 
     # -- citations ---------------------------------------------------------
@@ -259,8 +263,20 @@ def main() -> None:
         nm = f'<span class="tocnum">{num}</span>' if num else ""
         toc_html.append(f'<li class="toc{lvl}"><a href="#{sid}">{nm}{plain}</a></li>')
 
+    return {"body": body, "toc": "\n".join(toc_html), "refs": refs, "nrefs": len(order),
+            "labels": labels, "unused": unused,
+            "counts": dict(sections=n2, appendices=app, equations=neq, figures=nf, tables=nt)}
+
+
+def main() -> None:
+    bib = parse_bib(BIB.read_text())
+    body = "\n".join(p.read_text() for p in sorted(SECTIONS.glob("*.html")))
+    a = assemble(body, bib)
+    body, refs, order, unused = a["body"], a["refs"], range(a["nrefs"]), a["unused"]
+    c = a["counts"]; n2, app, neq, nf, nt = c["sections"], c["appendices"], c["equations"], c["figures"], c["tables"]
+
     page = TEMPLATE.read_text()
-    page = page.replace("{{TOC}}", "\n".join(toc_html))
+    page = page.replace("{{TOC}}", a["toc"])
     page = page.replace("{{BODY}}", body)
     page = page.replace("{{REFERENCES}}", refs)
     page = page.replace("{{NREFS}}", str(len(order)))

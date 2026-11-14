@@ -1,0 +1,50 @@
+<section id="sec-m-tensor"><h2>Tensor products and composite systems</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Build the vector space of two or more systems with the tensor (Kronecker) product.</li>
+<li>Compute tensor products of vectors and matrices by hand, and know the rules they obey.</li>
+<li>Recognise product and non-product (entangled) vectors, and see why the dimension grows exponentially.</li>
+<li>Take a partial trace.</li>
+</ul></div>
+
+<h3 id="sec-m-tensor-why">Why a new product is needed</h3>
+<p>If one qubit is described by a vector in \(\CC^2\), how do we describe two? A naive guess is to stack the two vectors into \(\CC^4 = \CC^2\oplus\CC^2\) (the <b>direct sum</b>). That is how classical systems combine: the state of two pendulums is the list of both positions and both velocities, and dimensions add. Quantum mechanics instead assigns an amplitude to every <i>joint</i> outcome. Two qubits have four joint outcomes (00, 01, 10, 11), three qubits have eight, and \(n\) qubits have \(2^n\). Dimensions multiply. The construction that achieves this is the <b>tensor product</b>.</p>
+
+<h3 id="sec-m-tensor-def">Definition and rules</h3>
+<p>Given spaces \(\mathcal H_A\) with basis \(\{\ket i\}\) and \(\mathcal H_B\) with basis \(\{\ket j\}\), the tensor product \(\mathcal H_A\otimes\mathcal H_B\) is the space with basis \(\{\ket i\otimes\ket j\}\), so its dimension is \(d_A d_B\). We often abbreviate \(\ket i\otimes\ket j = \ket i\ket j = \ket{ij}\). The product is bilinear,</p>
+\[ (a\ket u + b\ket{u'})\otimes\ket v = a\ket u\otimes\ket v + b\ket{u'}\otimes\ket v , \]
+<p>and inner products factorise: \(\big(\bra{u}\otimes\bra{v}\big)\big(\ket{u'}\otimes\ket{v'}\big) = \braket{u}{u'}\braket{v}{v'}\). Operators act factor by factor: \((A\otimes B)(\ket u\otimes\ket v) = A\ket u\otimes B\ket v\), and \((A\otimes B)(C\otimes D) = AC\otimes BD\).</p>
+<p>In components, the tensor product is the <b>Kronecker product</b>: each entry of the first factor multiplies a whole copy of the second.</p>
+<div class="eq" id="eq-m-kron">$$ \begin{pmatrix}a_0\\a_1\end{pmatrix}\otimes\begin{pmatrix}b_0\\b_1\end{pmatrix} = \begin{pmatrix}a_0b_0\\a_0b_1\\a_1b_0\\a_1b_1\end{pmatrix}, \qquad A\otimes B = \begin{pmatrix}a_{00}B & a_{01}B\\ a_{10}B & a_{11}B\end{pmatrix}. $$</div>
+<p>The ordering convention (first factor varies slowest) matches the binary labels \(00, 01, 10, 11\), and it is the convention of <code>numpy.kron</code>. Other software orders qubits the other way round; Qiskit, for example, puts qubit 0 on the right. Always check.</p>
+<div class="example"><p><b>Worked example: an operator on one qubit of two.</b> To apply \(X\) to the first qubit and nothing to the second, use \(X\otimes I\):</p>
+\[ X\otimes I = \begin{pmatrix}0\cdot I & 1\cdot I\\ 1\cdot I & 0\cdot I\end{pmatrix} = \begin{pmatrix}0&0&1&0\\0&0&0&1\\1&0&0&0\\0&1&0&0\end{pmatrix}. \]
+<p>It swaps \(\ket{00}\leftrightarrow\ket{10}\) and \(\ket{01}\leftrightarrow\ket{11}\): it flips the first bit. A Hamiltonian of two independent qubits is written \(H = H_A\otimes I + I\otimes H_B\), and one with a coupling adds a term such as \(g\,Z\otimes Z\).</p></div>
+
+<h3 id="sec-m-tensor-ent">Product vectors and entangled vectors</h3>
+<p>A vector of the form \(\ket u\otimes\ket v\) is a <b>product vector</b>. Not every vector in \(\mathcal H_A\otimes\mathcal H_B\) is one. Write a general two-qubit vector as \(\ket\psi = \sum_{ij} c_{ij}\ket{ij}\) and arrange the coefficients as a \(2\times2\) matrix \(C = (c_{ij})\). A product vector has \(c_{ij} = a_ib_j\), so \(C = \mathbf a\mathbf b^{\mathsf T}\) has rank one and \(\det C = 0\). The vector</p>
+<div class="eq" id="eq-m-bell">$$ \ket{\Phi^+} = \frac{\ket{00}+\ket{11}}{\sqrt2}, \qquad C = \frac1{\sqrt2}\begin{pmatrix}1&0\\0&1\end{pmatrix}, $$</div>
+<p>has \(\det C = 1/2 \ne 0\), so it cannot be written as a product. Such vectors are called <b>entangled</b>. Their physical meaning (correlations stronger than any classical ones) is the subject of Book 3, @b3:sec-q-composite. The general test uses the SVD of \(C\) (@eq:m-svd): \(\ket\psi = \sum_k s_k\,\ket{v_k}\otimes\ket{w_k}\), the <b>Schmidt decomposition</b>, and the state is a product exactly when only one singular value \(s_k\) is nonzero.</p>
+
+<h3 id="sec-m-tensor-exp">The exponential wall</h3>
+<p>Because dimensions multiply, \(n\) qubits need \(2^n\) complex amplitudes. At 16 bytes per amplitude, 30 qubits need 16 GB, 40 qubits need 16 TB, and 50 qubits need 16 PB. This is both the reason quantum computers might be powerful and the reason they are hard to simulate and design. A design tool cannot simulate a full processor quantum mechanically; it must exploit structure: weak coupling, locality, a few excitations, or a restricted class of states. Book 4 shows that the circuits used for error correction (Clifford circuits) are one such class, simulable in polynomial time.</p>
+
+<h3 id="sec-m-tensor-ptrace">The partial trace</h3>
+<p>Given an operator \(M\) on \(\mathcal H_A\otimes\mathcal H_B\), the <b>partial trace</b> over \(B\) produces an operator on \(\mathcal H_A\) alone:</p>
+<div class="eq" id="eq-m-ptrace">$$ \Tr_B M = \sum_j \big(I\otimes\bra j\big)\, M\, \big(I\otimes\ket j\big), \qquad \Tr_B(A\otimes B) = A\,\Tr(B). $$</div>
+<p>In components, \((\Tr_B M)_{ii'} = \sum_j M_{ij,\,i'j}\): sum over the matching \(B\) indices. In Book 3 the partial trace answers the question "what does system \(A\) look like if we ignore \(B\)?". Applied to the projector \(\ketbra{\Phi^+}{\Phi^+}\), it gives \(I/2\), the state of maximal ignorance: each half of an entangled pair, on its own, looks completely random. That is the mathematical core of decoherence, where \(B\) is the environment.</p>
+
+<div class="eda"><p>A processor's Hamiltonian is a sum of local terms on a tensor-product space whose dimension is exponential in the qubit count. Circuit-level tools such as scqubits and QuTiP (@lf:sec-design-extract) build these operators with Kronecker products and then truncate each subsystem to a few levels. Knowing how quickly the space grows tells you which simulations are feasible on a laptop (a handful of transmons with a few levels each) and which need approximations.</p></div>
+
+<div class="exercises" id="ex-m-tensor"><h4>Exercises</h4><ol>
+<li>Compute \(\ket{+}\otimes\ket{-}\) as a column vector and expand it in the basis \(\ket{00},\dots,\ket{11}\).
+<details><summary>Solution</summary><p>\(\frac12(1,1)^{\mathsf T}\otimes(1,-1)^{\mathsf T} = \frac12(1,-1,1,-1)^{\mathsf T} = \frac12(\ket{00}-\ket{01}+\ket{10}-\ket{11})\).</p></details></li>
+<li>Is \(\frac12(\ket{00}+\ket{01}+\ket{10}+\ket{11})\) entangled? Is \(\frac1{\sqrt2}(\ket{01}-\ket{10})\)?
+<details><summary>Solution</summary><p>First: \(C = \frac12\begin{pmatrix}1&1\\1&1\end{pmatrix}\), \(\det C = 0\), so it is a product, namely \(\ket+\otimes\ket+\). Second: \(C = \frac1{\sqrt2}\begin{pmatrix}0&1\\-1&0\end{pmatrix}\), \(\det C = 1/2\), entangled. It is the singlet state.</p></details></li>
+<li>Write \(Z\otimes Z\) as a \(4\times4\) matrix and give its eigenvalues on \(\ket{00},\ket{01},\ket{10},\ket{11}\).
+<details><summary>Solution</summary><p>\(Z\otimes Z = \mathrm{diag}(1,-1,-1,1)\). It returns \(+1\) when the bits agree and \(-1\) when they differ: it measures parity. Parity checks of this kind are the building blocks of error correction (Book 4).</p></details></li>
+<li>Compute \(\Tr_B\ketbra{\Phi^+}{\Phi^+}\) and \(\Tr_B\big(\ketbra{0}{0}\otimes\ketbra{+}{+}\big)\).
+<details><summary>Solution</summary><p>\(\ketbra{\Phi^+}{\Phi^+} = \frac12(\ketbra{00}{00}+\ketbra{00}{11}+\ketbra{11}{00}+\ketbra{11}{11})\). Tracing \(B\) keeps only terms whose \(B\) labels match: \(\frac12(\ketbra00+\ketbra11) = I/2\). For the product, \(\Tr_B = \ketbra00\cdot\Tr\ketbra{+}{+} = \ketbra00\).</p></details></li>
+<li>A chip has 20 transmons, each truncated to 3 levels. What is the Hilbert-space dimension, and how much memory does a single state vector need?
+<details><summary>Solution</summary><p>\(3^{20}\approx 3.5\times10^9\). At 16 bytes per complex amplitude that is about 56 GB, too large for a laptop and far too large for repeated simulation inside an optimisation loop.</p></details></li>
+</ol></div>
+</section>

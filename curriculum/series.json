@@ -1,0 +1,81 @@
+{
+  "title": "Foundations of Quantum Engineering",
+  "blurb": "A seven-book course from complex numbers to quantum chip manufacture, written as preparation for the review “From Laboratory to Foundry”.",
+  "books": [
+    {
+      "n": 1, "dir": "1-mathematics", "slug": "mathematics",
+      "short": "Mathematics",
+      "title": "Mathematics for Quantum Engineering",
+      "subtitle": "Complex numbers, linear algebra, differential equations, Fourier analysis, probability and numerical methods, taught with quantum devices in mind",
+      "blurb": "Every piece of mathematics the rest of the series uses, built from school algebra: complex numbers, vector spaces and Dirac notation, eigenvalues and matrix exponentials, tensor products, differential equations, Fourier analysis, probability and numerical optimisation.",
+      "prereqs": [],
+      "hours": 40,
+      "progress_field": "qeMath"
+    },
+    {
+      "n": 2, "dir": "2-classical-physics", "slug": "classical-physics",
+      "short": "Classical Physics",
+      "title": "Classical Physics for Quantum Engineers",
+      "subtitle": "Lagrangian and Hamiltonian mechanics, oscillators, electromagnetism, microwave circuits, waveguides and thermal noise",
+      "blurb": "The classical physics that quantum hardware is built from: least action and Hamiltonians, oscillators and normal modes, Maxwell's equations, capacitance and inductance matrices, transmission lines and resonators, optical waveguides, and the thermodynamics of noise.",
+      "prereqs": [1],
+      "hours": 45,
+      "progress_field": "qeClassical"
+    },
+    {
+      "n": 3, "dir": "3-quantum-mechanics", "slug": "quantum-mechanics",
+      "short": "Quantum Mechanics",
+      "title": "Quantum Mechanics",
+      "subtitle": "States, measurement, dynamics, the harmonic oscillator, two-level systems, perturbation theory, entanglement and open systems",
+      "blurb": "Quantum mechanics from the qubit up: postulates, Schrödinger dynamics, tunnelling, the harmonic oscillator, spin and Rabi oscillations, perturbation theory, density matrices and entanglement, decoherence and the Lindblad equation, and second quantisation.",
+      "prereqs": [1, 2],
+      "hours": 60,
+      "progress_field": "qeQM"
+    },
+    {
+      "n": 4, "dir": "4-quantum-information", "slug": "quantum-information",
+      "short": "Quantum Computing",
+      "title": "Quantum Information and Computation",
+      "subtitle": "Gates and circuits, entanglement, algorithms, noise and benchmarking, quantum error correction and the hardware stack",
+      "blurb": "What a quantum computer computes and why it is fragile: the circuit model, teleportation, Grover and Shor, quantum channels, fidelity and randomised benchmarking, stabiliser codes, the surface code and its threshold, and how programs become pulses.",
+      "prereqs": [3],
+      "hours": 50,
+      "progress_field": "qeQI"
+    },
+    {
+      "n": 5, "dir": "5-quantum-photonics", "slug": "quantum-photonics",
+      "short": "Quantum Photonics",
+      "title": "Quantum Photonics",
+      "subtitle": "The quantised field, states of light, linear optics, light–matter interaction, sources and detectors, integrated photonics and photonic quantum computing",
+      "blurb": "Light as a quantum system and as a qubit: field quantisation, coherent and squeezed states, beam splitters and Hong–Ou–Mandel interference, cavity QED, photon sources and detectors, integrated photonic circuits, and loss-tolerant photonic quantum computing.",
+      "prereqs": [2, 3, 4],
+      "hours": 45,
+      "progress_field": "qePhotonics"
+    },
+    {
+      "n": 6, "dir": "6-quantum-hardware", "slug": "quantum-hardware",
+      "short": "Quantum Hardware",
+      "title": "Quantum Hardware: Superconducting Circuits and Other Qubits",
+      "subtitle": "Superconductivity, Josephson junctions, circuit quantisation, circuit QED, gates, decoherence, and trapped ions, neutral atoms and spins",
+      "blurb": "How physical qubits are built: superconductivity and the Josephson junction, quantising a circuit, the transmon and fluxonium, dispersive readout, single- and two-qubit gates, where coherence is lost, and the trapped-ion, neutral-atom and spin-qubit alternatives.",
+      "prereqs": [2, 3, 4, 5],
+      "hours": 55,
+      "progress_field": "qeHardware"
+    },
+    {
+      "n": 7, "dir": "7-quantum-manufacturing", "slug": "quantum-manufacturing",
+      "short": "Making Quantum Chips",
+      "title": "Making Quantum Chips: Fabrication, Simulation, Yield and Design Automation",
+      "subtitle": "Cleanroom processes, classical EDA, electromagnetic simulation, variability and yield, cryogenic packaging and test, and statistical learning for manufacturing",
+      "blurb": "The bridge to quantum EDA: how chips are fabricated, how classical design automation works, how electromagnetic solvers turn layouts into Hamiltonians, how variation becomes yield loss, how chips are packaged and tested cold, and the statistics and machine learning that tie it together.",
+      "prereqs": [1, 2, 6],
+      "hours": 45,
+      "progress_field": "qeManufacturing"
+    }
+  ],
+  "capstone": {
+    "title": "From Laboratory to Foundry: Design Automation for Quantum Processors",
+    "short": "Lab to Foundry",
+    "href": "../index.html"
+  }
+}

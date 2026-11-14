@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mathematics for Quantum Engineering · Foundations of Quantum Engineering</title>
+<meta name="description" content="Every piece of mathematics the rest of the series uses, built from school algebra: complex numbers, vector spaces and Dirac notation, eigenvalues and matrix exponentials, tensor products, differential equations, Fourier analysis, probability and numerical optimisation.">
+<script>try{var t=localStorage.getItem('site-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/css/book.css">
+<script defer src="../../assets/js/book.js"></script>
+<script defer src="../../vendor/katex/katex.min.js"></script>
+<script defer src="../../vendor/katex/contrib/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  if (!window.renderMathInElement) return;
+  renderMathInElement(document.querySelector("main"), {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false}
+    ],
+    throwOnError: false,
+    macros: {
+      "\\ket": "\\left|#1\\right\\rangle",
+      "\\bra": "\\left\\langle#1\\right|",
+      "\\braket": "\\left\\langle#1\\middle|#2\\right\\rangle",
+      "\\ketbra": "\\left|#1\\right\\rangle\\!\\left\\langle#2\\right|",
+      "\\expval": "\\left\\langle#1\\right\\rangle",
+      "\\dd": "\\mathrm{d}",
+      "\\Tr": "\\operatorname{Tr}",
+      "\\dag": "^{\\dagger}",
+      "\\RR": "\\mathbb{R}",
+      "\\CC": "\\mathbb{C}",
+      "\\ii": "\\mathrm{i}",
+      "\\ee": "\\mathrm{e}",
+      "\\Re": "\\operatorname{Re}",
+      "\\Im": "\\operatorname{Im}"
+    }
+  });
+});
+</script>
+</head>
+<body>
+<header class="topbar">
+<a class="brand" href="index.html">Book 1 · <span>Mathematics</span></a>
+<span class="spacer"></span>
+<nav><a href="../index.html">Roadmap</a><a href="#ex-m-complex">Exercises</a><a href="../../index.html">Lab to Foundry</a></nav>
+<button class="btn icon-btn" id="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+<nav class="toc" aria-label="Contents">
+  <p class="toc-title">Contents</p>
+  <ol>
+<li class="toc2"><a href="#sec-m-preface">How to use this book</a></li>
+<li class="toc2"><a href="#sec-m-complex"><span class="tocnum">1</span>Complex numbers, the exponential and phasors</a></li>
+<li class="toc3"><a href="#sec-m-complex-arith"><span class="tocnum">1.1</span>Arithmetic in the plane</a></li>
+<li class="toc3"><a href="#sec-m-complex-euler"><span class="tocnum">1.2</span>Polar form and Euler's formula</a></li>
+<li class="toc3"><a href="#sec-m-complex-phasor"><span class="tocnum">1.3</span>Oscillations and phasors</a></li>
+<li class="toc3"><a href="#sec-m-complex-rotframe"><span class="tocnum">1.4</span>Rotating frames</a></li>
+<li class="toc3"><a href="#sec-m-complex-why"><span class="tocnum">1.5</span>Why quantum amplitudes are complex</a></li>
+<li class="toc2"><a href="#sec-m-vectors"><span class="tocnum">2</span>Vector spaces, inner products and Dirac notation</a></li>
+<li class="toc3"><a href="#sec-m-vectors-space"><span class="tocnum">2.1</span>Vectors beyond arrows</a></li>
+<li class="toc3"><a href="#sec-m-vectors-inner"><span class="tocnum">2.2</span>Inner products, length and angle</a></li>
+<li class="toc3"><a href="#sec-m-vectors-gs"><span class="tocnum">2.3</span>Projection and Gram–Schmidt</a></li>
+<li class="toc3"><a href="#sec-m-vectors-dirac"><span class="tocnum">2.4</span>Dirac notation</a></li>
+<li class="toc2"><a href="#sec-m-operators"><span class="tocnum">3</span>Linear operators, eigenvalues and the matrix exponential</a></li>
+<li class="toc3"><a href="#sec-m-op-maps"><span class="tocnum">3.1</span>Matrices are linear maps</a></li>
+<li class="toc3"><a href="#sec-m-op-adjoint"><span class="tocnum">3.2</span>The adjoint, Hermitian and unitary matrices</a></li>
+<li class="toc3"><a href="#sec-m-op-eigen"><span class="tocnum">3.3</span>Eigenvalues and eigenvectors</a></li>
+<li class="toc3"><a href="#sec-m-op-spectral"><span class="tocnum">3.4</span>The spectral theorem</a></li>
+<li class="toc3"><a href="#sec-m-op-pauli"><span class="tocnum">3.5</span>The Pauli matrices</a></li>
+<li class="toc3"><a href="#sec-m-op-exp"><span class="tocnum">3.6</span>Functions of matrices and the exponential</a></li>
+<li class="toc3"><a href="#sec-m-op-svd"><span class="tocnum">3.7</span>Singular value decomposition</a></li>
+<li class="toc2"><a href="#sec-m-tensor"><span class="tocnum">4</span>Tensor products and composite systems</a></li>
+<li class="toc3"><a href="#sec-m-tensor-why"><span class="tocnum">4.1</span>Why a new product is needed</a></li>
+<li class="toc3"><a href="#sec-m-tensor-def"><span class="tocnum">4.2</span>Definition and rules</a></li>
+<li class="toc3"><a href="#sec-m-tensor-ent"><span class="tocnum">4.3</span>Product vectors and entangled vectors</a></li>
+<li class="toc3"><a href="#sec-m-tensor-exp"><span class="tocnum">4.4</span>The exponential wall</a></li>
+<li class="toc3"><a href="#sec-m-tensor-ptrace"><span class="tocnum">4.5</span>The partial trace</a></li>
+<li class="toc2"><a href="#sec-m-ode"><span class="tocnum">5</span>Differential equations and linear dynamics</a></li>
+<li class="toc3"><a href="#sec-m-ode-first"><span class="tocnum">5.1</span>First-order equations: decay</a></li>
+<li class="toc3"><a href="#sec-m-ode-osc"><span class="tocnum">5.2</span>The harmonic oscillator</a></li>
+<li class="toc3"><a href="#sec-m-ode-damped"><span class="tocnum">5.3</span>Damping and the quality factor</a></li>
+<li class="toc3"><a href="#sec-m-ode-driven"><span class="tocnum">5.4</span>Driven oscillators and resonance</a></li>
+<li class="toc3"><a href="#sec-m-ode-systems"><span class="tocnum">5.5</span>Systems of linear equations: \(\dot{\mathbf x} = A\mathbf x\)</a></li>
+<li class="toc3"><a href="#sec-m-ode-pde"><span class="tocnum">5.6</span>Partial differential equations</a></li>
+<li class="toc2"><a href="#sec-m-fourier"><span class="tocnum">6</span>Fourier analysis, linear systems and spectra</a></li>
+<li class="toc3"><a href="#sec-m-fourier-series"><span class="tocnum">6.1</span>Fourier series</a></li>
+<li class="toc3"><a href="#sec-m-fourier-transform"><span class="tocnum">6.2</span>The Fourier transform</a></li>
+<li class="toc3"><a href="#sec-m-fourier-delta"><span class="tocnum">6.3</span>The delta function</a></li>
+<li class="toc3"><a href="#sec-m-fourier-lti"><span class="tocnum">6.4</span>Linear time-invariant systems and convolution</a></li>
+<li class="toc3"><a href="#sec-m-fourier-dft"><span class="tocnum">6.5</span>Sampling and the discrete Fourier transform</a></li>
+<li class="toc3"><a href="#sec-m-fourier-psd"><span class="tocnum">6.6</span>Noise and spectral densities</a></li>
+<li class="toc2"><a href="#sec-m-prob"><span class="tocnum">7</span>Probability, statistics and inference</a></li>
+<li class="toc3"><a href="#sec-m-prob-basics"><span class="tocnum">7.1</span>Random variables, expectation and variance</a></li>
+<li class="toc3"><a href="#sec-m-prob-dists"><span class="tocnum">7.2</span>The distributions that matter</a></li>
+<li class="toc3"><a href="#sec-m-prob-prop"><span class="tocnum">7.3</span>Propagation of uncertainty</a></li>
+<li class="toc3"><a href="#sec-m-prob-yield"><span class="tocnum">7.4</span>Independence and why yield collapses</a></li>
+<li class="toc3"><a href="#sec-m-prob-bayes"><span class="tocnum">7.5</span>Bayes' theorem and inference</a></li>
+<li class="toc3"><a href="#sec-m-prob-mc"><span class="tocnum">7.6</span>Monte Carlo methods</a></li>
+<li class="toc2"><a href="#sec-m-numerics"><span class="tocnum">8</span>Numerical methods and optimisation</a></li>
+<li class="toc3"><a href="#sec-m-num-float"><span class="tocnum">8.1</span>Floating point and conditioning</a></li>
+<li class="toc3"><a href="#sec-m-num-linear"><span class="tocnum">8.2</span>Solving linear systems and eigenproblems</a></li>
+<li class="toc3"><a href="#sec-m-num-discretise"><span class="tocnum">8.3</span>Discretising differential equations</a></li>
+<li class="toc3"><a href="#sec-m-num-lsq"><span class="tocnum">8.4</span>Least squares and fitting</a></li>
+<li class="toc3"><a href="#sec-m-num-opt"><span class="tocnum">8.5</span>Optimisation</a></li>
+<li class="toc3"><a href="#sec-m-num-adjoint"><span class="tocnum">8.6</span>Gradients of simulations: the adjoint method</a></li>
+    <li class="toc2"><a href="#references">References</a></li>
+  </ol>
+</nav>
+<main>
+<article>
+<header class="title-block">
+  <p class="kicker">Foundations of Quantum Engineering · Book 1 of 7</p>
+  <h1>Mathematics for Quantum Engineering</h1>
+  <p class="subtitle">Complex numbers, linear algebra, differential equations, Fourier analysis, probability and numerical methods, taught with quantum devices in mind</p>
+  <p class="byline">Jaswin</p>
+  <p class="meta">8 chapters · 40 numbered equations · 41 exercises with solutions · about 40 hours of study</p>
+  <p class="meta prereq">Before this book: school algebra and some calculus. <a href="../index.html">Series roadmap</a>.</p>
+</header>
+<section id="sec-m-preface" class="unnumbered"><h2>How to use this book</h2>
+<p>Quantum engineering borrows its mathematics from three places at once. From quantum mechanics it takes complex vector spaces, operators and their eigenvalues. From electrical engineering it takes phasors, differential equations, Fourier transforms and resonances. From manufacturing and data science it takes probability, statistics and optimisation. A physicist usually learns the first, an electrical engineer the second, and a data scientist the third. Someone who wants to build design tools for quantum processors needs all three, and needs to see that they are the same mathematics wearing different clothes.</p>
+<p>This book assumes school algebra, trigonometry and the idea of a derivative and an integral. Everything else is built from there, with the later books of the series in view. Each chapter opens with its goals, develops the ideas with derivations you can follow line by line, works examples that come from real quantum devices, and ends with exercises. Every exercise has a worked solution behind a <i>Solution</i> toggle. Try the exercise first; the struggle is where the learning happens.</p>
+<div class="box"><p><strong>Three habits that pay off for the whole series.</strong></p>
+<ul>
+<li><b>Check units and limits.</b> Before trusting any formula, check that both sides have the same units and that it does the obvious thing when a parameter goes to zero or infinity.</li>
+<li><b>Compute small cases by hand.</b> A \(2\times2\) matrix, a single oscillator, a coin flip. Most ideas in this book can be checked on a napkin.</li>
+<li><b>Keep a notebook with a Python prompt open.</b> NumPy and SciPy reproduce every calculation here in a line or two. Use them to check your hand calculations, not to replace them.</li>
+</ul></div>
+<p>The chapters can be read in order. Chapters 1–4 (complex numbers, vectors, operators, tensor products) are needed before Book 3 on quantum mechanics. Chapters 5–6 (differential equations, Fourier analysis) are needed before Book 2 on classical physics. Chapters 7–8 (probability, numerical methods and optimisation) are needed before Book 7 on manufacturing and yield, and they are used throughout the review that ends the series.</p>
+</section>
+
+<section id="sec-m-complex"><h2><span class="secnum">1</span> Complex numbers, the exponential and phasors</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Do arithmetic with complex numbers in Cartesian and polar form, and picture it in the plane.</li>
+<li>Derive Euler's formula \(\ee^{\ii\theta} = \cos\theta + \ii\sin\theta\) and use it to replace trigonometry with algebra.</li>
+<li>Represent oscillating signals as phasors, and understand why physicists and engineers write \(\ee^{-\ii\omega t}\) and \(\ee^{+j\omega t}\) respectively.</li>
+<li>See why quantum amplitudes must be complex numbers.</li>
+</ul></div>
+
+<h3 id="sec-m-complex-arith"><span class="secnum">1.1</span> Arithmetic in the plane</h3>
+<p>A complex number is a pair of real numbers \(z = x + \ii y\), where \(\ii\) is a symbol with the single rule \(\ii^2 = -1\). We call \(x = \Re z\) the real part and \(y = \Im z\) the imaginary part. Addition and multiplication follow ordinary algebra together with that rule:</p>
+<div class="eq" id="eq-m-mult">$$ (a+\ii b)(c+\ii d) = (ac - bd) + \ii\,(ad + bc).  \tag{1}$$</div>
+<p>The <b>complex conjugate</b> flips the sign of the imaginary part, \(z^* = x - \ii y\), and the <b>modulus</b> is the distance from the origin, \(|z| = \sqrt{x^2+y^2}\). The two are related by the identity that does most of the work in quantum mechanics:</p>
+<div class="eq" id="eq-m-modsq">$$ z z^* = (x+\ii y)(x-\ii y) = x^2 + y^2 = |z|^2 .  \tag{2}$$</div>
+<p>Division uses the same trick: multiply top and bottom by the conjugate of the denominator to make the denominator real, \(1/z = z^*/|z|^2\).</p>
+<p>It helps to draw \(z\) as the point \((x,y)\) in the <b>complex plane</b>. Addition is then vector addition. Multiplication is less obvious in Cartesian form, which is why we now change coordinates.</p>
+
+<h3 id="sec-m-complex-euler"><span class="secnum">1.2</span> Polar form and Euler's formula</h3>
+<p>Any point in the plane can be given by its distance \(r=|z|\) from the origin and its angle \(\theta\) from the positive real axis, so \(z = r(\cos\theta + \ii\sin\theta)\). The angle is called the <b>argument</b> or <b>phase</b>, \(\theta = \arg z\). Now multiply two numbers in this form and use the angle-addition formulas from trigonometry:</p>
+\[ (\cos\alpha + \ii\sin\alpha)(\cos\beta+\ii\sin\beta) = (\cos\alpha\cos\beta - \sin\alpha\sin\beta) + \ii(\sin\alpha\cos\beta+\cos\alpha\sin\beta) = \cos(\alpha+\beta) + \ii\sin(\alpha+\beta). \]
+<p>Multiplying adds the angles. The function \(f(\theta) = \cos\theta + \ii\sin\theta\) therefore satisfies \(f(\alpha)f(\beta) = f(\alpha+\beta)\), which is the defining property of an exponential. To find which exponential, differentiate:</p>
+\[ \frac{\dd f}{\dd\theta} = -\sin\theta + \ii\cos\theta = \ii(\cos\theta + \ii\sin\theta) = \ii f(\theta), \qquad f(0)=1 . \]
+<p>The unique solution of \(f' = \ii f\) with \(f(0)=1\) is \(f(\theta) = \ee^{\ii\theta}\). This is <b>Euler's formula</b>:</p>
+<div class="eq" id="eq-m-euler">$$ \ee^{\ii\theta} = \cos\theta + \ii\sin\theta, \qquad z = r\,\ee^{\ii\theta}.  \tag{3}$$</div>
+<p>A second way to see it is from the power series \(\ee^x = \sum_n x^n/n!\). Substituting \(x = \ii\theta\) and grouping even and odd powers using \(\ii^2=-1\), \(\ii^3=-\ii\), \(\ii^4=1\) reproduces the series for cosine and sine. Both arguments matter: the first shows <i>why</i> the exponential appears (it turns rotation into multiplication), the second shows that the definition is consistent.</p>
+<p>In polar form, multiplication is simple: \(r_1\ee^{\ii\theta_1}\cdot r_2\ee^{\ii\theta_2} = r_1r_2\,\ee^{\ii(\theta_1+\theta_2)}\). Moduli multiply and phases add. Multiplying by \(\ee^{\ii\phi}\) rotates a point by \(\phi\) without changing its length. Inverting Euler's formula gives the two identities you will use most often:</p>
+<div class="eq" id="eq-m-cossin">$$ \cos\theta = \frac{\ee^{\ii\theta}+\ee^{-\ii\theta}}{2}, \qquad \sin\theta = \frac{\ee^{\ii\theta}-\ee^{-\ii\theta}}{2\ii}.  \tag{4}$$</div>
+<div class="example"><p><b>Worked example: trigonometry without memorisation.</b> Find \(\cos^2\theta\) in terms of \(\cos 2\theta\).</p>
+<p>Using <a class="xref" href="#eq-m-cossin">(4)</a>, \(\cos^2\theta = \tfrac14(\ee^{\ii\theta}+\ee^{-\ii\theta})^2 = \tfrac14(\ee^{2\ii\theta} + 2 + \ee^{-2\ii\theta}) = \tfrac12 + \tfrac12\cos2\theta\). The same method gives every product-to-sum formula. In Book 3 the identical algebra produces the "rotating-wave approximation", where a product of a drive \(\cos\omega t\) and a qubit oscillation \(\ee^{-\ii\omega_q t}\) splits into a slowly varying part and a fast part that averages away.</p></div>
+
+<h3 id="sec-m-complex-phasor"><span class="secnum">1.3</span> Oscillations and phasors</h3>
+<p>A sinusoidal signal of amplitude \(A\), angular frequency \(\omega\) and phase \(\phi\) is \(v(t) = A\cos(\omega t + \phi)\). Using Euler's formula,</p>
+<div class="eq" id="eq-m-phasor">$$ v(t) = \Re\!\big[\,\tilde V\,\ee^{\ii\omega t}\big], \qquad \tilde V = A\,\ee^{\ii\phi}.  \tag{5}$$</div>
+<p>The complex number \(\tilde V\) is the <b>phasor</b>. It carries the amplitude and phase; the factor \(\ee^{\ii\omega t}\) carries the time dependence, which is the same for every signal in a linear circuit driven at frequency \(\omega\). The payoff is that differentiation becomes multiplication: \(\dd/\dd t\) acting on \(\ee^{\ii\omega t}\) gives \(\ii\omega\). A capacitor obeys \(i = C\,\dd v/\dd t\), so in phasor form \(\tilde I = \ii\omega C\,\tilde V\), and its <b>impedance</b> is \(Z_C = \tilde V/\tilde I = 1/(\ii\omega C)\). An inductor, \(v = L\,\dd i/\dd t\), has \(Z_L = \ii\omega L\). Circuit analysis at a single frequency becomes algebra with complex numbers. Book 2 builds microwave engineering on exactly this.</p>
+<div class="box warn"><p><strong>Sign conventions.</strong> Electrical engineers write \(\ee^{+j\omega t}\) with \(j=\sqrt{-1}\), so an inductor is \(j\omega L\). Physicists write \(\ee^{-\ii\omega t}\), because the Schrödinger equation makes a state of energy \(E\) evolve as \(\ee^{-\ii Et/\hbar}\); with that convention an inductor is \(-\ii\omega L\). Nothing physical changes, since the two are complex conjugates, but formulas copied between an engineering text and a physics paper often disagree by a conjugate. When a sign looks wrong, check the convention first. This series uses \(\ee^{-\ii\omega t}\) in quantum chapters and says so explicitly when it switches to the engineering convention for circuits.</p></div>
+<p>Two phasors at the same frequency add like vectors. This is <b>interference</b>: \(A\ee^{\ii\phi_1} + A\ee^{\ii\phi_2}\) has modulus \(2A|\cos((\phi_1-\phi_2)/2)|\), which is \(2A\) when the phases agree and zero when they differ by \(\pi\). The power, proportional to the modulus squared, is \(|\tilde V_1+\tilde V_2|^2 = |\tilde V_1|^2 + |\tilde V_2|^2 + 2\Re(\tilde V_1\tilde V_2^*)\). The last term, the cross term, is what makes interferometers work, from a Mach–Zehnder modulator to the quantum interference of photons in Book 5.</p>
+
+<h3 id="sec-m-complex-rotframe"><span class="secnum">1.4</span> Rotating frames</h3>
+<p>Suppose a signal oscillates near a carrier frequency \(\omega_0\): \(s(t) = a(t)\,\ee^{-\ii\omega_0 t}\), where the envelope \(a(t)\) changes slowly. Multiplying by \(\ee^{+\ii\omega_0 t}\) removes the carrier and leaves \(a(t)\). We say we have moved to a frame <b>rotating</b> at \(\omega_0\). A component that oscillates at \(\omega\) in the lab frame oscillates at \(\omega - \omega_0\), the <b>detuning</b>, in the rotating frame. This is what a heterodyne receiver does in hardware (it mixes the signal with a local oscillator), and it is what a quantum engineer does on paper to make qubit dynamics look slow and simple. You will meet it again in the Rabi problem (Book 3), in dispersive readout and in pulse shaping.</p>
+
+<h3 id="sec-m-complex-why"><span class="secnum">1.5</span> Why quantum amplitudes are complex</h3>
+<p>In quantum mechanics, a system that can reach an outcome along two indistinguishable paths is described by assigning each path an <b>amplitude</b>, a complex number \(c_k\). The probability of the outcome is the modulus squared of the sum, \(P = |c_1 + c_2|^2\). By <a class="xref" href="#eq-m-modsq">(2)</a> that contains the cross term \(2\Re(c_1c_2^*)\), so probabilities can cancel. Real amplitudes with signs would allow some cancellation, but complex numbers are needed for two further reasons that will become clear in Book 3: time evolution is a rotation of phases, \(\ee^{-\ii Et/\hbar}\), which needs a continuous family of phases rather than just \(\pm1\); and the description of spin requires three mutually "perpendicular" directions in a two-dimensional space, which real numbers cannot supply. For now the key fact is: <i>only relative phases between amplitudes are observable</i>. Multiplying every amplitude by the same \(\ee^{\ii\chi}\) leaves every \(|c_1+c_2|^2\) unchanged.</p>
+
+<div class="eda"><p>Every simulated quantity in a superconducting-chip design flow, from an impedance \(Z(\omega)\) to a scattering parameter \(S_{21}\), is a complex number at each frequency. Its modulus tells you how much signal passes; its phase tells you the delay and, near a resonance, the frequency and linewidth. Reading a resonator's response as a circle in the complex plane, rather than as a dip in a magnitude plot, is how loss is extracted from measurements (Book 2, Book 2).</p></div>
+
+<div class="exercises" id="ex-m-complex"><h4>Exercises</h4><ol>
+<li>Write \(z = 1 + \ii\sqrt3\) in polar form and compute \(z^6\).
+<details><summary>Solution</summary><p>\(|z| = \sqrt{1+3}=2\) and \(\arg z = \arctan\sqrt3 = \pi/3\), so \(z = 2\ee^{\ii\pi/3}\). Then \(z^6 = 2^6\ee^{2\pi\ii} = 64\). In Cartesian form this would take five multiplications.</p></details></li>
+<li>Show that \(|z_1z_2| = |z_1||z_2|\) and that \((z_1z_2)^* = z_1^*z_2^*\).
+<details><summary>Solution</summary><p>In polar form \(z_1z_2 = r_1r_2\ee^{\ii(\theta_1+\theta_2)}\), whose modulus is \(r_1r_2\). Conjugation flips the sign of every phase, \((r\ee^{\ii\theta})^* = r\ee^{-\ii\theta}\), so \((z_1z_2)^* = r_1r_2\ee^{-\ii(\theta_1+\theta_2)} = z_1^*z_2^*\).</p></details></li>
+<li>A resistor \(R\) is in series with a capacitor \(C\). Find the impedance and the frequency at which the current leads the voltage by \(45^\circ\) (engineering convention \(\ee^{j\omega t}\)).
+<details><summary>Solution</summary><p>\(Z = R + 1/(j\omega C) = R - j/(\omega C)\). The current is \(\tilde I = \tilde V/Z\), so its phase relative to the voltage is \(-\arg Z = \arctan(1/(\omega RC))\). This equals \(45^\circ\) when \(\omega RC = 1\), i.e. \(\omega = 1/RC\), the familiar corner frequency of an RC filter.</p></details></li>
+<li>Use <a class="xref" href="#eq-m-cossin">(4)</a> to show \(\cos A\cos B = \tfrac12[\cos(A-B) + \cos(A+B)]\). If \(A = \omega_d t\) is a drive and \(B = \omega_q t\) a qubit oscillation with \(\omega_d \approx \omega_q \approx 2\pi\times 5\) GHz, what are the two frequencies that appear, and which would an averaging over 10 ns keep?
+<details><summary>Solution</summary><p>Expanding both cosines in exponentials and collecting terms gives \(\tfrac14(\ee^{\ii(A+B)}+\ee^{-\ii(A+B)}+\ee^{\ii(A-B)}+\ee^{-\ii(A-B)})\), which is the stated result. The frequencies are the difference \(\omega_d-\omega_q\) (near zero) and the sum \(\approx 2\pi\times 10\) GHz. Over 10 ns the sum term completes about 100 cycles and averages to nearly zero; the difference term survives. Dropping the sum term is the rotating-wave approximation.</p></details></li>
+<li>Show that multiplying all amplitudes by a common phase \(\ee^{\ii\chi}\) leaves \(|c_1+c_2|^2\) unchanged, but changing only \(c_2 \to c_2\ee^{\ii\chi}\) does not.
+<details><summary>Solution</summary><p>\(|\ee^{\ii\chi}(c_1+c_2)|^2 = |\ee^{\ii\chi}|^2|c_1+c_2|^2 = |c_1+c_2|^2\). With only \(c_2\) changed, the cross term becomes \(2\Re(c_1c_2^*\ee^{-\ii\chi})\), which depends on \(\chi\). Global phases are invisible; relative phases are observable.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-m-vectors"><h2><span class="secnum">2</span> Vector spaces, inner products and Dirac notation</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Know what a complex vector space, a basis and a dimension are, and why functions can be vectors too.</li>
+<li>Compute inner products, norms and orthogonal projections, and orthonormalise a set of vectors.</li>
+<li>Read and write Dirac's bra–ket notation fluently, including outer products and the resolution of the identity.</li>
+</ul></div>
+
+<h3 id="sec-m-vectors-space"><span class="secnum">2.1</span> Vectors beyond arrows</h3>
+<p>In school a vector is an arrow with a length and a direction. The idea that survives into quantum mechanics is more abstract and more useful: a <b>vector space</b> is any collection of objects that you can add together and multiply by numbers, with the usual rules (addition is commutative and associative, there is a zero vector, multiplication distributes over addition). When the numbers are complex we have a <b>complex vector space</b>. Examples:</p>
+<ul>
+<li>Columns of \(n\) complex numbers, \(\CC^n\). The state of a qubit lives in \(\CC^2\).</li>
+<li>Complex-valued functions \(f(x)\) on an interval, added pointwise. The wavefunction of a particle lives in such a space.</li>
+<li>Polynomials of degree at most \(d\). Useful for exercises, and for the polynomial fits of Book 7.</li>
+</ul>
+<p>A set of vectors \(\{v_1,\dots,v_k\}\) is <b>linearly independent</b> if no nontrivial combination \(\sum c_iv_i\) is zero. A <b>basis</b> is an independent set that spans the space, so every vector is a unique combination of basis vectors. The number of basis vectors is the <b>dimension</b>. \(\CC^n\) has dimension \(n\); the space of functions on an interval is infinite-dimensional, with bases such as the Fourier modes \(\ee^{2\pi\ii kx/L}\) of Chapter 6.</p>
+
+<h3 id="sec-m-vectors-inner"><span class="secnum">2.2</span> Inner products, length and angle</h3>
+<p>To talk about length and orthogonality we need an <b>inner product</b>, a rule that takes two vectors and returns a complex number \(\langle u, v\rangle\). On \(\CC^n\) the standard choice is</p>
+<div class="eq" id="eq-m-inner">$$ \langle u, v\rangle = \sum_{k=1}^n u_k^*\, v_k , \qquad \|v\| = \sqrt{\langle v, v\rangle} = \Big(\sum_k |v_k|^2\Big)^{1/2}.  \tag{6}$$</div>
+<p>The conjugate on the first argument is essential. Without it, \(\langle v,v\rangle\) for \(v = (1,\ii)\) would be \(1 + \ii^2 = 0\), and a nonzero vector would have zero length. With it, \(\langle v,v\rangle = |1|^2+|\ii|^2 = 2\). The defining properties are: linearity in the second argument, \(\langle u, v\rangle = \langle v, u\rangle^*\) (conjugate symmetry), and \(\langle v,v\rangle > 0\) for \(v\ne0\). For functions on \([a,b]\) the same idea gives</p>
+<div class="eq" id="eq-m-inner-fn">$$ \langle f, g\rangle = \int_a^b f(x)^*\, g(x)\,\dd x .  \tag{7}$$</div>
+<p>Two vectors are <b>orthogonal</b> if \(\langle u,v\rangle=0\). A basis \(\{e_k\}\) is <b>orthonormal</b> if \(\langle e_j, e_k\rangle = \delta_{jk}\) (the Kronecker delta: 1 if \(j=k\), else 0). In an orthonormal basis the coefficients of a vector are just inner products: if \(v = \sum_k c_k e_k\), then taking the inner product with \(e_j\) gives \(c_j = \langle e_j, v\rangle\). This one-line fact is behind Fourier series, quantum measurement and modal analysis of electromagnetic structures alike.</p>
+<div class="thm"><p><b>Cauchy–Schwarz inequality.</b> \(|\langle u,v\rangle| \le \|u\|\,\|v\|\), with equality only when one vector is a multiple of the other.</p>
+<p><i>Proof.</i> If \(u=0\) it is trivial. Otherwise, let \(w = v - \frac{\langle u, v\rangle}{\|u\|^2}u\), the part of \(v\) orthogonal to \(u\). Then \(0 \le \|w\|^2 = \|v\|^2 - |\langle u,v\rangle|^2/\|u\|^2\), which rearranges to the claim. ∎</p></div>
+<p>Cauchy–Schwarz is the mathematical root of the Heisenberg uncertainty relation (Book 3) and guarantees that quantum probabilities, which are squared inner products of unit vectors, lie between 0 and 1.</p>
+
+<h3 id="sec-m-vectors-gs"><span class="secnum">2.3</span> Projection and Gram–Schmidt</h3>
+<p>The <b>orthogonal projection</b> of \(v\) onto the direction of a unit vector \(e\) is \(\langle e, v\rangle\, e\). Subtracting projections one at a time turns any independent list into an orthonormal one. This is the <b>Gram–Schmidt</b> procedure: given \(v_1, v_2, \dots\),</p>
+<div class="eq" id="eq-m-gs">$$ e_1 = \frac{v_1}{\|v_1\|}, \qquad w_k = v_k - \sum_{j\lt k} \langle e_j, v_k\rangle\, e_j, \qquad e_k = \frac{w_k}{\|w_k\|} .  \tag{8}$$</div>
+<p>Numerically the same idea, done carefully, is the QR factorisation used inside eigenvalue solvers (Chapter 8).</p>
+<div class="example"><p><b>Worked example.</b> Orthonormalise \(v_1 = (1, 1, 0)\) and \(v_2 = (1, 0, 1)\) in \(\RR^3\).</p>
+<p>\(e_1 = (1,1,0)/\sqrt2\). Then \(\langle e_1, v_2\rangle = 1/\sqrt2\), so \(w_2 = (1,0,1) - \tfrac12(1,1,0) = (\tfrac12, -\tfrac12, 1)\), with norm \(\sqrt{3/2}\). So \(e_2 = (1,-1,2)/\sqrt6\). Check: \(\langle e_1, e_2\rangle = (1 - 1 + 0)/\sqrt{12} = 0\).</p></div>
+
+<h3 id="sec-m-vectors-dirac"><span class="secnum">2.4</span> Dirac notation</h3>
+<p>Quantum mechanics uses a notation, due to Dirac, that makes inner products and projections almost automatic. A vector is written as a <b>ket</b> \(\ket{\psi}\). For each ket there is a <b>bra</b> \(\bra{\psi}\), which in \(\CC^n\) is the conjugate transpose: the row \((\psi_1^*, \dots, \psi_n^*)\). Putting a bra next to a ket makes a "bra-ket", the inner product:</p>
+<div class="eq" id="eq-m-braket">$$ \ket{\psi} = \begin{pmatrix}\psi_1\\ \vdots\\ \psi_n\end{pmatrix}, \qquad \bra{\phi} = (\phi_1^*, \dots, \phi_n^*), \qquad \braket{\phi}{\psi} = \sum_k \phi_k^*\psi_k .  \tag{9}$$</div>
+<p>Putting a ket next to a bra the other way round, \(\ketbra{\psi}{\phi}\), gives a column times a row: an \(n\times n\) matrix, the <b>outer product</b>. Acting on a vector, it does \(\big(\ketbra{\psi}{\phi}\big)\ket{\chi} = \ket{\psi}\braket{\phi}{\chi}\): it measures the overlap of \(\ket\chi\) with \(\ket\phi\) and returns that much of \(\ket\psi\). In particular, for a unit vector \(\ket{e}\), the matrix \(P = \ketbra{e}{e}\) is the projector onto \(\ket e\).</p>
+<p>If \(\{\ket{k}\}\) is an orthonormal basis, then every vector is \(\ket\psi = \sum_k \ket{k}\braket{k}{\psi}\), which means the sum of all the projectors is the identity:</p>
+<div class="eq" id="eq-m-resolution">$$ \sum_k \ketbra{k}{k} = I .  \tag{10}$$</div>
+<p>This <b>resolution of the identity</b> is the most used line in quantum mechanics. Inserting it between any bra and ket expresses an abstract quantity in a chosen basis. For instance \(\braket{\phi}{\psi} = \sum_k \braket{\phi}{k}\braket{k}{\psi} = \sum_k \phi_k^*\psi_k\), recovering <a class="xref" href="#eq-m-braket">(9)</a>.</p>
+<p>For a qubit the standard (computational) basis is</p>
+\[ \ket0 = \begin{pmatrix}1\\0\end{pmatrix}, \quad \ket1 = \begin{pmatrix}0\\1\end{pmatrix}, \qquad \ket{\pm} = \frac{\ket0 \pm \ket1}{\sqrt2}. \]
+<p>Both \(\{\ket0,\ket1\}\) and \(\{\ket+,\ket-\}\) are orthonormal bases of \(\CC^2\). A general unit vector is \(\alpha\ket0 + \beta\ket1\) with \(|\alpha|^2+|\beta|^2=1\).</p>
+<div class="box"><p><strong>Infinite dimensions, briefly.</strong> For functions, the "basis" \(\ket{x}\) of position states is continuous, sums become integrals and the Kronecker delta becomes the Dirac delta: \(\int \ketbra{x}{x}\,\dd x = I\), \(\braket{x}{x'} = \delta(x-x')\), and \(\braket{x}{\psi} = \psi(x)\) is the wavefunction. The rigorous theory (Hilbert spaces, rigged Hilbert spaces) is more delicate, but for engineering every formula works if you replace \(\sum_k\) by \(\int \dd x\). A space with an inner product that is complete (limits of convergent sequences stay inside) is called a <b>Hilbert space</b>; every finite-dimensional inner-product space is one.</p></div>
+
+<div class="eda"><p>The capacitance matrix of a multi-conductor layout and the modes of a 3D electromagnetic simulation are both expressed in bases, and the overlap integrals that couple them are inner products of the form <a class="xref" href="#eq-m-inner-fn">(7)</a>. The "energy participation ratio" used to turn a field simulation into a qubit Hamiltonian (<a class="xref ext" href="../../index.html#sec-design-extract">Lab to Foundry §3.3</a>) is a ratio of such integrals. Understanding projection onto a basis is understanding what those tools compute.</p></div>
+
+<div class="exercises" id="ex-m-vectors"><h4>Exercises</h4><ol>
+<li>Compute \(\braket{+}{-}\), \(\braket{0}{+}\) and \(\| \ket0 + \ii\ket1\|\).
+<details><summary>Solution</summary><p>\(\braket{+}{-} = \tfrac12(1\cdot1 + 1\cdot(-1)) = 0\). \(\braket{0}{+} = 1/\sqrt2\). \(\|\ket0+\ii\ket1\| = \sqrt{|1|^2+|\ii|^2} = \sqrt2\).</p></details></li>
+<li>Show that \(\ket{\pm\ii} = (\ket0 \pm \ii\ket1)/\sqrt2\) form an orthonormal basis, and expand \(\ket0\) in it.
+<details><summary>Solution</summary><p>The bra of \(\ket{+\ii}\) is \((1, -\ii)/\sqrt2\), so \(\braket{+\ii}{-\ii} = \tfrac12(1\cdot1 + (-\ii)(-\ii)) = \tfrac12(1-1)=0\). Each has norm 1. Coefficients: \(\braket{+\ii}{0} = 1/\sqrt2\) and \(\braket{-\ii}{0}=1/\sqrt2\), so \(\ket0 = (\ket{+\ii}+\ket{-\ii})/\sqrt2\).</p></details></li>
+<li>Show that \(P = \ketbra{e}{e}\) satisfies \(P^2 = P\) for a unit vector \(\ket e\), and write \(P\) as a matrix for \(\ket e = \ket+\).
+<details><summary>Solution</summary><p>\(P^2 = \ket e\braket{e}{e}\bra e = \ket e\bra e = P\) because \(\braket ee = 1\). For \(\ket+\): \(\tfrac12\begin{pmatrix}1\\1\end{pmatrix}(1\ \ 1) = \tfrac12\begin{pmatrix}1&1\\1&1\end{pmatrix}\).</p></details></li>
+<li>On \([0, L]\) with <a class="xref" href="#eq-m-inner-fn">(7)</a>, show that \(\phi_n(x) = \sqrt{2/L}\sin(n\pi x/L)\), \(n=1,2,\dots\), are orthonormal.
+<details><summary>Solution</summary><p>\(\langle\phi_m,\phi_n\rangle = \frac2L\int_0^L\sin\frac{m\pi x}{L}\sin\frac{n\pi x}{L}\dd x = \frac1L\int_0^L\big[\cos\frac{(m-n)\pi x}{L} - \cos\frac{(m+n)\pi x}{L}\big]\dd x\). For \(m\ne n\) both cosines integrate to zero over whole half-periods; for \(m=n\) the first term gives \(L\), so the result is 1. These are the standing waves of a string, of a particle in a box and of a transmission-line resonator.</p></details></li>
+<li>Prove the triangle inequality \(\|u+v\| \le \|u\|+\|v\|\) from Cauchy–Schwarz.
+<details><summary>Solution</summary><p>\(\|u+v\|^2 = \|u\|^2+\|v\|^2+2\Re\langle u,v\rangle \le \|u\|^2+\|v\|^2+2|\langle u,v\rangle| \le \|u\|^2+\|v\|^2+2\|u\|\|v\| = (\|u\|+\|v\|)^2\).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-m-operators"><h2><span class="secnum">3</span> Linear operators, eigenvalues and the matrix exponential</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Treat matrices as linear maps, change basis, and compute adjoints, traces and determinants.</li>
+<li>Find eigenvalues and eigenvectors, and understand why Hermitian matrices have real eigenvalues and orthogonal eigenvectors (the spectral theorem).</li>
+<li>Use unitary matrices, commutators and the Pauli matrices.</li>
+<li>Compute functions of matrices, above all \(\ee^{-\ii Ht}\), and know the singular value decomposition.</li>
+</ul></div>
+
+<h3 id="sec-m-op-maps"><span class="secnum">3.1</span> Matrices are linear maps</h3>
+<p>A <b>linear operator</b> \(A\) maps vectors to vectors and respects linear combinations: \(A(a\ket u + b\ket v) = aA\ket u + bA\ket v\). Choose an orthonormal basis \(\{\ket j\}\). Inserting the resolution of the identity (<a class="xref" href="#eq-m-resolution">(10)</a>) twice gives</p>
+<div class="eq" id="eq-m-matrix">$$ A = \sum_{j,k} \ket j \bra j A \ket k \bra k = \sum_{j,k} A_{jk}\,\ketbra{j}{k}, \qquad A_{jk} = \bra j A\ket k .  \tag{11}$$</div>
+<p>So an operator <i>is</i> a matrix once a basis is fixed, and the matrix element \(A_{jk}\) is "how much of \(\ket j\) you get when \(A\) acts on \(\ket k\)". Composition of operators is matrix multiplication, which in general does not commute: \(AB \ne BA\). The difference, the <b>commutator</b> \([A,B] = AB - BA\), is a central object in quantum mechanics, because it decides whether two quantities can be known together.</p>
+<p>Changing to another orthonormal basis \(\{\ket{k'}\}\) is done by the matrix \(U_{jk} = \braket{j}{k'}\), and the matrix of \(A\) in the new basis is \(U^\dagger A U\). Quantities that do not depend on the basis are especially useful. Two of them are the <b>trace</b>, \(\Tr A = \sum_k A_{kk}\), which satisfies \(\Tr(AB) = \Tr(BA)\), and the <b>determinant</b>, which satisfies \(\det(AB) = \det A\det B\).</p>
+
+<h3 id="sec-m-op-adjoint"><span class="secnum">3.2</span> The adjoint, Hermitian and unitary matrices</h3>
+<p>The <b>adjoint</b> (Hermitian conjugate) \(A^\dagger\) is the conjugate transpose, \((A^\dagger)_{jk} = A_{kj}^*\). It is defined so that \(\bra u A\ket v = \big(\bra v A^\dagger\ket u\big)^*\), and it reverses products: \((AB)^\dagger = B^\dagger A^\dagger\). Two families of operator matter above all others.</p>
+<div class="defn"><p><b>Definition.</b> \(A\) is <b>Hermitian</b> (self-adjoint) if \(A^\dagger = A\). \(U\) is <b>unitary</b> if \(U^\dagger U = UU^\dagger = I\).</p>
+<p>Hermitian operators represent measurable quantities (energy, position, spin). Unitary operators represent reversible evolution and changes of basis: they preserve every inner product, \(\braket{Uu}{Uv} = \bra u U^\dagger U\ket v = \braket uv\), and therefore every length and angle.</p></div>
+
+<h3 id="sec-m-op-eigen"><span class="secnum">3.3</span> Eigenvalues and eigenvectors</h3>
+<p>A nonzero vector \(\ket v\) is an <b>eigenvector</b> of \(A\) with <b>eigenvalue</b> \(\lambda\) if \(A\ket v = \lambda\ket v\): the operator only stretches it. Rewriting as \((A - \lambda I)\ket v = 0\), a nonzero solution exists only if \(A-\lambda I\) is not invertible, i.e.</p>
+<div class="eq" id="eq-m-charpoly">$$ \det(A - \lambda I) = 0 .  \tag{12}$$</div>
+<p>This is the <b>characteristic equation</b>, a polynomial of degree \(n\) with \(n\) complex roots counted with multiplicity. For a \(2\times2\) matrix it reads \(\lambda^2 - (\Tr A)\lambda + \det A = 0\), so the eigenvalues are</p>
+<div class="eq" id="eq-m-2x2">$$ \lambda_\pm = \frac{\Tr A}{2} \pm \sqrt{\Big(\frac{\Tr A}{2}\Big)^2 - \det A} .  \tag{13}$$</div>
+<div class="example"><p><b>Worked example: two coupled modes.</b> Two resonators of frequencies \(\omega_1, \omega_2\) coupled with strength \(g\) are described (Book 2 and Book 6) by \(H = \begin{pmatrix}\omega_1 & g\\ g & \omega_2\end{pmatrix}\). With mean \(\bar\omega = (\omega_1+\omega_2)/2\) and detuning \(\Delta = \omega_1-\omega_2\), <a class="xref" href="#eq-m-2x2">(13)</a> gives</p>
+\[ \omega_\pm = \bar\omega \pm \tfrac12\sqrt{\Delta^2 + 4g^2}. \]
+<p>On resonance (\(\Delta = 0\)) the modes split by \(2g\) and the eigenvectors are \((1,\pm1)/\sqrt2\): the energy is shared equally. Far from resonance (\(|\Delta|\gg g\)) the shift of each mode is approximately \(\pm g^2/\Delta\) and the eigenvectors are almost the uncoupled ones. This <b>avoided crossing</b> appears everywhere in quantum hardware, from the dispersive shift of a qubit coupled to a resonator to "frequency collisions" between neighbouring qubits (<a class="xref ext" href="../../index.html#sec-var-collisions">Lab to Foundry §4.2</a>). Exercise 3 asks you to verify the large-detuning limit.</p></div>
+
+<h3 id="sec-m-op-spectral"><span class="secnum">3.4</span> The spectral theorem</h3>
+<div class="thm"><p><b>Spectral theorem (finite dimensions).</b> If \(A\) is Hermitian, its eigenvalues are real, eigenvectors with different eigenvalues are orthogonal, and there is an orthonormal basis of eigenvectors \(\{\ket{a_k}\}\). Equivalently</p>
+<div class="eq" id="eq-m-spectral">$$ A = \sum_k a_k\,\ketbra{a_k}{a_k}, \qquad A = U D U^\dagger,  \tag{14}$$</div>
+<p>with \(D\) the diagonal matrix of eigenvalues and \(U\) the unitary whose columns are the eigenvectors.</p></div>
+<p><i>Why the eigenvalues are real.</i> If \(A\ket v = \lambda\ket v\), then \(\bra vA\ket v = \lambda\braket vv\). Taking the complex conjugate and using \(A^\dagger = A\) gives \(\bra vA\ket v^* = \bra vA^\dagger\ket v = \bra vA\ket v\), so \(\bra vA\ket v\) is real and so is \(\lambda\). <i>Why eigenvectors are orthogonal.</i> If \(A\ket u = \mu\ket u\) and \(A\ket v = \lambda\ket v\) with \(\mu\ne\lambda\), then \(\bra uA\ket v = \lambda\braket uv\) and also \(=\mu\braket uv\) (act with \(A\) to the left, using that \(\mu\) is real). So \((\lambda-\mu)\braket uv=0\) and \(\braket uv=0\). The existence of a full basis needs an induction argument found in any linear algebra text <span class="cite">[<a href="#ref-axler2015">1</a>]</span>.</p>
+<p>Physically, the theorem says that every measurable quantity has a set of definite-value states that are mutually exclusive (orthogonal) and exhaustive (a basis). Measurement in quantum mechanics (Book 3) is built directly on this.</p>
+<p>Unitary matrices also have an orthonormal eigenbasis, but their eigenvalues have modulus one, \(\ee^{\ii\theta_k}\). More generally, any <b>normal</b> matrix (\(AA^\dagger = A^\dagger A\)) can be diagonalised by a unitary.</p>
+
+<h3 id="sec-m-op-pauli"><span class="secnum">3.5</span> The Pauli matrices</h3>
+<p>Three Hermitian, unitary, traceless \(2\times2\) matrices will appear on almost every page of Books 3–6:</p>
+<div class="eq" id="eq-m-pauli">$$ X = \sigma_x = \begin{pmatrix}0&1\\1&0\end{pmatrix}, \quad Y = \sigma_y = \begin{pmatrix}0&-\ii\\ \ii&0\end{pmatrix}, \quad Z = \sigma_z = \begin{pmatrix}1&0\\0&-1\end{pmatrix}.  \tag{15}$$</div>
+<p>Each squares to the identity, so its eigenvalues are \(\pm1\). They anticommute in pairs and satisfy</p>
+<div class="eq" id="eq-m-pauli-alg">$$ \sigma_j\sigma_k = \delta_{jk}I + \ii\sum_l \epsilon_{jkl}\,\sigma_l , \qquad [\sigma_j,\sigma_k] = 2\ii\sum_l\epsilon_{jkl}\sigma_l ,  \tag{16}$$</div>
+<p>where \(\epsilon_{jkl}\) is \(+1\) for \((x,y,z)\) and its cyclic permutations, \(-1\) for the others, and 0 if an index repeats. Together with \(I\) they form a basis of all \(2\times2\) matrices: any \(M = \tfrac12\big(\Tr(M)I + \sum_j \Tr(M\sigma_j)\sigma_j\big)\). A Hermitian \(2\times2\) matrix is therefore \(a_0 I + \mathbf a\cdot\boldsymbol\sigma\) with real \(a_0\) and real vector \(\mathbf a\), and its eigenvalues are \(a_0 \pm |\mathbf a|\). This compact form is the basis of the Bloch-sphere picture of a qubit.</p>
+
+<h3 id="sec-m-op-exp"><span class="secnum">3.6</span> Functions of matrices and the exponential</h3>
+<p>If \(A = \sum_k a_k \ketbra{a_k}{a_k}\), then any function can be applied eigenvalue by eigenvalue:</p>
+<div class="eq" id="eq-m-fA">$$ f(A) = \sum_k f(a_k)\,\ketbra{a_k}{a_k} = U f(D)\,U^\dagger .  \tag{17}$$</div>
+<p>This agrees with the power series definition whenever the series converges. The most important case is the exponential. For Hermitian \(H\), the operator \(U(t) = \ee^{-\ii Ht}\) is unitary (its eigenvalues \(\ee^{-\ii h_kt}\) have modulus one), and it solves the differential equation \(\dd\ket{\psi}/\dd t = -\ii H\ket\psi\), which is the Schrödinger equation in units where \(\hbar=1\). Chapter 5 shows why.</p>
+<p>For the Pauli matrices there is a closed form. Let \(\hat n\) be a unit vector and \(\sigma_n = \hat n\cdot\boldsymbol\sigma\). Since \(\sigma_n^2 = I\), the power series splits into even and odd terms exactly as in Euler's formula:</p>
+<div class="eq" id="eq-m-paulirot">$$ \ee^{-\ii\theta\,\sigma_n/2} = \cos\frac\theta2\,I - \ii\sin\frac\theta2\,\sigma_n .  \tag{18}$$</div>
+<p>This is a rotation of a qubit by angle \(\theta\) about axis \(\hat n\), the single-qubit gate of Book 4. Two warnings about exponentials of matrices: \(\ee^{A}\ee^{B} = \ee^{A+B}\) holds only if \([A,B]=0\); and for non-commuting operators the correction is given by the Baker–Campbell–Hausdorff formula, whose first terms are</p>
+<div class="eq" id="eq-m-bch">$$ \ee^{A}B\,\ee^{-A} = B + [A,B] + \tfrac{1}{2!}[A,[A,B]] + \cdots, \qquad \ee^{A}\ee^{B} = \ee^{A+B+\frac12[A,B]+\cdots}.  \tag{19}$$</div>
+<p>The first identity is used constantly to move into rotating frames and to derive effective Hamiltonians (Book 3).</p>
+
+<h3 id="sec-m-op-svd"><span class="secnum">3.7</span> Singular value decomposition</h3>
+<p>Non-square or non-normal matrices cannot always be diagonalised by one unitary, but every matrix can be written as</p>
+<div class="eq" id="eq-m-svd">$$ M = V\,\Sigma\,W^\dagger ,  \tag{20}$$</div>
+<p>with \(V, W\) unitary and \(\Sigma\) diagonal with non-negative <b>singular values</b> \(s_1\ge s_2\ge\dots\). The singular values are the square roots of the eigenvalues of \(M^\dagger M\). The SVD gives the best low-rank approximation of a matrix (keep the largest singular values), the condition number \(s_1/s_n\) that controls numerical error (Chapter 8), and, in Book 3, the Schmidt decomposition that measures entanglement between two systems.</p>
+
+<div class="eda"><p>A finite-element simulation of a chip produces a generalised eigenvalue problem \(\mathbf A\mathbf e = \lambda\mathbf B\mathbf e\) with millions of unknowns (<a class="xref ext" href="../../index.html#sec-design-extract">Lab to Foundry §3.3</a>). Its eigenvalues are mode frequencies squared, and its eigenvectors are field patterns. Everything in this chapter, from the spectral theorem to avoided crossings, is what the solver is doing, at enormous scale. The sensitivity of an eigenvalue to a design parameter (the adjoint formula <a class="xref ext" href="../../index.html#eq-adjoint">Lab to Foundry eq. (12)</a>) follows from the same argument used above to show eigenvalues are real.</p></div>
+
+<div class="exercises" id="ex-m-operators"><h4>Exercises</h4><ol>
+<li>Find the eigenvalues and normalised eigenvectors of \(X\) and of \(Y\).
+<details><summary>Solution</summary><p>Both have trace 0 and determinant \(-1\), so eigenvalues \(\pm1\). For \(X\): \(\ket\pm = (\ket0\pm\ket1)/\sqrt2\). For \(Y\): \(\ket{\pm\ii} = (\ket0\pm\ii\ket1)/\sqrt2\). Check: \(Y\ket{+\ii} = \frac1{\sqrt2}(-\ii\cdot\ii, \ii)^{\mathsf T} = \frac1{\sqrt2}(1,\ii)^{\mathsf T}\).</p></details></li>
+<li>Verify \(XY = \ii Z\) by matrix multiplication and deduce \([X,Y] = 2\ii Z\).
+<details><summary>Solution</summary><p>\(XY = \begin{pmatrix}0&1\\1&0\end{pmatrix}\begin{pmatrix}0&-\ii\\ \ii&0\end{pmatrix} = \begin{pmatrix}\ii&0\\0&-\ii\end{pmatrix} = \ii Z\). Similarly \(YX = -\ii Z\), so \([X,Y] = 2\ii Z\).</p></details></li>
+<li>For the coupled-mode matrix of the worked example with \(|\Delta|\gg g\), expand \(\omega_\pm\) to second order in \(g\). With \(\omega_1/2\pi = 5.0\) GHz, \(\omega_2/2\pi = 6.0\) GHz and \(g/2\pi = 50\) MHz, what is the shift of the lower mode?
+<details><summary>Solution</summary><p>\(\sqrt{\Delta^2+4g^2} \approx |\Delta|(1 + 2g^2/\Delta^2)\), so \(\omega_\pm \approx \bar\omega \pm (|\Delta|/2 + g^2/|\Delta|)\). The lower mode (mostly mode 1 here, since \(\omega_1\lt \omega_2\)) moves down by \(g^2/|\Delta|\) and the upper one up by the same amount: level repulsion. Numerically \(g^2/|\Delta| = (50)^2/1000 = 2.5\) MHz.</p></details></li>
+<li>Use <a class="xref" href="#eq-m-paulirot">(18)</a> to show that \(\ee^{-\ii\pi X/2} = -\ii X\), and explain why the factor \(-\ii\) is unobservable.
+<details><summary>Solution</summary><p>With \(\theta = \pi\), \(\cos(\pi/2)=0\) and \(\sin(\pi/2) = 1\), so the result is \(-\ii X\). It differs from \(X\) by a global phase, which multiplies every amplitude equally and leaves every probability unchanged (Chapter 1, Exercise 5).</p></details></li>
+<li>Show that \(\Tr(\ketbra{u}{v}) = \braket vu\), and use it to prove that the trace of a projector \(\ketbra ee\) onto a unit vector is 1.
+<details><summary>Solution</summary><p>\(\Tr(\ketbra uv) = \sum_k\braket{k}{u}\braket{v}{k} = \sum_k \braket{v}{k}\braket{k}{u} = \braket vu\) using <a class="xref" href="#eq-m-resolution">(10)</a>. For \(u=v=e\), \(\Tr = \braket ee = 1\).</p></details></li>
+<li>Prove the first identity in <a class="xref" href="#eq-m-bch">(19)</a> to second order by expanding \(\ee^{\pm A} = I \pm A + A^2/2 + \dots\).
+<details><summary>Solution</summary><p>\((I + A + \tfrac12A^2)B(I - A + \tfrac12A^2) = B + AB - BA + \tfrac12A^2B - ABA + \tfrac12BA^2 + O(A^3)\). The first-order terms are \([A,B]\). The second-order terms are \(\tfrac12(A^2B - 2ABA + BA^2) = \tfrac12[A,[A,B]]\).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-m-tensor"><h2><span class="secnum">4</span> Tensor products and composite systems</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Build the vector space of two or more systems with the tensor (Kronecker) product.</li>
+<li>Compute tensor products of vectors and matrices by hand, and know the rules they obey.</li>
+<li>Recognise product and non-product (entangled) vectors, and see why the dimension grows exponentially.</li>
+<li>Take a partial trace.</li>
+</ul></div>
+
+<h3 id="sec-m-tensor-why"><span class="secnum">4.1</span> Why a new product is needed</h3>
+<p>If one qubit is described by a vector in \(\CC^2\), how do we describe two? A naive guess is to stack the two vectors into \(\CC^4 = \CC^2\oplus\CC^2\) (the <b>direct sum</b>). That is how classical systems combine: the state of two pendulums is the list of both positions and both velocities, and dimensions add. Quantum mechanics instead assigns an amplitude to every <i>joint</i> outcome. Two qubits have four joint outcomes (00, 01, 10, 11), three qubits have eight, and \(n\) qubits have \(2^n\). Dimensions multiply. The construction that achieves this is the <b>tensor product</b>.</p>
+
+<h3 id="sec-m-tensor-def"><span class="secnum">4.2</span> Definition and rules</h3>
+<p>Given spaces \(\mathcal H_A\) with basis \(\{\ket i\}\) and \(\mathcal H_B\) with basis \(\{\ket j\}\), the tensor product \(\mathcal H_A\otimes\mathcal H_B\) is the space with basis \(\{\ket i\otimes\ket j\}\), so its dimension is \(d_A d_B\). We often abbreviate \(\ket i\otimes\ket j = \ket i\ket j = \ket{ij}\). The product is bilinear,</p>
+\[ (a\ket u + b\ket{u'})\otimes\ket v = a\ket u\otimes\ket v + b\ket{u'}\otimes\ket v , \]
+<p>and inner products factorise: \(\big(\bra{u}\otimes\bra{v}\big)\big(\ket{u'}\otimes\ket{v'}\big) = \braket{u}{u'}\braket{v}{v'}\). Operators act factor by factor: \((A\otimes B)(\ket u\otimes\ket v) = A\ket u\otimes B\ket v\), and \((A\otimes B)(C\otimes D) = AC\otimes BD\).</p>
+<p>In components, the tensor product is the <b>Kronecker product</b>: each entry of the first factor multiplies a whole copy of the second.</p>
+<div class="eq" id="eq-m-kron">$$ \begin{pmatrix}a_0\\a_1\end{pmatrix}\otimes\begin{pmatrix}b_0\\b_1\end{pmatrix} = \begin{pmatrix}a_0b_0\\a_0b_1\\a_1b_0\\a_1b_1\end{pmatrix}, \qquad A\otimes B = \begin{pmatrix}a_{00}B & a_{01}B\\ a_{10}B & a_{11}B\end{pmatrix}.  \tag{21}$$</div>
+<p>The ordering convention (first factor varies slowest) matches the binary labels \(00, 01, 10, 11\), and it is the convention of <code>numpy.kron</code>. Other software orders qubits the other way round; Qiskit, for example, puts qubit 0 on the right. Always check.</p>
+<div class="example"><p><b>Worked example: an operator on one qubit of two.</b> To apply \(X\) to the first qubit and nothing to the second, use \(X\otimes I\):</p>
+\[ X\otimes I = \begin{pmatrix}0\cdot I & 1\cdot I\\ 1\cdot I & 0\cdot I\end{pmatrix} = \begin{pmatrix}0&0&1&0\\0&0&0&1\\1&0&0&0\\0&1&0&0\end{pmatrix}. \]
+<p>It swaps \(\ket{00}\leftrightarrow\ket{10}\) and \(\ket{01}\leftrightarrow\ket{11}\): it flips the first bit. A Hamiltonian of two independent qubits is written \(H = H_A\otimes I + I\otimes H_B\), and one with a coupling adds a term such as \(g\,Z\otimes Z\).</p></div>
+
+<h3 id="sec-m-tensor-ent"><span class="secnum">4.3</span> Product vectors and entangled vectors</h3>
+<p>A vector of the form \(\ket u\otimes\ket v\) is a <b>product vector</b>. Not every vector in \(\mathcal H_A\otimes\mathcal H_B\) is one. Write a general two-qubit vector as \(\ket\psi = \sum_{ij} c_{ij}\ket{ij}\) and arrange the coefficients as a \(2\times2\) matrix \(C = (c_{ij})\). A product vector has \(c_{ij} = a_ib_j\), so \(C = \mathbf a\mathbf b^{\mathsf T}\) has rank one and \(\det C = 0\). The vector</p>
+<div class="eq" id="eq-m-bell">$$ \ket{\Phi^+} = \frac{\ket{00}+\ket{11}}{\sqrt2}, \qquad C = \frac1{\sqrt2}\begin{pmatrix}1&0\\0&1\end{pmatrix},  \tag{22}$$</div>
+<p>has \(\det C = 1/2 \ne 0\), so it cannot be written as a product. Such vectors are called <b>entangled</b>. Their physical meaning (correlations stronger than any classical ones) is the subject of Book 3, Book 3. The general test uses the SVD of \(C\) (<a class="xref" href="#eq-m-svd">(20)</a>): \(\ket\psi = \sum_k s_k\,\ket{v_k}\otimes\ket{w_k}\), the <b>Schmidt decomposition</b>, and the state is a product exactly when only one singular value \(s_k\) is nonzero.</p>
+
+<h3 id="sec-m-tensor-exp"><span class="secnum">4.4</span> The exponential wall</h3>
+<p>Because dimensions multiply, \(n\) qubits need \(2^n\) complex amplitudes. At 16 bytes per amplitude, 30 qubits need 16 GB, 40 qubits need 16 TB, and 50 qubits need 16 PB. This is both the reason quantum computers might be powerful and the reason they are hard to simulate and design. A design tool cannot simulate a full processor quantum mechanically; it must exploit structure: weak coupling, locality, a few excitations, or a restricted class of states. Book 4 shows that the circuits used for error correction (Clifford circuits) are one such class, simulable in polynomial time.</p>
+
+<h3 id="sec-m-tensor-ptrace"><span class="secnum">4.5</span> The partial trace</h3>
+<p>Given an operator \(M\) on \(\mathcal H_A\otimes\mathcal H_B\), the <b>partial trace</b> over \(B\) produces an operator on \(\mathcal H_A\) alone:</p>
+<div class="eq" id="eq-m-ptrace">$$ \Tr_B M = \sum_j \big(I\otimes\bra j\big)\, M\, \big(I\otimes\ket j\big), \qquad \Tr_B(A\otimes B) = A\,\Tr(B).  \tag{23}$$</div>
+<p>In components, \((\Tr_B M)_{ii'} = \sum_j M_{ij,\,i'j}\): sum over the matching \(B\) indices. In Book 3 the partial trace answers the question "what does system \(A\) look like if we ignore \(B\)?". Applied to the projector \(\ketbra{\Phi^+}{\Phi^+}\), it gives \(I/2\), the state of maximal ignorance: each half of an entangled pair, on its own, looks completely random. That is the mathematical core of decoherence, where \(B\) is the environment.</p>
+
+<div class="eda"><p>A processor's Hamiltonian is a sum of local terms on a tensor-product space whose dimension is exponential in the qubit count. Circuit-level tools such as scqubits and QuTiP (<a class="xref ext" href="../../index.html#sec-design-extract">Lab to Foundry §3.3</a>) build these operators with Kronecker products and then truncate each subsystem to a few levels. Knowing how quickly the space grows tells you which simulations are feasible on a laptop (a handful of transmons with a few levels each) and which need approximations.</p></div>
+
+<div class="exercises" id="ex-m-tensor"><h4>Exercises</h4><ol>
+<li>Compute \(\ket{+}\otimes\ket{-}\) as a column vector and expand it in the basis \(\ket{00},\dots,\ket{11}\).
+<details><summary>Solution</summary><p>\(\frac12(1,1)^{\mathsf T}\otimes(1,-1)^{\mathsf T} = \frac12(1,-1,1,-1)^{\mathsf T} = \frac12(\ket{00}-\ket{01}+\ket{10}-\ket{11})\).</p></details></li>
+<li>Is \(\frac12(\ket{00}+\ket{01}+\ket{10}+\ket{11})\) entangled? Is \(\frac1{\sqrt2}(\ket{01}-\ket{10})\)?
+<details><summary>Solution</summary><p>First: \(C = \frac12\begin{pmatrix}1&1\\1&1\end{pmatrix}\), \(\det C = 0\), so it is a product, namely \(\ket+\otimes\ket+\). Second: \(C = \frac1{\sqrt2}\begin{pmatrix}0&1\\-1&0\end{pmatrix}\), \(\det C = 1/2\), entangled. It is the singlet state.</p></details></li>
+<li>Write \(Z\otimes Z\) as a \(4\times4\) matrix and give its eigenvalues on \(\ket{00},\ket{01},\ket{10},\ket{11}\).
+<details><summary>Solution</summary><p>\(Z\otimes Z = \mathrm{diag}(1,-1,-1,1)\). It returns \(+1\) when the bits agree and \(-1\) when they differ: it measures parity. Parity checks of this kind are the building blocks of error correction (Book 4).</p></details></li>
+<li>Compute \(\Tr_B\ketbra{\Phi^+}{\Phi^+}\) and \(\Tr_B\big(\ketbra{0}{0}\otimes\ketbra{+}{+}\big)\).
+<details><summary>Solution</summary><p>\(\ketbra{\Phi^+}{\Phi^+} = \frac12(\ketbra{00}{00}+\ketbra{00}{11}+\ketbra{11}{00}+\ketbra{11}{11})\). Tracing \(B\) keeps only terms whose \(B\) labels match: \(\frac12(\ketbra00+\ketbra11) = I/2\). For the product, \(\Tr_B = \ketbra00\cdot\Tr\ketbra{+}{+} = \ketbra00\).</p></details></li>
+<li>A chip has 20 transmons, each truncated to 3 levels. What is the Hilbert-space dimension, and how much memory does a single state vector need?
+<details><summary>Solution</summary><p>\(3^{20}\approx 3.5\times10^9\). At 16 bytes per complex amplitude that is about 56 GB, too large for a laptop and far too large for repeated simulation inside an optimisation loop.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-m-ode"><h2><span class="secnum">5</span> Differential equations and linear dynamics</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Solve first-order linear equations and recognise exponential growth and decay with a time constant.</li>
+<li>Solve the harmonic, damped and driven oscillator, and define the quality factor \(Q\).</li>
+<li>Write a system of linear equations as \(\dot{\mathbf x} = A\mathbf x\) and solve it with eigenvectors or the matrix exponential.</li>
+<li>Know the main partial differential equations of the series (wave, diffusion, Laplace, Schrödinger) and the method of separation of variables.</li>
+</ul></div>
+
+<h3 id="sec-m-ode-first"><span class="secnum">5.1</span> First-order equations: decay</h3>
+<p>The simplest dynamical law says that a quantity decreases at a rate proportional to itself: \(\dot x = -\gamma x\). Its solution is \(x(t) = x(0)\ee^{-\gamma t}\), with <b>time constant</b> \(\tau = 1/\gamma\). After \(\tau\), \(x\) has fallen to \(1/\ee\approx 37\%\). The excited-state population of a qubit relaxing to its ground state follows exactly this law, and its time constant is the famous \(T_1\). An RC circuit discharges with \(\tau = RC\). Radioactive decay, photon loss in a cavity, and heat flow to a cold plate are all first-order decays.</p>
+<p>With a source term, \(\dot x = -\gamma x + f(t)\), multiply by the <b>integrating factor</b> \(\ee^{\gamma t}\) to get \(\frac{\dd}{\dd t}(\ee^{\gamma t}x) = \ee^{\gamma t}f\), and integrate:</p>
+<div class="eq" id="eq-m-firstorder">$$ x(t) = x(0)\,\ee^{-\gamma t} + \int_0^t \ee^{-\gamma(t-s)}\,f(s)\,\dd s .  \tag{24}$$</div>
+<p>The response is a weighted memory of past inputs, with weight \(\ee^{-\gamma(t-s)}\) that forgets on the time scale \(\tau\). This is our first <b>convolution</b>, the central idea of Chapter 6.</p>
+
+<h3 id="sec-m-ode-osc"><span class="secnum">5.2</span> The harmonic oscillator</h3>
+<p>A mass on a spring, a pendulum at small amplitude, and an LC circuit all obey</p>
+<div class="eq" id="eq-m-sho">$$ \ddot x + \omega_0^2\,x = 0 .  \tag{25}$$</div>
+<p>Try \(x = \ee^{st}\). Substitution gives \(s^2 + \omega_0^2 = 0\), so \(s = \pm\ii\omega_0\), and the general real solution is \(x(t) = A\cos(\omega_0t + \phi)\). The frequency \(\omega_0\) is set by the system (\(\sqrt{k/m}\) for a spring, \(1/\sqrt{LC}\) for a circuit); the amplitude and phase are set by the initial conditions. Energy sloshes between two forms (kinetic and potential, or magnetic and electric) while the total stays constant. The quantum harmonic oscillator of Book 3 is the quantisation of exactly this equation, and every resonator and every transmon qubit is, to first approximation, one.</p>
+
+<h3 id="sec-m-ode-damped"><span class="secnum">5.3</span> Damping and the quality factor</h3>
+<p>Adding friction proportional to velocity gives</p>
+<div class="eq" id="eq-m-damped">$$ \ddot x + \gamma\,\dot x + \omega_0^2 x = 0, \qquad s = -\frac\gamma2 \pm \ii\sqrt{\omega_0^2 - \frac{\gamma^2}{4}} .  \tag{26}$$</div>
+<p>When \(\gamma \ll \omega_0\) (<b>underdamped</b>), \(x(t) \approx A\ee^{-\gamma t/2}\cos(\omega_0t+\phi)\): the amplitude decays at \(\gamma/2\) and the energy, proportional to amplitude squared, at \(\gamma\). The <b>quality factor</b> measures how many oscillations happen before the energy is lost:</p>
+<div class="eq" id="eq-m-Q">$$ Q = \frac{\omega_0}{\gamma} = 2\pi\times\frac{\text{energy stored}}{\text{energy lost per cycle}} .  \tag{27}$$</div>
+<p>Superconducting resonators reach \(Q\sim10^6\); at 5 GHz that means energy survives for \(Q/\omega_0 \approx 30\,\mu\)s. Loss in quantum hardware is almost always quoted as a \(Q\) or its inverse, a <b>loss tangent</b>. When \(\gamma > 2\omega_0\) the roots are real and the motion decays without oscillating (<b>overdamped</b>); \(\gamma = 2\omega_0\) is <b>critical damping</b>.</p>
+
+<h3 id="sec-m-ode-driven"><span class="secnum">5.4</span> Driven oscillators and resonance</h3>
+<p>Drive the oscillator with a force \(F\cos\omega t\). Using a phasor (Chapter 1), \(x = \Re[\tilde X\ee^{\ii\omega t}]\), the derivative becomes \(\ii\omega\) and</p>
+<div class="eq" id="eq-m-response">$$ \tilde X = \frac{F}{\omega_0^2 - \omega^2 + \ii\gamma\omega}, \qquad |\tilde X|^2 \approx \frac{F^2/4\omega_0^2}{(\omega-\omega_0)^2 + (\gamma/2)^2}\quad(\omega\approx\omega_0).  \tag{28}$$</div>
+<p>Near resonance the response is a <b>Lorentzian</b> of full width at half maximum \(\gamma\). The width in frequency is the inverse of the decay time: a narrow resonance means a long-lived oscillator. Reading the width of a measured resonance is how you measure \(Q = \omega_0/\gamma\). The phase of \(\tilde X\) swings by \(\pi\) as \(\omega\) passes through \(\omega_0\), which is why a resonance traces a circle in the complex plane.</p>
+
+<h3 id="sec-m-ode-systems"><span class="secnum">5.5</span> Systems of linear equations: \(\dot{\mathbf x} = A\mathbf x\)</h3>
+<p>Any linear ODE can be rewritten as a first-order system. For the oscillator, set \(\mathbf x = (x, \dot x)\); then</p>
+\[ \frac{\dd}{\dd t}\begin{pmatrix}x\\ \dot x\end{pmatrix} = \begin{pmatrix}0&1\\-\omega_0^2 & -\gamma\end{pmatrix}\begin{pmatrix}x\\ \dot x\end{pmatrix}. \]
+<p>The general system \(\dot{\mathbf x} = A\mathbf x\) has solution</p>
+<div class="eq" id="eq-m-expAt">$$ \mathbf x(t) = \ee^{At}\,\mathbf x(0) = \sum_k c_k\,\ee^{\lambda_kt}\,\mathbf v_k ,  \tag{29}$$</div>
+<p>where \(\lambda_k, \mathbf v_k\) are the eigenvalues and eigenvectors of \(A\) (when \(A\) is diagonalisable) and \(c_k\) are the coefficients of \(\mathbf x(0)\) in the eigenbasis. The real parts of the eigenvalues decide stability (negative: decay), and their imaginary parts give oscillation frequencies. You can check <a class="xref" href="#eq-m-expAt">(29)</a> by differentiating the power series of \(\ee^{At}\) term by term: \(\frac{\dd}{\dd t}\ee^{At} = A\ee^{At}\).</p>
+<p>The Schrödinger equation \(\ii\hbar\,\dd\ket\psi/\dd t = H\ket\psi\) is exactly of this form with \(A = -\ii H/\hbar\). Because \(H\) is Hermitian, the eigenvalues of \(A\) are purely imaginary, so there is no decay: quantum evolution of a closed system is pure oscillation, \(\ket{\psi(t)} = \sum_k c_k\ee^{-\ii E_kt/\hbar}\ket{E_k}\). Decay enters only when the system is coupled to an environment (Book 3, open systems).</p>
+<div class="example"><p><b>Worked example: normal modes of two coupled oscillators.</b> Two identical LC circuits coupled by a small capacitor obey \(\ddot x_1 = -\omega_0^2x_1 + \kappa x_2\) and \(\ddot x_2 = -\omega_0^2x_2 + \kappa x_1\). In matrix form \(\ddot{\mathbf x} = -K\mathbf x\) with \(K = \begin{pmatrix}\omega_0^2 & -\kappa\\ -\kappa & \omega_0^2\end{pmatrix}\). Trying \(\mathbf x = \mathbf v\,\ee^{\ii\omega t}\) gives \(K\mathbf v = \omega^2\mathbf v\): an eigenproblem. The eigenvectors are \((1,1)\) (in phase) and \((1,-1)\) (out of phase), with \(\omega^2 = \omega_0^2\mp\kappa\). If you excite only oscillator 1, which is a superposition of both normal modes, the energy beats back and forth between the two oscillators at the difference frequency \(\approx\kappa/\omega_0\). The quantum version of this energy swap is the iSWAP gate between two qubits (Book 6).</p></div>
+
+<h3 id="sec-m-ode-pde"><span class="secnum">5.6</span> Partial differential equations</h3>
+<p>Fields depend on space as well as time, and obey partial differential equations. Four appear repeatedly in the series:</p>
+<figure class="tbl" id="tab-m-pdes"><figcaption><b>Table 1.</b> The partial differential equations used in this series.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Equation</th><th>Form</th><th>Where it appears</th></tr>
+<tr><td>Laplace / Poisson</td><td>\(\nabla^2\phi = -\rho/\varepsilon\)</td><td>Electrostatics, capacitance extraction, ion-trap potentials, quantum-dot gates</td></tr>
+<tr><td>Wave / Helmholtz</td><td>\(\nabla^2 u = \frac{1}{c^2}\partial_t^2u\); \(\nabla^2u + k^2u = 0\)</td><td>Transmission lines, waveguides, cavity and package modes</td></tr>
+<tr><td>Diffusion</td><td>\(\partial_t u = D\nabla^2u\)</td><td>Heat flow, dopant and oxygen diffusion in fabrication, quasiparticle diffusion</td></tr>
+<tr><td>Schrödinger</td><td>\(\ii\hbar\,\partial_t\psi = -\frac{\hbar^2}{2m}\nabla^2\psi + V\psi\)</td><td>Electrons in dots, tunnelling, every quantum system</td></tr>
+</table></div></figure>
+<p>The standard analytic tool is <b>separation of variables</b>. For the wave equation on a string of length \(L\) with fixed ends, try \(u(x,t) = X(x)T(t)\). Substituting and dividing by \(XT\) gives \(X''/X = T''/(c^2T)\). The left side depends only on \(x\), the right only on \(t\), so both equal a constant \(-k^2\). Then \(X = \sin kx\) with \(k = n\pi/L\) to satisfy the boundary conditions, and \(T = \cos(ck t + \phi)\). The allowed frequencies \(\omega_n = n\pi c/L\) are the modes of the string, of a half-wave transmission-line resonator and of an optical cavity. A field configuration is a sum over these modes, each behaving like an independent harmonic oscillator. That observation, made quantum, is the quantisation of the electromagnetic field in Book 5.</p>
+
+<div class="eda"><p>When a design tool reports "mode 3 at 7.21 GHz with \(Q = 2.4\times10^5\)", it has solved a large version of \(\dot{\mathbf x}=A\mathbf x\) and read off the imaginary part (frequency) and real part (loss) of an eigenvalue: \(\lambda = -\gamma/2 + \ii\omega\), so \(Q = \omega/\gamma = -\Im\lambda/(2\Re\lambda)\). Unwanted package modes (<a class="xref ext" href="../../index.html#sec-pkg-modes">Lab to Foundry §6.1</a>) are simply eigenvalues that landed too close to a qubit frequency.</p></div>
+
+<div class="exercises" id="ex-m-ode"><h4>Exercises</h4><ol>
+<li>A qubit has \(T_1 = 100\,\mu\)s. What fraction of an excited population survives a 40 ns gate? A 1 µs readout?
+<details><summary>Solution</summary><p>\(\ee^{-0.04/100}\approx 1 - 4\times10^{-4}\), so about 0.04% is lost in the gate. \(\ee^{-1/100}\approx0.990\), so about 1% is lost during readout. This is why readout errors are typically larger than gate errors.</p></details></li>
+<li>A resonator at 6 GHz has a measured full width at half maximum of 60 kHz. What are \(Q\) and the photon lifetime?
+<details><summary>Solution</summary><p>\(Q = f_0/\Delta f = 6\times10^9/6\times10^4 = 10^5\). The energy decay rate is \(\gamma = 2\pi\times 60\) kHz, so the lifetime is \(1/\gamma\approx 2.65\,\mu\)s.</p></details></li>
+<li>Find the eigenvalues of \(A = \begin{pmatrix}0&1\\-\omega_0^2&-\gamma\end{pmatrix}\) and show they match <a class="xref" href="#eq-m-damped">(26)</a>.
+<details><summary>Solution</summary><p>\(\Tr A = -\gamma\), \(\det A = \omega_0^2\), so by <a class="xref" href="#eq-m-2x2">(13)</a> \(\lambda = -\gamma/2\pm\sqrt{\gamma^2/4-\omega_0^2} = -\gamma/2 \pm\ii\sqrt{\omega_0^2-\gamma^2/4}\).</p></details></li>
+<li>In the coupled-oscillator example, start with \(x_1(0) = 1\), \(x_2(0)=0\) and zero velocities. Show that \(x_2(t)\) reaches its maximum amplitude after \(t \approx \pi\omega_0/\kappa\).
+<details><summary>Solution</summary><p>\(\mathbf x(0) = \frac12[(1,1) + (1,-1)]\), so \(x_2(t) = \frac12[\cos\omega_+t - \cos\omega_-t]\) with \(\omega_\pm = \sqrt{\omega_0^2\mp\kappa}\approx\omega_0\mp\kappa/2\omega_0\). Using \(\cos a - \cos b = -2\sin\frac{a+b}2\sin\frac{a-b}2\), \(x_2 = \sin(\omega_0t)\sin(\kappa t/2\omega_0)\) approximately. The envelope \(\sin(\kappa t/2\omega_0)\) first peaks when \(\kappa t/2\omega_0 = \pi/2\), i.e. \(t = \pi\omega_0/\kappa\).</p></details></li>
+<li>Find the first three resonance frequencies of a 10 mm long transmission line, open at both ends, in which waves travel at \(c/\sqrt{\varepsilon_{\mathrm{eff}}}\) with \(\varepsilon_{\mathrm{eff}} = 6.2\) (a coplanar line on silicon).
+<details><summary>Solution</summary><p>Open ends also give standing waves with \(k = n\pi/L\) (cosines instead of sines). \(v = 3\times10^8/\sqrt{6.2}\approx1.20\times10^8\) m/s. \(f_n = nv/2L = n\times 6.0\) GHz. So 6.0, 12.0 and 18.0 GHz. This is a typical readout resonator length.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-m-fourier"><h2><span class="secnum">6</span> Fourier analysis, linear systems and spectra</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Expand periodic signals in Fourier series and arbitrary signals with the Fourier transform.</li>
+<li>Use the convolution theorem, the delta function and transfer functions to analyse linear time-invariant systems.</li>
+<li>Understand the time–frequency trade-off (a short pulse has a broad spectrum) and its consequences for qubit control.</li>
+<li>Define a noise power spectral density and the Wiener–Khinchin theorem.</li>
+</ul></div>
+
+<h3 id="sec-m-fourier-series"><span class="secnum">6.1</span> Fourier series</h3>
+<p>A function with period \(T\) can be written as a sum of complex exponentials at multiples of the fundamental frequency \(\omega_1 = 2\pi/T\):</p>
+<div class="eq" id="eq-m-fseries">$$ f(t) = \sum_{n=-\infty}^{\infty} c_n\,\ee^{\ii n\omega_1t}, \qquad c_n = \frac1T\int_0^T f(t)\,\ee^{-\ii n\omega_1t}\,\dd t .  \tag{30}$$</div>
+<p>The coefficient formula is just the projection of Chapter 2: the functions \(\ee^{\ii n\omega_1t}/\sqrt T\) are an orthonormal basis for functions on \([0,T]\), and \(c_n\) is (up to normalisation) the inner product of \(f\) with the \(n\)-th basis function. A square wave, for example, contains only odd harmonics with \(|c_n|\propto1/n\). The slow \(1/n\) fall-off is caused by the jumps; smooth functions have coefficients that fall off much faster. This is the first appearance of a principle we will use constantly: <i>sharp features in time need broad support in frequency</i>.</p>
+
+<h3 id="sec-m-fourier-transform"><span class="secnum">6.2</span> The Fourier transform</h3>
+<p>Letting the period go to infinity turns the sum into an integral. We use the convention</p>
+<div class="eq" id="eq-m-ft">$$ \tilde f(\omega) = \int_{-\infty}^{\infty} f(t)\,\ee^{\ii\omega t}\,\dd t, \qquad f(t) = \frac1{2\pi}\int_{-\infty}^{\infty}\tilde f(\omega)\,\ee^{-\ii\omega t}\,\dd\omega .  \tag{31}$$</div>
+<p>(Engineering texts often put the minus sign in the forward transform; as with phasors, the two conventions are complex conjugates.) The transform satisfies a small set of rules that make it a calculating machine:</p>
+<ul>
+<li><b>Derivative</b>: \(\dot f \to -\ii\omega\tilde f\). Differential equations become algebraic.</li>
+<li><b>Shift</b>: \(f(t - t_0)\to \ee^{\ii\omega t_0}\tilde f\). A delay is a linear phase.</li>
+<li><b>Modulation</b>: \(f(t)\ee^{-\ii\omega_0t} \to \tilde f(\omega-\omega_0)\). Multiplying by a carrier shifts the spectrum, which is how a baseband pulse is moved up to the qubit frequency.</li>
+<li><b>Parseval</b>: \(\int|f|^2\dd t = \frac1{2\pi}\int|\tilde f|^2\dd\omega\). Energy is the same counted in either domain.</li>
+</ul>
+<p>Two transform pairs are worth memorising. A Gaussian pulse stays Gaussian: \(\ee^{-t^2/2\sigma^2} \to \sqrt{2\pi}\sigma\,\ee^{-\sigma^2\omega^2/2}\), so a pulse of width \(\sigma\) in time has width \(1/\sigma\) in angular frequency. And a one-sided exponential decay at rate \(\gamma/2\), \(f(t) = \ee^{-\gamma t/2}\) for \(t>0\), gives \(\tilde f(\omega) = 1/(\gamma/2 - \ii\omega)\), whose modulus squared is the Lorentzian \(1/(\omega^2+\gamma^2/4)\). This is the precise statement behind Chapter 5's "linewidth is inverse lifetime" (<a class="xref" href="#fig-m-lorentz">Figure 1</a>).</p>
+<figure id="fig-m-lorentz">
+<img src="../figures/fig-m-lorentz.svg" alt="A decaying oscillation in time and its Lorentzian power spectrum, for two decay rates.">
+<figcaption><b>Figure 1.</b> Left: the field of a resonator ringing down, \(\ee^{-\gamma t/2}\cos\omega_0t\), for two loss rates. Right: the corresponding power spectra, Lorentzians of full width \(\gamma\). Ten times less loss gives a ten times narrower line.</figcaption>
+</figure>
+<div class="thm"><p><b>Time–frequency uncertainty.</b> For any pulse, the spreads in time and angular frequency (standard deviations of \(|f|^2\) and \(|\tilde f|^2\)) satisfy \(\Delta t\,\Delta\omega \ge \tfrac12\), with equality for a Gaussian.</p></div>
+<p>This is a purely mathematical fact about Fourier pairs. Its quantum version, with \(E = \hbar\omega\), is the energy–time uncertainty relation, and its practical consequence is a speed limit on qubit control. A transmon's \(|1\rangle\to|2\rangle\) transition sits only about 200–300 MHz from the \(|0\rangle\to|1\rangle\) transition we want to drive. A pulse much shorter than a few ns has spectral width comparable to that gap and will excite the unwanted level, a problem called <b>leakage</b>. Shaped pulses such as DRAG (Book 6) are designed in the frequency domain to put a spectral zero at the unwanted transition.</p>
+
+<h3 id="sec-m-fourier-delta"><span class="secnum">6.3</span> The delta function</h3>
+<p>The <b>Dirac delta</b> \(\delta(t)\) is the idealised impulse: zero everywhere except \(t=0\), with \(\int\delta(t)\,\dd t = 1\), and the sifting property \(\int f(t)\delta(t-t_0)\dd t = f(t_0)\). It is not an ordinary function but a limit of ever narrower, taller pulses (a Gaussian with \(\sigma\to0\) for example). Its Fourier transform is the constant 1: an impulse contains all frequencies equally. Conversely, \(\int\ee^{\ii\omega t}\dd t = 2\pi\delta(\omega)\): a pure tone has all its power at one frequency.</p>
+
+<h3 id="sec-m-fourier-lti"><span class="secnum">6.4</span> Linear time-invariant systems and convolution</h3>
+<p>A system is <b>linear</b> if the response to a sum of inputs is the sum of responses, and <b>time-invariant</b> if delaying the input delays the output. Every such system is characterised by its <b>impulse response</b> \(h(t)\), the output when the input is \(\delta(t)\). Since any input is a superposition of shifted impulses, \(x(t) = \int x(s)\delta(t-s)\dd s\), the output is</p>
+<div class="eq" id="eq-m-conv">$$ y(t) = \int h(t-s)\,x(s)\,\dd s = (h * x)(t), \qquad \tilde y(\omega) = \tilde h(\omega)\,\tilde x(\omega) .  \tag{32}$$</div>
+<p>The second equation is the <b>convolution theorem</b>: convolution in time is multiplication in frequency. The function \(\tilde h(\omega)\) is the <b>transfer function</b>, and for circuits it is a ratio of impedances. <a class="xref" href="#eq-m-firstorder">(24)</a> was a convolution with \(h(t) = \ee^{-\gamma t}\) for \(t>0\). This is why engineers live in the frequency domain: a chain of filters, amplifiers and cables is a product of transfer functions. The control line to a qubit, with its attenuators, filters and cable dispersion, distorts a pulse by convolution, and engineers "pre-distort" pulses by dividing by the measured \(\tilde h(\omega)\).</p>
+<p>The <b>Laplace transform</b>, \(F(s) = \int_0^\infty f(t)\ee^{-st}\dd t\), is the same idea for signals that start at \(t=0\), with complex \(s = \sigma + \ii\omega\). A transfer function written as a ratio of polynomials in \(s\) has <b>poles</b>, values of \(s\) where it blows up. Each pole \(s_k = -\gamma_k/2 + \ii\omega_k\) is a resonance with frequency \(\omega_k\) and loss rate \(\gamma_k\), the same numbers as the eigenvalues of \(A\) in <a class="xref" href="#eq-m-expAt">(29)</a>. A physical (causal and stable) system has all its poles in the left half plane.</p>
+
+<h3 id="sec-m-fourier-dft"><span class="secnum">6.5</span> Sampling and the discrete Fourier transform</h3>
+<p>Computers and arbitrary waveform generators work with samples \(f_k = f(k\Delta t)\), \(k = 0,\dots,N-1\). The <b>discrete Fourier transform</b> is</p>
+<div class="eq" id="eq-m-dft">$$ F_n = \sum_{k=0}^{N-1} f_k\,\ee^{-2\pi\ii\,kn/N}, \qquad f_k = \frac1N\sum_{n=0}^{N-1}F_n\,\ee^{2\pi\ii\,kn/N},  \tag{33}$$</div>
+<p>computed in \(O(N\log N)\) operations by the fast Fourier transform (FFT). Sampling at rate \(f_s = 1/\Delta t\) can represent frequencies only up to the <b>Nyquist frequency</b> \(f_s/2\); higher frequencies masquerade as lower ones (<b>aliasing</b>). Frequency resolution is \(1/(N\Delta t)\), the inverse of the record length. The DFT is also, mathematically, a unitary matrix (after dividing by \(\sqrt N\)), and its quantum counterpart, the quantum Fourier transform, is the engine of Shor's algorithm (Book 4).</p>
+
+<h3 id="sec-m-fourier-psd"><span class="secnum">6.6</span> Noise and spectral densities</h3>
+<p>A noisy signal \(x(t)\) cannot be described by its values, only by its statistics. If it is <b>stationary</b> (its statistics do not change in time), its <b>autocorrelation</b> \(C(\tau) = \expval{x(t+\tau)x(t)}\) depends only on the lag \(\tau\). The <b>power spectral density</b> is the Fourier transform of the autocorrelation (the Wiener–Khinchin theorem):</p>
+<div class="eq" id="eq-m-psd">$$ S_x(\omega) = \int_{-\infty}^\infty C(\tau)\,\ee^{\ii\omega\tau}\,\dd\tau, \qquad \expval{x^2} = \frac{1}{2\pi}\int S_x(\omega)\,\dd\omega .  \tag{34}$$</div>
+<p>It tells you how the noise power is distributed over frequency. <b>White noise</b> has a flat spectrum (its correlations last for an instant). Resistor (Johnson) noise is white up to very high frequencies (Book 2). <b>\(1/f\) noise</b>, with \(S\propto1/|\omega|\), has power at all time scales and is the main cause of slow drifts in qubit frequency. Book 3 shows that a qubit acts as a spectrum analyser: its relaxation rate samples the noise at the qubit frequency, while its dephasing samples the noise near zero frequency. Specifying noise as a spectral density is therefore how the hardware chapters connect device physics to error rates.</p>
+<div class="box warn"><p><strong>One-sided and two-sided spectra.</strong> Physicists often use the two-sided density above, defined for positive and negative \(\omega\). Engineers often quote a one-sided density over positive frequencies only, which is twice as large, and in units per hertz rather than per radian per second. Factors of \(2\) and \(2\pi\) in noise formulas are almost always this.</p></div>
+
+<div class="eda"><p>Electromagnetic solvers can work in the time domain (an impulse is launched and the ringing recorded, then Fourier transformed) or the frequency domain (one solve per frequency). The pole–residue fits used to compress a simulated response into a small model (vector fitting, <a class="xref ext" href="../../index.html#sec-design-scale">Lab to Foundry §3.5</a>) are rational transfer functions whose poles are the circuit's resonances. Passivity, the condition that the circuit cannot create energy, becomes a condition on the transfer function, and checking it is part of sign-off.</p></div>
+
+<div class="exercises" id="ex-m-fourier"><h4>Exercises</h4><ol>
+<li>Compute the Fourier transform of a rectangular pulse of height 1 and duration \(T\) centred on \(t=0\). Where is its first zero?
+<details><summary>Solution</summary><p>\(\tilde f(\omega) = \int_{-T/2}^{T/2}\ee^{\ii\omega t}\dd t = \frac{2\sin(\omega T/2)}{\omega} = T\,\mathrm{sinc}(\omega T/2)\). The first zero is at \(\omega = 2\pi/T\). A 20 ns square pulse has its first spectral zero 50 MHz from the carrier, with slowly decaying side lobes: a bad choice near other transitions.</p></details></li>
+<li>A Gaussian pulse has \(\sigma = 5\) ns. What is its spectral standard deviation in MHz (ordinary frequency)? Compare with an anharmonicity of 250 MHz.
+<details><summary>Solution</summary><p>\(\Delta\omega = 1/\sigma = 2\times10^8\) rad/s, so \(\Delta f = \Delta\omega/2\pi\approx 32\) MHz. The \(1\to2\) transition is about 8 standard deviations away, where a Gaussian has negligible weight. A 1 ns pulse (160 MHz width) would leak badly.</p></details></li>
+<li>Show that the convolution of two Lorentzians of widths \(\gamma_1, \gamma_2\) is a Lorentzian of width \(\gamma_1+\gamma_2\). (Hint: transform to the time domain.)
+<details><summary>Solution</summary><p>A Lorentzian of width \(\gamma\) is the transform of \(\ee^{-\gamma|t|/2}\). By the convolution theorem, convolution in frequency is multiplication in time, up to a factor \(2\pi\): \(\ee^{-\gamma_1|t|/2}\ee^{-\gamma_2|t|/2} = \ee^{-(\gamma_1+\gamma_2)|t|/2}\), the transform of a Lorentzian of width \(\gamma_1+\gamma_2\). Decay rates from independent mechanisms add: \(1/Q = \sum_i 1/Q_i\).</p></details></li>
+<li>An AWG samples at 2.4 GS/s. What is the highest frequency it can synthesise directly, and what frequency appears if you program a 1.6 GHz tone?
+<details><summary>Solution</summary><p>Nyquist is 1.2 GHz. A 1.6 GHz tone aliases to \(2.4 - 1.6 = 0.8\) GHz. In practice, qubit drives are synthesised at an intermediate frequency of a few hundred MHz and mixed up to 4–8 GHz.</p></details></li>
+<li>White noise has \(C(\tau) = \sigma^2\tau_c\,\delta(\tau)\). What is its spectral density, and what happens to \(\expval{x^2}\)? Why is that a sign that white noise is an idealisation?
+<details><summary>Solution</summary><p>\(S(\omega) = \sigma^2\tau_c\), flat. Then \(\expval{x^2} = \frac{1}{2\pi}\int S\,\dd\omega\) diverges. Real noise is white only over a finite bandwidth; any measurement has a bandwidth \(B\), and the measured variance is about \(S\cdot B\) (with the appropriate \(2\pi\)), which is why noise powers are quoted per unit bandwidth.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-m-prob"><h2><span class="secnum">7</span> Probability, statistics and inference</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Use random variables, expectations, variances and the main distributions (binomial, Poisson, Gaussian, exponential).</li>
+<li>Propagate uncertainty through a function, and understand the central limit theorem.</li>
+<li>Reason with Bayes' theorem, likelihoods and posterior distributions, and estimate parameters from data.</li>
+<li>Estimate rare-event probabilities with Monte Carlo, and see why yield falls exponentially with chip size.</li>
+</ul></div>
+
+<h3 id="sec-m-prob-basics"><span class="secnum">7.1</span> Random variables, expectation and variance</h3>
+<p>A <b>random variable</b> \(X\) assigns a number to each outcome of a random process. If it takes discrete values \(x_k\) with probabilities \(p_k\), its <b>expectation</b> (mean) is \(\mathbb E[X] = \sum_k p_kx_k\); if it is continuous with <b>probability density</b> \(p(x)\), then \(\Pr(a\lt X\lt b) = \int_a^bp(x)\dd x\) and \(\mathbb E[X] = \int x\,p(x)\dd x\). The <b>variance</b> measures spread:</p>
+<div class="eq" id="eq-m-var">$$ \operatorname{Var}X = \mathbb E\big[(X - \mu)^2\big] = \mathbb E[X^2] - \mu^2, \qquad \sigma = \sqrt{\operatorname{Var}X}.  \tag{35}$$</div>
+<p>Expectation is linear, \(\mathbb E[aX+bY] = a\mathbb E[X]+b\mathbb E[Y]\), always. Variance adds for independent variables, \(\operatorname{Var}(X+Y) = \operatorname{Var}X+\operatorname{Var}Y\); in general there is an extra term \(2\operatorname{Cov}(X,Y)\), where \(\operatorname{Cov}(X,Y) = \mathbb E[(X-\mu_X)(Y-\mu_Y)]\). For a vector of random variables the covariances form a symmetric, positive semi-definite <b>covariance matrix</b> \(\Sigma\); its eigenvectors are the directions of independent variation (this is principal component analysis).</p>
+<p>Quantum mechanics is a theory of probabilities: the outcome of measuring a qubit is a random variable, and the expectation value \(\expval{A} = \bra\psi A\ket\psi\) of Book 3 is exactly \(\mathbb E\) of the measurement outcome. Fabrication is also a random process: every junction, film thickness and linewidth is a random variable around its target.</p>
+
+<h3 id="sec-m-prob-dists"><span class="secnum">7.2</span> The distributions that matter</h3>
+<figure class="tbl" id="tab-m-dists"><figcaption><b>Table 2.</b> Distributions used in the series.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Distribution</th><th>Probability</th><th>Mean, variance</th><th>Where it appears</th></tr>
+<tr><td>Bernoulli / binomial</td><td>\(\binom nk p^k(1-p)^{n-k}\)</td><td>\(np\), \(np(1-p)\)</td><td>Repeated qubit measurements; number of good qubits on a chip</td></tr>
+<tr><td>Poisson</td><td>\(\ee^{-\lambda}\lambda^k/k!\)</td><td>\(\lambda\), \(\lambda\)</td><td>Photon counts in a coherent state; defects per wafer area</td></tr>
+<tr><td>Gaussian (normal)</td><td>\(\frac{1}{\sqrt{2\pi}\sigma}\ee^{-(x-\mu)^2/2\sigma^2}\)</td><td>\(\mu\), \(\sigma^2\)</td><td>Process variation; amplifier noise; readout signals</td></tr>
+<tr><td>Exponential</td><td>\(\gamma\,\ee^{-\gamma t}\)</td><td>\(1/\gamma\), \(1/\gamma^2\)</td><td>Waiting time for a decay or a jump; \(T_1\) events</td></tr>
+<tr><td>Log-normal</td><td>\(\ln X\) is Gaussian</td><td>\(\ee^{\mu+\sigma^2/2}\), …</td><td>Junction resistance when barrier thickness is Gaussian</td></tr>
+</table></div></figure>
+<p>The Gaussian is special because of the <b>central limit theorem</b>: the sum of many independent random variables with finite variance is approximately Gaussian, whatever their individual distributions. Process variation in a well-controlled fab is close to Gaussian because many small independent effects add. Rare events, however, live in the tails, where the Gaussian approximation is weakest. The Gaussian tail probability is written with the standard normal cumulative distribution \(\Phi\): \(\Pr(X > \mu + k\sigma) = 1 - \Phi(k)\), which is 16% at \(k=1\), 2.3% at \(k=2\), 0.13% at \(k=3\) and \(3\times10^{-7}\) at \(k=5\).</p>
+<p>The log-normal arises when a quantity depends exponentially on a Gaussian one. A Josephson junction's resistance depends exponentially on its oxide-barrier thickness \(d\), \(R\propto\ee^{d/d_0}\) (Book 6). If \(d\) is Gaussian, \(R\) is log-normal, and a tiny absolute spread in \(d\) becomes a percent-level spread in \(R\), which becomes a tens-of-MHz spread in qubit frequency (<a class="xref ext" href="../../index.html#sec-var-junction">Lab to Foundry §4.1</a>).</p>
+
+<h3 id="sec-m-prob-prop"><span class="secnum">7.3</span> Propagation of uncertainty</h3>
+<p>If \(Y = g(X_1,\dots,X_n)\) and the \(X_i\) have small spreads around their means, a first-order Taylor expansion gives</p>
+<div class="eq" id="eq-m-propagation">$$ \operatorname{Var}Y \approx \sum_{i,j}\frac{\partial g}{\partial x_i}\frac{\partial g}{\partial x_j}\,\Sigma_{ij} = \mathbf J\,\Sigma\,\mathbf J^{\mathsf T},  \tag{36}$$</div>
+<p>with \(\mathbf J\) the gradient (Jacobian) of \(g\). For independent inputs this is the familiar sum of squares, \(\sigma_Y^2 \approx\sum_i(\partial g/\partial x_i)^2\sigma_i^2\). For a product or ratio, relative errors add in quadrature. For example, a qubit frequency scales as \(\omega\propto\sqrt{E_J/C}\) to leading order, so \(\delta\omega/\omega \approx \tfrac12\sqrt{(\delta E_J/E_J)^2 + (\delta C/C)^2}\). That half-power is why a 2% junction spread produces about a 1% frequency spread. Statistical design sign-off in EDA is, at its heart, <a class="xref" href="#eq-m-propagation">(36)</a> with a Jacobian computed by a simulator.</p>
+
+<h3 id="sec-m-prob-yield"><span class="secnum">7.4</span> Independence and why yield collapses</h3>
+<p>Suppose each qubit on a chip independently lands inside its specification with probability \(p\). The probability that all \(N\) do is \(p^N = \ee^{N\ln p}\approx\ee^{-N(1-p)}\). Yield therefore falls exponentially with the number of components, and the per-component failure rate must fall like \(1/N\) to hold yield constant. <a class="xref" href="#fig-m-yield">Figure 2</a> shows this for a frequency window of \(\pm\Delta\) with Gaussian spread \(\sigma\). With \(\Delta/\sigma = 3\) (a "three-sigma" process), 100 qubits are all good only 76% of the time, and 1000 qubits only 7% of the time. A four-sigma window keeps 1000 qubits at 94%.</p>
+<figure id="fig-m-yield">
+<img src="../figures/fig-m-yield.svg" alt="Probability that all N components are within specification, for windows of 2, 3 and 4 standard deviations.">
+<figcaption><b>Figure 2.</b> Probability that all \(N\) independent components fall inside a window of \(\pm\Delta\), when each is Gaussian with standard deviation \(\sigma\). The curves are \([2\Phi(\Delta/\sigma)-1]^N\). Scaling to thousands of qubits requires either a tighter process, a wider window, or post-fabrication correction.</figcaption>
+</figure>
+
+<h3 id="sec-m-prob-bayes"><span class="secnum">7.5</span> Bayes' theorem and inference</h3>
+<p>Conditional probability \(\Pr(A|B)\) is the probability of \(A\) given that \(B\) happened. From \(\Pr(A\cap B) = \Pr(A|B)\Pr(B) = \Pr(B|A)\Pr(A)\) follows <b>Bayes' theorem</b>, which for a parameter \(\theta\) and data \(D\) reads</p>
+<div class="eq" id="eq-m-bayes">$$ p(\theta\,|\,D) = \frac{p(D\,|\,\theta)\;p(\theta)}{p(D)}, \qquad \text{posterior} \propto \text{likelihood}\times\text{prior}.  \tag{37}$$</div>
+<p>The <b>prior</b> \(p(\theta)\) encodes what we knew before the data; the <b>likelihood</b> \(p(D|\theta)\) is the probability of the observed data if the parameter were \(\theta\); the <b>posterior</b> is what we know afterwards. The denominator is a normalising constant.</p>
+<div class="example"><p><b>Worked example: is the qubit in state 1?</b> A readout reports "1" correctly 97% of the time when the qubit is in \(\ket1\), and wrongly reports "1" 2% of the time when it is in \(\ket0\). Before measuring, the qubit was in \(\ket1\) with probability 10%. The readout says "1". Bayes gives</p>
+\[ \Pr(1|\text{"1"}) = \frac{0.97\times0.1}{0.97\times0.1 + 0.02\times0.9} = \frac{0.097}{0.115} \approx 0.84 . \]
+<p>Even a good detector leaves a 16% chance of error when the prior is lopsided. Readout error mitigation and the decoders of quantum error correction (Book 4) are Bayesian inference problems of exactly this type, at scale.</p></div>
+<p>When the prior is flat, maximising the posterior is the same as maximising the likelihood: the <b>maximum-likelihood estimate</b>. For Gaussian noise of known \(\sigma\), the log-likelihood of data \(y_k\) given a model \(f(x_k;\theta)\) is \(-\sum_k(y_k - f(x_k;\theta))^2/2\sigma^2\) plus a constant, so maximum likelihood is <b>least squares</b>. The width of the likelihood around its peak gives the uncertainty; for \(n\) independent measurements the standard error of a mean falls as \(\sigma/\sqrt n\). That \(1/\sqrt n\) law governs how long you must average to measure a qubit frequency, a \(T_1\) or a gate fidelity to a given precision, and is why measurement time on cold devices is expensive (<a class="xref ext" href="../../index.html#sec-test-scarce">Lab to Foundry §7.2</a>).</p>
+<p>A <b>hierarchical model</b> puts priors on the parameters of priors. For example, each wafer's mean junction resistance is drawn from a fab-wide distribution, and each junction is drawn from its wafer's distribution. Data from many wafers then sharpen predictions for a new wafer. The review proposes exactly such a model for predicting cold qubit frequencies from room-temperature measurements (<a class="xref ext" href="../../index.html#sec-var-bayes">Lab to Foundry §4.5</a>); Book 7 develops it.</p>
+
+<h3 id="sec-m-prob-mc"><span class="secnum">7.6</span> Monte Carlo methods</h3>
+<p>When a probability or expectation cannot be computed analytically, sample it. To estimate \(\mathbb E[g(X)]\), draw \(X_1,\dots,X_n\) from \(p(x)\) and average \(g(X_i)\). The error falls as \(\sigma_g/\sqrt n\) regardless of dimension, which is what makes Monte Carlo the workhorse of yield analysis. Its weakness is rare events: to estimate a failure probability of \(10^{-6}\) to 10% relative precision needs about \(10^8\) samples, because almost none of them fail. <b>Importance sampling</b> fixes this by sampling from a distribution \(q(x)\) concentrated near the failure region and reweighting by \(p(x)/q(x)\). Error-correction simulations that estimate logical error rates of \(10^{-10}\) and statistical yield sign-off for large chips both depend on such techniques.</p>
+
+<div class="eda"><p>Almost every open problem in the review is a statistics problem in disguise: chance-constrained frequency allocation (what design maximises \(\Pr\)(no collisions)?), hierarchical Bayesian prediction of cold parameters from warm data, Bayesian experimental design for scarce cryogenic test time, and simulation-based inference of noise models. This chapter supplies the vocabulary; Book 7 supplies the methods.</p></div>
+
+<div class="exercises" id="ex-m-prob"><h4>Exercises</h4><ol>
+<li>A qubit in the state \(\sqrt{0.3}\ket0 + \sqrt{0.7}\ket1\) is measured 1000 times. What are the mean and standard deviation of the number of "1" outcomes? How many measurements are needed to estimate the probability 0.7 to \(\pm0.001\)?
+<details><summary>Solution</summary><p>Binomial with \(n=1000\), \(p=0.7\): mean 700, standard deviation \(\sqrt{1000\times0.7\times0.3}\approx14.5\). The standard error of \(\hat p\) is \(\sqrt{p(1-p)/n}\); setting it to 0.001 gives \(n = 0.21/10^{-6} = 2.1\times10^5\) shots.</p></details></li>
+<li>Show that the sum of two independent Gaussians is Gaussian with means and variances added. (Use characteristic functions \(\mathbb E[\ee^{\ii kX}] = \ee^{\ii k\mu - k^2\sigma^2/2}\).)
+<details><summary>Solution</summary><p>For independent variables, \(\mathbb E[\ee^{\ii k(X+Y)}] = \mathbb E[\ee^{\ii kX}]\mathbb E[\ee^{\ii kY}] = \ee^{\ii k(\mu_X+\mu_Y) - k^2(\sigma_X^2+\sigma_Y^2)/2}\), which is the characteristic function of a Gaussian with mean \(\mu_X+\mu_Y\) and variance \(\sigma_X^2+\sigma_Y^2\). (The characteristic function is the Fourier transform of the density, and the result is the convolution theorem again.)</p></details></li>
+<li>A junction's critical current is \(I_c\propto\ee^{-d/d_0}\) with \(d_0 = 0.1\) nm. If the barrier thickness \(d\) has standard deviation 0.005 nm, what is the relative spread of \(I_c\), and of the qubit frequency \(\omega\propto\sqrt{I_c}\)?
+<details><summary>Solution</summary><p>\(\delta I_c/I_c = \delta d/d_0 = 0.05\), i.e. 5%. The frequency spread is half that, 2.5%, or about 125 MHz at 5 GHz. This is why junction-level control is the key manufacturing problem for superconducting qubits.</p></details></li>
+<li>Using <a class="xref" href="#fig-m-yield">Figure 2</a>'s model, what window \(\Delta/\sigma\) is needed for a 1000-qubit chip to have 90% probability that every qubit is in specification?
+<details><summary>Solution</summary><p>Need \(p^{1000} = 0.9\), so \(p = 0.9^{1/1000}\approx 1 - 1.05\times10^{-4}\). The two-sided tail \(2(1-\Phi(k)) = 1.05\times10^{-4}\) gives \(1-\Phi(k) \approx 5.3\times10^{-5}\), so \(k\approx3.9\). The window must be nearly four standard deviations wide.</p></details></li>
+<li>A detector has dark-count probability \(10^{-3}\) per window and efficiency 90%. A photon is present with prior probability 0.5. Given a click, what is the probability a photon was present? Given no click?
+<details><summary>Solution</summary><p>Click: \(\frac{0.9\times0.5}{0.9\times0.5 + 0.001\times0.5}\approx 0.9989\). No click: \(\Pr(\text{photon}|\text{none}) = \frac{0.1\times0.5}{0.1\times0.5 + 0.999\times0.5}\approx 0.091\). Inefficiency hurts the "no click" inference far more than dark counts hurt the "click" inference. In photonic quantum computing, undetected loss is the dominant error (Book 5).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-m-numerics"><h2><span class="secnum">8</span> Numerical methods and optimisation</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand floating-point error, conditioning and why some problems are hard to solve accurately.</li>
+<li>Know how linear systems and eigenvalue problems are solved at scale, including sparse and iterative methods.</li>
+<li>Discretise a differential equation with finite differences and see the idea behind the finite-element method.</li>
+<li>Solve least-squares and constrained optimisation problems; use gradients, Lagrange multipliers and the adjoint method.</li>
+</ul></div>
+
+<h3 id="sec-m-num-float"><span class="secnum">8.1</span> Floating point and conditioning</h3>
+<p>Computers store real numbers in floating point with about 16 significant decimal digits (double precision, machine epsilon \(\epsilon\approx2.2\times10^{-16}\)). Every arithmetic operation may introduce a relative error of order \(\epsilon\). Usually this is harmless, but two situations amplify it. <b>Cancellation</b> occurs when subtracting nearly equal numbers: computing a 1 MHz frequency shift as the difference of two 5 GHz eigenvalues, each accurate to 10 digits, leaves only about 6 good digits in the shift. <b>Ill-conditioning</b> occurs when the problem itself is sensitive. For a linear system \(A\mathbf x = \mathbf b\), a relative change \(\delta\) in \(\mathbf b\) can change \(\mathbf x\) by up to \(\kappa(A)\,\delta\), where the <b>condition number</b> is the ratio of largest to smallest singular value, \(\kappa(A) = s_{\max}/s_{\min}\). With \(\kappa = 10^{10}\), even exact algorithms leave only about 6 reliable digits. Finite-element matrices for structures spanning many length scales, such as a chip with 100 nm junction leads and centimetre-scale ground planes, are notoriously ill-conditioned.</p>
+<p>A good habit: when a simulation gives a number, ask how many digits are physically meaningful, how many are numerically reliable, and whether those two counts are compatible with the precision you need. The review's estimate that qubit frequencies must be predicted to a few parts in \(10^3\) (<a class="xref ext" href="../../index.html#sec-design-accuracy">Lab to Foundry §3.4</a>) is demanding precisely because of these effects.</p>
+
+<h3 id="sec-m-num-linear"><span class="secnum">8.2</span> Solving linear systems and eigenproblems</h3>
+<p>A dense \(n\times n\) system is solved by <b>LU factorisation</b> (Gaussian elimination organised as \(A = LU\) with triangular factors) in about \(\tfrac23n^3\) operations. That is fine for \(n = 10^4\) but hopeless for the \(n = 10^7\) unknowns of a 3D electromagnetic simulation. Physical problems produce <b>sparse</b> matrices, in which each unknown couples only to its neighbours, so most entries are zero. Two strategies exploit this:</p>
+<ul>
+<li><b>Sparse direct solvers</b> reorder the unknowns to limit "fill-in" during factorisation. They are robust but their memory grows faster than \(n\) in 3D.</li>
+<li><b>Iterative (Krylov) solvers</b> such as conjugate gradients (for symmetric positive-definite matrices) and GMRES build the solution from the sequence \(\mathbf b, A\mathbf b, A^2\mathbf b,\dots\), needing only matrix–vector products. Their speed depends on the condition number, so they need a good <b>preconditioner</b>, an approximate inverse that is cheap to apply.</li>
+</ul>
+<p>Eigenvalues of dense matrices are computed by the QR algorithm (repeated QR factorisations that converge to triangular form) in \(O(n^3)\). For large sparse problems one wants only a few eigenvalues near a target, for example the modes near 5 GHz. <b>Shift-invert Lanczos or Arnoldi</b> iteration applies \((A - \sigma B)^{-1}\), whose largest eigenvalues correspond to the eigenvalues of \(A\mathbf e = \lambda B\mathbf e\) closest to the shift \(\sigma\). This is what an eigenmode solver does every time you ask for "the first 10 modes above 3 GHz" <span class="cite">[<a href="#ref-trefethen1997">2</a>]</span>.</p>
+
+<h3 id="sec-m-num-discretise"><span class="secnum">8.3</span> Discretising differential equations</h3>
+<p>To solve \(-u''(x) = f(x)\) on \([0,1]\) with \(u(0)=u(1)=0\) on a computer, put \(N\) grid points at spacing \(h\) and replace the derivative by a <b>finite difference</b>:</p>
+<div class="eq" id="eq-m-fd">$$ -u''(x_k) \approx \frac{-u_{k-1} + 2u_k - u_{k+1}}{h^2}, \qquad \text{error } = O(h^2).  \tag{38}$$</div>
+<p>The differential equation becomes a tridiagonal linear system \(A\mathbf u = \mathbf f\). Halving \(h\) cuts the error by four (second-order accuracy) but doubles the unknowns in 1D, and multiplies them by eight in 3D. The eigenvalues of the matrix approximate the true eigenvalues \((n\pi)^2\) well for low modes and badly for modes with wavelengths near \(h\): a grid can only represent features larger than its spacing.</p>
+<p>The <b>finite-element method</b> (FEM) generalises this to complicated geometries. The domain is split into small elements (triangles or tetrahedra), the solution is approximated by simple functions (polynomials) on each element, and the equation is imposed in a weak, integrated form: find \(u\) such that \(\int u'v' = \int fv\) for every test function \(v\) in the same space. This produces a sparse linear system or generalised eigenproblem. The method adapts naturally: elements can be small near a junction or a sharp metal edge and large elsewhere. Book 7 shows how commercial and open-source electromagnetic solvers apply this to Maxwell's equations, and why refining the mesh near the edges of superconducting films is essential.</p>
+<div class="box"><p><strong>Convergence studies.</strong> A single simulation result is not an answer. A trustworthy result is a sequence of results on finer meshes that visibly converges, with an extrapolated limit and an error estimate. For a method of order \(p\), \(Q_h \approx Q + ch^p\), so three meshes determine \(Q\), \(c\) and \(p\) (Richardson extrapolation). The review notes that in quantum design practice "convergence is judged by eye"; automating this is part of what a sign-off tool must do.</p></div>
+
+<h3 id="sec-m-num-lsq"><span class="secnum">8.4</span> Least squares and fitting</h3>
+<p>Fitting a model to data is the most common numerical task in a lab. For a model linear in its parameters, \(\mathbf y\approx X\boldsymbol\beta\), minimising \(\|\mathbf y - X\boldsymbol\beta\|^2\) gives the <b>normal equations</b> \(X^{\mathsf T}X\boldsymbol\beta = X^{\mathsf T}\mathbf y\). Numerically it is better to solve via QR or SVD, because \(X^{\mathsf T}X\) squares the condition number. Adding a penalty \(\lambda\|\boldsymbol\beta\|^2\) (<b>ridge regularisation</b>) stabilises ill-conditioned fits and has a Bayesian meaning: a Gaussian prior on \(\boldsymbol\beta\). For models nonlinear in their parameters, such as fitting \(A\ee^{-t/T_1}+B\) to a decay curve or a Lorentzian to a resonance, iterative methods (Gauss–Newton, Levenberg–Marquardt) linearise around the current guess and repeat. They need sensible starting values, which is why automated calibration software spends much of its effort on initial guesses.</p>
+
+<h3 id="sec-m-num-opt"><span class="secnum">8.5</span> Optimisation</h3>
+<p>Design is optimisation: choose parameters \(\mathbf x\) to minimise a cost \(f(\mathbf x)\), subject to constraints. The gradient \(\nabla f\) points uphill, so <b>gradient descent</b> steps \(\mathbf x\leftarrow\mathbf x - \eta\nabla f\). Newton's method uses second derivatives (the Hessian \(H\)) to step \(\mathbf x\leftarrow\mathbf x - H^{-1}\nabla f\), converging much faster near a minimum; quasi-Newton methods such as BFGS build an approximate Hessian from gradients <span class="cite">[<a href="#ref-nocedal2006">3</a>]</span>. A problem is <b>convex</b> if \(f\) and the feasible set are convex; then every local minimum is global and reliable algorithms exist <span class="cite">[<a href="#ref-boyd2004">4</a>]</span>. Most device design problems are not convex, so practical design combines good initial guesses, gradient-based local search and global strategies such as multi-start or Bayesian optimisation (Book 7).</p>
+<p><b>Constraints</b> are handled with Lagrange multipliers. To minimise \(f(\mathbf x)\) subject to \(g(\mathbf x) = 0\), look for stationary points of the <b>Lagrangian</b> \(\mathcal L = f + \lambda g\):</p>
+<div class="eq" id="eq-m-lagrange">$$ \nabla f + \lambda\nabla g = 0, \qquad g(\mathbf x) = 0 .  \tag{39}$$</div>
+<p>Geometrically, at the optimum the gradient of the cost is perpendicular to the constraint surface. The multiplier \(\lambda\) measures how much the optimal cost would improve if the constraint were relaxed, which in design terms is the "price" of a specification. Inequality constraints \(g\le0\) lead to the Karush–Kuhn–Tucker conditions, in which a multiplier is nonzero only when its constraint is active.</p>
+
+<h3 id="sec-m-num-adjoint"><span class="secnum">8.6</span> Gradients of simulations: the adjoint method</h3>
+<p>Suppose a design parameter vector \(\mathbf p\) (say 100 geometric dimensions) enters a large linear system \(A(\mathbf p)\mathbf u = \mathbf b\), and the cost depends on the solution, \(f = \mathbf c^{\mathsf T}\mathbf u\). Finite differences need one extra solve per parameter: 100 solves. The <b>adjoint method</b> needs one. Differentiate \(A\mathbf u = \mathbf b\): \(A\,\partial_k\mathbf u = -(\partial_kA)\mathbf u\), so</p>
+<div class="eq" id="eq-m-adjoint">$$ \frac{\partial f}{\partial p_k} = \mathbf c^{\mathsf T}\partial_k\mathbf u = -\boldsymbol\lambda^{\mathsf T}(\partial_kA)\,\mathbf u, \qquad A^{\mathsf T}\boldsymbol\lambda = \mathbf c .  \tag{40}$$</div>
+<p>One forward solve for \(\mathbf u\), one adjoint solve for \(\boldsymbol\lambda\), and then every component of the gradient costs only a cheap matrix product. The same trick for eigenvalue problems gives the eigenvalue sensitivity formula used in the review (<a class="xref ext" href="../../index.html#eq-adjoint">Lab to Foundry eq. (12)</a>), and it is the same mathematics as back-propagation in neural networks. Adjoint gradients are what make inverse design of photonic and microwave components practical.</p>
+
+<div class="eda"><p>Electronic design automation is, in large part, applied numerical linear algebra and optimisation at scale: sparse solvers for extraction, model-order reduction to compress what the solver produced (<a class="xref ext" href="../../index.html#sec-design-scale">Lab to Foundry §3.5</a>), and constrained optimisation for placement and frequency allocation. Quantum EDA inherits all of it, and adds tighter accuracy targets and statistics. This chapter is the minimum toolkit for reading those sections of the review critically.</p></div>
+
+<div class="exercises" id="ex-m-numerics"><h4>Exercises</h4><ol>
+<li>Two eigenvalues are computed as \(5.000\,000\,123\) GHz and \(5.000\,000\,456\) GHz, each with relative error \(10^{-9}\). What is the relative error of their difference?
+<details><summary>Solution</summary><p>Each has absolute error about \(5\) Hz. The difference is 333 Hz, with absolute error up to about 10 Hz, so a relative error of about 3%: six orders of magnitude worse than the inputs. Small splittings should be computed from a model that gives them directly (for example perturbation theory), not as a difference of large numbers.</p></details></li>
+<li>For the finite-difference matrix \(A = h^{-2}\,\mathrm{tridiag}(-1,2,-1)\) of size \(N\), the eigenvalues are \(\frac{4}{h^2}\sin^2\frac{n\pi h}{2}\) with \(h = 1/(N+1)\). Compare with the exact \((n\pi)^2\) for \(n=1\) and \(n=N\) when \(N = 99\).
+<details><summary>Solution</summary><p>\(h = 0.01\). For \(n=1\): \(4\times10^4\sin^2(0.005\pi)\approx 9.8688\) versus \(\pi^2 = 9.8696\), error 0.008%. For \(n = 99\): \(4\times10^4\sin^2(0.495\pi) \approx 3.999\times10^4\) versus \((99\pi)^2\approx 9.67\times10^4\), wrong by a factor 2.4. Only modes well resolved by the grid are trustworthy.</p></details></li>
+<li>Minimise \(f = x^2 + y^2\) subject to \(x + 2y = 5\) with a Lagrange multiplier.
+<details><summary>Solution</summary><p>\(\nabla f + \lambda\nabla g = (2x + \lambda, 2y + 2\lambda) = 0\), so \(x = -\lambda/2\), \(y = -\lambda\). The constraint gives \(-\lambda/2 - 2\lambda = 5\), \(\lambda = -2\). So \((x,y) = (1,2)\), \(f = 5\). Check: the closest point on the line to the origin.</p></details></li>
+<li>A cost depends on \(p = 200\) layout parameters through a simulation that takes 10 minutes per solve. How long does one gradient take by forward finite differences, and by the adjoint method?
+<details><summary>Solution</summary><p>Finite differences: \(201\) solves, about 33 hours. Adjoint: 2 solves, 20 minutes. For a 50-step optimisation that is 70 days against 17 hours.</p></details></li>
+<li>Show that minimising \(\sum_k(y_k - \beta x_k)^2\) gives \(\beta = \sum x_ky_k/\sum x_k^2\). Interpret this as a projection.
+<details><summary>Solution</summary><p>Setting the derivative \(-2\sum x_k(y_k - \beta x_k)\) to zero gives the result. It is \(\langle\mathbf x,\mathbf y\rangle/\langle\mathbf x,\mathbf x\rangle\), the coefficient of the orthogonal projection of \(\mathbf y\) onto \(\mathbf x\) (Chapter 2). Least squares is projection onto the space spanned by the model's columns.</p></details></li>
+</ol></div>
+</section>
+
+<section id="references" class="references">
+  <h2>References and further reading</h2>
+  <p class="refnote">Numbered in order of first citation in this book. Entries tagged “verify details” were compiled from memory; check volume and page before citing them.</p>
+  <ol class="reflist">
+<li id="ref-axler2015"><span class="refnum">[1]</span> S. Axler, <i>Linear Algebra Done Right</i>, 3rd ed. (Springer, 2015).</li>
+<li id="ref-trefethen1997"><span class="refnum">[2]</span> L. N. Trefethen, D. Bau, <i>Numerical Linear Algebra</i> (SIAM, 1997).</li>
+<li id="ref-nocedal2006"><span class="refnum">[3]</span> J. Nocedal, S. J. Wright, <i>Numerical Optimization</i>, 2nd ed. (Springer, 2006).</li>
+<li id="ref-boyd2004"><span class="refnum">[4]</span> S. Boyd, L. Vandenberghe, <i>Convex Optimization</i> (Cambridge University Press, 2004).</li>
+  </ol>
+</section>
+<nav class="pager" aria-label="Series"><a class="prev" href="../index.html"><span>Start</span>Series roadmap</a><a class="next" href="../classical-physics/index.html"><span>Next · Book 2</span>Classical Physics for Quantum Engineers</a></nav>
+<footer class="page-footer">
+  <p>Foundations of Quantum Engineering, Book 1. Source: <code>curriculum/1-mathematics/</code>. Rebuild with <code>make</code>; figures are computed by <code>scripts/make_foundation_figures.py</code>. Built 2026-11-14.</p>
+</footer>
+</article>
+</main>
+</div>
+</body>
+</html>

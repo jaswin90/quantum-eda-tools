@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foundations of Quantum Engineering: roadmap</title>
+<meta name="description" content="A seven-book course from complex numbers to quantum chip manufacture, written as preparation for the review “From Laboratory to Foundry”.">
+<script>try{var t=localStorage.getItem('site-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/css/book.css">
+<script defer src="../assets/js/book.js"></script>
+<script defer src="../vendor/katex/katex.min.js"></script>
+<script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  if (!window.renderMathInElement) return;
+  renderMathInElement(document.querySelector("main"), {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false}
+    ],
+    throwOnError: false,
+    macros: {
+      "\\ket": "\\left|#1\\right\\rangle",
+      "\\bra": "\\left\\langle#1\\right|",
+      "\\braket": "\\left\\langle#1\\middle|#2\\right\\rangle",
+      "\\ketbra": "\\left|#1\\right\\rangle\\!\\left\\langle#2\\right|",
+      "\\expval": "\\left\\langle#1\\right\\rangle",
+      "\\dd": "\\mathrm{d}",
+      "\\Tr": "\\operatorname{Tr}",
+      "\\dag": "^{\\dagger}",
+      "\\RR": "\\mathbb{R}",
+      "\\CC": "\\mathbb{C}",
+      "\\ii": "\\mathrm{i}",
+      "\\ee": "\\mathrm{e}",
+      "\\Re": "\\operatorname{Re}",
+      "\\Im": "\\operatorname{Im}"
+    }
+  });
+});
+</script>
+</head>
+<body>
+<header class="topbar">
+<a class="brand" href="index.html">Foundations of <span>Quantum Engineering</span></a>
+<span class="spacer"></span>
+<nav><a href="#sec-order">Reading order</a><a href="#sec-books">Books</a><a href="../index.html">Lab to Foundry</a></nav>
+<button class="btn icon-btn" id="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+<nav class="toc" aria-label="Contents">
+  <p class="toc-title">Contents</p>
+  <ol>
+<li class="toc2"><a href="#sec-order"><span class="tocnum">1</span>Reading order</a></li>
+<li class="toc2"><a href="#sec-books"><span class="tocnum">2</span>The books</a></li>
+  </ol>
+</nav>
+<main>
+<article>
+<header class="title-block">
+  <p class="kicker">A course in seven books · Roadmap</p>
+  <h1>Foundations of Quantum Engineering</h1>
+  <p class="subtitle">From complex numbers to the manufacture of quantum processors: a planned route into quantum design automation</p>
+  <p class="byline">Jaswin</p>
+  <p class="meta">7 books · 8 chapters · 41 exercises with solutions · capstone: <a href="../index.html">From Laboratory to Foundry</a></p>
+</header>
+<section id="sec-order"><h2><span class="secnum">1</span> Reading order</h2><p>Draft.</p></section>
+<section id="sec-books"><h2><span class="secnum">2</span> The books</h2>
+<div class="bookcard" id="book-1"><p class="bc-num">Book 1 · about 40 h · needs: none</p><h3 class="bc-title"><a href="mathematics/index.html">Mathematics for Quantum Engineering</a></h3><p>Every piece of mathematics the rest of the series uses, built from school algebra: complex numbers, vector spaces and Dirac notation, eigenvalues and matrix exponentials, tensor products, differential equations, Fourier analysis, probability and numerical optimisation.</p><details><summary>8 chapters</summary><ol><li><a href="mathematics/index.html#sec-m-complex">Complex numbers, the exponential and phasors</a></li><li><a href="mathematics/index.html#sec-m-vectors">Vector spaces, inner products and Dirac notation</a></li><li><a href="mathematics/index.html#sec-m-operators">Linear operators, eigenvalues and the matrix exponential</a></li><li><a href="mathematics/index.html#sec-m-tensor">Tensor products and composite systems</a></li><li><a href="mathematics/index.html#sec-m-ode">Differential equations and linear dynamics</a></li><li><a href="mathematics/index.html#sec-m-fourier">Fourier analysis, linear systems and spectra</a></li><li><a href="mathematics/index.html#sec-m-prob">Probability, statistics and inference</a></li><li><a href="mathematics/index.html#sec-m-numerics">Numerical methods and optimisation</a></li></ol></details></div>
+<div class="bookcard" id="book-2"><p class="bc-num">Book 2 · about 45 h · needs: Book 1</p><h3 class="bc-title"><a href="classical-physics/index.html">Classical Physics for Quantum Engineers</a></h3><p>The classical physics that quantum hardware is built from: least action and Hamiltonians, oscillators and normal modes, Maxwell&#x27;s equations, capacitance and inductance matrices, transmission lines and resonators, optical waveguides, and the thermodynamics of noise.</p><details><summary>0 chapters</summary><ol></ol></details></div>
+<div class="bookcard" id="book-3"><p class="bc-num">Book 3 · about 60 h · needs: Book 1, Book 2</p><h3 class="bc-title"><a href="quantum-mechanics/index.html">Quantum Mechanics</a></h3><p>Quantum mechanics from the qubit up: postulates, Schrödinger dynamics, tunnelling, the harmonic oscillator, spin and Rabi oscillations, perturbation theory, density matrices and entanglement, decoherence and the Lindblad equation, and second quantisation.</p><details><summary>0 chapters</summary><ol></ol></details></div>
+<div class="bookcard" id="book-4"><p class="bc-num">Book 4 · about 50 h · needs: Book 3</p><h3 class="bc-title"><a href="quantum-information/index.html">Quantum Information and Computation</a></h3><p>What a quantum computer computes and why it is fragile: the circuit model, teleportation, Grover and Shor, quantum channels, fidelity and randomised benchmarking, stabiliser codes, the surface code and its threshold, and how programs become pulses.</p><details><summary>0 chapters</summary><ol></ol></details></div>
+<div class="bookcard" id="book-5"><p class="bc-num">Book 5 · about 45 h · needs: Book 2, Book 3, Book 4</p><h3 class="bc-title"><a href="quantum-photonics/index.html">Quantum Photonics</a></h3><p>Light as a quantum system and as a qubit: field quantisation, coherent and squeezed states, beam splitters and Hong–Ou–Mandel interference, cavity QED, photon sources and detectors, integrated photonic circuits, and loss-tolerant photonic quantum computing.</p><details><summary>0 chapters</summary><ol></ol></details></div>
+<div class="bookcard" id="book-6"><p class="bc-num">Book 6 · about 55 h · needs: Book 2, Book 3, Book 4, Book 5</p><h3 class="bc-title"><a href="quantum-hardware/index.html">Quantum Hardware: Superconducting Circuits and Other Qubits</a></h3><p>How physical qubits are built: superconductivity and the Josephson junction, quantising a circuit, the transmon and fluxonium, dispersive readout, single- and two-qubit gates, where coherence is lost, and the trapped-ion, neutral-atom and spin-qubit alternatives.</p><details><summary>0 chapters</summary><ol></ol></details></div>
+<div class="bookcard" id="book-7"><p class="bc-num">Book 7 · about 45 h · needs: Book 1, Book 2, Book 6</p><h3 class="bc-title"><a href="quantum-manufacturing/index.html">Making Quantum Chips: Fabrication, Simulation, Yield and Design Automation</a></h3><p>The bridge to quantum EDA: how chips are fabricated, how classical design automation works, how electromagnetic solvers turn layouts into Hamiltonians, how variation becomes yield loss, how chips are packaged and tested cold, and the statistics and machine learning that tie it together.</p><details><summary>0 chapters</summary><ol></ol></details></div>
+</section>
+
+
+<nav class="pager" aria-label="Series"><a class="next" href="mathematics/index.html"><span>Begin · Book 1</span>Mathematics for Quantum Engineering</a></nav>
+<footer class="page-footer">
+  <p>Foundations of Quantum Engineering. Source: <code>curriculum/</code>. Rebuild with <code>make</code>; figures are computed by <code>scripts/make_foundation_figures.py</code>. Built 2026-11-14.</p>
+</footer>
+</article>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<section id="sec-m-prob"><h2>Probability, statistics and inference</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Use random variables, expectations, variances and the main distributions (binomial, Poisson, Gaussian, exponential).</li>
+<li>Propagate uncertainty through a function, and understand the central limit theorem.</li>
+<li>Reason with Bayes' theorem, likelihoods and posterior distributions, and estimate parameters from data.</li>
+<li>Estimate rare-event probabilities with Monte Carlo, and see why yield falls exponentially with chip size.</li>
+</ul></div>
+
+<h3 id="sec-m-prob-basics">Random variables, expectation and variance</h3>
+<p>A <b>random variable</b> \(X\) assigns a number to each outcome of a random process. If it takes discrete values \(x_k\) with probabilities \(p_k\), its <b>expectation</b> (mean) is \(\mathbb E[X] = \sum_k p_kx_k\); if it is continuous with <b>probability density</b> \(p(x)\), then \(\Pr(a\lt X\lt b) = \int_a^bp(x)\dd x\) and \(\mathbb E[X] = \int x\,p(x)\dd x\). The <b>variance</b> measures spread:</p>
+<div class="eq" id="eq-m-var">$$ \operatorname{Var}X = \mathbb E\big[(X - \mu)^2\big] = \mathbb E[X^2] - \mu^2, \qquad \sigma = \sqrt{\operatorname{Var}X}. $$</div>
+<p>Expectation is linear, \(\mathbb E[aX+bY] = a\mathbb E[X]+b\mathbb E[Y]\), always. Variance adds for independent variables, \(\operatorname{Var}(X+Y) = \operatorname{Var}X+\operatorname{Var}Y\); in general there is an extra term \(2\operatorname{Cov}(X,Y)\), where \(\operatorname{Cov}(X,Y) = \mathbb E[(X-\mu_X)(Y-\mu_Y)]\). For a vector of random variables the covariances form a symmetric, positive semi-definite <b>covariance matrix</b> \(\Sigma\); its eigenvectors are the directions of independent variation (this is principal component analysis).</p>
+<p>Quantum mechanics is a theory of probabilities: the outcome of measuring a qubit is a random variable, and the expectation value \(\expval{A} = \bra\psi A\ket\psi\) of Book 3 is exactly \(\mathbb E\) of the measurement outcome. Fabrication is also a random process: every junction, film thickness and linewidth is a random variable around its target.</p>
+
+<h3 id="sec-m-prob-dists">The distributions that matter</h3>
+<figure class="tbl" id="tab-m-dists"><figcaption>Distributions used in the series.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Distribution</th><th>Probability</th><th>Mean, variance</th><th>Where it appears</th></tr>
+<tr><td>Bernoulli / binomial</td><td>\(\binom nk p^k(1-p)^{n-k}\)</td><td>\(np\), \(np(1-p)\)</td><td>Repeated qubit measurements; number of good qubits on a chip</td></tr>
+<tr><td>Poisson</td><td>\(\ee^{-\lambda}\lambda^k/k!\)</td><td>\(\lambda\), \(\lambda\)</td><td>Photon counts in a coherent state; defects per wafer area</td></tr>
+<tr><td>Gaussian (normal)</td><td>\(\frac{1}{\sqrt{2\pi}\sigma}\ee^{-(x-\mu)^2/2\sigma^2}\)</td><td>\(\mu\), \(\sigma^2\)</td><td>Process variation; amplifier noise; readout signals</td></tr>
+<tr><td>Exponential</td><td>\(\gamma\,\ee^{-\gamma t}\)</td><td>\(1/\gamma\), \(1/\gamma^2\)</td><td>Waiting time for a decay or a jump; \(T_1\) events</td></tr>
+<tr><td>Log-normal</td><td>\(\ln X\) is Gaussian</td><td>\(\ee^{\mu+\sigma^2/2}\), …</td><td>Junction resistance when barrier thickness is Gaussian</td></tr>
+</table></div></figure>
+<p>The Gaussian is special because of the <b>central limit theorem</b>: the sum of many independent random variables with finite variance is approximately Gaussian, whatever their individual distributions. Process variation in a well-controlled fab is close to Gaussian because many small independent effects add. Rare events, however, live in the tails, where the Gaussian approximation is weakest. The Gaussian tail probability is written with the standard normal cumulative distribution \(\Phi\): \(\Pr(X > \mu + k\sigma) = 1 - \Phi(k)\), which is 16% at \(k=1\), 2.3% at \(k=2\), 0.13% at \(k=3\) and \(3\times10^{-7}\) at \(k=5\).</p>
+<p>The log-normal arises when a quantity depends exponentially on a Gaussian one. A Josephson junction's resistance depends exponentially on its oxide-barrier thickness \(d\), \(R\propto\ee^{d/d_0}\) (Book 6). If \(d\) is Gaussian, \(R\) is log-normal, and a tiny absolute spread in \(d\) becomes a percent-level spread in \(R\), which becomes a tens-of-MHz spread in qubit frequency (@lf:sec-var-junction).</p>
+
+<h3 id="sec-m-prob-prop">Propagation of uncertainty</h3>
+<p>If \(Y = g(X_1,\dots,X_n)\) and the \(X_i\) have small spreads around their means, a first-order Taylor expansion gives</p>
+<div class="eq" id="eq-m-propagation">$$ \operatorname{Var}Y \approx \sum_{i,j}\frac{\partial g}{\partial x_i}\frac{\partial g}{\partial x_j}\,\Sigma_{ij} = \mathbf J\,\Sigma\,\mathbf J^{\mathsf T}, $$</div>
+<p>with \(\mathbf J\) the gradient (Jacobian) of \(g\). For independent inputs this is the familiar sum of squares, \(\sigma_Y^2 \approx\sum_i(\partial g/\partial x_i)^2\sigma_i^2\). For a product or ratio, relative errors add in quadrature. For example, a qubit frequency scales as \(\omega\propto\sqrt{E_J/C}\) to leading order, so \(\delta\omega/\omega \approx \tfrac12\sqrt{(\delta E_J/E_J)^2 + (\delta C/C)^2}\). That half-power is why a 2% junction spread produces about a 1% frequency spread. Statistical design sign-off in EDA is, at its heart, @eq:m-propagation with a Jacobian computed by a simulator.</p>
+
+<h3 id="sec-m-prob-yield">Independence and why yield collapses</h3>
+<p>Suppose each qubit on a chip independently lands inside its specification with probability \(p\). The probability that all \(N\) do is \(p^N = \ee^{N\ln p}\approx\ee^{-N(1-p)}\). Yield therefore falls exponentially with the number of components, and the per-component failure rate must fall like \(1/N\) to hold yield constant. @fig:m-yield shows this for a frequency window of \(\pm\Delta\) with Gaussian spread \(\sigma\). With \(\Delta/\sigma = 3\) (a "three-sigma" process), 100 qubits are all good only 76% of the time, and 1000 qubits only 7% of the time. A four-sigma window keeps 1000 qubits at 94%.</p>
+<figure id="fig-m-yield">
+<img src="../figures/fig-m-yield.svg" alt="Probability that all N components are within specification, for windows of 2, 3 and 4 standard deviations.">
+<figcaption>Probability that all \(N\) independent components fall inside a window of \(\pm\Delta\), when each is Gaussian with standard deviation \(\sigma\). The curves are \([2\Phi(\Delta/\sigma)-1]^N\). Scaling to thousands of qubits requires either a tighter process, a wider window, or post-fabrication correction.</figcaption>
+</figure>
+
+<h3 id="sec-m-prob-bayes">Bayes' theorem and inference</h3>
+<p>Conditional probability \(\Pr(A|B)\) is the probability of \(A\) given that \(B\) happened. From \(\Pr(A\cap B) = \Pr(A|B)\Pr(B) = \Pr(B|A)\Pr(A)\) follows <b>Bayes' theorem</b>, which for a parameter \(\theta\) and data \(D\) reads</p>
+<div class="eq" id="eq-m-bayes">$$ p(\theta\,|\,D) = \frac{p(D\,|\,\theta)\;p(\theta)}{p(D)}, \qquad \text{posterior} \propto \text{likelihood}\times\text{prior}. $$</div>
+<p>The <b>prior</b> \(p(\theta)\) encodes what we knew before the data; the <b>likelihood</b> \(p(D|\theta)\) is the probability of the observed data if the parameter were \(\theta\); the <b>posterior</b> is what we know afterwards. The denominator is a normalising constant.</p>
+<div class="example"><p><b>Worked example: is the qubit in state 1?</b> A readout reports "1" correctly 97% of the time when the qubit is in \(\ket1\), and wrongly reports "1" 2% of the time when it is in \(\ket0\). Before measuring, the qubit was in \(\ket1\) with probability 10%. The readout says "1". Bayes gives</p>
+\[ \Pr(1|\text{"1"}) = \frac{0.97\times0.1}{0.97\times0.1 + 0.02\times0.9} = \frac{0.097}{0.115} \approx 0.84 . \]
+<p>Even a good detector leaves a 16% chance of error when the prior is lopsided. Readout error mitigation and the decoders of quantum error correction (Book 4) are Bayesian inference problems of exactly this type, at scale.</p></div>
+<p>When the prior is flat, maximising the posterior is the same as maximising the likelihood: the <b>maximum-likelihood estimate</b>. For Gaussian noise of known \(\sigma\), the log-likelihood of data \(y_k\) given a model \(f(x_k;\theta)\) is \(-\sum_k(y_k - f(x_k;\theta))^2/2\sigma^2\) plus a constant, so maximum likelihood is <b>least squares</b>. The width of the likelihood around its peak gives the uncertainty; for \(n\) independent measurements the standard error of a mean falls as \(\sigma/\sqrt n\). That \(1/\sqrt n\) law governs how long you must average to measure a qubit frequency, a \(T_1\) or a gate fidelity to a given precision, and is why measurement time on cold devices is expensive (@lf:sec-test-scarce).</p>
+<p>A <b>hierarchical model</b> puts priors on the parameters of priors. For example, each wafer's mean junction resistance is drawn from a fab-wide distribution, and each junction is drawn from its wafer's distribution. Data from many wafers then sharpen predictions for a new wafer. The review proposes exactly such a model for predicting cold qubit frequencies from room-temperature measurements (@lf:sec-var-bayes); Book 7 develops it.</p>
+
+<h3 id="sec-m-prob-mc">Monte Carlo methods</h3>
+<p>When a probability or expectation cannot be computed analytically, sample it. To estimate \(\mathbb E[g(X)]\), draw \(X_1,\dots,X_n\) from \(p(x)\) and average \(g(X_i)\). The error falls as \(\sigma_g/\sqrt n\) regardless of dimension, which is what makes Monte Carlo the workhorse of yield analysis. Its weakness is rare events: to estimate a failure probability of \(10^{-6}\) to 10% relative precision needs about \(10^8\) samples, because almost none of them fail. <b>Importance sampling</b> fixes this by sampling from a distribution \(q(x)\) concentrated near the failure region and reweighting by \(p(x)/q(x)\). Error-correction simulations that estimate logical error rates of \(10^{-10}\) and statistical yield sign-off for large chips both depend on such techniques.</p>
+
+<div class="eda"><p>Almost every open problem in the review is a statistics problem in disguise: chance-constrained frequency allocation (what design maximises \(\Pr\)(no collisions)?), hierarchical Bayesian prediction of cold parameters from warm data, Bayesian experimental design for scarce cryogenic test time, and simulation-based inference of noise models. This chapter supplies the vocabulary; Book 7 supplies the methods.</p></div>
+
+<div class="exercises" id="ex-m-prob"><h4>Exercises</h4><ol>
+<li>A qubit in the state \(\sqrt{0.3}\ket0 + \sqrt{0.7}\ket1\) is measured 1000 times. What are the mean and standard deviation of the number of "1" outcomes? How many measurements are needed to estimate the probability 0.7 to \(\pm0.001\)?
+<details><summary>Solution</summary><p>Binomial with \(n=1000\), \(p=0.7\): mean 700, standard deviation \(\sqrt{1000\times0.7\times0.3}\approx14.5\). The standard error of \(\hat p\) is \(\sqrt{p(1-p)/n}\); setting it to 0.001 gives \(n = 0.21/10^{-6} = 2.1\times10^5\) shots.</p></details></li>
+<li>Show that the sum of two independent Gaussians is Gaussian with means and variances added. (Use characteristic functions \(\mathbb E[\ee^{\ii kX}] = \ee^{\ii k\mu - k^2\sigma^2/2}\).)
+<details><summary>Solution</summary><p>For independent variables, \(\mathbb E[\ee^{\ii k(X+Y)}] = \mathbb E[\ee^{\ii kX}]\mathbb E[\ee^{\ii kY}] = \ee^{\ii k(\mu_X+\mu_Y) - k^2(\sigma_X^2+\sigma_Y^2)/2}\), which is the characteristic function of a Gaussian with mean \(\mu_X+\mu_Y\) and variance \(\sigma_X^2+\sigma_Y^2\). (The characteristic function is the Fourier transform of the density, and the result is the convolution theorem again.)</p></details></li>
+<li>A junction's critical current is \(I_c\propto\ee^{-d/d_0}\) with \(d_0 = 0.1\) nm. If the barrier thickness \(d\) has standard deviation 0.005 nm, what is the relative spread of \(I_c\), and of the qubit frequency \(\omega\propto\sqrt{I_c}\)?
+<details><summary>Solution</summary><p>\(\delta I_c/I_c = \delta d/d_0 = 0.05\), i.e. 5%. The frequency spread is half that, 2.5%, or about 125 MHz at 5 GHz. This is why junction-level control is the key manufacturing problem for superconducting qubits.</p></details></li>
+<li>Using @fig:m-yield's model, what window \(\Delta/\sigma\) is needed for a 1000-qubit chip to have 90% probability that every qubit is in specification?
+<details><summary>Solution</summary><p>Need \(p^{1000} = 0.9\), so \(p = 0.9^{1/1000}\approx 1 - 1.05\times10^{-4}\). The two-sided tail \(2(1-\Phi(k)) = 1.05\times10^{-4}\) gives \(1-\Phi(k) \approx 5.3\times10^{-5}\), so \(k\approx3.9\). The window must be nearly four standard deviations wide.</p></details></li>
+<li>A detector has dark-count probability \(10^{-3}\) per window and efficiency 90%. A photon is present with prior probability 0.5. Given a click, what is the probability a photon was present? Given no click?
+<details><summary>Solution</summary><p>Click: \(\frac{0.9\times0.5}{0.9\times0.5 + 0.001\times0.5}\approx 0.9989\). No click: \(\Pr(\text{photon}|\text{none}) = \frac{0.1\times0.5}{0.1\times0.5 + 0.999\times0.5}\approx 0.091\). Inefficiency hurts the "no click" inference far more than dark counts hurt the "click" inference. In photonic quantum computing, undetected loss is the dominant error (Book 5).</p></details></li>
+</ol></div>
+</section>
