@@ -48,14 +48,60 @@ document.addEventListener("DOMContentLoaded", function () {
 <header class="topbar">
 <a class="brand" href="index.html">Book 4 · <span>Quantum Computing</span></a>
 <span class="spacer"></span>
-<nav><a href="../index.html">Roadmap</a><a href="#references">Exercises</a><a href="../../index.html">Lab to Foundry</a></nav>
+<nav><a href="../index.html">Roadmap</a><a href="#ex-i-circuits">Exercises</a><a href="../../index.html">Lab to Foundry</a></nav>
 <button class="btn icon-btn" id="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
 </header>
 <div class="layout">
 <nav class="toc" aria-label="Contents">
   <p class="toc-title">Contents</p>
   <ol>
-<li class="toc2"><a href="#sec-soon">In preparation</a></li>
+<li class="toc2"><a href="#sec-i-preface">How to use this book</a></li>
+<li class="toc2"><a href="#sec-i-circuits"><span class="tocnum">1</span>Qubits, gates and circuits</a></li>
+<li class="toc3"><a href="#sec-i-circ-single"><span class="tocnum">1.1</span>Single-qubit gates</a></li>
+<li class="toc3"><a href="#sec-i-circ-two"><span class="tocnum">1.2</span>Two-qubit gates</a></li>
+<li class="toc3"><a href="#sec-i-circ-diag"><span class="tocnum">1.3</span>Circuit diagrams</a></li>
+<li class="toc3"><a href="#sec-i-circ-univ"><span class="tocnum">1.4</span>Universality</a></li>
+<li class="toc3"><a href="#sec-i-circ-divincenzo"><span class="tocnum">1.5</span>What hardware must provide</a></li>
+<li class="toc2"><a href="#sec-i-entangle"><span class="tocnum">2</span>Entanglement as a resource: no-cloning, teleportation and networks</a></li>
+<li class="toc3"><a href="#sec-i-ent-clone"><span class="tocnum">2.1</span>No cloning</a></li>
+<li class="toc3"><a href="#sec-i-ent-tele"><span class="tocnum">2.2</span>Teleportation</a></li>
+<li class="toc3"><a href="#sec-i-ent-dense"><span class="tocnum">2.3</span>Superdense coding</a></li>
+<li class="toc3"><a href="#sec-i-ent-swap"><span class="tocnum">2.4</span>Entanglement swapping and networks</a></li>
+<li class="toc2"><a href="#sec-i-alg1"><span class="tocnum">3</span>Quantum algorithms I: interference, oracles and search</a></li>
+<li class="toc3"><a href="#sec-i-alg1-par"><span class="tocnum">3.1</span>Parallelism and interference</a></li>
+<li class="toc3"><a href="#sec-i-alg1-dj"><span class="tocnum">3.2</span>Deutsch–Jozsa and Bernstein–Vazirani</a></li>
+<li class="toc3"><a href="#sec-i-alg1-grover"><span class="tocnum">3.3</span>Grover's search</a></li>
+<li class="toc2"><a href="#sec-i-alg2"><span class="tocnum">4</span>Quantum algorithms II: Fourier transform, phase estimation, factoring and simulation</a></li>
+<li class="toc3"><a href="#sec-i-alg2-qft"><span class="tocnum">4.1</span>The quantum Fourier transform</a></li>
+<li class="toc3"><a href="#sec-i-alg2-pe"><span class="tocnum">4.2</span>Phase estimation</a></li>
+<li class="toc3"><a href="#sec-i-alg2-shor"><span class="tocnum">4.3</span>Shor's algorithm</a></li>
+<li class="toc3"><a href="#sec-i-alg2-sim"><span class="tocnum">4.4</span>Hamiltonian simulation</a></li>
+<li class="toc3"><a href="#sec-i-alg2-var"><span class="tocnum">4.5</span>Variational and near-term algorithms</a></li>
+<li class="toc2"><a href="#sec-i-noise"><span class="tocnum">5</span>Noise, fidelity and benchmarking</a></li>
+<li class="toc3"><a href="#sec-i-noise-model"><span class="tocnum">5.1</span>Gate errors as channels</a></li>
+<li class="toc3"><a href="#sec-i-noise-fid"><span class="tocnum">5.2</span>Measures of gate quality</a></li>
+<li class="toc3"><a href="#sec-i-noise-tomo"><span class="tocnum">5.3</span>Tomography</a></li>
+<li class="toc3"><a href="#sec-i-noise-rb"><span class="tocnum">5.4</span>Randomised benchmarking</a></li>
+<li class="toc3"><a href="#sec-i-noise-beyond"><span class="tocnum">5.5</span>Errors the simple models miss</a></li>
+<li class="toc2"><a href="#sec-i-qec1"><span class="tocnum">6</span>Quantum error correction I: codes and stabilisers</a></li>
+<li class="toc3"><a href="#sec-i-qec1-rep"><span class="tocnum">6.1</span>The repetition code, quantum style</a></li>
+<li class="toc3"><a href="#sec-i-qec1-disc"><span class="tocnum">6.2</span>Discretisation of errors</a></li>
+<li class="toc3"><a href="#sec-i-qec1-stab"><span class="tocnum">6.3</span>The stabiliser formalism</a></li>
+<li class="toc3"><a href="#sec-i-qec1-gk"><span class="tocnum">6.4</span>Clifford circuits are classically simulable</a></li>
+<li class="toc2"><a href="#sec-i-qec2"><span class="tocnum">7</span>Quantum error correction II: the surface code and fault tolerance</a></li>
+<li class="toc3"><a href="#sec-i-qec2-surface"><span class="tocnum">7.1</span>The surface code</a></li>
+<li class="toc3"><a href="#sec-i-qec2-cycle"><span class="tocnum">7.2</span>The syndrome-extraction cycle</a></li>
+<li class="toc3"><a href="#sec-i-qec2-decoder"><span class="tocnum">7.3</span>Decoders</a></li>
+<li class="toc3"><a href="#sec-i-qec2-threshold"><span class="tocnum">7.4</span>Threshold and the suppression factor</a></li>
+<li class="toc3"><a href="#sec-i-qec2-ft"><span class="tocnum">7.5</span>Fault-tolerant logic</a></li>
+<li class="toc3"><a href="#sec-i-qec2-ldpc"><span class="tocnum">7.6</span>Beyond the surface code</a></li>
+<li class="toc2"><a href="#sec-i-stack"><span class="tocnum">8</span>From program to pulses: the quantum computing stack</a></li>
+<li class="toc3"><a href="#sec-i-stack-layers"><span class="tocnum">8.1</span>The layers</a></li>
+<li class="toc3"><a href="#sec-i-stack-compile"><span class="tocnum">8.2</span>Compilation</a></li>
+<li class="toc3"><a href="#sec-i-stack-pulses"><span class="tocnum">8.3</span>Gates become pulses</a></li>
+<li class="toc3"><a href="#sec-i-stack-cal"><span class="tocnum">8.4</span>Calibration</a></li>
+<li class="toc3"><a href="#sec-i-stack-elec"><span class="tocnum">8.5</span>Control electronics and scaling</a></li>
+    <li class="toc2"><a href="#references">References</a></li>
   </ol>
 </nav>
 <main>
@@ -65,11 +111,378 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Quantum Information and Computation</h1>
   <p class="subtitle">Gates and circuits, entanglement, algorithms, noise and benchmarking, quantum error correction and the hardware stack</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">0 chapters · 0 numbered equations · 0 exercises with solutions · about 50 hours of study</p>
+  <p class="meta">8 chapters · 13 numbered equations · 27 exercises with solutions · about 50 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../quantum-mechanics/index.html">Book 3: Quantum Mechanics</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
-<section id="sec-soon" class="unnumbered"><h2>In preparation</h2><p>This book has not been written yet.</p></section>
+<section id="sec-i-preface" class="unnumbered"><h2>How to use this book</h2>
+<p>Book 3 described what a single quantum system does. This book asks what can be computed with many of them, and what it costs to make the computation reliable. It is organised in three parts. Chapters 1–4 develop the circuit model, entanglement as a resource and the main algorithms, so that you know what a quantum computer is for and how large it must be. Chapter 5 turns to imperfection: how gate errors are modelled, measured and compared. Chapters 6–7 develop quantum error correction from the repetition code to the surface code, which converts a requirement on a computation into a requirement on physical error rates and qubit counts. Chapter 8 follows a program down the stack to pulses, which is where the hardware of Book 6 begins.</p>
+<p>Error correction is the bridge between this course and the review it prepares you for. The review's single most important figure of merit, the logical error suppression factor \(\Lambda\), is defined in Chapter 7 here; its dependence on fabrication is the subject of the review's §9. Read Chapters 5–7 carefully.</p>
+<p>Prerequisites: Book 3, especially Chapters 2, 5, 7 and 8 (measurement, qubit rotations, density matrices and channels). The standard reference for this material is Nielsen and Chuang <span class="cite">[<a href="#ref-nielsen2010">1</a>]</span>; Preskill's lecture notes are an excellent free companion <span class="cite">[<a href="#ref-preskill_notes">2</a>]</span>.</p>
+</section>
 
+<section id="sec-i-circuits"><h2><span class="secnum">1</span> Qubits, gates and circuits</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Use the standard single-qubit gates and know that every single-qubit unitary is a rotation.</li>
+<li>Use CNOT, CZ, SWAP and iSWAP, and convert between them.</li>
+<li>Read and write quantum circuit diagrams, including measurement and classical control.</li>
+<li>Understand universality, the Clifford+T gate set and the DiVincenzo criteria for hardware.</li>
+</ul></div>
+
+<h3 id="sec-i-circ-single"><span class="secnum">1.1</span> Single-qubit gates</h3>
+<p>A gate is a unitary operator applied to one or more qubits. The single-qubit gates used everywhere are</p>
+<div class="eq" id="eq-i-gates1">$$ H = \frac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}, \quad S = \begin{pmatrix}1&0\\0&\ii\end{pmatrix}, \quad T = \begin{pmatrix}1&0\\0&\ee^{\ii\pi/4}\end{pmatrix}, \quad R_{\hat n}(\theta) = \ee^{-\ii\theta\,\hat n\cdot\boldsymbol\sigma/2},  \tag{1}$$</div>
+<p>plus the Paulis \(X, Y, Z\). The <b>Hadamard</b> \(H\) maps \(\ket0\to\ket+\) and \(\ket1\to\ket-\): it switches between the \(Z\) and \(X\) bases, and on the Bloch sphere it is a \(\pi\) rotation about the axis halfway between \(x\) and \(z\). \(S = \sqrt Z\) and \(T = \sqrt S\) are phase gates (rotations about \(z\) by \(\pi/2\) and \(\pi/4\), up to global phase). Every single-qubit unitary is, up to a global phase, a rotation \(R_{\hat n}(\theta)\) (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-paulirot">Book 1 eq. (18)</a>), and can be decomposed into rotations about two fixed axes, for example \(U = \ee^{\ii\alpha}R_z(\beta)R_y(\gamma)R_z(\delta)\) (Euler angles). Superconducting hardware typically implements \(R_x(\pi/2)\) pulses and "virtual" \(R_z\) frame changes (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-spin-gates">Book 3 §5.3</a>), and builds everything else from them.</p>
+
+<h3 id="sec-i-circ-two"><span class="secnum">1.2</span> Two-qubit gates</h3>
+<p>The <b>controlled-NOT</b> flips the target qubit if the control is \(\ket1\): \(\ket{c,t}\to\ket{c, t\oplus c}\). In the basis \(\ket{00},\ket{01},\ket{10},\ket{11}\) (control first),</p>
+<div class="eq" id="eq-i-cnot">$$ \mathrm{CNOT} = \begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&0&1\\0&0&1&0\end{pmatrix}, \qquad \mathrm{CZ} = \mathrm{diag}(1,1,1,-1), \qquad \mathrm{CNOT} = (I\otimes H)\,\mathrm{CZ}\,(I\otimes H).  \tag{2}$$</div>
+<p>The <b>controlled-Z</b> is symmetric in the two qubits and is what many superconducting and neutral-atom platforms implement natively. Applied to \(\ket+\ket0\), CNOT produces the Bell state \(\ket{\Phi^+}\): two-qubit gates create entanglement. The <b>SWAP</b> exchanges two qubits' states and costs three CNOTs; the <b>iSWAP</b>, \(\ket{01}\to\ii\ket{10}\), \(\ket{10}\to\ii\ket{01}\), arises naturally from the exchange interaction \(g(\sigma_+\sigma_-'+\sigma_-\sigma_+')\) of coupled qubits (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-pert-deg">Book 3 §6.2</a>) applied for time \(\pi/2g\). Hardware platforms each have a native entangling gate (CZ, iSWAP, cross-resonance, Mølmer–Sørensen), and all are equivalent up to single-qubit gates and a few repetitions.</p>
+
+<h3 id="sec-i-circ-diag"><span class="secnum">1.3</span> Circuit diagrams</h3>
+<p>In a circuit diagram, horizontal lines are qubits (time runs left to right), boxes are gates, a dot connected to \(\oplus\) is a CNOT, and a meter symbol is a measurement in the \(Z\) basis. Double lines carry classical bits, and a gate conditioned on a double line is applied only if the measured bit is 1 (<b>classical feed-forward</b>). Two circuit identities are worth knowing because compilers use them constantly: a CNOT conjugated by Hadamards on both qubits reverses control and target; and a Pauli on the control or target can be pushed through a CNOT, changing into a different Pauli (\(X\) on the control becomes \(X\) on both qubits; \(Z\) on the target becomes \(Z\) on both). The second rule is the basis of the stabiliser formalism (Chapter 6) and of how errors spread through error-correction circuits.</p>
+<p>Measurement can be deferred to the end of a circuit and replaced by quantum-controlled gates (the <b>principle of deferred measurement</b>), so mid-circuit measurement adds no computational power in principle. It matters enormously in practice: error correction measures ancilla qubits repeatedly and needs fast, low-crosstalk mid-circuit readout and reset.</p>
+
+<h3 id="sec-i-circ-univ"><span class="secnum">1.4</span> Universality</h3>
+<p>A set of gates is <b>universal</b> if any unitary on any number of qubits can be approximated to arbitrary accuracy by circuits built from it. Single-qubit rotations plus CNOT are universal exactly: any \(n\)-qubit unitary can be decomposed into them, though a generic unitary needs \(O(4^n)\) gates, so only special unitaries are efficiently implementable. A <b>discrete</b> universal set is needed for error correction, because only a finite set of gates can be protected. The standard choice is <b>Clifford + T</b>: the Clifford group (generated by \(H\), \(S\) and CNOT) plus the \(T\) gate. The Solovay–Kitaev theorem guarantees that any single-qubit rotation can be approximated to accuracy \(\epsilon\) with \(O(\log^c(1/\epsilon))\) gates from a finite universal set; modern synthesis achieves about \(3\log_2(1/\epsilon)\) \(T\) gates. Clifford circuits alone are not universal and are efficiently simulable classically (the Gottesman–Knill theorem, Chapter 6). The \(T\) gates are where quantum advantage lives, and in fault-tolerant machines they are the expensive part (Chapter 7).</p>
+
+<h3 id="sec-i-circ-divincenzo"><span class="secnum">1.5</span> What hardware must provide</h3>
+<p>DiVincenzo's criteria <span class="cite">[<a href="#ref-divincenzo2000">3</a>]</span> list what a physical platform needs: (1) well-defined, scalable qubits; (2) initialisation to a simple state; (3) coherence times long compared with gate times; (4) a universal gate set; (5) qubit-specific measurement. Two more for communication: conversion between stationary and flying qubits, and faithful transmission. Every platform in Books 5 and 6 can be read as a particular trade-off among these, and every problem in the review, from frequency crowding to wiring, is ultimately a threat to criterion 1, "scalable".</p>
+
+<div class="eda"><p>A gate is the interface between hardware and software. Its specification (which unitary, how fast, at what error) is the contract a chip design must meet. In the review's terms the error of each gate, \(\varepsilon_i\), is a function of the device parameters \(\boldsymbol\theta\) and the coherence budget (<a class="xref ext" href="../../index.html#eq-eps">Lab to Foundry eq. (37)</a>), and that function is what connects chip design to algorithm performance.</p></div>
+
+<div class="exercises" id="ex-i-circuits"><h4>Exercises</h4><ol>
+<li>Show that \(HXH = Z\), \(HZH = X\) and \(HYH = -Y\).
+<details><summary>Solution</summary><p>Direct multiplication. Geometrically, \(H\) is a \(\pi\) rotation about \((\hat x+\hat z)/\sqrt2\), which swaps the \(x\) and \(z\) axes and reverses \(y\).</p></details></li>
+<li>Verify \(\mathrm{CNOT} = (I\otimes H)\,\mathrm{CZ}\,(I\otimes H)\) by checking its action on \(\ket{1}\ket{0}\).
+<details><summary>Solution</summary><p>\((I\otimes H)\ket{10} = \ket1\ket+\). CZ applies \(Z\) to the target when the control is 1: \(\ket1\ket-\). Then \((I\otimes H)\) gives \(\ket1\ket1\). So \(\ket{10}\to\ket{11}\), as CNOT does. On \(\ket{0t}\) CZ does nothing and \(H^2 = I\).</p></details></li>
+<li>Compute the state produced by \(\mathrm{CNOT}(H\otimes I)\ket{01}\).
+<details><summary>Solution</summary><p>\((H\otimes I)\ket{01} = \tfrac1{\sqrt2}(\ket{01}+\ket{11})\). CNOT gives \(\tfrac1{\sqrt2}(\ket{01}+\ket{10}) = \ket{\Psi^+}\).</p></details></li>
+<li>Show that \(T\) is not a Clifford gate by computing \(TXT^\dagger\).
+<details><summary>Solution</summary><p>\(TXT^\dagger = \begin{pmatrix}0&\ee^{-\ii\pi/4}\\ \ee^{\ii\pi/4}&0\end{pmatrix} = (X+Y)/\sqrt2\), which is not a Pauli (times a phase). Clifford gates map Paulis to Paulis; \(T\) does not.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-i-entangle"><h2><span class="secnum">2</span> Entanglement as a resource: no-cloning, teleportation and networks</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Prove the no-cloning theorem and understand its consequences for error correction.</li>
+<li>Work through quantum teleportation and superdense coding.</li>
+<li>Understand Bell measurements, entanglement swapping and why they matter for modular and photonic architectures.</li>
+</ul></div>
+
+<h3 id="sec-i-ent-clone"><span class="secnum">2.1</span> No cloning</h3>
+<p>Classical error correction copies data. Quantum mechanics forbids it <span class="cite">[<a href="#ref-wootters1982">4</a>]</span>. Suppose a unitary \(U\) copied every state: \(U\ket\psi\ket0 = \ket\psi\ket\psi\) and \(U\ket\phi\ket0 = \ket\phi\ket\phi\). Taking the inner product of the two equations and using unitarity gives \(\braket\phi\psi = \braket\phi\psi^2\), so \(\braket\phi\psi\) is 0 or 1. Only orthogonal states (which are effectively classical bits) can be copied. The same conclusion holds for any quantum operation, not only unitaries. Two consequences matter here. Quantum error correction must protect information without copying it, by spreading it into entanglement (Chapter 6). And quantum information cannot be amplified like a classical signal, so loss on a photonic channel cannot be fixed by a repeater that copies (Book 5).</p>
+
+<h3 id="sec-i-ent-tele"><span class="secnum">2.2</span> Teleportation</h3>
+<p>Alice has a qubit in an unknown state \(\ket\psi = \alpha\ket0+\beta\ket1\) and shares a Bell pair \(\ket{\Phi^+}_{AB}\) with Bob. The joint state of Alice's two qubits and Bob's one can be rewritten exactly in the Bell basis of Alice's pair <span class="cite">[<a href="#ref-bennett1993">5</a>]</span>:</p>
+<div class="eq" id="eq-i-tele">$$ \ket\psi\ket{\Phi^+} = \tfrac12\Big[\ket{\Phi^+}\ket\psi + \ket{\Phi^-}Z\ket\psi + \ket{\Psi^+}X\ket\psi + \ket{\Psi^-}XZ\ket\psi\Big] .  \tag{3}$$</div>
+<p>Alice measures her two qubits in the Bell basis (a CNOT, a Hadamard and two \(Z\) measurements). Each of the four outcomes is equally likely and reveals nothing about \(\alpha,\beta\). She sends the two classical bits to Bob, who applies \(I\), \(Z\), \(X\) or \(XZ\) accordingly, and holds \(\ket\psi\). No cloning is violated (Alice's copy is destroyed by her measurement) and nothing travels faster than light (Bob needs the classical bits). Teleportation is the template for many hardware operations: moving logical qubits between modules, implementing gates by "gate teleportation" with prepared resource states (Chapter 7's magic states), and fusion-based photonic computing (Book 5).</p>
+
+<h3 id="sec-i-ent-dense"><span class="secnum">2.3</span> Superdense coding</h3>
+<p>Run the protocol the other way. If Alice and Bob share \(\ket{\Phi^+}\), Alice can apply one of \(I, X, Z, XZ\) to her half, turning the pair into one of the four Bell states, and send her qubit to Bob. Bob's Bell measurement distinguishes them, so one transmitted qubit carries two classical bits. Teleportation (2 bits + 1 ebit → 1 qubit) and superdense coding (1 qubit + 1 ebit → 2 bits) show that entanglement is a consumable resource with an exchange rate.</p>
+
+<h3 id="sec-i-ent-swap"><span class="secnum">2.4</span> Entanglement swapping and networks</h3>
+<p>If Alice–Bob share a Bell pair and Bob–Charlie share another, a Bell measurement on Bob's two qubits leaves Alice and Charlie entangled, though they never interacted: <b>entanglement swapping</b>. Chains of swaps, combined with purification, are the principle of quantum repeaters. In computing, the same idea links modules: two chips connected by optical or microwave links can share Bell pairs generated by sending photons and performing a Bell measurement in the middle, and then teleport gates between modules. Every modular roadmap in the industry (multi-chip superconducting systems, linked ion traps, networked neutral-atom arrays) depends on the rate and fidelity of such links, which become hardware specifications like any other.</p>
+
+<div class="box"><p><strong>Linear optics cannot do a complete Bell measurement.</strong> With only beam splitters, phase shifters and photon detectors, at most two of the four Bell states of two photons can be distinguished, so a linear-optical Bell measurement succeeds with probability at most 50%. This single fact shapes photonic quantum computing: computation must be organised around probabilistic "fusion" measurements and redundancy (Book 5, Book 5).</p></div>
+
+<div class="exercises" id="ex-i-entangle"><h4>Exercises</h4><ol>
+<li>Verify <a class="xref" href="#eq-i-tele">(3)</a> for the coefficient of \(\ket{\Phi^+}\) on Alice's side.
+<details><summary>Solution</summary><p>Write \(\ket\psi\ket{\Phi^+} = \tfrac{1}{\sqrt2}(\alpha\ket{000}+\alpha\ket{011}+\beta\ket{100}+\beta\ket{111})\) (qubits: Alice's input, Alice's half, Bob). Project Alice's two qubits onto \(\bra{\Phi^+} = \tfrac1{\sqrt2}(\bra{00}+\bra{11})\): terms \(\ket{00}\ket0\) and \(\ket{11}\ket1\) survive, giving \(\tfrac12(\alpha\ket0+\beta\ket1)\).</p></details></li>
+<li>In superdense coding, which operation must Alice apply to send "11" if the code is \(00\to I\), \(01\to X\), \(10\to Z\), \(11\to XZ\), and which Bell state does Bob receive?
+<details><summary>Solution</summary><p>\((XZ\otimes I)\ket{\Phi^+} = \tfrac{1}{\sqrt2}(XZ\ket0\ket0 + XZ\ket1\ket1) = \tfrac1{\sqrt2}(\ket1\ket0 - \ket0\ket1) = -\ket{\Psi^-}\).</p></details></li>
+<li>Show that no unitary can map \(\ket\psi\ket0\to\ket\psi\ket\psi\) for both \(\ket0\) and \(\ket+\).
+<details><summary>Solution</summary><p>\(\braket{0}{+} = 1/\sqrt2\), but cloning would require \(\braket0+ = \braket0+^2 = 1/2\). Contradiction.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-i-alg1"><h2><span class="secnum">3</span> Quantum algorithms I: interference, oracles and search</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand quantum parallelism and why interference, not parallelism, gives speed-ups.</li>
+<li>Work through Deutsch–Jozsa and Bernstein–Vazirani in the oracle model.</li>
+<li>Derive Grover's search algorithm geometrically, and know its optimality.</li>
+</ul></div>
+
+<h3 id="sec-i-alg1-par"><span class="secnum">3.1</span> Parallelism and interference</h3>
+<p>A classical function \(f:\{0,1\}^n\to\{0,1\}\) can be implemented reversibly as a unitary <b>oracle</b> \(U_f\ket x\ket y = \ket x\ket{y\oplus f(x)}\). Applying it to the uniform superposition \(H^{\otimes n}\ket{0}^{\otimes n} = 2^{-n/2}\sum_x\ket x\) evaluates \(f\) on all \(2^n\) inputs "at once". But a measurement returns only one random \(x\) with its \(f(x)\): nothing gained. Speed-ups come from arranging the computation so that amplitudes for wrong answers <i>interfere destructively</i> and those for the right answer constructively, before measuring. Every quantum algorithm is a careful choreography of interference.</p>
+<p>A useful trick: if the target qubit is prepared in \(\ket-\), then \(U_f\ket x\ket- = (-1)^{f(x)}\ket x\ket-\). The function value has been moved into a phase (<b>phase kickback</b>). Phases are what interfere.</p>
+
+<h3 id="sec-i-alg1-dj"><span class="secnum">3.2</span> Deutsch–Jozsa and Bernstein–Vazirani</h3>
+<p>Suppose \(f\) is promised to be either constant or balanced (0 on exactly half the inputs). Classically, a deterministic answer needs \(2^{n-1}+1\) queries in the worst case. The Deutsch–Jozsa circuit uses one: prepare \(H^{\otimes n}\ket0^{\otimes n}\), apply the phase oracle, apply \(H^{\otimes n}\) again, and measure. The amplitude of \(\ket{0\dots0}\) is</p>
+<div class="eq" id="eq-i-dj">$$ \frac{1}{2^n}\sum_x(-1)^{f(x)} = \begin{cases}\pm1 & f \text{ constant}\\ 0 & f\text{ balanced}\end{cases}  \tag{4}$$</div>
+<p>so outcome \(0\dots0\) occurs with certainty if \(f\) is constant and never if it is balanced. Bernstein–Vazirani uses the same circuit for \(f(x) = s\cdot x \bmod 2\) and recovers the hidden string \(s\) in one query (classically \(n\)), because \(H^{\otimes n}\) maps \(2^{-n/2}\sum_x(-1)^{s\cdot x}\ket x\) exactly to \(\ket s\). These are toy problems, but they show the structure of useful algorithms: Hadamards create superpositions, the oracle writes phases, and a Fourier-type transform (here \(H^{\otimes n}\), the Fourier transform over bit strings) concentrates amplitude on the answer.</p>
+
+<h3 id="sec-i-alg1-grover"><span class="secnum">3.3</span> Grover's search</h3>
+<p>Search \(N = 2^n\) items for the one marked by \(f(w) = 1\). Classically this needs about \(N/2\) queries on average. Grover's algorithm <span class="cite">[<a href="#ref-grover1996">6</a>]</span> needs about \(\tfrac\pi4\sqrt N\). Start in the uniform superposition \(\ket s\). Repeat two reflections: the oracle \(O = I - 2\ketbra ww\) (flip the sign of the marked item) and the <b>diffusion</b> \(D = 2\ketbra ss - I\) (reflect about the mean). Everything happens in the two-dimensional plane spanned by \(\ket w\) and the uniform superposition of unmarked items \(\ket{s'}\). The starting state makes a small angle \(\theta/2\) with \(\ket{s'}\), with \(\sin(\theta/2) = 1/\sqrt N\). Two reflections compose to a rotation by \(\theta\), so after \(k\) iterations</p>
+<div class="eq" id="eq-i-grover">$$ \Pr(w) = \sin^2\!\Big(\frac{(2k+1)\theta}{2}\Big), \qquad k_{\mathrm{opt}}\approx\frac{\pi}{4}\sqrt N .  \tag{5}$$</div>
+<p>Iterating too long rotates past the target, and the success probability falls again. The quadratic speed-up is provably optimal for unstructured search. Its generalisation, <b>amplitude amplification</b>, boosts the success probability of any quantum subroutine quadratically faster than classical repetition, and appears as a component in many algorithms.</p>
+<div class="box warn"><p><strong>Why quadratic speed-ups are fragile.</strong> A fault-tolerant logical operation is roughly \(10^3\)–\(10^4\) times slower than a classical processor operation, and each oracle call may contain thousands of logical gates. A \(\sqrt N\) advantage pays off only for very large \(N\), and analyses suggest that quadratic speed-ups alone are unlikely to give practical advantage on early fault-tolerant machines. Exponential speed-ups (Chapter 4) are what drive the roadmaps.</p></div>
+
+<div class="exercises" id="ex-i-alg1"><h4>Exercises</h4><ol>
+<li>For \(n = 1\) (Deutsch's problem), list the four functions \(f:\{0,1\}\to\{0,1\}\) and show the circuit distinguishes constant from balanced with one query.
+<details><summary>Solution</summary><p>\(f = 0\), \(f = 1\) (constant), \(f(x) = x\), \(f(x) = 1-x\) (balanced). After \(H\), phase oracle and \(H\), the amplitude of \(\ket0\) is \(\tfrac12[(-1)^{f(0)}+(-1)^{f(1)}]\): \(\pm1\) for constant, 0 for balanced.</p></details></li>
+<li>For \(N = 4\), how many Grover iterations give the marked item with certainty?
+<details><summary>Solution</summary><p>\(\sin(\theta/2) = 1/2\), so \(\theta = \pi/3\). After \(k = 1\), \(\sin^2(3\theta/2) = \sin^2(\pi/2) = 1\). One iteration suffices.</p></details></li>
+<li>For \(N = 2^{40}\), estimate the optimal number of iterations and compare with the classical average.
+<details><summary>Solution</summary><p>\(\tfrac\pi4\sqrt{2^{40}} = \tfrac\pi4\times2^{20}\approx8.2\times10^5\) versus \(2^{39}\approx5.5\times10^{11}\).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-i-alg2"><h2><span class="secnum">4</span> Quantum algorithms II: Fourier transform, phase estimation, factoring and simulation</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Build the quantum Fourier transform from Hadamards and controlled phases.</li>
+<li>Understand phase estimation, the subroutine behind most exponential speed-ups.</li>
+<li>Follow Shor's factoring algorithm at the level of its structure and cost.</li>
+<li>Understand Hamiltonian simulation by Trotterisation, variational algorithms, and how resource estimates are made.</li>
+</ul></div>
+
+<h3 id="sec-i-alg2-qft"><span class="secnum">4.1</span> The quantum Fourier transform</h3>
+<p>The discrete Fourier transform of Book 1 (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-dft">Book 1 eq. (33)</a>), normalised to be unitary, acts on basis states of \(n\) qubits (\(N = 2^n\)) as</p>
+<div class="eq" id="eq-i-qft">$$ \mathrm{QFT}\ket j = \frac{1}{\sqrt N}\sum_{k=0}^{N-1}\ee^{2\pi\ii jk/N}\ket k = \frac{1}{\sqrt N}\bigotimes_{l=1}^{n}\big(\ket0 + \ee^{2\pi\ii\,j/2^l}\ket1\big).  \tag{6}$$</div>
+<p>The product form shows that each output qubit carries one binary digit of \(j\) in its phase. A circuit of \(n\) Hadamards and \(n(n-1)/2\) controlled phase rotations \(R_k = \mathrm{diag}(1, \ee^{2\pi\ii/2^k})\) implements it, compared with \(O(n2^n)\) operations for the classical FFT on a vector of length \(2^n\). The catch is the same as always: the QFT transforms amplitudes, which cannot be read out. It is useful only as a step inside an algorithm whose output after the QFT is concentrated on a few outcomes. Small rotations \(R_k\) with \(k\gtrsim\log_2(n/\epsilon)\) can be dropped with error \(\epsilon\) (the <b>approximate QFT</b>).</p>
+
+<h3 id="sec-i-alg2-pe"><span class="secnum">4.2</span> Phase estimation</h3>
+<p>Given a unitary \(U\) and one of its eigenvectors, \(U\ket u = \ee^{2\pi\ii\varphi}\ket u\), <b>phase estimation</b> finds \(\varphi\) to \(t\) bits. Prepare \(t\) ancillas in \(\ket+\), apply controlled-\(U^{2^k}\) from ancilla \(k\) to the register holding \(\ket u\). By phase kickback, ancilla \(k\) acquires the phase \(\ee^{2\pi\ii\,2^k\varphi}\), so the ancilla register is exactly in the product state of <a class="xref" href="#eq-i-qft">(6)</a> with \(j/2^t\) replaced by \(\varphi\). An inverse QFT then yields the binary expansion of \(\varphi\). Precision \(2^{-t}\) costs about \(2^t\) applications of \(U\), the "Heisenberg scaling" that also underlies quantum-enhanced metrology. Phase estimation is how quantum computers find energies of molecules (with \(U = \ee^{-\ii Ht}\)) and periods of functions.</p>
+
+<h3 id="sec-i-alg2-shor"><span class="secnum">4.3</span> Shor's algorithm</h3>
+<p>Factoring an integer \(N\) reduces, by classical number theory, to finding the <b>order</b> \(r\) of a random \(a\) modulo \(N\): the smallest \(r\) with \(a^r\equiv1 \pmod N\). If \(r\) is even, \(\gcd(a^{r/2}\pm1, N)\) is likely to be a nontrivial factor. The unitary \(U\ket y = \ket{ay\bmod N}\) has eigenvalues \(\ee^{2\pi\ii s/r}\), so phase estimation on \(U\) returns \(s/r\) for random \(s\), and continued fractions recover \(r\) <span class="cite">[<a href="#ref-shor1997">7</a>]</span>. The quantum cost is dominated by modular exponentiation, implemented with reversible arithmetic circuits of \(O(n^3)\) gates for an \(n\)-bit number (with faster variants). Classically, the best known algorithm (the number field sieve) takes time \(\exp(O(n^{1/3}\log^{2/3}n))\). This exponential separation is why factoring RSA-2048 is the benchmark of fault-tolerant roadmaps.</p>
+<p>Resource estimates translate an algorithm into hardware requirements. An influential 2021 analysis estimated that factoring a 2048-bit RSA key would take about 8 hours on 20 million noisy physical qubits with \(10^{-3}\) error rates and a surface code <span class="cite">[<a href="#ref-gidney2021rsa">8</a>]</span>; refinements published since have reduced the qubit count substantially, to under a million in a 2025 estimate cited in the review <span class="cite">[<a href="#ref-gidney2025rsa">9</a>]</span>. These numbers are only as good as their assumptions about physical error rates, code cycle time and connectivity, all of which are hardware properties. That is the link from algorithms to the review's §9.</p>
+
+<h3 id="sec-i-alg2-sim"><span class="secnum">4.4</span> Hamiltonian simulation</h3>
+<p>Feynman's original motivation for quantum computers was simulating quantum systems, whose state vectors grow exponentially (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-tensor-exp">Book 1 §4.4</a>). For a Hamiltonian that is a sum of local terms, \(H = \sum_jH_j\), the <b>Trotter–Suzuki</b> product formula approximates evolution by alternating short evolutions under each term <span class="cite">[<a href="#ref-lloyd1996">10</a>]</span>:</p>
+<div class="eq" id="eq-i-trotter">$$ \ee^{-\ii Ht} \approx \Big(\prod_j\ee^{-\ii H_jt/r}\Big)^r, \qquad \text{error } = O\Big(\frac{t^2}{r}\sum_{j\lt k}\big\|[H_j,H_k]\big\|\Big).  \tag{7}$$</div>
+<p>The error comes from the non-commuting terms, through the Baker–Campbell–Hausdorff formula (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-bch">Book 1 eq. (19)</a>). Each factor is a small circuit. Applications in chemistry and materials (catalysts, battery materials, high-temperature superconductors) are among the most credible uses of fault-tolerant machines, typically needing hundreds to thousands of logical qubits and \(10^8\)–\(10^{12}\) \(T\) gates.</p>
+
+<h3 id="sec-i-alg2-var"><span class="secnum">4.5</span> Variational and near-term algorithms</h3>
+<p>Without error correction, circuits must be short. <b>Variational</b> algorithms use a parametrised circuit \(U(\boldsymbol\theta)\) to prepare a trial state, estimate a cost such as \(\expval{H}\) by repeated measurement, and let a classical optimiser update \(\boldsymbol\theta\) (the variational quantum eigensolver <span class="cite">[<a href="#ref-peruzzo2014">11</a>]</span>; QAOA for optimisation). They are a quantum application of the variational principle (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-pert-var">Book 3 §6.6</a>). Their difficulties are instructive for engineers: the number of measurements needed to estimate gradients to useful precision is large, noise biases the cost, and for many circuit families gradients vanish exponentially with size ("barren plateaus"). The industry consensus by 2026 is that useful advantage requires error correction, which is what the rest of this book addresses.</p>
+
+<div class="eda"><p>Resource estimation closes the loop from application to hardware: a target algorithm fixes a logical error budget and a logical qubit count; the code and decoder fix the physical error rate and qubit count required (<a class="xref ext" href="../../index.html#eq-dreq">Lab to Foundry eq. (36)</a>); and the physical error rate is fixed by the chip's design and fabrication. A quantum EDA system can be judged by how well it predicts the inputs to that chain before a chip is made.</p></div>
+
+<div class="exercises" id="ex-i-alg2"><h4>Exercises</h4><ol>
+<li>Write the QFT on one qubit and on two qubits as matrices.
+<details><summary>Solution</summary><p>One qubit: \(H\). Two qubits (\(N=4\), \(\omega = \ii\)): \(\tfrac12\begin{pmatrix}1&1&1&1\\1&\ii&-1&-\ii\\1&-1&1&-1\\1&-\ii&-1&\ii\end{pmatrix}\).</p></details></li>
+<li>Find the order of \(a = 7\) modulo \(N = 15\) and use it to factor 15.
+<details><summary>Solution</summary><p>\(7^1 = 7\), \(7^2 = 49\equiv4\), \(7^3\equiv28\equiv13\), \(7^4\equiv91\equiv1\). So \(r = 4\), \(a^{r/2} = 49\equiv4\). \(\gcd(3, 15) = 3\) and \(\gcd(5, 15) = 5\).</p></details></li>
+<li>For two terms with \(\|[H_1,H_2]\| = 1\) (in units where \(\hbar=1\)) and \(t = 10\), how many Trotter steps give error below \(10^{-3}\) with the first-order formula (taking the constant as \(\tfrac12\))?
+<details><summary>Solution</summary><p>Error \(\approx\tfrac12 t^2/r = 50/r \lt 10^{-3}\) requires \(r>5\times10^4\). Higher-order formulas reduce this dramatically, which is why they are used.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-i-noise"><h2><span class="secnum">5</span> Noise, fidelity and benchmarking</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Model gate errors as quantum channels, and reduce them to Pauli channels by twirling.</li>
+<li>Define process fidelity, average gate fidelity and their relation, and estimate coherence-limited gate fidelity.</li>
+<li>Understand tomography and why it does not scale, and how randomised benchmarking does.</li>
+<li>Know the error types that matter beyond the simple model: coherent errors, leakage, crosstalk and correlated errors.</li>
+</ul></div>
+
+<h3 id="sec-i-noise-model"><span class="secnum">5.1</span> Gate errors as channels</h3>
+<p>A real gate implements not the ideal unitary \(U\) but a channel \(\tilde{\mathcal U}\). It is convenient to write \(\tilde{\mathcal U} = \mathcal E\circ\mathcal U\): the ideal gate followed by an error channel \(\mathcal E\) (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#eq-q-kraus">Book 3 eq. (34)</a>). A general error channel on \(n\) qubits has \(16^n - 4^n\) real parameters, too many to measure or use. The <b>Pauli channel</b> is the workhorse simplification:</p>
+<div class="eq" id="eq-i-pauli">$$ \mathcal E(\rho) = \sum_{P\in\{I,X,Y,Z\}^{\otimes n}} p_P\,P\rho P, \qquad \sum_Pp_P = 1,  \tag{8}$$</div>
+<p>a random Pauli applied with probabilities \(p_P\). The <b>depolarising</b> channel is the special case with all non-identity Paulis equally likely. Any channel can be converted into a Pauli channel with the same average fidelity by <b>Pauli twirling</b>: surround the gate with random Paulis (and their compensating Paulis afterwards). Twirling is used in experiments (randomised compiling) and justifies Pauli models in error-correction simulations, which is crucial because Pauli errors on Clifford circuits can be simulated efficiently (Chapter 6).</p>
+<p>For a qubit with relaxation and dephasing during a gate of duration \(t_g\), twirling the amplitude- and phase-damping channels gives approximately</p>
+<div class="eq" id="eq-i-coh">$$ p_X = p_Y \approx \frac{t_g}{4T_1}, \qquad p_Z\approx\frac{t_g}{2T_2} - \frac{t_g}{4T_1}, \qquad 1 - \bar F \approx \frac{t_g}{3}\Big(\frac{1}{T_1} + \frac{1}{T_\varphi}\Big)  \tag{9}$$</div>
+<p>(for \(t_g\ll T_1, T_2\); the last expression uses \(1/T_2 = 1/2T_1 + 1/T_\varphi\)). A 25 ns single-qubit gate with \(T_1 = T_\varphi = 100\) µs has a coherence limit of about \(1.7\times10^{-4}\); a 60 ns two-qubit gate on two such qubits about \(8\times10^{-4}\). These coherence limits are the first line of the error budget in the review (<a class="xref ext" href="../../index.html#eq-eps">Lab to Foundry eq. (37)</a>).</p>
+
+<h3 id="sec-i-noise-fid"><span class="secnum">5.2</span> Measures of gate quality</h3>
+<p>The <b>average gate fidelity</b> of an implemented channel \(\tilde{\mathcal U}\) to the target \(U\) is \(\bar F = \int\dd\psi\,\bra\psi U^\dagger\tilde{\mathcal U}(\ketbra\psi\psi)U\ket\psi\), averaged over all pure input states. The <b>process (entanglement) fidelity</b> \(F_e\) is the fidelity of the Choi state of the channel, and for a Pauli channel it is simply \(p_I\). They are related by</p>
+<div class="eq" id="eq-i-favg">$$ \bar F = \frac{dF_e + 1}{d+1}, \qquad d = 2^n .  \tag{10}$$</div>
+<p>The <b>error rate</b> \(r = 1 - \bar F\) is the number most often quoted. For error correction, though, the average hides what matters: a coherent over-rotation by angle \(\epsilon\) has infidelity of order \(\epsilon^2\), but repeated \(N\) times in phase it builds up to \(N^2\epsilon^2\), while stochastic errors build up only as \(N\epsilon^2\). The worst-case measure, the <b>diamond norm</b> distance, can be as large as \(\sqrt{r}\) for coherent errors. Twirling converts coherent into stochastic errors, which is one reason it is used.</p>
+
+<h3 id="sec-i-noise-tomo"><span class="secnum">5.3</span> Tomography</h3>
+<p><b>State tomography</b> reconstructs \(\rho\) from measurements in a complete set of bases; <b>process tomography</b> reconstructs a channel from tomography of its outputs for a complete set of inputs. Both need a number of measurement settings exponential in \(n\), and both mix up the errors of the gate under test with the errors of state preparation and measurement (SPAM). They are used for one and two qubits, mostly for diagnosis.</p>
+
+<h3 id="sec-i-noise-rb"><span class="secnum">5.4</span> Randomised benchmarking</h3>
+<p><b>Randomised benchmarking</b> (RB) <span class="cite">[<a href="#ref-magesan2011">12</a>]</span> avoids both problems. Apply a random sequence of \(m\) Clifford gates, followed by the single Clifford that inverts the whole sequence, and measure the probability \(F(m)\) of returning to the initial state. Averaging over random sequences twirls the noise into a depolarising channel with parameter \(p\) per gate, and</p>
+<div class="eq" id="eq-i-rb">$$ F(m) = A\,p^m + B, \qquad r = \frac{(d-1)(1-p)}{d} .  \tag{11}$$</div>
+<p>SPAM errors only affect \(A\) and \(B\), not the decay rate, so \(r\) is a clean per-gate error (<a class="xref ext" href="../../index.html#eq-rb">Lab to Foundry eq. (29)</a>). <b>Interleaved</b> RB inserts a specific gate between the random Cliffords and compares decay rates to extract that gate's error. <b>Cross-entropy benchmarking</b> uses random non-Clifford circuits and compares measured output distributions with ideal ones; it was used in the 2019 "supremacy" experiment. <b>Simultaneous</b> RB on many qubits at once exposes crosstalk. <a class="xref" href="#fig-i-rb">Figure 1</a> shows a typical RB decay.</p>
+<figure id="fig-i-rb">
+<img src="../figures/fig-i-rb.svg" alt="Randomised benchmarking survival probability decaying with sequence length for two error rates.">
+<figcaption><b>Figure 1.</b> Randomised benchmarking decays from <a class="xref" href="#eq-i-rb">(11)</a> for a single qubit (\(d=2\)) with error per Clifford \(r = 10^{-3}\) and \(5\times10^{-3}\), \(A = 0.48\), \(B = 0.5\) (the asymptote, a fully mixed qubit). Points mimic averages over random sequences with shot noise.</figcaption>
+</figure>
+
+<h3 id="sec-i-noise-beyond"><span class="secnum">5.5</span> Errors the simple models miss</h3>
+<ul>
+<li><b>Leakage</b>: a transmon has levels above \(\ket1\). Population that leaks into \(\ket2\) is outside the qubit space; it is not a Pauli error, it persists, and it spreads to neighbours through two-qubit gates. Error-correction schemes add "leakage reduction units" to pump it back.</li>
+<li><b>Crosstalk</b>: control of one qubit disturbs another, through stray couplings, shared lines or residual \(ZZ\) interaction (<a class="xref ext" href="../../index.html#eq-zz">Lab to Foundry eq. (7)</a>). It makes errors depend on what neighbours are doing.</li>
+<li><b>Correlated errors</b>: a cosmic ray or radioactive decay deposits energy in the substrate and creates quasiparticles that cause errors on many qubits at once for milliseconds. Correlated errors are particularly damaging to error correction, which assumes independence (<a class="xref ext" href="../../index.html#sec-qec-dem">Lab to Foundry §9.4</a>).</li>
+<li><b>Drift and non-stationarity</b>: two-level systems move in frequency, so a qubit's \(T_1\) and frequency change over hours. A benchmark is a snapshot.</li>
+</ul>
+
+<div class="eda"><p>Benchmarks are the measured outputs that a predictive design flow must reproduce. The review's proposed die record (<a class="xref ext" href="../../index.html#sec-prob-record">Lab to Foundry §11.1</a>) links each chip's layout and fabrication data with its measured RB error rates, coherence and crosstalk, so that models can be trained and validated against them.</p></div>
+
+<div class="exercises" id="ex-i-noise"><h4>Exercises</h4><ol>
+<li>A single-qubit depolarising channel with \(p_X = p_Y = p_Z = 10^{-4}\). What are \(F_e\) and \(\bar F\)?
+<details><summary>Solution</summary><p>\(F_e = p_I = 1 - 3\times10^{-4}\). \(\bar F = (2F_e+1)/3 = 1 - 2\times10^{-4}\). The error rate \(r = 2\times10^{-4}\).</p></details></li>
+<li>Estimate the coherence-limited error of a 40 ns CZ gate between two qubits each with \(T_1 = 150\) µs and \(T_\varphi = 200\) µs, using <a class="xref" href="#eq-i-coh">(9)</a> per qubit and adding.
+<details><summary>Solution</summary><p>Per qubit: \(\tfrac{40\,\mathrm{ns}}{3}(1/150 + 1/200)\,\mu\mathrm s^{-1} = 13.3\times0.01167\times10^{-3}\approx1.56\times10^{-4}\). Two qubits: about \(3.1\times10^{-4}\). (For two-qubit gates the prefactor differs slightly because the average is over a 4-dimensional space; this is an estimate.)</p></details></li>
+<li>An RB experiment fits \(p = 0.9985\) per Clifford on one qubit. What is \(r\)? If a Clifford averages 1.875 physical gates, what is the error per physical gate?
+<details><summary>Solution</summary><p>\(r = (1 - p)/2 = 7.5\times10^{-4}\). Per gate \(\approx7.5\times10^{-4}/1.875 = 4\times10^{-4}\).</p></details></li>
+<li>A gate over-rotates by \(\epsilon = 0.01\) rad. What is its infidelity, and what is the error after 100 repetitions if the errors add coherently?
+<details><summary>Solution</summary><p>Infidelity of a rotation error \(\epsilon\) is about \(\epsilon^2/6\) on average for a qubit (\(\approx1.7\times10^{-5}\)). After 100 coherent repetitions the angle error is 1 rad, infidelity of order \(1/6\) or more: far worse than \(100\times1.7\times10^{-5} = 1.7\times10^{-3}\) for stochastic errors.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-i-qec1"><h2><span class="secnum">6</span> Quantum error correction I: codes and stabilisers</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>See how the repetition code protects against bit flips without measuring the encoded information.</li>
+<li>Understand why correcting \(X\) and \(Z\) errors is enough to correct any error (discretisation).</li>
+<li>Use the stabiliser formalism: stabiliser groups, logical operators, syndromes and code parameters \([[n,k,d]]\).</li>
+<li>Know the Shor and Steane codes, the Knill–Laflamme conditions and the Gottesman–Knill theorem.</li>
+</ul></div>
+
+<h3 id="sec-i-qec1-rep"><span class="secnum">6.1</span> The repetition code, quantum style</h3>
+<p>Classically, one protects a bit against flips by sending three copies and taking a majority vote. Quantum mechanically we cannot copy (<a class="xref" href="#sec-i-ent-clone">§2.1</a>) and must not measure the data. Instead, <b>encode</b> \(\alpha\ket0+\beta\ket1\mapsto\alpha\ket{000}+\beta\ket{111}\) with two CNOTs. This is not three copies of the state; it is an entangled state in a two-dimensional subspace (the <b>code space</b>) of the eight-dimensional space. A bit flip on qubit 1 gives \(\alpha\ket{100}+\beta\ket{011}\). To detect it without learning \(\alpha,\beta\), measure the <b>parities</b> \(Z_1Z_2\) and \(Z_2Z_3\). Both code states have parities \((+1,+1)\); a flip on qubit 1 gives \((-1,+1)\), on qubit 2 \((-1,-1)\), on qubit 3 \((+1,-1)\). The parity outcomes, the <b>syndrome</b>, identify the error but carry no information about \(\alpha,\beta\), so the superposition survives. Apply \(X\) to the identified qubit and the state is restored. Parities are measured with an ancilla qubit and two CNOTs, then the ancilla is measured: this <b>syndrome extraction</b> circuit is the elementary operation of every error-correcting quantum computer.</p>
+<p>If each qubit flips independently with probability \(p\), the code fails only when two or more flip: \(p_L = 3p^2 - 2p^3\), better than \(p\) when \(p \lt 1/2\). With \(n = 2t+1\) qubits it corrects \(t\) flips and \(p_L\sim p^{t+1}\). This exponential suppression with code size, below a threshold, is the whole point.</p>
+
+<h3 id="sec-i-qec1-disc"><span class="secnum">6.2</span> Discretisation of errors</h3>
+<p>Quantum errors are continuous: a small rotation, a partial relaxation. Yet it suffices to correct a discrete set. Any single-qubit error operator can be expanded in Paulis, \(E = e_0I + e_xX + e_yY + e_zZ\). The syndrome measurement projects the erroneous state onto one term of this expansion, so after measurement the error <i>is</i> one of \(I, X, Y, Z\), and correcting it fixes the state. Since \(Y = \ii XZ\), a code that corrects arbitrary \(X\) and \(Z\) errors on any \(t\) qubits corrects every error on \(t\) qubits. This is why the Pauli error models of Chapter 5 are not just convenient but natural.</p>
+<p>The repetition code above corrects \(X\) but is defenceless against \(Z\): a phase flip on any qubit changes \(\alpha\ket{000}+\beta\ket{111}\) to \(\alpha\ket{000}-\beta\ket{111}\), which is a valid code state. In the \(\ket\pm\) basis the roles swap, giving a phase-flip code. Shor concatenated the two: encode in the phase-flip code, then encode each of those three qubits in the bit-flip code, giving the 9-qubit <b>Shor code</b>, the first code that corrects an arbitrary single-qubit error <span class="cite">[<a href="#ref-shor1995">13</a>]</span>.</p>
+
+<h3 id="sec-i-qec1-stab"><span class="secnum">6.3</span> The stabiliser formalism</h3>
+<p>Describing codes by their states becomes unwieldy. Gottesman's insight <span class="cite">[<a href="#ref-gottesman1997">14</a>]</span> was to describe them by the operators that leave them unchanged. A <b>stabiliser group</b> \(\mathcal S\) is an abelian group of \(n\)-qubit Pauli operators not containing \(-I\). The code space is</p>
+<div class="eq" id="eq-i-codespace">$$ \mathcal C = \{\ket\psi : S\ket\psi = \ket\psi\ \ \forall S\in\mathcal S\} .  \tag{12}$$</div>
+<p>If \(\mathcal S\) has \(n-k\) independent generators, \(\mathcal C\) has dimension \(2^k\): it encodes \(k\) logical qubits. For the bit-flip code, \(\mathcal S = \langle Z_1Z_2, Z_2Z_3\rangle\), \(n=3\), \(k=1\).</p>
+<ul>
+<li><b>Syndromes.</b> A Pauli error \(E\) either commutes or anticommutes with each generator \(S_j\). If it anticommutes, \(S_jE\ket\psi = -E\ket\psi\), so measuring \(S_j\) gives \(-1\). The pattern of signs is the syndrome.</li>
+<li><b>Logical operators.</b> Paulis that commute with every stabiliser but are not themselves in \(\mathcal S\) map the code space to itself nontrivially: they are logical operations, \(\bar X\) and \(\bar Z\). For the bit-flip code \(\bar X = X_1X_2X_3\), \(\bar Z = Z_1\) (or any \(Z_i\)).</li>
+<li><b>Distance.</b> The <b>code distance</b> \(d\) is the minimum weight (number of non-identity factors) of a logical operator. A code with distance \(d\) detects any error of weight below \(d\) and corrects any of weight up to \(\lfloor(d-1)/2\rfloor\). Codes are labelled \([[n,k,d]]\).</li>
+</ul>
+<p>The 7-qubit <b>Steane code</b> <span class="cite">[<a href="#ref-steane1996">15</a>]</span>, \([[7,1,3]]\), built from the classical Hamming code, has three \(X\)-type and three \(Z\)-type generators of weight 4, and the useful property that \(H\), \(S\) and CNOT act <b>transversally</b> (qubit by qubit), so these logical gates cannot spread a single error into two. The general condition for a code to correct a set of errors \(\{E_a\}\) is the <b>Knill–Laflamme</b> condition <span class="cite">[<a href="#ref-knill1997">16</a>]</span>: \(\bra{\bar i}E_a^\dagger E_b\ket{\bar j} = c_{ab}\delta_{ij}\) for code basis states \(\ket{\bar i}\). Errors must not distinguish between, or mix, logical states.</p>
+
+<h3 id="sec-i-qec1-gk"><span class="secnum">6.4</span> Clifford circuits are classically simulable</h3>
+<p>Clifford gates map Paulis to Paulis under conjugation. A stabiliser state on \(n\) qubits is described by \(n\) generators, each a string of \(n\) Paulis plus a sign, i.e. \(O(n^2)\) bits. A Clifford gate updates the generators in \(O(n)\) time and a Pauli measurement in \(O(n^2)\). This is the <b>Gottesman–Knill theorem</b>: circuits of Clifford gates, Pauli measurements and Pauli noise can be simulated efficiently on a classical computer. It means that error-correction circuits, which are almost entirely Clifford, can be simulated for thousands of qubits and billions of shots. Google's Stim simulator does exactly this, and it is the computational core of the review's proposed design-to-logical-error pipeline (<a class="xref ext" href="../../index.html#sec-qec-dem">Lab to Foundry §9.4</a>). It also means that Clifford gates alone give no quantum advantage: the \(T\) gate is essential.</p>
+
+<div class="eda"><p>A code is a wiring diagram. Each stabiliser generator is a parity measurement among specific qubits, implemented by an ancilla and CNOTs, so the code fixes which qubits must be coupled and how often. Choosing a code chooses the chip's connectivity (<a class="xref ext" href="../../index.html#sec-qec-codes">Lab to Foundry §9.2</a>). That is why error correction is part of chip design, not only of software.</p></div>
+
+<div class="exercises" id="ex-i-qec1"><h4>Exercises</h4><ol>
+<li>For the bit-flip code, compute the syndrome of \(X_1X_2\). What correction does the decoder apply, and what is the result?
+<details><summary>Solution</summary><p>\(X_1X_2\) anticommutes with \(Z_2Z_3\) only (it commutes with \(Z_1Z_2\)): syndrome \((+1,-1)\), which points to a flip on qubit 3. Applying \(X_3\) leaves \(X_1X_2X_3 = \bar X\): a logical error. Weight-2 errors defeat a distance-3 code.</p></details></li>
+<li>Show that \(Z_1\) and \(X_1X_2X_3\) commute with both generators of the bit-flip code and anticommute with each other.
+<details><summary>Solution</summary><p>\(Z_1\) commutes with all \(Z\)-type operators. \(X_1X_2X_3\) overlaps each \(Z_iZ_j\) on two qubits, giving two sign flips, so it commutes. \(Z_1\) and \(X_1X_2X_3\) overlap on one qubit and anticommute, as logical \(\bar Z\) and \(\bar X\) must.</p></details></li>
+<li>Compute \(p_L\) for the three-qubit code at \(p = 10^{-2}\) and \(p = 10^{-3}\). By how much does going to five qubits help at \(p=10^{-3}\)?
+<details><summary>Solution</summary><p>\(3p^2-2p^3\): \(2.98\times10^{-4}\) and \(3.0\times10^{-6}\). Five qubits fail with three or more flips: \(\approx\binom53p^3 = 10^{-8}\), a 300-fold improvement.</p></details></li>
+<li>How many independent stabiliser generators does a \([[n,k,d]]\) code have? Check for the Steane code.
+<details><summary>Solution</summary><p>\(n-k\). Steane: \(7-1 = 6\) (three \(X\)-type, three \(Z\)-type).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-i-qec2"><h2><span class="secnum">7</span> Quantum error correction II: the surface code and fault tolerance</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand the surface code: its layout, stabilisers, logical operators and syndrome-extraction cycle.</li>
+<li>Know how decoders work, why they must be fast, and what a detector error model is.</li>
+<li>Understand thresholds, the suppression factor \(\Lambda\), and how they set qubit overheads.</li>
+<li>See how logical gates are performed (lattice surgery, magic states) and where qLDPC codes fit.</li>
+</ul></div>
+
+<h3 id="sec-i-qec2-surface"><span class="secnum">7.1</span> The surface code</h3>
+<p>Arrange \(d\times d\) data qubits on a square grid, and place an ancilla on each face of the grid between four data qubits (and on some boundary edges between two). Faces alternate, like a chessboard, between <b>\(X\)-type</b> stabilisers \(X\!X\!X\!X\) and <b>\(Z\)-type</b> stabilisers \(Z\!Z\!Z\!Z\) on the four surrounding data qubits <span class="cite">[<a href="#ref-dennis2002">17</a>, <a href="#ref-fowler2012">18</a>]</span>. Neighbouring \(X\) and \(Z\) stabilisers share two qubits, so they commute. This is the <b>rotated surface code</b>, \([[d^2, 1, d]]\), using \(d^2\) data and \(d^2-1\) ancilla qubits, \(2d^2-1\) in all. Its logical \(\bar Z\) is a chain of \(Z\)s across the patch from one boundary to the opposite one, and \(\bar X\) a chain of \(X\)s in the other direction; both have weight \(d\).</p>
+<p>Its attractions are engineering ones. Every stabiliser involves only nearest neighbours on a planar grid, so a chip needs only local couplers in two dimensions. Each qubit couples to at most four others. And the threshold (below) is high, around 1% for circuit-level noise. Its drawback is overhead: one logical qubit costs \(2d^2-1\) physical qubits, hundreds to thousands at useful distances.</p>
+
+<h3 id="sec-i-qec2-cycle"><span class="secnum">7.2</span> The syndrome-extraction cycle</h3>
+<p>One <b>QEC cycle</b> measures every stabiliser once: reset ancillas, apply Hadamards to \(X\)-type ancillas, four rounds of CNOT (or CZ) gates in a carefully chosen order that avoids "hook" errors reducing the distance, Hadamards again, and measure all ancillas. On superconducting hardware a cycle takes about 1 µs, dominated by readout. Because measurements themselves can be wrong, a single cycle's syndrome cannot be trusted. Instead one compares each stabiliser's result with its result in the previous cycle; a change is a <b>detection event</b>. A data error creates a pair of detection events in space (on the two neighbouring stabilisers); a measurement error creates a pair in time (the same stabiliser in consecutive cycles). Errors are thus edges in a three-dimensional space-time graph, and detection events are their endpoints.</p>
+
+<h3 id="sec-i-qec2-decoder"><span class="secnum">7.3</span> Decoders</h3>
+<p>The <b>decoder</b> takes the detection events and guesses which errors occurred, or rather, which equivalence class of errors, since only the class (whether a logical operator was applied) matters. For the surface code with independent errors, the most likely explanation is a minimum-weight set of edges pairing up the detection events: <b>minimum-weight perfect matching</b> (MWPM), solved by Edmonds' blossom algorithm. Union-find decoders are faster and slightly less accurate; neural-network decoders trained on device data can be more accurate because they learn correlated noise. The decoder's inputs are not just the syndrome but a <b>detector error model</b>: the list of possible error mechanisms, the detection events each triggers, the logical observables each flips, and their probabilities. That model is generated from a noisy circuit by a Clifford simulator such as Stim (Chapter 6).</p>
+<p>Decoding must keep up in real time: syndromes arrive every microsecond, and if the decoder falls behind, the backlog grows without bound (and non-Clifford gates, which need decoded results to proceed, stall). Real-time decoding for hundreds of logical qubits is a hardware co-design problem in its own right (<a class="xref ext" href="../../index.html#sec-qec-dec">Lab to Foundry §9.3</a>).</p>
+
+<h3 id="sec-i-qec2-threshold"><span class="secnum">7.4</span> Threshold and the suppression factor</h3>
+<p>If physical errors are independent with rate \(p\), a distance-\(d\) code fails when roughly \((d+1)/2\) errors line up along a logical path. Counting such paths gives the scaling law</p>
+<div class="eq" id="eq-i-scaling">$$ p_L(d) \approx A\Big(\frac{p}{p_{\mathrm{th}}}\Big)^{(d+1)/2}, \qquad \Lambda = \frac{p_L(d)}{p_L(d+2)} \approx \frac{p_{\mathrm{th}}}{p} .  \tag{13}$$</div>
+<p>Below the <b>threshold</b> \(p_{\mathrm{th}}\) (about 1% for the surface code with circuit-level depolarising noise and MWPM), increasing the distance suppresses logical errors exponentially, by a factor \(\Lambda\) for each step \(d\to d+2\). Above it, larger codes are worse (<a class="xref" href="#fig-i-threshold">Figure 2</a>). The <b>suppression factor</b> \(\Lambda\) is the single most important figure of merit of an error-corrected processor: it decides the distance, and hence the qubit count, needed for a target logical error rate. Google's Willow processor reported \(\Lambda\approx2.1\) in 2024–25 (<a class="xref ext" href="../../index.html#eq-pl">Lab to Foundry eq. (35)</a>); the review shows that raising \(\Lambda\) from about 2 to 4 cuts the physical qubits per logical qubit by more than half.</p>
+<figure id="fig-i-threshold">
+<img src="../figures/fig-i-threshold.svg" alt="Logical error rate versus physical error rate for surface codes of distance 3, 5, 7 and 9, crossing at the threshold.">
+<figcaption><b>Figure 2.</b> The scaling law <a class="xref" href="#eq-i-scaling">(13)</a> with \(A = 0.1\) and \(p_{\mathrm{th}} = 1\%\) for distances 3 to 9. Below threshold, larger codes win, and the gap between curves is \(\Lambda = p_{\mathrm{th}}/p\). Real codes deviate near threshold, but this is the shape every experiment is compared against.</figcaption>
+</figure>
+<p>Thresholds assume independent errors. Correlated errors (cosmic rays, leakage, crosstalk) can create long error chains that the decoder does not expect, and can flatten the exponential suppression at low \(p_L\). Establishing that a chip's error model is close enough to independent that \(\Lambda\) keeps holding at large \(d\) is one of the hardest verification problems in the field.</p>
+
+<h3 id="sec-i-qec2-ft"><span class="secnum">7.5</span> Fault-tolerant logic</h3>
+<p>Storing information is not enough; one must compute on encoded qubits without letting errors spread. A procedure is <b>fault tolerant</b> if a single fault anywhere causes at most a correctable error in each code block. The threshold theorem states that with fault-tolerant procedures and \(p \lt p_{\mathrm{th}}\), arbitrarily long computations are possible with polylogarithmic overhead.</p>
+<ul>
+<li><b>Clifford gates</b> on surface codes are done by <b>lattice surgery</b>: merging and splitting patches by measuring joint stabilisers along their boundaries, which implements logical parity measurements such as \(\bar Z\bar Z\) and hence CNOT. Each operation takes about \(d\) cycles.</li>
+<li><b>The \(T\) gate</b> cannot be done transversally in the surface code (no code has a transversal universal gate set). Instead, noisy copies of the "magic state" \(T\ket+\) are prepared and purified by <b>magic-state distillation</b> <span class="cite">[<a href="#ref-bravyi2005">19</a>]</span>, then consumed by gate teleportation (<a class="xref" href="#sec-i-ent-tele">§2.2</a>). Distillation "factories" can occupy a large fraction of a fault-tolerant machine, and the \(T\)-count of an algorithm is its dominant cost.</li>
+</ul>
+
+<h3 id="sec-i-qec2-ldpc"><span class="secnum">7.6</span> Beyond the surface code</h3>
+<p>The surface code encodes one logical qubit per patch, so its rate \(k/n\) tends to zero. <b>Quantum low-density parity-check (qLDPC)</b> codes encode many logical qubits per block with comparable distance, for example IBM's bivariate bicycle "gross" code \([[144,12,12]]\), which stores 12 logical qubits in 288 physical qubits where the surface code would need about 3,000 <span class="cite">[<a href="#ref-bravyi2024">20</a>]</span>. The price is non-local connectivity: each qubit must couple to some distant ones, which needs long-range couplers or multi-layer wiring on a superconducting chip, or atom shuttling in neutral-atom arrays. <b>Bosonic codes</b> (cat and GKP codes) instead encode a qubit in the many levels of an oscillator and are combined with simpler outer codes. The choice of code is therefore inseparable from the choice of hardware layout and fabrication technology, which is the review's point in <a class="xref ext" href="../../index.html#sec-qec-codes">Lab to Foundry §9.2</a>.</p>
+
+<div class="eda"><p>The review's Problem 6 asks for the pipeline: layout and process statistics → device parameters → gate errors (<a class="xref ext" href="../../index.html#eq-eps">Lab to Foundry eq. (37)</a>) → detector error model → decoder → \(p_L\) and \(\Lambda\), including yield over the fabricated distribution (<a class="xref ext" href="../../index.html#eq-ly">Lab to Foundry eq. (39)</a>). Every arrow in that chain is a model you have now seen in outline. Building it with calibrated uncertainty is an open problem.</p></div>
+
+<div class="exercises" id="ex-i-qec2"><h4>Exercises</h4><ol>
+<li>How many physical qubits does a distance-25 rotated surface code use? How many for 100 such logical qubits?
+<details><summary>Solution</summary><p>\(2\times625-1 = 1249\). For 100: about 125,000, before counting routing space and magic-state factories.</p></details></li>
+<li>With \(p = 2\times10^{-3}\), \(p_{\mathrm{th}} = 10^{-2}\) and \(A = 0.1\), what distance gives \(p_L \lt 10^{-12}\)?
+<details><summary>Solution</summary><p>\(\Lambda = 5\). Need \(0.1\times0.2^{(d+1)/2} \lt 10^{-12}\), i.e. \((d+1)/2 > \ln(10^{11})/\ln5 = 15.7\), so \((d+1)/2 = 16\), \(d = 31\).</p></details></li>
+<li>Why does a measurement error in one cycle produce two detection events?
+<details><summary>Solution</summary><p>A detection event compares a stabiliser's outcome with its previous value. A wrong outcome in cycle \(t\) differs from cycle \(t-1\) (event) and from cycle \(t+1\), where the correct value returns (second event). Both events are on the same stabiliser, separated in time.</p></details></li>
+<li>A processor improves its two-qubit error from 0.5% to 0.25% with threshold 1%. By how much does \(\Lambda\) change, and how does the distance needed for \(p_L = 10^{-9}\) change (take \(A = 0.1\))?
+<details><summary>Solution</summary><p>\(\Lambda\) goes from 2 to 4. Need \((d+1)/2 > \ln(10^8)/\ln\Lambda\): 26.6 → \(d = 53\) at \(\Lambda=2\); 13.3 → \(d = 27\) at \(\Lambda = 4\). Qubits per logical qubit fall from about 5,600 to about 1,460, nearly fourfold.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-i-stack"><h2><span class="secnum">8</span> From program to pulses: the quantum computing stack</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Follow a quantum program through compilation: decomposition into native gates, mapping and routing onto hardware connectivity, and scheduling.</li>
+<li>Understand how gates become control pulses and how the control electronics and calibration loop work.</li>
+<li>See where the hardware constraints of Books 5–7 enter the software stack.</li>
+</ul></div>
+
+<h3 id="sec-i-stack-layers"><span class="secnum">8.1</span> The layers</h3>
+<p>A quantum computer is a stack. At the top, an algorithm expressed as a circuit of abstract gates. Below it, a <b>compiler</b> that rewrites the circuit for a specific device. Then a <b>pulse layer</b> that turns each native gate into analogue waveforms, the <b>control electronics</b> that generate and digitise those waveforms, the <b>cryogenic wiring</b> that carries them, and the <b>chip</b>. For fault-tolerant machines, an error-correction layer sits between the algorithm and the physical gates: logical operations become lattice-surgery schedules, syndromes stream to real-time decoders, and corrections are tracked in software (the "Pauli frame") rather than applied physically.</p>
+
+<h3 id="sec-i-stack-compile"><span class="secnum">8.2</span> Compilation</h3>
+<p>Compilation has three main steps.</p>
+<ol>
+<li><b>Decomposition</b> into the device's native gate set, for example \(\{R_z(\theta), \sqrt X, \mathrm{CZ}\}\). Arbitrary two-qubit unitaries need at most three CNOT-equivalent gates (the KAK or Cartan decomposition), and single-qubit runs merge into one rotation.</li>
+<li><b>Mapping and routing.</b> Logical circuit qubits are assigned to physical qubits, and because a two-qubit gate needs the two qubits to be coupled, SWAPs are inserted to bring interacting qubits together. Optimal routing is NP-hard; heuristics (such as SABRE) are used. On a square grid, routing can multiply the two-qubit gate count by a factor of several, which is a strong argument for higher connectivity or for codes and algorithms adapted to the grid.</li>
+<li><b>Scheduling and optimisation.</b> Gates are scheduled in parallel where hardware allows, subject to crosstalk constraints (some neighbouring gates should not run simultaneously), and the compiler cancels redundant gates. Noise-aware compilers use per-qubit calibration data to prefer the best qubits and couplers.</li>
+</ol>
+<p>The compiler therefore consumes a <b>device model</b>: the coupling graph, native gates, their durations and error rates, crosstalk restrictions and readout fidelities. That same model, predicted before fabrication, is what a design tool should output. Closing that loop (design tools producing the device model that compilers consume) is one of the integration opportunities identified in the review.</p>
+
+<h3 id="sec-i-stack-pulses"><span class="secnum">8.3</span> Gates become pulses</h3>
+<p>For a superconducting qubit, a single-qubit gate is a shaped microwave pulse of tens of nanoseconds at the qubit frequency, with Gaussian or cosine envelope plus a DRAG correction (Book 6); a two-qubit gate is a flux pulse on a coupler or a cross-resonance drive. Pulses are synthesised digitally at an intermediate frequency, converted by fast DACs, and mixed up to 4–8 GHz with a local oscillator (or synthesised directly by RF DACs). Readout is a pulse on a resonator, whose transmitted signal is amplified, mixed down, digitised and integrated to a single number per shot, then thresholded into "0" or "1". Every step adds distortion (filters, cable dispersion, mixer imbalance), which is calibrated and pre-compensated (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-fourier-lti">Book 1 §6.4</a>). <b>Optimal control</b> methods (GRAPE, Krotov, gradient-based pulse optimisation) search for pulse shapes that maximise gate fidelity under a model Hamiltonian, and depend on that model being accurate.</p>
+
+<h3 id="sec-i-stack-cal"><span class="secnum">8.4</span> Calibration</h3>
+<p>Before a processor can run anything, every qubit's frequency, \(\pi\)-pulse amplitude, DRAG coefficient, readout frequency and discrimination threshold, and every two-qubit gate's parameters, must be measured and set. The experiments are those of Book 3 (Rabi, Ramsey, echo) and Chapter 5 (RB), organised as a dependency graph: you cannot calibrate a two-qubit gate before both single-qubit gates are good. Parameters drift as two-level systems move, so calibration is repeated, partly every few hours. For thousands of qubits, calibration time and robustness become system-level constraints, and a chip whose parameters land closer to design needs less of it (<a class="xref ext" href="../../index.html#sec-test-cal">Lab to Foundry §7.3</a>).</p>
+
+<h3 id="sec-i-stack-elec"><span class="secnum">8.5</span> Control electronics and scaling</h3>
+<p>Today most systems use one or more coaxial lines per qubit from room-temperature electronics, which does not scale to a million qubits (Book 2, <a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-th-cryo">Book 2 §8.5</a>). Paths forward include multiplexed readout (many resonators on one feedline, already standard), frequency-multiplexed drives, cryogenic CMOS controllers at 4 K, single-flux-quantum logic close to the chip, and photonic links that carry control signals optically into the refrigerator. Each moves complexity into the cryostat and adds heat and noise sources near the qubits, so system design becomes a joint optimisation of chip, package, wiring and electronics (<a class="xref ext" href="../../index.html#sec-pkg-wiring">Lab to Foundry §6.2</a>).</p>
+
+<div class="eda"><p>Classical EDA succeeded because each layer of the stack consumed a well-defined model from the layer below: standard-cell libraries with timing, power and noise characterisation. The quantum stack lacks most of these interfaces. A compiler's device model, a decoder's detector error model and a pulse optimiser's Hamiltonian are all re-derived by hand from measurements today. A quantum PDK would supply them from design and process data.</p></div>
+
+<div class="exercises" id="ex-i-stack"><h4>Exercises</h4><ol>
+<li>A circuit needs CNOTs between qubits that are, on average, 3 hops apart on a grid. Roughly how many CNOTs does routing add per original CNOT if each SWAP costs 3 CNOTs and you swap one qubit along the path?
+<details><summary>Solution</summary><p>Two SWAPs bring the qubits adjacent (3 hops → 1), costing 6 CNOTs, plus the original: about 7 CNOTs, a sevenfold increase (less with clever routing and reuse of moved qubits).</p></details></li>
+<li>Calibrating one qubit takes 10 minutes of experiments, and each coupler 15 minutes. Estimate full calibration time for 1,000 qubits on a square grid if done sequentially, and argue why parallelism is limited.
+<details><summary>Solution</summary><p>About 2,000 couplers: \(1000\times10 + 2000\times15 = 40{,}000\) minutes, about 28 days. Parallel calibration is limited by crosstalk between simultaneous experiments and by shared control lines, so real systems use careful parallel scheduling and automated dependency graphs. This is why predictable fabrication, which reduces the search ranges, has system-level value.</p></details></li>
+</ol></div>
+</section>
+
+<section id="references" class="references">
+  <h2>References and further reading</h2>
+  <p class="refnote">Numbered in order of first citation in this book. Entries tagged “verify details” were compiled from memory; check volume and page before citing them.</p>
+  <ol class="reflist">
+<li id="ref-nielsen2010"><span class="refnum">[1]</span> M. A. Nielsen, I. L. Chuang, <i>Quantum Computation and Quantum Information</i>, 10th anniversary ed. (Cambridge University Press, 2010).</li>
+<li id="ref-preskill_notes"><span class="refnum">[2]</span> J. Preskill, <i>Lecture Notes for Physics 229: Quantum Information and Computation</i> (California Institute of Technology, 1998). <a class="ref-url" href="http://theory.caltech.edu/~preskill/ph229/">theory.caltech.edu</a></li>
+<li id="ref-divincenzo2000"><span class="refnum">[3]</span> D. P. DiVincenzo, “The physical implementation of quantum computation,” <i>Fortschr. Phys.</i> <b>48</b>, 771 (2000).</li>
+<li id="ref-wootters1982"><span class="refnum">[4]</span> W. K. Wootters, W. H. Zurek, “A single quantum cannot be cloned,” <i>Nature</i> <b>299</b>, 802 (1982).</li>
+<li id="ref-bennett1993"><span class="refnum">[5]</span> C. H. Bennett, G. Brassard, C. Crépeau et al., “Teleporting an unknown quantum state via dual classical and Einstein–Podolsky–Rosen channels,” <i>Phys. Rev. Lett.</i> <b>70</b>, 1895 (1993).</li>
+<li id="ref-grover1996"><span class="refnum">[6]</span> L. K. Grover, “A fast quantum mechanical algorithm for database search,” in <i>Proc. 28th ACM Symposium on Theory of Computing</i> (1996).</li>
+<li id="ref-shor1997"><span class="refnum">[7]</span> P. W. Shor, “Polynomial-time algorithms for prime factorization and discrete logarithms on a quantum computer,” <i>SIAM J. Comput.</i> <b>26</b>, 1484 (1997).</li>
+<li id="ref-gidney2021rsa"><span class="refnum">[8]</span> C. Gidney, M. Ekerå, “How to factor 2048 bit RSA integers in 8 hours using 20 million noisy qubits,” <i>Quantum</i> <b>5</b>, 433 (2021).</li>
+<li id="ref-gidney2025rsa"><span class="refnum">[9]</span> C. Gidney, “How to factor 2048 bit RSA integers with less than a million noisy qubits”, <a href="https://arxiv.org/abs/2505.15917">arXiv:2505.15917</a> (2025).</li>
+<li id="ref-lloyd1996"><span class="refnum">[10]</span> S. Lloyd, “Universal quantum simulators,” <i>Science</i> <b>273</b>, 1073 (1996).</li>
+<li id="ref-peruzzo2014"><span class="refnum">[11]</span> A. Peruzzo, J. McClean, P. Shadbolt et al., “A variational eigenvalue solver on a photonic quantum processor,” <i>Nat. Commun.</i> <b>5</b>, 4213 (2014).</li>
+<li id="ref-magesan2011"><span class="refnum">[12]</span> E. Magesan, J. M. Gambetta, J. Emerson, “Scalable and robust randomized benchmarking of quantum processes,” <i>Phys. Rev. Lett.</i> <b>106</b>, 180504 (2011).</li>
+<li id="ref-shor1995"><span class="refnum">[13]</span> P. W. Shor, “Scheme for reducing decoherence in quantum computer memory,” <i>Phys. Rev. A</i> <b>52</b>, R2493 (1995).</li>
+<li id="ref-gottesman1997"><span class="refnum">[14]</span> D. Gottesman, “Stabilizer codes and quantum error correction (PhD thesis, Caltech)”, <a href="https://arxiv.org/abs/quant-ph/9705052">arXiv:quant-ph/9705052</a> (1997).</li>
+<li id="ref-steane1996"><span class="refnum">[15]</span> A. M. Steane, “Error correcting codes in quantum theory,” <i>Phys. Rev. Lett.</i> <b>77</b>, 793 (1996).</li>
+<li id="ref-knill1997"><span class="refnum">[16]</span> E. Knill, R. Laflamme, “Theory of quantum error-correcting codes,” <i>Phys. Rev. A</i> <b>55</b>, 900 (1997).</li>
+<li id="ref-dennis2002"><span class="refnum">[17]</span> E. Dennis, A. Kitaev, A. Landahl, J. Preskill, “Topological quantum memory,” <i>J. Math. Phys.</i> <b>43</b>, 4452 (2002).</li>
+<li id="ref-fowler2012"><span class="refnum">[18]</span> A. G. Fowler, M. Mariantoni, J. M. Martinis, A. N. Cleland, “Surface codes: towards practical large-scale quantum computation,” <i>Phys. Rev. A</i> <b>86</b>, 032324 (2012).</li>
+<li id="ref-bravyi2005"><span class="refnum">[19]</span> S. Bravyi, A. Kitaev, “Universal quantum computation with ideal Clifford gates and noisy ancillas,” <i>Phys. Rev. A</i> <b>71</b>, 022316 (2005).</li>
+<li id="ref-bravyi2024"><span class="refnum">[20]</span> S. Bravyi, A. W. Cross, J. M. Gambetta et al., “High-threshold and low-overhead fault-tolerant quantum memory,” <i>Nature</i> <b>627</b>, 778 (2024).</li>
+  </ol>
+</section>
 <nav class="pager" aria-label="Series"><a class="prev" href="../quantum-mechanics/index.html"><span>Previous · Book 3</span>Quantum Mechanics</a><a class="next" href="../quantum-photonics/index.html"><span>Next · Book 5</span>Quantum Photonics</a></nav>
 <footer class="page-footer">
   <p>Foundations of Quantum Engineering, Book 4. Source: <code>curriculum/4-quantum-information/</code>. Rebuild with <code>make</code>; figures are computed by <code>scripts/make_foundation_figures.py</code>. Built 2026-11-14.</p>

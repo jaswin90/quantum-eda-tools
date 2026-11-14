@@ -231,7 +231,52 @@ def fig_q_decoh():
     return {"T2_us": round(T2, 1)}
 
 
-FIGS = [fig_q_qho, fig_q_rabi, fig_q_decoh, fig_m_lorentz, fig_m_yield, fig_c_avoided, fig_c_notch, fig_c_nth]
+# ============================================================== Book 4: quantum information
+def fig_i_rb():
+    import random
+    rnd = random.Random(7)
+    p = Plot()
+    p.set_x(0, 1000)
+    p.set_y(0.45, 1.0)
+    p.axes([0, 250, 500, 750, 1000], [0.5, 0.75, 1.0], "sequence length m (Cliffords)", "survival probability", fmt, fmt)
+    p.hline(0.5)
+    for r, col, lab in ((1e-3, C1, "r = 10⁻³"), (5e-3, C2, "r = 5×10⁻³")):
+        pp = 1 - 2 * r
+        p.line([(m, 0.48 * pp ** m + 0.5) for m in frange(0, 1000, 400)], col)
+        for m in (1, 25, 50, 100, 150, 200, 300, 400, 500, 600, 700, 800, 900, 1000):
+            y = 0.48 * pp ** m + 0.5 + rnd.gauss(0, 0.006)
+            p.dot(m, y, col, r=4)
+        mm = 400 if r == 1e-3 else 120
+        p.label(mm, 0.48 * pp ** mm + 0.5, lab, col, dy=-12)
+    save(p, "fig-i-rb.svg", "Randomised benchmarking decays for two error rates.")
+
+
+def fig_i_threshold():
+    p = Plot()
+    p.set_x(1e-4, 3e-2, log=True)
+    p.set_y(1e-12, 1, log=True)
+    p.axes([1e-4, 1e-3, 1e-2], [1e-12, 1e-9, 1e-6, 1e-3, 1], "physical error rate p", "logical error rate p_L",
+           lambda v: mf.p10(int(round(math.log10(v)))), lambda v: mf.p10(int(round(math.log10(v)))))
+    p.vline(1e-2)
+    for d, col in ((3, C3), (5, C1), (7, C2), (9, INK2)):
+        pts = []
+        for e in frange(-4, math.log10(3e-2), 300):
+            x = 10 ** e
+            y = 0.1 * (x / 1e-2) ** ((d + 1) / 2)
+            if 1e-12 <= y <= 1:
+                pts.append((x, y))
+        p.line(pts, col)
+        x0 = 2.2e-4 if d > 3 else 1.3e-4
+        y0 = 0.1 * (x0 / 1e-2) ** ((d + 1) / 2)
+        if y0 < 1e-12:
+            x0 = 1e-2 * (1e-11 / 0.1) ** (2 / (d + 1))
+            y0 = 1e-11
+        p.label(x0, y0, f"d = {d}", col, dy=-8)
+    p.label(1e-2, 1e-5, "threshold", INK2, dx=8, dy=-6, size=13, weight=400)
+    save(p, "fig-i-threshold.svg", "Logical error rate versus physical error rate for surface-code distances 3 to 9.")
+
+
+FIGS = [fig_i_rb, fig_i_threshold, fig_q_qho, fig_q_rabi, fig_q_decoh, fig_m_lorentz, fig_m_yield, fig_c_avoided, fig_c_notch, fig_c_nth]
 
 
 def main():

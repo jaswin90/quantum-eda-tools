@@ -1,0 +1,39 @@
+<section id="sec-i-alg2"><h2>Quantum algorithms II: Fourier transform, phase estimation, factoring and simulation</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Build the quantum Fourier transform from Hadamards and controlled phases.</li>
+<li>Understand phase estimation, the subroutine behind most exponential speed-ups.</li>
+<li>Follow Shor's factoring algorithm at the level of its structure and cost.</li>
+<li>Understand Hamiltonian simulation by Trotterisation, variational algorithms, and how resource estimates are made.</li>
+</ul></div>
+
+<h3 id="sec-i-alg2-qft">The quantum Fourier transform</h3>
+<p>The discrete Fourier transform of Book 1 (@b1:eq-m-dft), normalised to be unitary, acts on basis states of \(n\) qubits (\(N = 2^n\)) as</p>
+<div class="eq" id="eq-i-qft">$$ \mathrm{QFT}\ket j = \frac{1}{\sqrt N}\sum_{k=0}^{N-1}\ee^{2\pi\ii jk/N}\ket k = \frac{1}{\sqrt N}\bigotimes_{l=1}^{n}\big(\ket0 + \ee^{2\pi\ii\,j/2^l}\ket1\big). $$</div>
+<p>The product form shows that each output qubit carries one binary digit of \(j\) in its phase. A circuit of \(n\) Hadamards and \(n(n-1)/2\) controlled phase rotations \(R_k = \mathrm{diag}(1, \ee^{2\pi\ii/2^k})\) implements it, compared with \(O(n2^n)\) operations for the classical FFT on a vector of length \(2^n\). The catch is the same as always: the QFT transforms amplitudes, which cannot be read out. It is useful only as a step inside an algorithm whose output after the QFT is concentrated on a few outcomes. Small rotations \(R_k\) with \(k\gtrsim\log_2(n/\epsilon)\) can be dropped with error \(\epsilon\) (the <b>approximate QFT</b>).</p>
+
+<h3 id="sec-i-alg2-pe">Phase estimation</h3>
+<p>Given a unitary \(U\) and one of its eigenvectors, \(U\ket u = \ee^{2\pi\ii\varphi}\ket u\), <b>phase estimation</b> finds \(\varphi\) to \(t\) bits. Prepare \(t\) ancillas in \(\ket+\), apply controlled-\(U^{2^k}\) from ancilla \(k\) to the register holding \(\ket u\). By phase kickback, ancilla \(k\) acquires the phase \(\ee^{2\pi\ii\,2^k\varphi}\), so the ancilla register is exactly in the product state of @eq:i-qft with \(j/2^t\) replaced by \(\varphi\). An inverse QFT then yields the binary expansion of \(\varphi\). Precision \(2^{-t}\) costs about \(2^t\) applications of \(U\), the "Heisenberg scaling" that also underlies quantum-enhanced metrology. Phase estimation is how quantum computers find energies of molecules (with \(U = \ee^{-\ii Ht}\)) and periods of functions.</p>
+
+<h3 id="sec-i-alg2-shor">Shor's algorithm</h3>
+<p>Factoring an integer \(N\) reduces, by classical number theory, to finding the <b>order</b> \(r\) of a random \(a\) modulo \(N\): the smallest \(r\) with \(a^r\equiv1 \pmod N\). If \(r\) is even, \(\gcd(a^{r/2}\pm1, N)\) is likely to be a nontrivial factor. The unitary \(U\ket y = \ket{ay\bmod N}\) has eigenvalues \(\ee^{2\pi\ii s/r}\), so phase estimation on \(U\) returns \(s/r\) for random \(s\), and continued fractions recover \(r\) [@shor1997]. The quantum cost is dominated by modular exponentiation, implemented with reversible arithmetic circuits of \(O(n^3)\) gates for an \(n\)-bit number (with faster variants). Classically, the best known algorithm (the number field sieve) takes time \(\exp(O(n^{1/3}\log^{2/3}n))\). This exponential separation is why factoring RSA-2048 is the benchmark of fault-tolerant roadmaps.</p>
+<p>Resource estimates translate an algorithm into hardware requirements. An influential 2021 analysis estimated that factoring a 2048-bit RSA key would take about 8 hours on 20 million noisy physical qubits with \(10^{-3}\) error rates and a surface code [@gidney2021rsa]; refinements published since have reduced the qubit count substantially, to under a million in a 2025 estimate cited in the review [@gidney2025rsa]. These numbers are only as good as their assumptions about physical error rates, code cycle time and connectivity, all of which are hardware properties. That is the link from algorithms to the review's §9.</p>
+
+<h3 id="sec-i-alg2-sim">Hamiltonian simulation</h3>
+<p>Feynman's original motivation for quantum computers was simulating quantum systems, whose state vectors grow exponentially (@b1:sec-m-tensor-exp). For a Hamiltonian that is a sum of local terms, \(H = \sum_jH_j\), the <b>Trotter–Suzuki</b> product formula approximates evolution by alternating short evolutions under each term [@lloyd1996]:</p>
+<div class="eq" id="eq-i-trotter">$$ \ee^{-\ii Ht} \approx \Big(\prod_j\ee^{-\ii H_jt/r}\Big)^r, \qquad \text{error } = O\Big(\frac{t^2}{r}\sum_{j\lt k}\big\|[H_j,H_k]\big\|\Big). $$</div>
+<p>The error comes from the non-commuting terms, through the Baker–Campbell–Hausdorff formula (@b1:eq-m-bch). Each factor is a small circuit. Applications in chemistry and materials (catalysts, battery materials, high-temperature superconductors) are among the most credible uses of fault-tolerant machines, typically needing hundreds to thousands of logical qubits and \(10^8\)–\(10^{12}\) \(T\) gates.</p>
+
+<h3 id="sec-i-alg2-var">Variational and near-term algorithms</h3>
+<p>Without error correction, circuits must be short. <b>Variational</b> algorithms use a parametrised circuit \(U(\boldsymbol\theta)\) to prepare a trial state, estimate a cost such as \(\expval{H}\) by repeated measurement, and let a classical optimiser update \(\boldsymbol\theta\) (the variational quantum eigensolver [@peruzzo2014]; QAOA for optimisation). They are a quantum application of the variational principle (@b3:sec-q-pert-var). Their difficulties are instructive for engineers: the number of measurements needed to estimate gradients to useful precision is large, noise biases the cost, and for many circuit families gradients vanish exponentially with size ("barren plateaus"). The industry consensus by 2026 is that useful advantage requires error correction, which is what the rest of this book addresses.</p>
+
+<div class="eda"><p>Resource estimation closes the loop from application to hardware: a target algorithm fixes a logical error budget and a logical qubit count; the code and decoder fix the physical error rate and qubit count required (@lf:eq-dreq); and the physical error rate is fixed by the chip's design and fabrication. A quantum EDA system can be judged by how well it predicts the inputs to that chain before a chip is made.</p></div>
+
+<div class="exercises" id="ex-i-alg2"><h4>Exercises</h4><ol>
+<li>Write the QFT on one qubit and on two qubits as matrices.
+<details><summary>Solution</summary><p>One qubit: \(H\). Two qubits (\(N=4\), \(\omega = \ii\)): \(\tfrac12\begin{pmatrix}1&1&1&1\\1&\ii&-1&-\ii\\1&-1&1&-1\\1&-\ii&-1&\ii\end{pmatrix}\).</p></details></li>
+<li>Find the order of \(a = 7\) modulo \(N = 15\) and use it to factor 15.
+<details><summary>Solution</summary><p>\(7^1 = 7\), \(7^2 = 49\equiv4\), \(7^3\equiv28\equiv13\), \(7^4\equiv91\equiv1\). So \(r = 4\), \(a^{r/2} = 49\equiv4\). \(\gcd(3, 15) = 3\) and \(\gcd(5, 15) = 5\).</p></details></li>
+<li>For two terms with \(\|[H_1,H_2]\| = 1\) (in units where \(\hbar=1\)) and \(t = 10\), how many Trotter steps give error below \(10^{-3}\) with the first-order formula (taking the constant as \(\tfrac12\))?
+<details><summary>Solution</summary><p>Error \(\approx\tfrac12 t^2/r = 50/r \lt 10^{-3}\) requires \(r>5\times10^4\). Higher-order formulas reduce this dramatically, which is why they are used.</p></details></li>
+</ol></div>
+</section>

@@ -1,0 +1,52 @@
+<section id="sec-i-qec2"><h2>Quantum error correction II: the surface code and fault tolerance</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand the surface code: its layout, stabilisers, logical operators and syndrome-extraction cycle.</li>
+<li>Know how decoders work, why they must be fast, and what a detector error model is.</li>
+<li>Understand thresholds, the suppression factor \(\Lambda\), and how they set qubit overheads.</li>
+<li>See how logical gates are performed (lattice surgery, magic states) and where qLDPC codes fit.</li>
+</ul></div>
+
+<h3 id="sec-i-qec2-surface">The surface code</h3>
+<p>Arrange \(d\times d\) data qubits on a square grid, and place an ancilla on each face of the grid between four data qubits (and on some boundary edges between two). Faces alternate, like a chessboard, between <b>\(X\)-type</b> stabilisers \(X\!X\!X\!X\) and <b>\(Z\)-type</b> stabilisers \(Z\!Z\!Z\!Z\) on the four surrounding data qubits [@dennis2002; @fowler2012]. Neighbouring \(X\) and \(Z\) stabilisers share two qubits, so they commute. This is the <b>rotated surface code</b>, \([[d^2, 1, d]]\), using \(d^2\) data and \(d^2-1\) ancilla qubits, \(2d^2-1\) in all. Its logical \(\bar Z\) is a chain of \(Z\)s across the patch from one boundary to the opposite one, and \(\bar X\) a chain of \(X\)s in the other direction; both have weight \(d\).</p>
+<p>Its attractions are engineering ones. Every stabiliser involves only nearest neighbours on a planar grid, so a chip needs only local couplers in two dimensions. Each qubit couples to at most four others. And the threshold (below) is high, around 1% for circuit-level noise. Its drawback is overhead: one logical qubit costs \(2d^2-1\) physical qubits, hundreds to thousands at useful distances.</p>
+
+<h3 id="sec-i-qec2-cycle">The syndrome-extraction cycle</h3>
+<p>One <b>QEC cycle</b> measures every stabiliser once: reset ancillas, apply Hadamards to \(X\)-type ancillas, four rounds of CNOT (or CZ) gates in a carefully chosen order that avoids "hook" errors reducing the distance, Hadamards again, and measure all ancillas. On superconducting hardware a cycle takes about 1 µs, dominated by readout. Because measurements themselves can be wrong, a single cycle's syndrome cannot be trusted. Instead one compares each stabiliser's result with its result in the previous cycle; a change is a <b>detection event</b>. A data error creates a pair of detection events in space (on the two neighbouring stabilisers); a measurement error creates a pair in time (the same stabiliser in consecutive cycles). Errors are thus edges in a three-dimensional space-time graph, and detection events are their endpoints.</p>
+
+<h3 id="sec-i-qec2-decoder">Decoders</h3>
+<p>The <b>decoder</b> takes the detection events and guesses which errors occurred, or rather, which equivalence class of errors, since only the class (whether a logical operator was applied) matters. For the surface code with independent errors, the most likely explanation is a minimum-weight set of edges pairing up the detection events: <b>minimum-weight perfect matching</b> (MWPM), solved by Edmonds' blossom algorithm. Union-find decoders are faster and slightly less accurate; neural-network decoders trained on device data can be more accurate because they learn correlated noise. The decoder's inputs are not just the syndrome but a <b>detector error model</b>: the list of possible error mechanisms, the detection events each triggers, the logical observables each flips, and their probabilities. That model is generated from a noisy circuit by a Clifford simulator such as Stim (Chapter 6).</p>
+<p>Decoding must keep up in real time: syndromes arrive every microsecond, and if the decoder falls behind, the backlog grows without bound (and non-Clifford gates, which need decoded results to proceed, stall). Real-time decoding for hundreds of logical qubits is a hardware co-design problem in its own right (@lf:sec-qec-dec).</p>
+
+<h3 id="sec-i-qec2-threshold">Threshold and the suppression factor</h3>
+<p>If physical errors are independent with rate \(p\), a distance-\(d\) code fails when roughly \((d+1)/2\) errors line up along a logical path. Counting such paths gives the scaling law</p>
+<div class="eq" id="eq-i-scaling">$$ p_L(d) \approx A\Big(\frac{p}{p_{\mathrm{th}}}\Big)^{(d+1)/2}, \qquad \Lambda = \frac{p_L(d)}{p_L(d+2)} \approx \frac{p_{\mathrm{th}}}{p} . $$</div>
+<p>Below the <b>threshold</b> \(p_{\mathrm{th}}\) (about 1% for the surface code with circuit-level depolarising noise and MWPM), increasing the distance suppresses logical errors exponentially, by a factor \(\Lambda\) for each step \(d\to d+2\). Above it, larger codes are worse (@fig:i-threshold). The <b>suppression factor</b> \(\Lambda\) is the single most important figure of merit of an error-corrected processor: it decides the distance, and hence the qubit count, needed for a target logical error rate. Google's Willow processor reported \(\Lambda\approx2.1\) in 2024–25 (@lf:eq-pl); the review shows that raising \(\Lambda\) from about 2 to 4 cuts the physical qubits per logical qubit by more than half.</p>
+<figure id="fig-i-threshold">
+<img src="../figures/fig-i-threshold.svg" alt="Logical error rate versus physical error rate for surface codes of distance 3, 5, 7 and 9, crossing at the threshold.">
+<figcaption>The scaling law @eq:i-scaling with \(A = 0.1\) and \(p_{\mathrm{th}} = 1\%\) for distances 3 to 9. Below threshold, larger codes win, and the gap between curves is \(\Lambda = p_{\mathrm{th}}/p\). Real codes deviate near threshold, but this is the shape every experiment is compared against.</figcaption>
+</figure>
+<p>Thresholds assume independent errors. Correlated errors (cosmic rays, leakage, crosstalk) can create long error chains that the decoder does not expect, and can flatten the exponential suppression at low \(p_L\). Establishing that a chip's error model is close enough to independent that \(\Lambda\) keeps holding at large \(d\) is one of the hardest verification problems in the field.</p>
+
+<h3 id="sec-i-qec2-ft">Fault-tolerant logic</h3>
+<p>Storing information is not enough; one must compute on encoded qubits without letting errors spread. A procedure is <b>fault tolerant</b> if a single fault anywhere causes at most a correctable error in each code block. The threshold theorem states that with fault-tolerant procedures and \(p \lt p_{\mathrm{th}}\), arbitrarily long computations are possible with polylogarithmic overhead.</p>
+<ul>
+<li><b>Clifford gates</b> on surface codes are done by <b>lattice surgery</b>: merging and splitting patches by measuring joint stabilisers along their boundaries, which implements logical parity measurements such as \(\bar Z\bar Z\) and hence CNOT. Each operation takes about \(d\) cycles.</li>
+<li><b>The \(T\) gate</b> cannot be done transversally in the surface code (no code has a transversal universal gate set). Instead, noisy copies of the "magic state" \(T\ket+\) are prepared and purified by <b>magic-state distillation</b> [@bravyi2005], then consumed by gate teleportation (@sec:i-ent-tele). Distillation "factories" can occupy a large fraction of a fault-tolerant machine, and the \(T\)-count of an algorithm is its dominant cost.</li>
+</ul>
+
+<h3 id="sec-i-qec2-ldpc">Beyond the surface code</h3>
+<p>The surface code encodes one logical qubit per patch, so its rate \(k/n\) tends to zero. <b>Quantum low-density parity-check (qLDPC)</b> codes encode many logical qubits per block with comparable distance, for example IBM's bivariate bicycle "gross" code \([[144,12,12]]\), which stores 12 logical qubits in 288 physical qubits where the surface code would need about 3,000 [@bravyi2024]. The price is non-local connectivity: each qubit must couple to some distant ones, which needs long-range couplers or multi-layer wiring on a superconducting chip, or atom shuttling in neutral-atom arrays. <b>Bosonic codes</b> (cat and GKP codes) instead encode a qubit in the many levels of an oscillator and are combined with simpler outer codes. The choice of code is therefore inseparable from the choice of hardware layout and fabrication technology, which is the review's point in @lf:sec-qec-codes.</p>
+
+<div class="eda"><p>The review's Problem 6 asks for the pipeline: layout and process statistics → device parameters → gate errors (@lf:eq-eps) → detector error model → decoder → \(p_L\) and \(\Lambda\), including yield over the fabricated distribution (@lf:eq-ly). Every arrow in that chain is a model you have now seen in outline. Building it with calibrated uncertainty is an open problem.</p></div>
+
+<div class="exercises" id="ex-i-qec2"><h4>Exercises</h4><ol>
+<li>How many physical qubits does a distance-25 rotated surface code use? How many for 100 such logical qubits?
+<details><summary>Solution</summary><p>\(2\times625-1 = 1249\). For 100: about 125,000, before counting routing space and magic-state factories.</p></details></li>
+<li>With \(p = 2\times10^{-3}\), \(p_{\mathrm{th}} = 10^{-2}\) and \(A = 0.1\), what distance gives \(p_L \lt 10^{-12}\)?
+<details><summary>Solution</summary><p>\(\Lambda = 5\). Need \(0.1\times0.2^{(d+1)/2} \lt 10^{-12}\), i.e. \((d+1)/2 > \ln(10^{11})/\ln5 = 15.7\), so \((d+1)/2 = 16\), \(d = 31\).</p></details></li>
+<li>Why does a measurement error in one cycle produce two detection events?
+<details><summary>Solution</summary><p>A detection event compares a stabiliser's outcome with its previous value. A wrong outcome in cycle \(t\) differs from cycle \(t-1\) (event) and from cycle \(t+1\), where the correct value returns (second event). Both events are on the same stabiliser, separated in time.</p></details></li>
+<li>A processor improves its two-qubit error from 0.5% to 0.25% with threshold 1%. By how much does \(\Lambda\) change, and how does the distance needed for \(p_L = 10^{-9}\) change (take \(A = 0.1\))?
+<details><summary>Solution</summary><p>\(\Lambda\) goes from 2 to 4. Need \((d+1)/2 > \ln(10^8)/\ln\Lambda\): 26.6 → \(d = 53\) at \(\Lambda=2\); 13.3 → \(d = 27\) at \(\Lambda = 4\). Qubits per logical qubit fall from about 5,600 to about 1,460, nearly fourfold.</p></details></li>
+</ol></div>
+</section>

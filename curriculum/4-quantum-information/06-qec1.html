@@ -1,0 +1,43 @@
+<section id="sec-i-qec1"><h2>Quantum error correction I: codes and stabilisers</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>See how the repetition code protects against bit flips without measuring the encoded information.</li>
+<li>Understand why correcting \(X\) and \(Z\) errors is enough to correct any error (discretisation).</li>
+<li>Use the stabiliser formalism: stabiliser groups, logical operators, syndromes and code parameters \([[n,k,d]]\).</li>
+<li>Know the Shor and Steane codes, the Knill–Laflamme conditions and the Gottesman–Knill theorem.</li>
+</ul></div>
+
+<h3 id="sec-i-qec1-rep">The repetition code, quantum style</h3>
+<p>Classically, one protects a bit against flips by sending three copies and taking a majority vote. Quantum mechanically we cannot copy (@sec:i-ent-clone) and must not measure the data. Instead, <b>encode</b> \(\alpha\ket0+\beta\ket1\mapsto\alpha\ket{000}+\beta\ket{111}\) with two CNOTs. This is not three copies of the state; it is an entangled state in a two-dimensional subspace (the <b>code space</b>) of the eight-dimensional space. A bit flip on qubit 1 gives \(\alpha\ket{100}+\beta\ket{011}\). To detect it without learning \(\alpha,\beta\), measure the <b>parities</b> \(Z_1Z_2\) and \(Z_2Z_3\). Both code states have parities \((+1,+1)\); a flip on qubit 1 gives \((-1,+1)\), on qubit 2 \((-1,-1)\), on qubit 3 \((+1,-1)\). The parity outcomes, the <b>syndrome</b>, identify the error but carry no information about \(\alpha,\beta\), so the superposition survives. Apply \(X\) to the identified qubit and the state is restored. Parities are measured with an ancilla qubit and two CNOTs, then the ancilla is measured: this <b>syndrome extraction</b> circuit is the elementary operation of every error-correcting quantum computer.</p>
+<p>If each qubit flips independently with probability \(p\), the code fails only when two or more flip: \(p_L = 3p^2 - 2p^3\), better than \(p\) when \(p \lt 1/2\). With \(n = 2t+1\) qubits it corrects \(t\) flips and \(p_L\sim p^{t+1}\). This exponential suppression with code size, below a threshold, is the whole point.</p>
+
+<h3 id="sec-i-qec1-disc">Discretisation of errors</h3>
+<p>Quantum errors are continuous: a small rotation, a partial relaxation. Yet it suffices to correct a discrete set. Any single-qubit error operator can be expanded in Paulis, \(E = e_0I + e_xX + e_yY + e_zZ\). The syndrome measurement projects the erroneous state onto one term of this expansion, so after measurement the error <i>is</i> one of \(I, X, Y, Z\), and correcting it fixes the state. Since \(Y = \ii XZ\), a code that corrects arbitrary \(X\) and \(Z\) errors on any \(t\) qubits corrects every error on \(t\) qubits. This is why the Pauli error models of Chapter 5 are not just convenient but natural.</p>
+<p>The repetition code above corrects \(X\) but is defenceless against \(Z\): a phase flip on any qubit changes \(\alpha\ket{000}+\beta\ket{111}\) to \(\alpha\ket{000}-\beta\ket{111}\), which is a valid code state. In the \(\ket\pm\) basis the roles swap, giving a phase-flip code. Shor concatenated the two: encode in the phase-flip code, then encode each of those three qubits in the bit-flip code, giving the 9-qubit <b>Shor code</b>, the first code that corrects an arbitrary single-qubit error [@shor1995].</p>
+
+<h3 id="sec-i-qec1-stab">The stabiliser formalism</h3>
+<p>Describing codes by their states becomes unwieldy. Gottesman's insight [@gottesman1997] was to describe them by the operators that leave them unchanged. A <b>stabiliser group</b> \(\mathcal S\) is an abelian group of \(n\)-qubit Pauli operators not containing \(-I\). The code space is</p>
+<div class="eq" id="eq-i-codespace">$$ \mathcal C = \{\ket\psi : S\ket\psi = \ket\psi\ \ \forall S\in\mathcal S\} . $$</div>
+<p>If \(\mathcal S\) has \(n-k\) independent generators, \(\mathcal C\) has dimension \(2^k\): it encodes \(k\) logical qubits. For the bit-flip code, \(\mathcal S = \langle Z_1Z_2, Z_2Z_3\rangle\), \(n=3\), \(k=1\).</p>
+<ul>
+<li><b>Syndromes.</b> A Pauli error \(E\) either commutes or anticommutes with each generator \(S_j\). If it anticommutes, \(S_jE\ket\psi = -E\ket\psi\), so measuring \(S_j\) gives \(-1\). The pattern of signs is the syndrome.</li>
+<li><b>Logical operators.</b> Paulis that commute with every stabiliser but are not themselves in \(\mathcal S\) map the code space to itself nontrivially: they are logical operations, \(\bar X\) and \(\bar Z\). For the bit-flip code \(\bar X = X_1X_2X_3\), \(\bar Z = Z_1\) (or any \(Z_i\)).</li>
+<li><b>Distance.</b> The <b>code distance</b> \(d\) is the minimum weight (number of non-identity factors) of a logical operator. A code with distance \(d\) detects any error of weight below \(d\) and corrects any of weight up to \(\lfloor(d-1)/2\rfloor\). Codes are labelled \([[n,k,d]]\).</li>
+</ul>
+<p>The 7-qubit <b>Steane code</b> [@steane1996], \([[7,1,3]]\), built from the classical Hamming code, has three \(X\)-type and three \(Z\)-type generators of weight 4, and the useful property that \(H\), \(S\) and CNOT act <b>transversally</b> (qubit by qubit), so these logical gates cannot spread a single error into two. The general condition for a code to correct a set of errors \(\{E_a\}\) is the <b>Knill–Laflamme</b> condition [@knill1997]: \(\bra{\bar i}E_a^\dagger E_b\ket{\bar j} = c_{ab}\delta_{ij}\) for code basis states \(\ket{\bar i}\). Errors must not distinguish between, or mix, logical states.</p>
+
+<h3 id="sec-i-qec1-gk">Clifford circuits are classically simulable</h3>
+<p>Clifford gates map Paulis to Paulis under conjugation. A stabiliser state on \(n\) qubits is described by \(n\) generators, each a string of \(n\) Paulis plus a sign, i.e. \(O(n^2)\) bits. A Clifford gate updates the generators in \(O(n)\) time and a Pauli measurement in \(O(n^2)\). This is the <b>Gottesman–Knill theorem</b>: circuits of Clifford gates, Pauli measurements and Pauli noise can be simulated efficiently on a classical computer. It means that error-correction circuits, which are almost entirely Clifford, can be simulated for thousands of qubits and billions of shots. Google's Stim simulator does exactly this, and it is the computational core of the review's proposed design-to-logical-error pipeline (@lf:sec-qec-dem). It also means that Clifford gates alone give no quantum advantage: the \(T\) gate is essential.</p>
+
+<div class="eda"><p>A code is a wiring diagram. Each stabiliser generator is a parity measurement among specific qubits, implemented by an ancilla and CNOTs, so the code fixes which qubits must be coupled and how often. Choosing a code chooses the chip's connectivity (@lf:sec-qec-codes). That is why error correction is part of chip design, not only of software.</p></div>
+
+<div class="exercises" id="ex-i-qec1"><h4>Exercises</h4><ol>
+<li>For the bit-flip code, compute the syndrome of \(X_1X_2\). What correction does the decoder apply, and what is the result?
+<details><summary>Solution</summary><p>\(X_1X_2\) anticommutes with \(Z_2Z_3\) only (it commutes with \(Z_1Z_2\)): syndrome \((+1,-1)\), which points to a flip on qubit 3. Applying \(X_3\) leaves \(X_1X_2X_3 = \bar X\): a logical error. Weight-2 errors defeat a distance-3 code.</p></details></li>
+<li>Show that \(Z_1\) and \(X_1X_2X_3\) commute with both generators of the bit-flip code and anticommute with each other.
+<details><summary>Solution</summary><p>\(Z_1\) commutes with all \(Z\)-type operators. \(X_1X_2X_3\) overlaps each \(Z_iZ_j\) on two qubits, giving two sign flips, so it commutes. \(Z_1\) and \(X_1X_2X_3\) overlap on one qubit and anticommute, as logical \(\bar Z\) and \(\bar X\) must.</p></details></li>
+<li>Compute \(p_L\) for the three-qubit code at \(p = 10^{-2}\) and \(p = 10^{-3}\). By how much does going to five qubits help at \(p=10^{-3}\)?
+<details><summary>Solution</summary><p>\(3p^2-2p^3\): \(2.98\times10^{-4}\) and \(3.0\times10^{-6}\). Five qubits fail with three or more flips: \(\approx\binom53p^3 = 10^{-8}\), a 300-fold improvement.</p></details></li>
+<li>How many independent stabiliser generators does a \([[n,k,d]]\) code have? Check for the Steane code.
+<details><summary>Solution</summary><p>\(n-k\). Steane: \(7-1 = 6\) (three \(X\)-type, three \(Z\)-type).</p></details></li>
+</ol></div>
+</section>
