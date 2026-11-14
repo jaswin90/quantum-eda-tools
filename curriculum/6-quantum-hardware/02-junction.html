@@ -1,46 +1,85 @@
 <section id="sec-h-jj"><h2>The Josephson junction</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>Derive the two Josephson relations and the junction's energy \(-E_J\cos\varphi\).</li>
-<li>Treat the junction as a nonlinear inductor, and use the RCSJ model.</li>
-<li>Relate \(E_J\) to the room-temperature resistance (Ambegaokar–Baratoff), and understand its exponential sensitivity to the barrier.</li>
-<li>Use SQUIDs as tunable junctions, and know how junctions are fabricated.</li>
+<li>Understand what a Josephson junction is physically, and derive its two defining relations and its energy \(-E_J\cos\varphi\).</li>
+<li>See the junction as a nonlinear inductor without loss, the one ingredient every superconducting qubit needs.</li>
+<li>Relate the junction energy \(E_J\) to its room-temperature resistance, and understand why tiny changes in the oxide barrier cause large changes in \(E_J\).</li>
+<li>Use SQUIDs as tunable junctions, and know how junctions are fabricated and trimmed.</li>
 </ul></div>
 
-<h3 id="sec-h-jj-rel">The Josephson relations</h3>
-<p>Two superconductors separated by a barrier thin enough (1–2 nm of aluminium oxide) for Cooper pairs to tunnel form a <b>Josephson junction</b> [@josephson1962]. Each side has its own condensate phase, and the gauge-invariant phase difference \(\varphi\) across the barrier is the junction's single dynamical variable. Josephson predicted:</p>
-<div class="eq" id="eq-h-josephson">$$ I = I_c\sin\varphi, \qquad V = \frac{\hbar}{2e}\,\frac{\dd\varphi}{\dd t} = \frac{\Phi_0}{2\pi}\,\dot\varphi . $$</div>
-<p>A supercurrent up to the <b>critical current</b> \(I_c\) flows with zero voltage (the DC effect), and a constant voltage makes the phase wind and the current oscillate at \(2eV/h\approx483.6\) GHz per millivolt (the AC effect, now the basis of the volt standard). A simple derivation models the junction as a two-level tunnelling problem for the number of pairs transferred: coupling \(-\tfrac{E_J}{2}\sum_N(\ket{N}\bra{N+1} + \mathrm{h.c.})\) between states that differ by one tunnelled pair is diagonalised by phase states \(\ket\varphi = \sum_N\ee^{\ii N\varphi}\ket N\), giving energy \(-E_J\cos\varphi\); the current is \(2e\,\dot N = (2e/\hbar)\,\partial E/\partial\varphi\).</p>
-<p>The second relation says the phase is the junction's flux in units of \(\Phi_0/2\pi\): \(\varphi = 2\pi\Phi/\Phi_0\) with \(\Phi = \int V\dd t\), the node flux of @b2:eq-c-flux. Integrating the power \(IV\) gives the stored energy</p>
-<div class="eq" id="eq-h-ej">$$ U(\varphi) = -E_J\cos\varphi, \qquad E_J = \frac{\hbar I_c}{2e} = \frac{\Phi_0I_c}{2\pi} . $$</div>
-<p>This is the potential energy of a pendulum in the junction's flux coordinate.</p>
+<div class="bigpic"><p>Book 3 showed that a harmonic oscillator (an LC circuit) cannot be a qubit, because its energy levels are equally spaced: a pulse that drives the first transition drives all the others too (@b3:sec-q-qho-anharm). To make a qubit we need a circuit element that is <i>nonlinear</i>, so that the levels become unequal, and that is also <i>lossless</i>, so that the qubit lives long. Resistors are lossy; ordinary capacitors and inductors are linear. The Josephson junction, two superconductors separated by a barrier one or two nanometres thick, is the only element that is both. Every superconducting qubit is built around one or more of them. Its key parameter, \(E_J\), is also the hardest thing in the whole chip to manufacture precisely.</p></div>
 
-<h3 id="sec-h-jj-ind">A nonlinear inductor</h3>
-<p>For small phase, \(I\approx I_c\varphi = (2\pi I_c/\Phi_0)\Phi\), which is an inductor with</p>
+<h3 id="sec-h-jj-what">What a junction is</h3>
+<p>Take two pieces of superconductor (usually aluminium) and separate them with an insulating barrier about 1–2 nm thick (usually aluminium oxide, grown by exposing the first aluminium layer to oxygen). Classically, no current can cross an insulator. Quantum mechanically, electrons can <b>tunnel</b> through a thin enough barrier (@b3:sec-q-dyn-tunnel), and in a superconductor whole Cooper pairs can tunnel, coherently. Each side has its own condensate wavefunction with its own phase (Chapter 1). The <b>phase difference</b> across the barrier, \(\varphi = \theta_2 - \theta_1\) (made gauge-invariant by including the vector potential), is the junction's single dynamical variable. Everything about the junction follows from how the tunnelling current and the voltage depend on \(\varphi\).</p>
+
+<h3 id="sec-h-jj-rel">The two Josephson relations</h3>
+<p>In 1962 Brian Josephson, then a graduate student, predicted [@josephson1962]:</p>
+<div class="eq" id="eq-h-josephson">$$ I = I_c\sin\varphi, \qquad V = \frac{\hbar}{2e}\,\frac{\dd\varphi}{\dd t} = \frac{\Phi_0}{2\pi}\,\dot\varphi . $$</div>
+<p><b>First relation (DC Josephson effect).</b> A supercurrent flows through the barrier with <i>no voltage</i>, as long as it is below the <b>critical current</b> \(I_c\). Its size depends on the phase difference like a sine.</p>
+<p><b>Second relation (AC Josephson effect).</b> If a voltage \(V\) is held across the junction, the phase difference winds steadily, \(\varphi = (2eV/\hbar)t\), so the current oscillates at frequency \(2eV/h\approx483.6\) GHz per millivolt. This relation is so exact that it defines the volt in metrology.</p>
+<div class="intuition"><p>Where does the sine come from? Think of the states \(\ket N\) = "\(N\) Cooper pairs have tunnelled across". Tunnelling of one pair connects \(\ket N\) to \(\ket{N\pm1}\) with amplitude \(-E_J/2\), exactly like a particle hopping on a line of sites (@b3:sec-q-sec-tb). The energy eigenstates of a hopping problem are "plane waves" \(\sum_N\ee^{\ii N\varphi}\ket N\) with energy \(-E_J\cos\varphi\), the band of a tight-binding chain. Here \(\varphi\) plays the role of momentum, and the junction's energy is \(-E_J\cos\varphi\). The current is the rate of pair transfer, \(2e\,\dot N\), which turns out to be \((2e/\hbar)\,\dd E/\dd\varphi = I_c\sin\varphi\).</p></div>
+<p>The second relation tells us what \(\varphi\) really is in circuit language. The node flux is \(\Phi = \int V\dd t\) (@b2:eq-c-flux), so integrating \(V = (\Phi_0/2\pi)\dot\varphi\) gives</p>
+\[ \varphi = 2\pi\,\frac{\Phi}{\Phi_0} : \]
+<p>the phase difference is the junction's flux, measured in units of \(\Phi_0/2\pi\). Integrating the power \(IV\) over time gives the energy stored in the junction:</p>
+<div class="eq" id="eq-h-ej">$$ U(\varphi) = -E_J\cos\varphi, \qquad E_J = \frac{\hbar I_c}{2e} = \frac{\Phi_0I_c}{2\pi} . $$</div>
+<p>This is the potential energy of a pendulum (@b2:sec-c-lag-gen), with \(\varphi\) as the angle. The <b>Josephson energy</b> \(E_J\) sets the depth of the potential. A transmon qubit, as Chapter 3 shows, is literally a quantum pendulum.</p>
+
+<h3 id="sec-h-jj-ind">A nonlinear inductor without loss</h3>
+<p>For small phase, \(\sin\varphi\approx\varphi\), so \(I\approx I_c\varphi = (2\pi I_c/\Phi_0)\,\Phi\). Current proportional to flux is exactly what an inductor does (\(\Phi = LI\)). So a junction at small currents is an inductor with</p>
 <div class="eq" id="eq-h-lj">$$ L_J = \frac{\Phi_0}{2\pi I_c} = \Big(\frac{\Phi_0}{2\pi}\Big)^2\frac{1}{E_J}, \qquad L_J(\varphi) = \frac{L_J}{\cos\varphi} . $$</div>
-<p>A junction with \(I_c = 30\) nA has \(L_J\approx11\) nH and \(E_J/h\approx15\) GHz. The inductance grows with current, so the junction is a <b>nonlinear, dissipationless inductor</b>: the only one available in electronics. Nonlinearity without loss is exactly what a qubit needs (@b3:sec-q-qho-anharm), and it is also what makes parametric amplifiers and frequency converters possible. A real junction also has a capacitance \(C_J\) (a parallel-plate capacitor across the thin oxide, about 50 fF per µm²) and, above the gap voltage, a resistance. The <b>RCSJ</b> (resistively and capacitively shunted junction) model puts these in parallel with the ideal element; its classical dynamics are a damped, driven pendulum, which explains the hysteretic current–voltage curves used to characterise junctions.</p>
+<p>At larger currents, the effective inductance \(L_J/\cos\varphi\) grows: the junction is a <b>nonlinear inductor</b>. And because the supercurrent flows without any voltage, it dissipates nothing. Nonlinear and lossless: exactly what a qubit needs (@b3:sec-q-qho-anharm). The same nonlinearity powers Josephson parametric amplifiers (@b2:sec-c-osc-param) and frequency converters.</p>
+<div class="example"><p><b>Worked example: typical numbers.</b> A qubit junction with \(I_c = 30\) nA has \(L_J = 2.07\times10^{-15}/(2\pi\times3\times10^{-8}) = 11\) nH and \(E_J = \Phi_0I_c/2\pi = 9.9\times10^{-24}\) J, i.e. \(E_J/h = 15\) GHz. An 11 nH inductor would be a long meandering wire; the junction is about 0.02 µm² in area. That compactness is another reason junctions are used even where nonlinearity is not needed (for example, in junction arrays as superinductors).</p></div>
+<p>A real junction also has a capacitance \(C_J\) across its thin oxide, about 50 fF per µm², and, above the gap voltage \(2\Delta/e\), a resistance as quasiparticles start to flow. The <b>RCSJ model</b> (resistively and capacitively shunted junction) puts these in parallel with the ideal Josephson element. Its classical dynamics are a damped, driven pendulum, which explains the hysteretic current–voltage curves used to characterise junctions in the lab.</p>
 
 <h3 id="sec-h-jj-ab">From room-temperature resistance to \(E_J\)</h3>
-<p>The critical current is tied to the normal-state tunnel resistance \(R_n\) by the <b>Ambegaokar–Baratoff</b> relation (@lf:eq-ab),</p>
+<p>Measuring \(I_c\) needs a cold sample. Fortunately \(I_c\) is tied to something measurable at room temperature in milliseconds with a probe: the junction's <b>normal-state resistance</b> \(R_n\) (the resistance of the barrier when the metals are not superconducting). The <b>Ambegaokar–Baratoff</b> relation (@lf:eq-ab) says</p>
 <div class="eq" id="eq-h-ab">$$ I_cR_n = \frac{\pi\Delta}{2e}\quad\Longrightarrow\quad E_J = \frac{h\Delta}{8e^2R_n} = \frac{R_Q}{2R_n}\,\Delta , $$</div>
-<p>where \(R_Q = h/(2e)^2\approx6.45\) kΩ is the resistance quantum for Cooper pairs. Since \(R_n\) can be measured at room temperature with a probe station in milliseconds, it is the main manufacturing metric for junctions: every junction on a wafer can be measured warm and its \(E_J\), and hence its qubit's frequency, predicted. The prediction is imperfect: the resistance changes on cooling and ageing, and the gap varies with film thickness, which is why the review proposes a statistical "warm-to-cold" model (@lf:sec-var-bayes). For aluminium, \(R_n\approx10\) kΩ gives \(E_J/h\approx14\) GHz.</p>
-<p>The tunnel resistance depends exponentially on the barrier thickness (@b3:eq-q-tunnel) and inversely on area: \(R_n\propto\ee^{2\kappa d}/A\). With \(\kappa\approx5\) nm\(^{-1}\), a 0.01 nm change in average barrier thickness changes \(R_n\) by 10%. Junction areas are typically \(0.01\)–\(0.05\) µm², so a 5 nm error in a 150 nm linewidth changes the area by several percent. Both effects make junction-to-junction spreads of 1–3% hard to beat, and this, through @lf:eq-sens, is the root of frequency variability in superconducting processors.</p>
+<p>where \(R_Q = h/(2e)^2\approx6.45\) kΩ is the resistance quantum for Cooper pairs. Both \(I_c\) and \(1/R_n\) are proportional to how easily charge tunnels through the barrier, so their product depends only on the superconductor's gap.</p>
+<div class="example"><p><b>Worked example: from a probe measurement to a qubit frequency.</b> A junction measures \(R_n = 10\) kΩ at room temperature. With \(\Delta = 180\) µeV: \(E_J = (6.45/20)\times180 = 58\) µeV, i.e. \(E_J/h = 14\) GHz. Chapter 3 will show that with a typical capacitance this gives a qubit near 5 GHz. A wafer prober can measure thousands of junctions an hour, so every junction's qubit frequency can be predicted before the chip is ever cooled. The prediction is imperfect: resistance changes on cooling and ageing, and the gap depends on film thickness, which is why the review proposes a statistical "warm-to-cold" model (@lf:sec-var-bayes).</p></div>
+
+<h3 id="sec-h-jj-sens">Why junctions are hard to make reproducibly</h3>
+<p>The tunnelling probability through a barrier of thickness \(d\) falls exponentially (@b3:eq-q-tunnel): \(R_n\propto\ee^{2\kappa d}/A\) with \(\kappa\approx5\) nm\(^{-1}\) for aluminium oxide, and \(A\) the junction area.</p>
+<ul>
+<li>A change of only 0.01 nm (a few percent of one atom's diameter) in the average barrier thickness changes \(R_n\) by \(\ee^{2\times5\times0.01} - 1\approx10\%\).</li>
+<li>Junction areas are tiny (0.01–0.05 µm², e.g. 150 nm × 150 nm), so a 5 nm error in each linewidth changes the area by about 7%.</li>
+</ul>
+<p>Both effects make junction-to-junction spreads below 1–3% hard to achieve. Since the qubit frequency scales as \(\sqrt{E_J}\), a 2% spread in \(E_J\) gives about a 1% spread in frequency, roughly 50 MHz at 5 GHz. That is larger than the frequency windows that qubits must avoid to prevent unwanted interactions (Chapter 5). This single fact, exponential sensitivity of \(E_J\) to sub-ångström variation, is the root of the frequency-variability problem at the centre of the review (@lf:sec-var-junction).</p>
 
 <h3 id="sec-h-jj-squid">SQUIDs: tunable junctions</h3>
-<p>Two junctions in parallel in a small loop form a DC <b>SQUID</b>. Flux quantisation (@eq:h-fluxq) constrains the two phases, \(\varphi_1 - \varphi_2 = 2\pi\Phi_{\mathrm{ext}}/\Phi_0\), and for identical junctions the pair acts as one junction with</p>
-<div class="eq" id="eq-h-squid">$$ E_J(\Phi_{\mathrm{ext}}) = 2E_{J0}\,\Big|\cos\frac{\pi\Phi_{\mathrm{ext}}}{\Phi_0}\Big| , $$</div>
-<p>tunable from \(2E_{J0}\) to zero by an external flux (with asymmetric junctions, to a nonzero minimum). Flux-tunable transmons and tunable couplers use SQUIDs, with a current line nearby supplying the flux. Tunability helps correct fabrication spread and enables fast two-qubit gates, but it exposes the qubit to flux noise (\(\partial\omega/\partial\Phi\ne0\) away from the "sweet spot" where the derivative vanishes) and requires a control line per tunable element.</p>
+<p>Put two junctions in parallel in a small superconducting loop: a DC <b>SQUID</b> (superconducting quantum interference device). Flux quantisation (Chapter 1) ties the two phases together: \(\varphi_1 - \varphi_2 = 2\pi\Phi_{\mathrm{ext}}/\Phi_0\), where \(\Phi_{\mathrm{ext}}\) is the magnetic flux through the loop. The two junctions' currents then interfere like two slits, and for identical junctions the pair behaves as one junction with</p>
+<div class="eq" id="eq-h-squid">$$ E_J(\Phi_{\mathrm{ext}}) = 2E_{J0}\,\Big|\cos\frac{\pi\Phi_{\mathrm{ext}}}{\Phi_0}\Big| . $$</div>
+<p>So the effective \(E_J\) can be tuned from \(2E_{J0}\) down to zero by threading flux through the loop, supplied by a current in a nearby on-chip line. With unequal junctions, the minimum is nonzero. Tunable qubits and tunable couplers use SQUIDs. The benefit: fabrication spread can be corrected, and fast two-qubit gates can be made (Chapter 5). The costs: a control line per tunable element (more wiring, more heat), and sensitivity to <b>flux noise</b>, because \(\partial E_J/\partial\Phi\ne0\) away from the "sweet spots" (\(\Phi_{\mathrm{ext}} = 0\) or \(\Phi_0/2\)) where the derivative vanishes.</p>
 
 <h3 id="sec-h-jj-fab">How junctions are made</h3>
-<p>The standard process is <b>double-angle shadow evaporation</b> of aluminium through a suspended resist mask, either a bridge (the Dolan technique [@dolan1977]) or crossed trenches (the "Manhattan" style). Aluminium is evaporated from one angle, the surface is oxidised in a controlled oxygen atmosphere (pressure × time sets the barrier thickness), and a second aluminium layer is evaporated from another angle so that it overlaps the first only at the junction. The process is simple and gives excellent coherence, but it is sensitive to resist profiles, evaporation angles and oxidation conditions, and it is not native to CMOS-style fabs. Industrial lines (imec, MIT Lincoln Laboratory, foundries such as SkyWater and Rigetti's fab) have developed subtractive, overlap or 300 mm-compatible variants (@lf:sec-land-foundry). Post-fabrication <b>laser annealing</b> of junctions changes \(R_n\) by a few percent in a controlled way and is used to trim frequencies after measurement (@lf:sec-var-trim).</p>
+<p>The standard research process is <b>double-angle shadow evaporation</b> [@dolan1977]:</p>
+<ol>
+<li>Spin two layers of resist on the wafer and pattern them with an electron beam so that the bottom layer is undercut, leaving a thin suspended bridge (the "Dolan bridge") or a pair of crossed trenches (the "Manhattan" style).</li>
+<li>Evaporate aluminium at one angle: the bridge casts a shadow, so the metal lands in a shifted position.</li>
+<li>Without breaking vacuum, let in a controlled amount of oxygen for a controlled time; the pressure × time product sets the oxide thickness and hence \(R_n\).</li>
+<li>Evaporate a second aluminium layer from the opposite angle, so it overlaps the first only in a tiny region: that overlap is the junction.</li>
+<li>Dissolve the resist ("lift-off"), leaving the junction and its leads.</li>
+</ol>
+<p>The method is simple and produces junctions with excellent coherence, but it is sensitive to resist profiles, evaporation angles and oxidation conditions, and it does not fit naturally into industrial CMOS-style fabs. Industrial lines (imec, MIT Lincoln Laboratory, and foundries such as SkyWater) have developed subtractive and overlap processes compatible with 200 and 300 mm wafers (@lf:sec-land-foundry). After fabrication, <b>laser annealing</b> can increase a junction's resistance by a few percent in a controlled way, which is used to trim frequencies towards target after measurement (@lf:sec-var-trim).</p>
 
-<div class="eda"><p>The junction is where process and design meet most sharply. A design specifies \(E_J\); the process delivers a distribution of \(R_n\) with a wafer-scale gradient and a local random part; trimming narrows the distribution at a cost in test time. The yield problem of the review's §4 is the propagation of this distribution through the frequency formula to collision constraints.</p></div>
+<div class="eda"><p>The junction is where process and design meet most sharply. The design specifies \(E_J\); the process delivers a distribution of \(R_n\) with a wafer-wide gradient and a local random part; trimming narrows the distribution at a cost in test time. The yield problem of the review's §4 is the propagation of this distribution through the qubit-frequency formula to the frequency windows that gates require.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>A Josephson junction is two superconductors separated by a ~1–2 nm oxide; Cooper pairs tunnel coherently.</li>
+<li>\(I = I_c\sin\varphi\), \(V = (\Phi_0/2\pi)\dot\varphi\); energy \(-E_J\cos\varphi\): a pendulum in the flux coordinate.</li>
+<li>It is a lossless nonlinear inductor, \(L_J = (\Phi_0/2\pi)^2/E_J\), the ingredient that makes qubits possible.</li>
+<li>\(E_J = (R_Q/2R_n)\Delta\) links a room-temperature resistance to the qubit; exponential dependence on barrier thickness makes junction spread the key manufacturing problem.</li>
+<li>A SQUID is a flux-tunable junction; tunability fixes fabrication spread at the cost of wiring and flux noise.</li>
+</ul></div>
 
 <div class="exercises" id="ex-h-jj"><h4>Exercises</h4><ol>
 <li>Compute \(L_J\) and \(E_J/h\) for \(I_c = 20\) nA.
 <details><summary>Solution</summary><p>\(L_J = 2.068\times10^{-15}/(2\pi\times2\times10^{-8}) = 16.5\) nH. \(E_J = \Phi_0I_c/2\pi = 6.58\times10^{-24}\) J, \(E_J/h\approx9.9\) GHz.</p></details></li>
 <li>An aluminium junction has \(R_n = 8\) kΩ. Using \(E_J = (R_Q/2R_n)\Delta\) with \(\Delta = 180\) µeV and \(R_Q = 6.45\) kΩ, find \(E_J/h\).
-<details><summary>Solution</summary><p>\(E_J = (6.45/16)\times180\) µeV \(= 72.6\) µeV; \(E_J/h = 72.6\times10^{-6}\times2.418\times10^{14}\approx17.6\) GHz.</p></details></li>
+<details><summary>Solution</summary><p>\(E_J = (6.45/16)\times180 = 72.6\) µeV; \(E_J/h = 72.6\times10^{-6}\times2.418\times10^{14}\approx17.6\) GHz.</p></details></li>
+<li>A 1 µV DC voltage is applied across a junction. At what frequency does the supercurrent oscillate?
+<details><summary>Solution</summary><p>\(2eV/h = 483.6\) GHz/mV × 0.001 mV = 484 MHz.</p></details></li>
+<li>Two junctions on the same wafer have oxide thicknesses differing by 0.02 nm and areas differing by 3%. By roughly how much do their \(E_J\) differ? (Use \(\kappa = 5\) nm\(^{-1}\).)
+<details><summary>Solution</summary><p>Barrier: \(\ee^{-2\times5\times0.02} = 0.82\), an 18% difference. Area: 3%. Combined, \(E_J\propto A\ee^{-2\kappa d}\) differs by about 15–21% depending on the signs. The qubit frequency (\(\propto\sqrt{E_J}\)) differs by roughly 8–10%: hundreds of MHz.</p></details></li>
 <li>A symmetric SQUID has \(E_{J0}/h = 10\) GHz per junction. At what external flux is \(E_J\) half its maximum? What is \(\partial E_J/\partial\Phi\) there, in GHz per \(\Phi_0\)?
-<details><summary>Solution</summary><p>\(|\cos(\pi\Phi/\Phi_0)| = 1/2\) at \(\Phi = \Phi_0/3\). \(\partial E_J/\partial\Phi = -2E_{J0}(\pi/\Phi_0)\sin(\pi/3) = -2\times10\times\pi\times0.866\approx-54\) GHz per \(\Phi_0\). Flux noise of \(10^{-6}\Phi_0\) then moves \(E_J\) by 54 kHz, and the qubit frequency by roughly half that fraction.</p></details></li>
+<details><summary>Solution</summary><p>\(|\cos(\pi\Phi/\Phi_0)| = 1/2\) at \(\Phi = \Phi_0/3\). \(\partial E_J/\partial\Phi = -2E_{J0}(\pi/\Phi_0)\sin(\pi/3)\approx-54\) GHz per \(\Phi_0\). Flux noise of \(10^{-6}\Phi_0\) then moves \(E_J\) by 54 kHz.</p></details></li>
 </ol></div>
 </section>
