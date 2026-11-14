@@ -62,6 +62,22 @@
 <p>\(\bra+ = (\bra0 + \bra1)/\sqrt2\), and \(\braket{0}{0} = 1\), \(\braket01 = 0\), etc., so \(\braket{+}{\psi} = \frac{1}{5\sqrt2}(3 + 4\ii)\). Its modulus squared is \(25/50 = 1/2\): measuring this state in the \(\pm\) basis gives "+" half the time (Book 3). The projector: \(\ketbra\psi\psi = \frac{1}{25}\begin{pmatrix}3\\4\ii\end{pmatrix}(3,\ -4\ii) = \frac{1}{25}\begin{pmatrix}9 & -12\ii\\ 12\ii & 16\end{pmatrix}\). Note the conjugation in the bra.</p></div>
 <div class="box"><p><strong>Infinite dimensions, briefly.</strong> For a particle on a line, the "basis" \(\ket{x}\) of position states is continuous. Sums become integrals and the Kronecker delta becomes the Dirac delta (Chapter 6): \(\int \ketbra{x}{x}\,\dd x = I\), \(\braket{x}{x'} = \delta(x-x')\), and \(\braket{x}{\psi} = \psi(x)\) is the wavefunction. The rigorous theory is delicate, but for engineering every formula works if you replace \(\sum_k\) by \(\int\dd x\). A space with an inner product that is complete (limits of convergent sequences stay inside) is a <b>Hilbert space</b>; every finite-dimensional one is.</p></div>
 
+<h3 id="sec-m-vectors-worked">Worked examples with complex vectors</h3>
+<p>Complex vectors behave like ordinary arrows except in one place: the inner product conjugates its first argument. Let us practise on the two-component vectors that describe a qubit.</p>
+<div class="example"><p><b>Inner product and overlap.</b> Take \(\mathbf u = \tfrac1{\sqrt2}(1, \ii)\) and \(\mathbf v = \tfrac1{\sqrt2}(1, 1)\). Then</p>
+\[ \braket{\mathbf u}{\mathbf v} = \tfrac12\big(1^*\cdot1 + \ii^*\cdot1\big) = \tfrac12(1 - \ii), \qquad |\braket{\mathbf u}{\mathbf v}|^2 = \tfrac14(1+1) = \tfrac12 . \]
+<p>Both vectors have length 1: \(\braket{\mathbf u}{\mathbf u} = \tfrac12(1\cdot1 + (-\ii)(\ii)) = \tfrac12(1+1) = 1\). In quantum language these are the states \(\ket{+\ii}\) and \(\ket+\), and the number \(\tfrac12\) is the probability that a measurement in one basis finds the other state (Book 3, Chapter 2).</p></div>
+<div class="pitfall"><p>Forget the conjugate and \(\mathbf u\) would have "length squared" \(\tfrac12(1\cdot1 + \ii\cdot\ii) = \tfrac12(1 - 1) = 0\): a non-zero vector with zero length, which is nonsense. In NumPy, <code>np.dot(u, v)</code> does <i>not</i> conjugate; <code>np.vdot(u, v)</code> does. Using the wrong one is one of the most common bugs in quantum simulation code.</p></div>
+<div class="example"><p><b>Gram–Schmidt by hand.</b> Make an orthonormal pair from \(\mathbf a = (1,1,0)\) and \(\mathbf b = (1,0,1)\).</p>
+<ol>
+<li>Normalise the first: \(\mathbf e_1 = (1,1,0)/\sqrt2\).</li>
+<li>Remove from \(\mathbf b\) its component along \(\mathbf e_1\): \(\braket{\mathbf e_1}{\mathbf b} = 1/\sqrt2\), so \(\mathbf b - \tfrac1{\sqrt2}\mathbf e_1 = (1,0,1) - (\tfrac12,\tfrac12,0) = (\tfrac12,-\tfrac12,1)\).</li>
+<li>Normalise: its length is \(\sqrt{\tfrac14+\tfrac14+1} = \sqrt{3/2}\), so \(\mathbf e_2 = (1,-1,2)/\sqrt6\).</li>
+</ol>
+<p>Check: \(\braket{\mathbf e_1}{\mathbf e_2} = (1 - 1 + 0)/\sqrt{12} = 0\). The same three steps, applied to functions instead of arrays, produce orthogonal polynomials and the mode shapes used by field solvers.</p></div>
+<div class="quick"><p>Normalise \((3, 4\ii)\).</p>
+<details><summary>Answer</summary><p>Length \(\sqrt{|3|^2+|4\ii|^2} = \sqrt{9+16} = 5\), so the unit vector is \((0.6, 0.8\ii)\). Note \(|4\ii|^2 = 16\), not \(-16\).</p></details></div>
+
 <h3 id="sec-m-vectors-code">Try it in Python</h3>
 <p>NumPy represents kets as arrays; <code>np.vdot(a, b)</code> computes \(\braket ab\), conjugating the first argument automatically.</p>
 <pre class="code"><code>import numpy as np

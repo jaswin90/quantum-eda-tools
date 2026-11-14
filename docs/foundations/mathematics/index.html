@@ -69,7 +69,8 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-vectors-inner"><span class="tocnum">2.2</span>Inner products, length and angle</a></li>
 <li class="toc3"><a href="#sec-m-vectors-gs"><span class="tocnum">2.3</span>Projection and Gram–Schmidt</a></li>
 <li class="toc3"><a href="#sec-m-vectors-dirac"><span class="tocnum">2.4</span>Dirac notation</a></li>
-<li class="toc3"><a href="#sec-m-vectors-code"><span class="tocnum">2.5</span>Try it in Python</a></li>
+<li class="toc3"><a href="#sec-m-vectors-worked"><span class="tocnum">2.5</span>Worked examples with complex vectors</a></li>
+<li class="toc3"><a href="#sec-m-vectors-code"><span class="tocnum">2.6</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-operators"><span class="tocnum">3</span>Linear operators, eigenvalues and the matrix exponential</a></li>
 <li class="toc3"><a href="#sec-m-op-maps"><span class="tocnum">3.1</span>Matrices are linear maps</a></li>
 <li class="toc3"><a href="#sec-m-op-adjoint"><span class="tocnum">3.2</span>The adjoint, Hermitian and unitary matrices</a></li>
@@ -78,14 +79,16 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-op-pauli"><span class="tocnum">3.5</span>The Pauli matrices</a></li>
 <li class="toc3"><a href="#sec-m-op-exp"><span class="tocnum">3.6</span>Functions of matrices and the exponential</a></li>
 <li class="toc3"><a href="#sec-m-op-svd"><span class="tocnum">3.7</span>Singular value decomposition</a></li>
-<li class="toc3"><a href="#sec-m-op-code"><span class="tocnum">3.8</span>Try it in Python</a></li>
+<li class="toc3"><a href="#sec-m-op-comm"><span class="tocnum">3.8</span>Commutators: when order matters</a></li>
+<li class="toc3"><a href="#sec-m-op-code"><span class="tocnum">3.9</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-tensor"><span class="tocnum">4</span>Tensor products and composite systems</a></li>
 <li class="toc3"><a href="#sec-m-tensor-why"><span class="tocnum">4.1</span>Why a new product is needed</a></li>
 <li class="toc3"><a href="#sec-m-tensor-def"><span class="tocnum">4.2</span>Definition and rules</a></li>
 <li class="toc3"><a href="#sec-m-tensor-ent"><span class="tocnum">4.3</span>Product vectors and entangled vectors</a></li>
 <li class="toc3"><a href="#sec-m-tensor-exp"><span class="tocnum">4.4</span>The exponential wall</a></li>
 <li class="toc3"><a href="#sec-m-tensor-ptrace"><span class="tocnum">4.5</span>The partial trace</a></li>
-<li class="toc3"><a href="#sec-m-tensor-code"><span class="tocnum">4.6</span>Try it in Python</a></li>
+<li class="toc3"><a href="#sec-m-tensor-order"><span class="tocnum">4.6</span>Worked example: which qubit is which?</a></li>
+<li class="toc3"><a href="#sec-m-tensor-code"><span class="tocnum">4.7</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-ode"><span class="tocnum">5</span>Differential equations and linear dynamics</a></li>
 <li class="toc3"><a href="#sec-m-ode-first"><span class="tocnum">5.1</span>First-order equations: decay</a></li>
 <li class="toc3"><a href="#sec-m-ode-osc"><span class="tocnum">5.2</span>The harmonic oscillator</a></li>
@@ -93,7 +96,8 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-ode-driven"><span class="tocnum">5.4</span>Driven oscillators and resonance</a></li>
 <li class="toc3"><a href="#sec-m-ode-systems"><span class="tocnum">5.5</span>Systems of linear equations: \(\dot{\mathbf x} = A\mathbf x\)</a></li>
 <li class="toc3"><a href="#sec-m-ode-pde"><span class="tocnum">5.6</span>Partial differential equations</a></li>
-<li class="toc3"><a href="#sec-m-ode-code"><span class="tocnum">5.7</span>Try it in Python</a></li>
+<li class="toc3"><a href="#sec-m-ode-taylor"><span class="tocnum">5.7</span>Taylor series and linearisation</a></li>
+<li class="toc3"><a href="#sec-m-ode-code"><span class="tocnum">5.8</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-fourier"><span class="tocnum">6</span>Fourier analysis, linear systems and spectra</a></li>
 <li class="toc3"><a href="#sec-m-fourier-series"><span class="tocnum">6.1</span>Fourier series: periodic signals</a></li>
 <li class="toc3"><a href="#sec-m-fourier-transform"><span class="tocnum">6.2</span>The Fourier transform: any signal</a></li>
@@ -101,7 +105,8 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-fourier-lti"><span class="tocnum">6.4</span>Linear time-invariant systems and convolution</a></li>
 <li class="toc3"><a href="#sec-m-fourier-dft"><span class="tocnum">6.5</span>Sampling and the discrete Fourier transform</a></li>
 <li class="toc3"><a href="#sec-m-fourier-psd"><span class="tocnum">6.6</span>Noise and spectral densities</a></li>
-<li class="toc3"><a href="#sec-m-fourier-code"><span class="tocnum">6.7</span>Try it in Python</a></li>
+<li class="toc3"><a href="#sec-m-fourier-db"><span class="tocnum">6.7</span>Decibels and logarithmic scales</a></li>
+<li class="toc3"><a href="#sec-m-fourier-code"><span class="tocnum">6.8</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-prob"><span class="tocnum">7</span>Probability, statistics and inference</a></li>
 <li class="toc3"><a href="#sec-m-prob-basics"><span class="tocnum">7.1</span>Random variables, expectation and variance</a></li>
 <li class="toc3"><a href="#sec-m-prob-dists"><span class="tocnum">7.2</span>The distributions that matter</a></li>
@@ -109,7 +114,8 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-prob-yield"><span class="tocnum">7.4</span>Independence and why yield collapses</a></li>
 <li class="toc3"><a href="#sec-m-prob-bayes"><span class="tocnum">7.5</span>Bayes' theorem and inference</a></li>
 <li class="toc3"><a href="#sec-m-prob-mc"><span class="tocnum">7.6</span>Monte Carlo methods</a></li>
-<li class="toc3"><a href="#sec-m-prob-code"><span class="tocnum">7.7</span>Try it in Python</a></li>
+<li class="toc3"><a href="#sec-m-prob-ci"><span class="tocnum">7.7</span>Confidence intervals: how sure is a number?</a></li>
+<li class="toc3"><a href="#sec-m-prob-code"><span class="tocnum">7.8</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-numerics"><span class="tocnum">8</span>Numerical methods and optimisation</a></li>
 <li class="toc3"><a href="#sec-m-num-float"><span class="tocnum">8.1</span>Floating point and conditioning</a></li>
 <li class="toc3"><a href="#sec-m-num-linear"><span class="tocnum">8.2</span>Solving linear systems and eigenproblems</a></li>
@@ -117,7 +123,8 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-num-lsq"><span class="tocnum">8.4</span>Least squares and fitting</a></li>
 <li class="toc3"><a href="#sec-m-num-opt"><span class="tocnum">8.5</span>Optimisation</a></li>
 <li class="toc3"><a href="#sec-m-num-adjoint"><span class="tocnum">8.6</span>Gradients of simulations: the adjoint method</a></li>
-<li class="toc3"><a href="#sec-m-num-code"><span class="tocnum">8.7</span>Try it in Python</a></li>
+<li class="toc3"><a href="#sec-m-num-units"><span class="tocnum">8.7</span>Units and scaling</a></li>
+<li class="toc3"><a href="#sec-m-num-code"><span class="tocnum">8.8</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-worked"><span class="tocnum">9</span>Putting it together: the mathematics of measuring a resonator</a></li>
 <li class="toc3"><a href="#sec-m-w-model"><span class="tocnum">9.1</span>Step 1: the model (Chapters 1 and 5)</a></li>
 <li class="toc3"><a href="#sec-m-w-response"><span class="tocnum">9.2</span>Step 2: the predicted response (Chapters 1 and 6)</a></li>
@@ -345,7 +352,23 @@ for f in (1e4, 159e3, 1e7):
 <p>\(\bra+ = (\bra0 + \bra1)/\sqrt2\), and \(\braket{0}{0} = 1\), \(\braket01 = 0\), etc., so \(\braket{+}{\psi} = \frac{1}{5\sqrt2}(3 + 4\ii)\). Its modulus squared is \(25/50 = 1/2\): measuring this state in the \(\pm\) basis gives "+" half the time (Book 3). The projector: \(\ketbra\psi\psi = \frac{1}{25}\begin{pmatrix}3\\4\ii\end{pmatrix}(3,\ -4\ii) = \frac{1}{25}\begin{pmatrix}9 & -12\ii\\ 12\ii & 16\end{pmatrix}\). Note the conjugation in the bra.</p></div>
 <div class="box"><p><strong>Infinite dimensions, briefly.</strong> For a particle on a line, the "basis" \(\ket{x}\) of position states is continuous. Sums become integrals and the Kronecker delta becomes the Dirac delta (Chapter 6): \(\int \ketbra{x}{x}\,\dd x = I\), \(\braket{x}{x'} = \delta(x-x')\), and \(\braket{x}{\psi} = \psi(x)\) is the wavefunction. The rigorous theory is delicate, but for engineering every formula works if you replace \(\sum_k\) by \(\int\dd x\). A space with an inner product that is complete (limits of convergent sequences stay inside) is a <b>Hilbert space</b>; every finite-dimensional one is.</p></div>
 
-<h3 id="sec-m-vectors-code"><span class="secnum">2.5</span> Try it in Python</h3>
+<h3 id="sec-m-vectors-worked"><span class="secnum">2.5</span> Worked examples with complex vectors</h3>
+<p>Complex vectors behave like ordinary arrows except in one place: the inner product conjugates its first argument. Let us practise on the two-component vectors that describe a qubit.</p>
+<div class="example"><p><b>Inner product and overlap.</b> Take \(\mathbf u = \tfrac1{\sqrt2}(1, \ii)\) and \(\mathbf v = \tfrac1{\sqrt2}(1, 1)\). Then</p>
+\[ \braket{\mathbf u}{\mathbf v} = \tfrac12\big(1^*\cdot1 + \ii^*\cdot1\big) = \tfrac12(1 - \ii), \qquad |\braket{\mathbf u}{\mathbf v}|^2 = \tfrac14(1+1) = \tfrac12 . \]
+<p>Both vectors have length 1: \(\braket{\mathbf u}{\mathbf u} = \tfrac12(1\cdot1 + (-\ii)(\ii)) = \tfrac12(1+1) = 1\). In quantum language these are the states \(\ket{+\ii}\) and \(\ket+\), and the number \(\tfrac12\) is the probability that a measurement in one basis finds the other state (Book 3, Chapter 2).</p></div>
+<div class="pitfall"><p>Forget the conjugate and \(\mathbf u\) would have "length squared" \(\tfrac12(1\cdot1 + \ii\cdot\ii) = \tfrac12(1 - 1) = 0\): a non-zero vector with zero length, which is nonsense. In NumPy, <code>np.dot(u, v)</code> does <i>not</i> conjugate; <code>np.vdot(u, v)</code> does. Using the wrong one is one of the most common bugs in quantum simulation code.</p></div>
+<div class="example"><p><b>Gram–Schmidt by hand.</b> Make an orthonormal pair from \(\mathbf a = (1,1,0)\) and \(\mathbf b = (1,0,1)\).</p>
+<ol>
+<li>Normalise the first: \(\mathbf e_1 = (1,1,0)/\sqrt2\).</li>
+<li>Remove from \(\mathbf b\) its component along \(\mathbf e_1\): \(\braket{\mathbf e_1}{\mathbf b} = 1/\sqrt2\), so \(\mathbf b - \tfrac1{\sqrt2}\mathbf e_1 = (1,0,1) - (\tfrac12,\tfrac12,0) = (\tfrac12,-\tfrac12,1)\).</li>
+<li>Normalise: its length is \(\sqrt{\tfrac14+\tfrac14+1} = \sqrt{3/2}\), so \(\mathbf e_2 = (1,-1,2)/\sqrt6\).</li>
+</ol>
+<p>Check: \(\braket{\mathbf e_1}{\mathbf e_2} = (1 - 1 + 0)/\sqrt{12} = 0\). The same three steps, applied to functions instead of arrays, produce orthogonal polynomials and the mode shapes used by field solvers.</p></div>
+<div class="quick"><p>Normalise \((3, 4\ii)\).</p>
+<details><summary>Answer</summary><p>Length \(\sqrt{|3|^2+|4\ii|^2} = \sqrt{9+16} = 5\), so the unit vector is \((0.6, 0.8\ii)\). Note \(|4\ii|^2 = 16\), not \(-16\).</p></details></div>
+
+<h3 id="sec-m-vectors-code"><span class="secnum">2.6</span> Try it in Python</h3>
 <p>NumPy represents kets as arrays; <code>np.vdot(a, b)</code> computes \(\braket ab\), conjugating the first argument automatically.</p>
 <pre class="code"><code>import numpy as np
 ket0, ket1 = np.array([1, 0]), np.array([0, 1])
@@ -451,7 +474,25 @@ print(np.allclose(I, np.eye(2)))       # True: resolution of the identity</code>
 <div class="eq" id="eq-m-svd">$$ M = V\,\Sigma\,W^\dagger ,  \tag{20}$$</div>
 <p>with \(V, W\) unitary and \(\Sigma\) diagonal with non-negative <b>singular values</b> \(s_1\ge s_2\ge\dots\). Read it as: rotate (\(W^\dagger\)), stretch along the axes (\(\Sigma\)), rotate again (\(V\)). The singular values are the square roots of the eigenvalues of \(M^\dagger M\). The SVD gives the best low-rank approximation of a matrix (keep the largest singular values), the condition number \(s_1/s_n\) that controls numerical error (Chapter 8), and, in Book 3, the Schmidt decomposition that measures entanglement.</p>
 
-<h3 id="sec-m-op-code"><span class="secnum">3.8</span> Try it in Python</h3>
+<h3 id="sec-m-op-comm"><span class="secnum">3.8</span> Commutators: when order matters</h3>
+<p>Because \(AB\) and \(BA\) generally differ, it is useful to have a name for the difference. The <b>commutator</b> is</p>
+\[ [A,B] = AB - BA . \]
+<p>If \([A,B] = 0\) the matrices <b>commute</b> and the order does not matter. This one matrix tells you a great deal:</p>
+<ul>
+<li><b>Shared eigenvectors.</b> Two Hermitian matrices commute exactly when they have a common set of eigenvectors. In quantum mechanics this means the two quantities can both have definite values at once (Book 3, Chapter 2).</li>
+<li><b>Exponentials.</b> \(\ee^A\ee^B = \ee^{A+B}\) holds when \(A\) and \(B\) commute, and generally fails otherwise. Applying two control fields one after the other is then not the same as applying them together.</li>
+<li><b>Dynamics.</b> A quantity whose matrix commutes with the Hamiltonian is conserved (Book 3, Chapter 3).</li>
+</ul>
+<div class="example"><p><b>Worked example: Pauli commutators.</b> Multiply out</p>
+\[ XZ = \begin{pmatrix}0&1\\1&0\end{pmatrix}\begin{pmatrix}1&0\\0&-1\end{pmatrix} = \begin{pmatrix}0&-1\\1&0\end{pmatrix}, \qquad ZX = \begin{pmatrix}0&1\\-1&0\end{pmatrix}. \]
+<p>So \([X,Z] = \begin{pmatrix}0&-2\\2&0\end{pmatrix} = -2\ii Y\). Doing the same for the other pairs gives the cyclic pattern</p>
+\[ [X,Y] = 2\ii Z, \qquad [Y,Z] = 2\ii X, \qquad [Z,X] = 2\ii Y . \]
+<p>No two different Pauli matrices commute. That is the algebraic reason a qubit cannot have definite values along two axes at once, and why rotations about different axes do not commute.</p></div>
+<div class="pitfall"><p>A frequent algebra slip is to "simplify" \((A+B)^2\) to \(A^2 + 2AB + B^2\). For matrices it is \(A^2 + AB + BA + B^2\), which equals the familiar form only if \(A\) and \(B\) commute. The same care is needed in every expansion of operator expressions in Books 2 to 6.</p></div>
+<div class="quick"><p>Do \(X\) and \(X+Z\) commute?</p>
+<details><summary>Answer</summary><p>\([X, X+Z] = [X,X] + [X,Z] = 0 - 2\ii Y\ne0\). No.</p></details></div>
+
+<h3 id="sec-m-op-code"><span class="secnum">3.9</span> Try it in Python</h3>
 <p><code>np.linalg.eigh</code> diagonalises Hermitian matrices (returning real eigenvalues in increasing order and orthonormal eigenvectors as columns); <code>scipy.linalg.expm</code> computes matrix exponentials.</p>
 <pre class="code"><code>import numpy as np
 from scipy.linalg import expm
@@ -543,7 +584,19 @@ print(np.round(U, 3))                  # cos(pi/4) I - i sin(pi/4) X</code></pre
 <p>In components: \((\Tr_B M)_{ii'} = \sum_j M_{ij,\,i'j}\), i.e. keep the \(A\) indices and sum over matching \(B\) indices. It is like computing a marginal probability distribution by summing over the variable you do not care about.</p>
 <div class="example"><p><b>Worked example: half of an entangled pair.</b> Write the projector \(\ketbra{\Phi^+}{\Phi^+} = \frac12(\ketbra{00}{00}+\ketbra{00}{11}+\ketbra{11}{00}+\ketbra{11}{11})\). Tracing out \(B\) keeps only terms whose \(B\) labels match (the first and last): \(\Tr_B = \frac12(\ketbra00 + \ketbra11) = I/2\). Each half of the entangled pair, on its own, is in the state of maximal ignorance: a 50:50 random bit with no phase information. The whole is perfectly known; the parts are completely random. In Book 3 this becomes the explanation of decoherence, where \(B\) is the environment.</p></div>
 
-<h3 id="sec-m-tensor-code"><span class="secnum">4.6</span> Try it in Python</h3>
+<h3 id="sec-m-tensor-order"><span class="secnum">4.6</span> Worked example: which qubit is which?</h3>
+<p>The tensor product is not symmetric: \(A\otimes B\ne B\otimes A\) in general. The order of the factors is the order of the qubits, and you must fix a convention. In this series the left factor is the first qubit: \(\ket{01} = \ket0\otimes\ket1\) means "qubit 1 in \(\ket0\), qubit 2 in \(\ket1\)", and the basis order is \(\ket{00},\ket{01},\ket{10},\ket{11}\).</p>
+<div class="example"><p><b>Acting on one qubit of two.</b> To apply \(X\) to the first qubit only, use \(X\otimes I\); to the second, \(I\otimes X\). On \(\ket{01}\):</p>
+\[ (X\otimes I)\ket{01} = X\ket0\otimes I\ket1 = \ket{11}, \qquad (I\otimes X)\ket{01} = \ket0\otimes X\ket1 = \ket{00}. \]
+<p>As \(4\times4\) matrices, written in \(2\times2\) blocks,</p>
+\[ X\otimes I = \begin{pmatrix}0 & I\\ I & 0\end{pmatrix}, \qquad I\otimes X = \begin{pmatrix}X & 0\\ 0 & X\end{pmatrix}. \]
+<p>The first swaps the top and bottom halves of the state vector (flipping qubit 1); the second flips within each half (flipping qubit 2). For \(n\) qubits, an operator \(A\) on qubit \(k\) is \(I\otimes\cdots\otimes A\otimes\cdots\otimes I\), with \(A\) in position \(k\): a \(2^n\times2^n\) matrix built from one \(2\times2\) block.</p></div>
+<div class="example"><p><b>Two-qubit observables.</b> \(Z\otimes Z\) is diagonal with entries \((+1,-1,-1,+1)\) on \(\ket{00},\ket{01},\ket{10},\ket{11}\): it measures <i>parity</i>, \(+1\) if the qubits agree and \(-1\) if they differ, without revealing either individual value. Parity checks like this are the basic measurement of quantum error correction (Book 4).</p></div>
+<div class="pitfall"><p>Not everyone uses the same order. Qiskit, for example, labels qubit 0 as the <i>rightmost</i> factor ("little-endian"), so its \(\ket{01}\) means qubit 0 is in \(\ket1\). Moving matrices or results between tools without converting the order silently swaps qubits. When in doubt, test with a state like \(\ket{01}\) whose two qubits differ.</p></div>
+<div class="quick"><p>What is \((Z\otimes I)\ket{10}\)?</p>
+<details><summary>Answer</summary><p>\(Z\ket1\otimes\ket0 = -\ket{10}\).</p></details></div>
+
+<h3 id="sec-m-tensor-code"><span class="secnum">4.7</span> Try it in Python</h3>
 <p><code>np.kron</code> is the tensor product. A partial trace can be done by reshaping the density matrix into a four-index array and summing over the matching \(B\) indices.</p>
 <pre class="code"><code>import numpy as np
 k0, k1 = np.array([1, 0]), np.array([0, 1])
@@ -646,7 +699,18 @@ print(rhoA)                                             # identity / 2</code></p
 </table></div></figure>
 <p>(\(\nabla^2 = \partial_x^2 + \partial_y^2 + \partial_z^2\) adds up the curvature in each direction.) The classic analytic method is <b>separation of variables</b>. For the wave equation on a string of length \(L\) with fixed ends, try \(u(x,t) = X(x)T(t)\). Substituting and dividing by \(XT\) gives \(X''/X = T''/(c^2T)\). The left side depends only on \(x\), the right only on \(t\), so both must equal the same constant, call it \(-k^2\). Then \(X = \sin kx\), and the fixed ends require \(kL = n\pi\); and \(T = \cos(ckt + \phi)\). The allowed frequencies \(\omega_n = n\pi c/L\) are the <b>modes</b> of the string, of a half-wave transmission-line resonator and of an optical cavity. Any motion is a sum of modes, each behaving like an independent harmonic oscillator. That observation, made quantum, is how light is quantised in Book 5.</p>
 
-<h3 id="sec-m-ode-code"><span class="secnum">5.7</span> Try it in Python</h3>
+<h3 id="sec-m-ode-taylor"><span class="secnum">5.7</span> Taylor series and linearisation</h3>
+<p>Almost every equation in the physical world is nonlinear, and almost every one is solved, at first, by pretending it is linear. The tool that justifies this is the <b>Taylor series</b>: near a point \(x_0\), a smooth function is a polynomial,</p>
+\[ f(x_0+h) = f(x_0) + f'(x_0)\,h + \tfrac12f''(x_0)\,h^2 + \tfrac16f'''(x_0)\,h^3 + \cdots \]
+<p>For small \(h\), each term is much smaller than the one before, so a few terms are enough. Expansions used throughout the series:</p>
+\[ \ee^x\approx1+x+\tfrac{x^2}2, \quad \cos x\approx1-\tfrac{x^2}2+\tfrac{x^4}{24}, \quad \sin x\approx x-\tfrac{x^3}6, \quad \sqrt{1+x}\approx1+\tfrac x2, \quad \frac1{1+x}\approx1-x . \]
+<div class="example"><p><b>Linearisation: why everything oscillates.</b> A particle of mass \(m\) in any potential \(V(x)\) with a minimum at \(x_0\) has \(V'(x_0) = 0\). Taylor-expanding, \(V(x)\approx V(x_0) + \tfrac12V''(x_0)(x-x_0)^2\): near the bottom, every valley is a parabola. So small motions are harmonic with \(\omega = \sqrt{V''(x_0)/m}\). For a pendulum, \(V = -mg\ell\cos\theta\) gives \(V''(0) = mg\ell\), and with "mass" \(m\ell^2\) (moment of inertia), \(\omega = \sqrt{g/\ell}\). The same argument makes every circuit near its operating point an LC oscillator, and every crystal a set of vibrating springs. If \(V''(x_0)\lt0\) the point is a maximum: unstable, and small displacements grow exponentially instead of oscillating.</p>
+<p>The next terms are the <b>nonlinearity</b>. For the pendulum, \(\cos\theta\approx1-\theta^2/2+\theta^4/24\), and the \(\theta^4\) term is what makes a transmon an anharmonic oscillator and hence a qubit (Book 2, Chapter 3; Book 3, Chapter 4).</p></div>
+<div class="example"><p><b>Sensitivity: small changes, first order.</b> A resonator has \(f = 1/(2\pi\sqrt{LC})\). If \(C\) changes by a small fraction \(\epsilon\), then \(f\propto(1+\epsilon)^{-1/2}\approx1-\epsilon/2\). A 1% error in a simulated capacitance moves the frequency by 0.5%, about 25 MHz at 5 GHz. Rules of this kind ("the fractional change in \(f\) is minus half the fractional change in \(C\)") are first-order Taylor expansions, and they are how fabrication tolerances are turned into frequency spreads (<a class="xref ext" href="../../index.html#eq-sens">Lab to Foundry eq. (8)</a>).</p></div>
+<div class="quick"><p>Estimate \(\sqrt{1.02}\) without a calculator.</p>
+<details><summary>Answer</summary><p>\(1 + 0.02/2 = 1.01\). The exact value is 1.00995.</p></details></div>
+
+<h3 id="sec-m-ode-code"><span class="secnum">5.8</span> Try it in Python</h3>
 <p>The solution \(\mathbf x(t) = \ee^{At}\mathbf x(0)\) can be computed directly, or a numerical integrator can step the equation forward. Both should agree.</p>
 <pre class="code"><code>import numpy as np
 from scipy.linalg import expm
@@ -756,7 +820,27 @@ print(sol.y[0, -1])                               # agrees with the exact value 
 <p>It tells you how the noise power is spread over frequency. <b>White noise</b> has a flat spectrum (no memory: \(C(\tau)\) is a spike at zero); resistor noise is white over a huge range (Book 2). <b>\(1/f\) noise</b>, with \(S\propto1/|\omega|\), has power at all time scales, growing towards slow fluctuations; it causes the slow wandering of qubit frequencies. Book 3 shows that a qubit acts as a spectrum analyser: its energy relaxation samples the noise at its own frequency, while its dephasing samples noise near zero frequency. Specifying noise as a spectral density is therefore how the hardware books connect physical noise sources to error rates.</p>
 <div class="box warn"><p><strong>One-sided and two-sided spectra.</strong> Physicists often use the two-sided density above, defined for positive and negative \(\omega\). Engineers often quote a one-sided density over positive frequencies only, which is twice as large, and per hertz rather than per radian per second. Factors of 2 and \(2\pi\) in noise formulas almost always come from this.</p></div>
 
-<h3 id="sec-m-fourier-code"><span class="secnum">6.7</span> Try it in Python</h3>
+<h3 id="sec-m-fourier-db"><span class="secnum">6.7</span> Decibels and logarithmic scales</h3>
+<p>Signals in quantum hardware span enormous ranges: a room-temperature microwave source emits milliwatts, a qubit readout signal is \(10^{-17}\) W, and a resonator's response falls by factors of thousands off resonance. Engineers therefore use a logarithmic unit, the <b>decibel</b>:</p>
+\[ \text{ratio in dB} = 10\log_{10}\frac{P_2}{P_1}\ \text{(powers)}, \qquad = 20\log_{10}\frac{V_2}{V_1}\ \text{(amplitudes)} . \]
+<p>The factor 20 for amplitudes is because power goes as amplitude squared, so both formulas give the same number for the same physical change. Values worth memorising:</p>
+<figure class="tbl" id="tab-m-db"><figcaption><b>Table 2.</b> Decibels and power ratios.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>dB</th><th>power ratio</th><th>amplitude ratio</th></tr>
+<tr><td>3</td><td>\(\approx2\)</td><td>\(\approx1.41\)</td></tr>
+<tr><td>10</td><td>10</td><td>3.16</td></tr>
+<tr><td>20</td><td>100</td><td>10</td></tr>
+<tr><td>30</td><td>1000</td><td>31.6</td></tr>
+<tr><td>\(-3\)</td><td>\(\approx\tfrac12\)</td><td>\(\approx0.71\)</td></tr>
+</table></div></figure>
+<p>Absolute powers are quoted in <b>dBm</b>, decibels relative to 1 mW: 0 dBm is 1 mW, \(-30\) dBm is 1 µW, \(-60\) dBm is 1 nW, and \(-130\) dBm is \(10^{-16}\) W.</p>
+<p>The point of logarithms is that gains and losses <i>multiply</i>, so their decibels <i>add</i>.</p>
+<div class="example"><p><b>Worked example: a refrigerator input line.</b> A 0 dBm pulse leaves the room-temperature electronics. Attenuators of 20 dB, 10 dB and 30 dB at successive stages give \(-60\) dB in total, and cable losses add another 5 dB. The pulse reaches the chip at \(0 - 60 - 5 = -65\) dBm, about 0.3 nW. Doing the same in ratios would mean multiplying \(10^{-2}\times10^{-1}\times10^{-3}\times0.32\): the same answer, with more chances for slips.</p></div>
+<div class="pitfall"><p>Use 10 log for powers and 20 log for amplitudes, and never mix them. A transmission coefficient \(S_{21}\) is an amplitude ratio: \(|S_{21}| = 0.5\) is \(-6\) dB (a quarter of the power), not \(-3\) dB. Network analysers and simulators report \(20\log_{10}|S_{21}|\).</p></div>
+<div class="quick"><p>A resonance dip has \(|S_{21}| = 0.1\) at its minimum. What is that in dB, and what fraction of power is transmitted?</p>
+<details><summary>Answer</summary><p>\(20\log_{10}0.1 = -20\) dB; power fraction \(0.1^2 = 1\%\).</p></details></div>
+
+<h3 id="sec-m-fourier-code"><span class="secnum">6.8</span> Try it in Python</h3>
 <p>The FFT turns a sampled signal into its spectrum. Here a decaying 50 MHz tone is sampled at 1 GS/s; its spectrum shows a Lorentzian peak whose width matches the decay rate.</p>
 <pre class="code"><code>import numpy as np
 fs, N = 1e9, 2**16                              # 1 GS/s, 65.5 us record
@@ -819,7 +903,7 @@ print(f[k], half.max() - half.min())           # peak at 50 MHz, width about 1 M
 <div class="example"><p><b>Worked example: averaging shots.</b> Estimate \(p\) by measuring \(n\) times and averaging the results. The average of \(n\) independent copies has variance \(\operatorname{Var}X/n\), so its standard deviation, the <b>standard error</b>, is \(\sqrt{p(1-p)/n}\). With \(p = 0.3\): 100 shots give ±0.046, 10,000 shots ±0.0046. Ten times more precision costs a hundred times more measurements: the \(1/\sqrt n\) law that makes characterising quantum chips slow.</p></div>
 
 <h3 id="sec-m-prob-dists"><span class="secnum">7.2</span> The distributions that matter</h3>
-<figure class="tbl" id="tab-m-dists"><figcaption><b>Table 2.</b> Distributions used in the series.</figcaption>
+<figure class="tbl" id="tab-m-dists"><figcaption><b>Table 3.</b> Distributions used in the series.</figcaption>
 <div class="tblwrap"><table>
 <tr><th>Distribution</th><th>Probability</th><th>Mean, variance</th><th>Where it appears</th></tr>
 <tr><td>Bernoulli / binomial</td><td>\(\binom nk p^k(1-p)^{n-k}\)</td><td>\(np\), \(np(1-p)\)</td><td>Repeated qubit measurements; number of good qubits on a chip</td></tr>
@@ -830,7 +914,7 @@ print(f[k], half.max() - half.min())           # peak at 50 MHz, width about 1 M
 </table></div></figure>
 <p>In words: the <b>binomial</b> counts successes in \(n\) independent tries (\(\binom nk\) is the number of ways to choose which \(k\) succeed). The <b>Poisson</b> counts rare independent events in a fixed window (photons arriving, particles landing); its variance equals its mean. The <b>exponential</b> is the waiting time for such an event. The <b>Gaussian</b> is the bell curve.</p>
 <p>The Gaussian is everywhere because of the <b>central limit theorem</b>: the sum of many small independent random effects is approximately Gaussian, whatever the individual effects look like. Process variation in a well-controlled fab is close to Gaussian because many small independent effects add up. Probabilities for Gaussians are written with the standard normal cumulative distribution \(\Phi(k)\), the probability that a standard Gaussian is below \(k\). The tails matter most for yield:</p>
-<figure class="tbl" id="tab-m-tails"><figcaption><b>Table 3.</b> Gaussian tail probabilities \(\Pr(X > \mu + k\sigma) = 1 - \Phi(k)\).</figcaption>
+<figure class="tbl" id="tab-m-tails"><figcaption><b>Table 4.</b> Gaussian tail probabilities \(\Pr(X > \mu + k\sigma) = 1 - \Phi(k)\).</figcaption>
 <div class="tblwrap"><table>
 <tr><th>\(k\)</th><td class="num">1</td><td class="num">2</td><td class="num">3</td><td class="num">4</td><td class="num">5</td></tr>
 <tr><th>One-sided tail</th><td class="num">16%</td><td class="num">2.3%</td><td class="num">0.13%</td><td class="num">3.2×10⁻⁵</td><td class="num">2.9×10⁻⁷</td></tr>
@@ -865,7 +949,20 @@ print(f[k], half.max() - half.min())           # peak at 50 MHz, width about 1 M
 <p>When a probability or average is too hard to compute by formula, <b>simulate it</b>: draw random samples \(X_1,\dots,X_n\) from the distribution and average \(g(X_i)\). The error falls as \(\sigma_g/\sqrt n\) regardless of how many variables are involved, which makes Monte Carlo the workhorse of yield analysis. Its weakness is rare events: to estimate a failure probability of \(10^{-6}\) to 10% precision, you need about \(10^8\) samples, because almost none fail. <b>Importance sampling</b> fixes this by drawing samples from a distribution \(q(x)\) concentrated near the failures and correcting each by the weight \(p(x)/q(x)\). Error-correction simulations that estimate logical error rates of \(10^{-10}\), and statistical sign-off of large chips, both depend on such techniques.</p>
 <div class="example"><p><b>Worked example: estimating \(\pi\).</b> Throw \(n\) random points uniformly into a unit square; the fraction landing inside the quarter circle \(x^2+y^2 \lt 1\) estimates \(\pi/4\). Each point succeeds with probability \(p = 0.785\), so the standard error of \(\pi\) is \(4\sqrt{p(1-p)/n}\approx1.6/\sqrt n\): 10,000 points give \(\pi\pm0.016\). The same recipe, "sample, count, divide", estimates the probability that a randomly fabricated chip has no frequency collisions (Book 7).</p></div>
 
-<h3 id="sec-m-prob-code"><span class="secnum">7.7</span> Try it in Python</h3>
+<h3 id="sec-m-prob-ci"><span class="secnum">7.7</span> Confidence intervals: how sure is a number?</h3>
+<p>Every measured quantity in quantum hardware (a \(T_1\), a gate error, a yield) is an estimate from a finite number of samples, and it should come with an uncertainty. The key fact is the difference between two numbers that are easily confused:</p>
+<ul>
+<li>the <b>spread of the data</b>, the standard deviation \(\sigma\) of individual samples, which does not shrink as you take more;</li>
+<li>the <b>uncertainty of the mean</b>, the <b>standard error</b> \(\sigma/\sqrt N\), which does.</li>
+</ul>
+<p>By the central limit theorem, for large \(N\) the sample mean is approximately Gaussian around the true mean with width \(\sigma/\sqrt N\). So the interval "mean \(\pm1.96\) standard errors" captures the true mean in 95% of experiments: a <b>95% confidence interval</b>. For small \(N\), replace 1.96 by a slightly larger factor from Student's \(t\) distribution (2.26 for \(N = 10\)).</p>
+<div class="example"><p><b>Worked example: a qubit's \(T_1\).</b> Ten repeated measurements give a mean of 82 µs with sample standard deviation 9 µs. The standard error is \(9/\sqrt{10} = 2.8\) µs, and the 95% interval is \(82\pm2.26\times2.8 = 82\pm6.4\) µs. Two qubits measured at 82 and 86 µs are therefore not shown to differ. Note that the 9 µs spread is real physics (\(T_1\) fluctuates over hours as defects drift), not just measurement error: it would not shrink with more data.</p></div>
+<div class="example"><p><b>Worked example: rare errors.</b> For a probability estimated from counts, \(\hat p = k/N\) has standard error \(\sqrt{\hat p(1-\hat p)/N}\). Three readout errors in 1000 shots gives \(\hat p = 0.003\pm0.0017\). If you see <i>zero</i> failures in \(N\) trials, the "rule of three" gives a 95% upper bound of about \(3/N\): no failures in 1000 shots means the error rate is probably below 0.3%, not that it is zero.</p></div>
+<div class="pitfall"><p>A 95% confidence interval does not mean "95% probability that the true value is in this particular interval". It means the procedure that built it captures the true value in 95% of repetitions. The difference rarely matters in practice, but the Bayesian credible interval of <a class="xref" href="#sec-m-prob-bayes">§7.5</a> is the object that has the first meaning.</p></div>
+<div class="quick"><p>How many shots are needed to measure an error rate near 1% with a standard error of 0.1%?</p>
+<details><summary>Answer</summary><p>\(\sqrt{0.01\times0.99/N} = 0.001\) gives \(N\approx9900\), about ten thousand shots.</p></details></div>
+
+<h3 id="sec-m-prob-code"><span class="secnum">7.8</span> Try it in Python</h3>
 <p>Monte Carlo makes every formula in this chapter testable. Here we check the \(1/\sqrt n\) law and the yield curve of <a class="xref" href="#fig-m-yield">Figure 2</a>.</p>
 <pre class="code"><code>import numpy as np
 from math import erf, sqrt
@@ -961,7 +1058,16 @@ print(sims, (2*Phi(k) - 1)**N)                 # both about 0.76</code></pre>
 <div class="eq" id="eq-m-adjoint">$$ \frac{\partial f}{\partial p_k} = \mathbf c^{\mathsf T}\partial_k\mathbf u = -\boldsymbol\lambda^{\mathsf T}(\partial_kA)\,\mathbf u, \qquad A^{\mathsf T}\boldsymbol\lambda = \mathbf c .  \tag{40}$$</div>
 <p>One forward solve for \(\mathbf u\), one "adjoint" solve for \(\boldsymbol\lambda\), and then each component of the gradient is a cheap matrix product, however many parameters there are. The same trick for eigenvalue problems gives the eigenvalue-sensitivity formula used in the review (<a class="xref ext" href="../../index.html#eq-adjoint">Lab to Foundry eq. (12)</a>), and it is the same mathematics as back-propagation in neural networks. Adjoint gradients are what make "inverse design" of photonic and microwave components practical.</p>
 
-<h3 id="sec-m-num-code"><span class="secnum">8.7</span> Try it in Python</h3>
+<h3 id="sec-m-num-units"><span class="secnum">8.7</span> Units and scaling</h3>
+<p>Physical constants in SI units span a huge range: \(\hbar\approx10^{-34}\) J s, capacitances \(10^{-13}\) F, frequencies \(10^{10}\) rad/s. Double-precision arithmetic copes with the range, but solvers and humans often do not. The cure is to choose units in which the important numbers are of order one.</p>
+<p>For superconducting circuits a convenient set is: time in nanoseconds, frequency in GHz, energy as \(E/h\) in GHz, capacitance in fF, inductance in nH, length in µm. Then a phase after time \(t\) at frequency \(f\) is just \(2\pi ft\) with \(f\) in GHz and \(t\) in ns, and a Hamiltonian is a matrix of numbers like 5.0 and \(-0.25\). Every Python example in Books 3 and 6 works this way.</p>
+<div class="example"><p><b>Worked example: a solver that silently fails.</b> An ODE solver controls its error with an absolute tolerance, often \(10^{-6}\) by default, meaning "errors smaller than \(10^{-6}\) do not matter". Simulate a resonator's charge, of order \(10^{-16}\) C, in SI units, and the solver considers the entire solution to be zero within tolerance: it takes huge steps and returns garbage without complaint. The same simulation with charge in units of the electron charge (values of order 1 to 1000) works perfectly. The fix is either to rescale the variables or to set tolerances that match their size.</p></div>
+<div class="example"><p><b>Nondimensionalising.</b> The damped oscillator \(m\ddot x + m\gamma\dot x + kx = 0\) has three parameters, but after measuring time in units of \(1/\omega_0\) it becomes \(x'' + x'/Q + x = 0\): only the quality factor matters. Finding the few dimensionless combinations that control a problem (here \(Q\); for a coupled qubit and resonator, \(g/\Delta\)) tells you which numbers to sweep in a design study, and which formulas apply.</p></div>
+<div class="pitfall"><p>Mixing units is the most expensive bug in engineering history (a spacecraft was lost to pound-seconds versus newton-seconds). In quantum hardware the classic slip is between \(f\) and \(\omega = 2\pi f\): a coupling "\(g = 100\) MHz" may mean \(g/2\pi\) or \(g\), a factor of 6.28. Write \(g/2\pi = 100\) MHz to be unambiguous, as this series does.</p></div>
+<div class="quick"><p>In units of GHz and ns, what phase does a 5 GHz qubit accumulate in 3 ns?</p>
+<details><summary>Answer</summary><p>\(2\pi\times5\times3 = 30\pi\approx94.2\) rad, i.e. exactly 15 full turns.</p></details></div>
+
+<h3 id="sec-m-num-code"><span class="secnum">8.8</span> Try it in Python</h3>
 <p>The finite-difference matrix of <a class="xref" href="#eq-m-fd">(38)</a> in a few lines, with a convergence study and Richardson extrapolation of the lowest eigenvalue (exact value \(\pi^2\)).</p>
 <pre class="code"><code>import numpy as np
 def lowest_eig(N):

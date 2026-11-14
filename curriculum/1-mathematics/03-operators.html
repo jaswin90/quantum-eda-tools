@@ -64,6 +64,24 @@
 <div class="eq" id="eq-m-svd">$$ M = V\,\Sigma\,W^\dagger , $$</div>
 <p>with \(V, W\) unitary and \(\Sigma\) diagonal with non-negative <b>singular values</b> \(s_1\ge s_2\ge\dots\). Read it as: rotate (\(W^\dagger\)), stretch along the axes (\(\Sigma\)), rotate again (\(V\)). The singular values are the square roots of the eigenvalues of \(M^\dagger M\). The SVD gives the best low-rank approximation of a matrix (keep the largest singular values), the condition number \(s_1/s_n\) that controls numerical error (Chapter 8), and, in Book 3, the Schmidt decomposition that measures entanglement.</p>
 
+<h3 id="sec-m-op-comm">Commutators: when order matters</h3>
+<p>Because \(AB\) and \(BA\) generally differ, it is useful to have a name for the difference. The <b>commutator</b> is</p>
+\[ [A,B] = AB - BA . \]
+<p>If \([A,B] = 0\) the matrices <b>commute</b> and the order does not matter. This one matrix tells you a great deal:</p>
+<ul>
+<li><b>Shared eigenvectors.</b> Two Hermitian matrices commute exactly when they have a common set of eigenvectors. In quantum mechanics this means the two quantities can both have definite values at once (Book 3, Chapter 2).</li>
+<li><b>Exponentials.</b> \(\ee^A\ee^B = \ee^{A+B}\) holds when \(A\) and \(B\) commute, and generally fails otherwise. Applying two control fields one after the other is then not the same as applying them together.</li>
+<li><b>Dynamics.</b> A quantity whose matrix commutes with the Hamiltonian is conserved (Book 3, Chapter 3).</li>
+</ul>
+<div class="example"><p><b>Worked example: Pauli commutators.</b> Multiply out</p>
+\[ XZ = \begin{pmatrix}0&1\\1&0\end{pmatrix}\begin{pmatrix}1&0\\0&-1\end{pmatrix} = \begin{pmatrix}0&-1\\1&0\end{pmatrix}, \qquad ZX = \begin{pmatrix}0&1\\-1&0\end{pmatrix}. \]
+<p>So \([X,Z] = \begin{pmatrix}0&-2\\2&0\end{pmatrix} = -2\ii Y\). Doing the same for the other pairs gives the cyclic pattern</p>
+\[ [X,Y] = 2\ii Z, \qquad [Y,Z] = 2\ii X, \qquad [Z,X] = 2\ii Y . \]
+<p>No two different Pauli matrices commute. That is the algebraic reason a qubit cannot have definite values along two axes at once, and why rotations about different axes do not commute.</p></div>
+<div class="pitfall"><p>A frequent algebra slip is to "simplify" \((A+B)^2\) to \(A^2 + 2AB + B^2\). For matrices it is \(A^2 + AB + BA + B^2\), which equals the familiar form only if \(A\) and \(B\) commute. The same care is needed in every expansion of operator expressions in Books 2 to 6.</p></div>
+<div class="quick"><p>Do \(X\) and \(X+Z\) commute?</p>
+<details><summary>Answer</summary><p>\([X, X+Z] = [X,X] + [X,Z] = 0 - 2\ii Y\ne0\). No.</p></details></div>
+
 <h3 id="sec-m-op-code">Try it in Python</h3>
 <p><code>np.linalg.eigh</code> diagonalises Hermitian matrices (returning real eigenvalues in increasing order and orthonormal eigenvectors as columns); <code>scipy.linalg.expm</code> computes matrix exponentials.</p>
 <pre class="code"><code>import numpy as np

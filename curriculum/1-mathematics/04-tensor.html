@@ -44,6 +44,18 @@
 <p>In components: \((\Tr_B M)_{ii'} = \sum_j M_{ij,\,i'j}\), i.e. keep the \(A\) indices and sum over matching \(B\) indices. It is like computing a marginal probability distribution by summing over the variable you do not care about.</p>
 <div class="example"><p><b>Worked example: half of an entangled pair.</b> Write the projector \(\ketbra{\Phi^+}{\Phi^+} = \frac12(\ketbra{00}{00}+\ketbra{00}{11}+\ketbra{11}{00}+\ketbra{11}{11})\). Tracing out \(B\) keeps only terms whose \(B\) labels match (the first and last): \(\Tr_B = \frac12(\ketbra00 + \ketbra11) = I/2\). Each half of the entangled pair, on its own, is in the state of maximal ignorance: a 50:50 random bit with no phase information. The whole is perfectly known; the parts are completely random. In Book 3 this becomes the explanation of decoherence, where \(B\) is the environment.</p></div>
 
+<h3 id="sec-m-tensor-order">Worked example: which qubit is which?</h3>
+<p>The tensor product is not symmetric: \(A\otimes B\ne B\otimes A\) in general. The order of the factors is the order of the qubits, and you must fix a convention. In this series the left factor is the first qubit: \(\ket{01} = \ket0\otimes\ket1\) means "qubit 1 in \(\ket0\), qubit 2 in \(\ket1\)", and the basis order is \(\ket{00},\ket{01},\ket{10},\ket{11}\).</p>
+<div class="example"><p><b>Acting on one qubit of two.</b> To apply \(X\) to the first qubit only, use \(X\otimes I\); to the second, \(I\otimes X\). On \(\ket{01}\):</p>
+\[ (X\otimes I)\ket{01} = X\ket0\otimes I\ket1 = \ket{11}, \qquad (I\otimes X)\ket{01} = \ket0\otimes X\ket1 = \ket{00}. \]
+<p>As \(4\times4\) matrices, written in \(2\times2\) blocks,</p>
+\[ X\otimes I = \begin{pmatrix}0 & I\\ I & 0\end{pmatrix}, \qquad I\otimes X = \begin{pmatrix}X & 0\\ 0 & X\end{pmatrix}. \]
+<p>The first swaps the top and bottom halves of the state vector (flipping qubit 1); the second flips within each half (flipping qubit 2). For \(n\) qubits, an operator \(A\) on qubit \(k\) is \(I\otimes\cdots\otimes A\otimes\cdots\otimes I\), with \(A\) in position \(k\): a \(2^n\times2^n\) matrix built from one \(2\times2\) block.</p></div>
+<div class="example"><p><b>Two-qubit observables.</b> \(Z\otimes Z\) is diagonal with entries \((+1,-1,-1,+1)\) on \(\ket{00},\ket{01},\ket{10},\ket{11}\): it measures <i>parity</i>, \(+1\) if the qubits agree and \(-1\) if they differ, without revealing either individual value. Parity checks like this are the basic measurement of quantum error correction (Book 4).</p></div>
+<div class="pitfall"><p>Not everyone uses the same order. Qiskit, for example, labels qubit 0 as the <i>rightmost</i> factor ("little-endian"), so its \(\ket{01}\) means qubit 0 is in \(\ket1\). Moving matrices or results between tools without converting the order silently swaps qubits. When in doubt, test with a state like \(\ket{01}\) whose two qubits differ.</p></div>
+<div class="quick"><p>What is \((Z\otimes I)\ket{10}\)?</p>
+<details><summary>Answer</summary><p>\(Z\ket1\otimes\ket0 = -\ket{10}\).</p></details></div>
+
 <h3 id="sec-m-tensor-code">Try it in Python</h3>
 <p><code>np.kron</code> is the tensor product. A partial trace can be done by reshaping the density matrix into a four-index array and summing over the matching \(B\) indices.</p>
 <pre class="code"><code>import numpy as np
