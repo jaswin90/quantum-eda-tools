@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <p class="toc-title">Contents</p>
   <ol>
 <li class="toc2"><a href="#sec-c-preface">How to use this book</a></li>
+<li class="toc3"><a href="#sec-c-pre-terms">Words and symbols you will meet</a></li>
 <li class="toc2"><a href="#sec-c-lagrange"><span class="tocnum">1</span>From Newton to Lagrange: the principle of least action</a></li>
 <li class="toc3"><a href="#sec-c-lag-newton"><span class="tocnum">1.1</span>Why reformulate Newton</a></li>
 <li class="toc3"><a href="#sec-c-lag-action"><span class="tocnum">1.2</span>The action and the Euler–Lagrange equation</a></li>
@@ -129,6 +130,30 @@ document.addEventListener("DOMContentLoaded", function () {
 <p>A quantum processor is a classical object for almost all of its design. Its metal patterns are drawn by lithography, its fields obey Maxwell's equations, its signals travel down transmission lines, its heat flows to a refrigerator, and its noise comes from resistors and amplifiers. Only at the very end does one "quantise" the result. That last step is mechanical once the classical description is right: write the energy as a Lagrangian, convert it to a Hamiltonian, and replace Poisson brackets by commutators. This book builds the classical description and leaves the system ready to be quantised in Books 3, 5 and 6.</p>
 <p>Chapters 1–3 develop mechanics in the form quantum theory needs: least action, Lagrangians, Hamiltonians and oscillators. Chapters 4–6 develop electromagnetism from charges to microwave circuits, ending with the transmission-line resonators that are the workhorses of superconducting quantum hardware. Chapter 7 does the same for light in optical waveguides, which is the starting point of Book 5 on photonics. Chapter 8 covers thermal physics and noise, which decide why quantum hardware has to be cold and how much noise reaches a qubit.</p>
 <p>Prerequisites are the first six chapters of Book 1. The chapters use SI units throughout; useful constants are \(e = 1.602\times10^{-19}\) C, \(h = 6.626\times10^{-34}\) J s, \(\hbar = h/2\pi\), \(k_B = 1.381\times10^{-23}\) J/K, \(\varepsilon_0 = 8.854\times10^{-12}\) F/m and \(\mu_0 = 4\pi\times10^{-7}\) H/m (to the precision used here).</p>
+<p>Every chapter follows the same pattern: a "big picture" box saying why the topic matters for quantum hardware, the physics built up from a worked example, a short "Try it in Python" section you can run and modify, a box connecting the chapter to design automation, a list of key points, and exercises with solutions. If a chapter feels heavy, read the big picture, the worked examples and the key points first, then come back for the derivations.</p>
+<h3 id="sec-c-pre-terms">Words and symbols you will meet</h3>
+<dl class="terms">
+<dt>\(L = T - V\)</dt><dd>The Lagrangian: kinetic minus potential energy. Its time integral is the action.</dd>
+<dt>\(q\), \(p\)</dt><dd>A generalised coordinate and its conjugate momentum, \(p = \partial L/\partial\dot q\).</dd>
+<dt>\(H\)</dt><dd>The Hamiltonian: the energy written as a function of \(q\) and \(p\). Quantum mechanics starts from it.</dd>
+<dt>\(\{f,g\}\)</dt><dd>Poisson bracket; becomes the commutator \([\hat f,\hat g]/\ii\hbar\) in quantum mechanics.</dd>
+<dt>\(\Phi\), \(Q\)</dt><dd>Node flux (time integral of a node's voltage) and node charge: the "position" and "momentum" of a circuit.</dd>
+<dt>\(\mathbf C\), \(\mathbf C^{-1}\)</dt><dd>The capacitance matrix of a layout and its inverse, which sets charging energies.</dd>
+<dt>\(Z = \sqrt{L/C}\), \(Z_0\)</dt><dd>Impedance of an oscillator; characteristic impedance of a transmission line (usually 50 Ω).</dd>
+<dt>\(R_Q = h/(2e)^2\)</dt><dd>The resistance quantum, about 6.45 kΩ. Circuits with impedance near it are strongly quantum.</dd>
+<dt>\(\Phi_0 = h/2e\)</dt><dd>The superconducting flux quantum, \(2.07\times10^{-15}\) Wb.</dd>
+<dt>\(Q_i\), \(Q_e\), \(Q_L\)</dt><dd>Internal, external (coupling) and loaded quality factors: \(1/Q_L = 1/Q_i + 1/Q_e\).</dd>
+<dt>\(\kappa\)</dt><dd>An energy decay rate, \(\kappa = \omega/Q\). In optics, also a coupling per unit length.</dd>
+<dt>\(g\), \(\Delta\)</dt><dd>Coupling strength and detuning between two oscillators; the dispersive shift is \(g^2/\Delta\).</dd>
+<dt>\(\varepsilon_r\), \(\tan\delta\)</dt><dd>Relative permittivity and loss tangent of a dielectric.</dd>
+<dt>participation ratio \(p\)</dt><dd>Fraction of a mode's electric energy stored in a given material; \(1/Q = \sum p\tan\delta\).</dd>
+<dt>\(\lambda_L\), \(L_k\)</dt><dd>London penetration depth and kinetic inductance of a superconductor.</dd>
+<dt>\(\Gamma\), \(S_{ij}\)</dt><dd>Reflection coefficient; scattering parameters of a microwave network.</dd>
+<dt>\(n\), \(n_{\mathrm{eff}}\), \(n_g\)</dt><dd>Refractive index, effective index of a waveguide mode, group index.</dd>
+<dt>dB</dt><dd>Decibels: a power ratio of \(10^{x/10}\). Losses in dB add along a path.</dd>
+<dt>\(k_B T\), \(\bar n\)</dt><dd>Thermal energy (about 20.8 GHz × \(h\) per kelvin) and the mean thermal photon number of a mode.</dd>
+<dt>\(T_N\)</dt><dd>Noise temperature of an amplifier: the noise it adds, expressed as an equivalent resistor temperature.</dd>
+</dl>
 </section>
 
 <section id="sec-c-lagrange"><h2><span class="secnum">1</span> From Newton to Lagrange: the principle of least action</h2>
