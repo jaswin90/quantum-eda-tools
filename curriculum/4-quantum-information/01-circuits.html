@@ -1,41 +1,132 @@
 <section id="sec-i-circuits"><h2>Qubits, gates and circuits</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>Use the standard single-qubit gates and know that every single-qubit unitary is a rotation.</li>
-<li>Use CNOT, CZ, SWAP and iSWAP, and convert between them.</li>
-<li>Read and write quantum circuit diagrams, including measurement and classical control.</li>
-<li>Understand universality, the Clifford+T gate set and the DiVincenzo criteria for hardware.</li>
+<li>Say precisely what a qubit is, how it differs from a classical bit, and how to write one down.</li>
+<li>Apply the standard single-qubit gates by hand, as matrices and as rotations of the Bloch sphere.</li>
+<li>Use the two-qubit gates CNOT, CZ, SWAP and iSWAP, and convert between them.</li>
+<li>Read and draw quantum circuit diagrams, including measurement and classical control.</li>
+<li>Explain what "universal gate set" means, why Clifford + T is the standard choice, and what hardware must provide (the DiVincenzo criteria).</li>
 </ul></div>
 
+<div class="bigpic"><p>A classical computer stores information in bits that are 0 or 1 and changes them with logic gates such as AND and NOT. A quantum computer stores information in <b>qubits</b>, which can be in a <i>superposition</i> of 0 and 1, and changes them with <b>quantum gates</b>, which are rotations of that superposition. A program is a <b>circuit</b>: a list of gates applied in order, ending with measurements that turn the quantum state back into ordinary bits. Everything else in this book (algorithms, noise, error correction) is built from the vocabulary of this chapter, so it is worth going slowly.</p></div>
+
+<h3 id="sec-i-circ-bit">From bits to qubits</h3>
+<p>A classical bit is a physical system with two distinguishable states, such as a capacitor charged or discharged. At any moment it is in exactly one of them. If we are unsure which, we describe our ignorance with probabilities \(p_0\) and \(p_1 = 1-p_0\), but the bit itself is still definitely one or the other.</p>
+<p>A qubit also has two distinguishable states, written \(\ket0\) and \(\ket1\). These could be the two lowest energy levels of a superconducting circuit, two levels of an atom, or a photon in one of two waveguides (Books 5 and 6). The new ingredient, explained in Book 3, is that the qubit can also be in any <b>superposition</b></p>
+<div class="eq" id="eq-i-qubit">$$ \ket\psi = \alpha\ket0 + \beta\ket1, \qquad \alpha,\beta\in\CC, \qquad |\alpha|^2 + |\beta|^2 = 1 . $$</div>
+<p>As a column vector, \(\ket\psi = \begin{pmatrix}\alpha\\ \beta\end{pmatrix}\), with \(\ket0 = \begin{pmatrix}1\\0\end{pmatrix}\) and \(\ket1 = \begin{pmatrix}0\\1\end{pmatrix}\). The numbers \(\alpha\) and \(\beta\) are <b>amplitudes</b>. Measuring the qubit "in the computational basis" gives 0 with probability \(|\alpha|^2\) and 1 with probability \(|\beta|^2\), and afterwards the qubit is left in the state that was found.</p>
+<div class="pitfall"><p>A superposition is <i>not</i> "secretly 0 or 1, we just don't know which". The state \((\ket0+\ket1)/\sqrt2\) and a coin that is 0 or 1 with probability ½ give the same statistics if you only ever measure 0-versus-1. They differ as soon as you rotate before measuring: the superposition can be rotated to give 0 with certainty, the coin cannot. Book 3, @b3:sec-q-post-mixture, works through this example. The difference is the phase relationship between \(\alpha\) and \(\beta\), and quantum algorithms exploit exactly that.</p></div>
+<p>Two practical facts follow from the formula. First, one qubit does <i>not</i> store two numbers you can read out: a measurement gives one bit, then the superposition is gone. Second, the amplitudes are continuous, so a qubit can be wrong by a small amount. That is why noise and error correction (Chapters 5–7) are so central.</p>
+
+<h3 id="sec-i-circ-bloch">Picturing one qubit: the Bloch sphere</h3>
+<p>Because only relative phases are observable (multiplying the whole state by \(\ee^{\ii\chi}\) changes nothing), any qubit state can be written</p>
+\[ \ket\psi = \cos\tfrac\theta2\ket0 + \ee^{\ii\phi}\sin\tfrac\theta2\ket1 , \]
+<p>which is a point on a sphere at polar angle \(\theta\) and azimuth \(\phi\): the <b>Bloch sphere</b> (@b3:eq-q-bloch). Keep this map in your head:</p>
+<ul>
+<li>North pole: \(\ket0\). South pole: \(\ket1\).</li>
+<li>On the equator, the equal superpositions: \(\ket+ = (\ket0+\ket1)/\sqrt2\) on the \(+x\) axis, \(\ket- = (\ket0-\ket1)/\sqrt2\) on \(-x\), \(\ket{\pm\ii} = (\ket0\pm\ii\ket1)/\sqrt2\) on \(\pm y\).</li>
+<li>Opposite points are orthogonal states (perfectly distinguishable).</li>
+</ul>
+<p>Single-qubit gates, as we are about to see, are just rotations of this sphere. That one picture is worth more than any amount of matrix algebra for building intuition.</p>
+
 <h3 id="sec-i-circ-single">Single-qubit gates</h3>
-<p>A gate is a unitary operator applied to one or more qubits. The single-qubit gates used everywhere are</p>
-<div class="eq" id="eq-i-gates1">$$ H = \frac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}, \quad S = \begin{pmatrix}1&0\\0&\ii\end{pmatrix}, \quad T = \begin{pmatrix}1&0\\0&\ee^{\ii\pi/4}\end{pmatrix}, \quad R_{\hat n}(\theta) = \ee^{-\ii\theta\,\hat n\cdot\boldsymbol\sigma/2}, $$</div>
-<p>plus the Paulis \(X, Y, Z\). The <b>Hadamard</b> \(H\) maps \(\ket0\to\ket+\) and \(\ket1\to\ket-\): it switches between the \(Z\) and \(X\) bases, and on the Bloch sphere it is a \(\pi\) rotation about the axis halfway between \(x\) and \(z\). \(S = \sqrt Z\) and \(T = \sqrt S\) are phase gates (rotations about \(z\) by \(\pi/2\) and \(\pi/4\), up to global phase). Every single-qubit unitary is, up to a global phase, a rotation \(R_{\hat n}(\theta)\) (@b1:eq-m-paulirot), and can be decomposed into rotations about two fixed axes, for example \(U = \ee^{\ii\alpha}R_z(\beta)R_y(\gamma)R_z(\delta)\) (Euler angles). Superconducting hardware typically implements \(R_x(\pi/2)\) pulses and "virtual" \(R_z\) frame changes (@b3:sec-q-spin-gates), and builds everything else from them.</p>
+<p>A quantum gate on one qubit is a \(2\times2\) <b>unitary</b> matrix \(U\) (one with \(U^\dagger U = I\); see @b1:sec-m-op-adjoint). Unitarity is required because the output must still have total probability one, and because quantum evolution between measurements is reversible. Here are the gates you will meet constantly, each with what it does to the basis states and on the sphere.</p>
+<figure class="tbl" id="tab-i-gates"><figcaption>The standard single-qubit gates.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Gate</th><th>Matrix</th><th>Action on basis</th><th>Bloch-sphere picture</th></tr>
+<tr><td>Pauli \(X\) ("NOT")</td><td>\(\begin{pmatrix}0&1\\1&0\end{pmatrix}\)</td><td>\(\ket0\leftrightarrow\ket1\)</td><td>Half-turn (\(\pi\)) about \(x\)</td></tr>
+<tr><td>Pauli \(Z\)</td><td>\(\begin{pmatrix}1&0\\0&-1\end{pmatrix}\)</td><td>\(\ket0\to\ket0\), \(\ket1\to-\ket1\)</td><td>Half-turn about \(z\)</td></tr>
+<tr><td>Pauli \(Y\)</td><td>\(\begin{pmatrix}0&-\ii\\ \ii&0\end{pmatrix}\)</td><td>\(\ket0\to\ii\ket1\), \(\ket1\to-\ii\ket0\)</td><td>Half-turn about \(y\)</td></tr>
+<tr><td>Hadamard \(H\)</td><td>\(\frac1{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}\)</td><td>\(\ket0\to\ket+\), \(\ket1\to\ket-\)</td><td>Half-turn about the axis between \(x\) and \(z\)</td></tr>
+<tr><td>Phase \(S\)</td><td>\(\begin{pmatrix}1&0\\0&\ii\end{pmatrix}\)</td><td>\(\ket1\to\ii\ket1\)</td><td>Quarter-turn (\(\pi/2\)) about \(z\)</td></tr>
+<tr><td>\(T\)</td><td>\(\begin{pmatrix}1&0\\0&\ee^{\ii\pi/4}\end{pmatrix}\)</td><td>\(\ket1\to\ee^{\ii\pi/4}\ket1\)</td><td>Eighth-turn (\(\pi/4\)) about \(z\)</td></tr>
+</table></div></figure>
+<div class="example"><p><b>Worked example: applying gates by hand.</b> Start in \(\ket0\), apply \(H\), then \(Z\), then \(H\) again. What comes out?</p>
+<p>Step 1: \(H\ket0 = \frac1{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix} = \frac1{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix} = \ket+\).</p>
+<p>Step 2: \(Z\ket+ = \frac1{\sqrt2}\begin{pmatrix}1\\-1\end{pmatrix} = \ket-\). The amplitudes have the same size; only the sign (a phase) of \(\ket1\) changed. A 0/1 measurement now would still give 50:50.</p>
+<p>Step 3: \(H\ket- = \frac1{2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}\begin{pmatrix}1\\-1\end{pmatrix} = \frac12\begin{pmatrix}0\\2\end{pmatrix} = \ket1\).</p>
+<p>So \(HZH\ket0 = \ket1\): the invisible phase flip became a visible bit flip. In fact \(HZH = X\) as matrices (Exercise 1). On the sphere: \(H\) moves north pole to \(+x\), \(Z\) rotates \(+x\) to \(-x\), \(H\) moves \(-x\) to the south pole. This "Hadamard sandwich" turns phase information into measurable bit information, and it is the core trick of almost every quantum algorithm.</p></div>
+<p>More generally, a rotation by angle \(\theta\) about an axis \(\hat n\) is (@b1:eq-m-paulirot)</p>
+<div class="eq" id="eq-i-rot">$$ R_{\hat n}(\theta) = \ee^{-\ii\theta\,\hat n\cdot\boldsymbol\sigma/2} = \cos\frac\theta2\,I - \ii\sin\frac\theta2\,(n_xX + n_yY + n_zZ). $$</div>
+<p>Every single-qubit gate equals some \(R_{\hat n}(\theta)\) up to a global phase, and every rotation can be built from rotations about two fixed axes, for example \(U = \ee^{\ii\alpha}R_z(\beta)R_y(\gamma)R_z(\delta)\) ("Euler angles"). Hardware uses this: a superconducting processor typically has a calibrated \(\pi/2\) pulse about \(x\) and implements \(R_z\) for free by shifting the phase of later pulses (@b3:sec-q-spin-gates). Any single-qubit gate is then a short sequence of those two.</p>
+<div class="quick"><p>What does \(S\) do to \(\ket+\)? And what does \(SS\) equal?</p>
+<details><summary>Answer</summary><p>\(S\ket+ = (\ket0+\ii\ket1)/\sqrt2 = \ket{+\ii}\): a quarter-turn about \(z\) moves \(+x\) to \(+y\). \(SS = \mathrm{diag}(1, \ii^2) = Z\): two quarter-turns make a half-turn.</p></details></div>
+
+<h3 id="sec-i-circ-multi">Several qubits</h3>
+<p>Two qubits have four basis states \(\ket{00},\ket{01},\ket{10},\ket{11}\), and a general state is a superposition of all four with four amplitudes. Three qubits have eight; \(n\) qubits have \(2^n\). Mathematically this is the tensor product of Book 1, Chapter 4: \(\ket{01} = \ket0\otimes\ket1\), and a gate \(U\) on the first qubit alone is \(U\otimes I\). We list the first qubit first, so \(\ket{10}\) means "first qubit 1, second qubit 0". (Some software, such as Qiskit, uses the opposite order; always check.)</p>
+<p>Applying a single-qubit gate to each qubit separately can never correlate them. For that we need gates that act on two qubits jointly.</p>
 
 <h3 id="sec-i-circ-two">Two-qubit gates</h3>
-<p>The <b>controlled-NOT</b> flips the target qubit if the control is \(\ket1\): \(\ket{c,t}\to\ket{c, t\oplus c}\). In the basis \(\ket{00},\ket{01},\ket{10},\ket{11}\) (control first),</p>
+<p>The <b>controlled-NOT</b> (CNOT) has a <i>control</i> and a <i>target</i> qubit. It flips the target if, and only if, the control is \(\ket1\): \(\ket{c,t}\to\ket{c,\ t\oplus c}\), where \(\oplus\) is addition modulo 2 (XOR). Writing out all four cases makes this concrete:</p>
+\[ \ket{00}\to\ket{00},\quad \ket{01}\to\ket{01},\quad \ket{10}\to\ket{11},\quad \ket{11}\to\ket{10}. \]
+<p>On basis states it is just the classical reversible XOR. Its power appears on superpositions. Take the control in \(\ket+\) and the target in \(\ket0\):</p>
+\[ \mathrm{CNOT}\,\frac{\ket0+\ket1}{\sqrt2}\ket0 = \frac{\mathrm{CNOT}\ket{00} + \mathrm{CNOT}\ket{10}}{\sqrt2} = \frac{\ket{00}+\ket{11}}{\sqrt2} . \]
+<p>(We used linearity: a gate acts on each term of a superposition separately.) The result is the <b>Bell state</b> \(\ket{\Phi^+}\). It is <b>entangled</b>: it cannot be written as (state of qubit 1) ⊗ (state of qubit 2) (@b1:sec-m-tensor-ent). Measuring either qubit gives a random bit, but the two bits always agree. Creating entanglement is the job of two-qubit gates; no amount of single-qubit gates can do it.</p>
+<p>Other two-qubit gates you will meet:</p>
 <div class="eq" id="eq-i-cnot">$$ \mathrm{CNOT} = \begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&0&1\\0&0&1&0\end{pmatrix}, \qquad \mathrm{CZ} = \mathrm{diag}(1,1,1,-1), \qquad \mathrm{CNOT} = (I\otimes H)\,\mathrm{CZ}\,(I\otimes H). $$</div>
-<p>The <b>controlled-Z</b> is symmetric in the two qubits and is what many superconducting and neutral-atom platforms implement natively. Applied to \(\ket+\ket0\), CNOT produces the Bell state \(\ket{\Phi^+}\): two-qubit gates create entanglement. The <b>SWAP</b> exchanges two qubits' states and costs three CNOTs; the <b>iSWAP</b>, \(\ket{01}\to\ii\ket{10}\), \(\ket{10}\to\ii\ket{01}\), arises naturally from the exchange interaction \(g(\sigma_+\sigma_-'+\sigma_-\sigma_+')\) of coupled qubits (@b3:sec-q-pert-deg) applied for time \(\pi/2g\). Hardware platforms each have a native entangling gate (CZ, iSWAP, cross-resonance, Mølmer–Sørensen), and all are equivalent up to single-qubit gates and a few repetitions.</p>
+<ul>
+<li><b>Controlled-Z</b> (CZ) multiplies \(\ket{11}\) by \(-1\) and leaves the rest. It is symmetric (no difference between control and target) and is what many superconducting and neutral-atom machines do natively. The last formula above, which is the Hadamard sandwich again on the target, turns it into a CNOT.</li>
+<li><b>SWAP</b> exchanges the two qubits' states: \(\ket{01}\leftrightarrow\ket{10}\). It costs three CNOTs.</li>
+<li><b>iSWAP</b> does \(\ket{01}\to\ii\ket{10}\), \(\ket{10}\to\ii\ket{01}\). It arises naturally when two qubits with the same frequency are coupled: energy sloshes from one to the other, exactly as between two coupled pendulums (@b1:sec-m-ode-systems, @b3:sec-q-pert-deg).</li>
+</ul>
+<p>Each hardware platform has one natural ("native") entangling gate (CZ, iSWAP, cross-resonance, Mølmer–Sørensen, Book 6), and any of them, combined with single-qubit gates, can make any other.</p>
+<div class="quick"><p>What does CZ do to \(\ket+\ket+\)? Is the result entangled?</p>
+<details><summary>Answer</summary><p>\(\ket+\ket+ = \tfrac12(\ket{00}+\ket{01}+\ket{10}+\ket{11})\), and CZ flips the sign of the last term: \(\tfrac12(\ket{00}+\ket{01}+\ket{10}-\ket{11})\). Its coefficient matrix \(\tfrac12\begin{pmatrix}1&1\\1&-1\end{pmatrix}\) has nonzero determinant, so yes, it is entangled (it is a two-qubit "cluster state", which reappears in Book 5).</p></details></div>
 
 <h3 id="sec-i-circ-diag">Circuit diagrams</h3>
-<p>In a circuit diagram, horizontal lines are qubits (time runs left to right), boxes are gates, a dot connected to \(\oplus\) is a CNOT, and a meter symbol is a measurement in the \(Z\) basis. Double lines carry classical bits, and a gate conditioned on a double line is applied only if the measured bit is 1 (<b>classical feed-forward</b>). Two circuit identities are worth knowing because compilers use them constantly: a CNOT conjugated by Hadamards on both qubits reverses control and target; and a Pauli on the control or target can be pushed through a CNOT, changing into a different Pauli (\(X\) on the control becomes \(X\) on both qubits; \(Z\) on the target becomes \(Z\) on both). The second rule is the basis of the stabiliser formalism (Chapter 6) and of how errors spread through error-correction circuits.</p>
-<p>Measurement can be deferred to the end of a circuit and replaced by quantum-controlled gates (the <b>principle of deferred measurement</b>), so mid-circuit measurement adds no computational power in principle. It matters enormously in practice: error correction measures ancilla qubits repeatedly and needs fast, low-crosstalk mid-circuit readout and reset.</p>
+<p>Quantum programs are drawn as <b>circuit diagrams</b>. Learn to read them as you would read a musical score:</p>
+<ul>
+<li>Each horizontal line is one qubit; time runs from left to right. Qubits usually start in \(\ket0\).</li>
+<li>A box with a letter (\(H\), \(X\), \(R_z(\theta)\)) is a single-qubit gate on that line.</li>
+<li>A filled dot on one line joined by a vertical line to \(\oplus\) on another is a CNOT (dot = control, \(\oplus\) = target). Two dots joined is a CZ.</li>
+<li>A meter symbol is a measurement in the \(0/1\) basis; after it, the line becomes a double line, meaning a classical bit.</li>
+<li>A gate attached to a double line is applied only if that classical bit is 1: <b>classical feed-forward</b>.</li>
+</ul>
+<p>The Bell-state circuit is therefore: two lines, an \(H\) on the first, then a CNOT from first to second, then two meters. Reading circuits right to left as matrix products is a common source of errors: the gate drawn first (leftmost) acts first, so its matrix is the <i>rightmost</i> factor. The circuit "\(A\) then \(B\)" is the matrix \(BA\).</p>
+<p>Two identities are used by compilers all the time, and are worth checking once by hand. A CNOT with Hadamards on both qubits before and after is a CNOT with control and target swapped. And Pauli errors move through CNOTs in a fixed pattern: an \(X\) on the control before a CNOT becomes \(X\) on both qubits after it; a \(Z\) on the target becomes \(Z\) on both. That second rule is how a single error spreads through an error-correction circuit, and Chapter 6 builds on it.</p>
+<p>Measuring in the middle of a circuit can always be postponed to the end (the "principle of deferred measurement"), so mid-circuit measurement adds no computing power in principle. In practice it is essential: error correction measures helper qubits over and over while the computation runs, and needs fast, accurate readout and reset.</p>
 
-<h3 id="sec-i-circ-univ">Universality</h3>
-<p>A set of gates is <b>universal</b> if any unitary on any number of qubits can be approximated to arbitrary accuracy by circuits built from it. Single-qubit rotations plus CNOT are universal exactly: any \(n\)-qubit unitary can be decomposed into them, though a generic unitary needs \(O(4^n)\) gates, so only special unitaries are efficiently implementable. A <b>discrete</b> universal set is needed for error correction, because only a finite set of gates can be protected. The standard choice is <b>Clifford + T</b>: the Clifford group (generated by \(H\), \(S\) and CNOT) plus the \(T\) gate. The Solovay–Kitaev theorem guarantees that any single-qubit rotation can be approximated to accuracy \(\epsilon\) with \(O(\log^c(1/\epsilon))\) gates from a finite universal set; modern synthesis achieves about \(3\log_2(1/\epsilon)\) \(T\) gates. Clifford circuits alone are not universal and are efficiently simulable classically (the Gottesman–Knill theorem, Chapter 6). The \(T\) gates are where quantum advantage lives, and in fault-tolerant machines they are the expensive part (Chapter 7).</p>
+<h3 id="sec-i-circ-univ">Universality: which gates are enough?</h3>
+<p>Classically, NAND alone can build any logic function. The quantum analogue is a <b>universal gate set</b>: a set of gates from which any unitary on any number of qubits can be approximated as accurately as we like.</p>
+<ul>
+<li><b>All single-qubit rotations plus CNOT</b> are universal, even exactly. But a <i>generic</i> unitary on \(n\) qubits needs about \(4^n\) gates, so only special unitaries (the ones useful algorithms use) can be built efficiently.</li>
+<li>A <b>finite</b> universal set is needed for error correction, because only finitely many operations can be protected. The standard choice is <b>Clifford + T</b>. The <b>Clifford gates</b> are those generated by \(H\), \(S\) and CNOT; they map Pauli operators to Pauli operators. Adding the single non-Clifford gate \(T\) makes the set universal.</li>
+</ul>
+<p>How many \(T\) gates does it take to approximate an arbitrary rotation to accuracy \(\epsilon\)? The Solovay–Kitaev theorem guaranteed a count growing only like a power of \(\log(1/\epsilon)\); modern methods achieve about \(3\log_2(1/\epsilon)\). For \(\epsilon = 10^{-10}\), that is about 100 \(T\) gates per rotation.</p>
+<div class="intuition"><p>Why does the \(T\) gate matter so much? Circuits made only of Clifford gates, however large, can be simulated efficiently on an ordinary computer (the Gottesman–Knill theorem, Chapter 6). So all of a quantum computer's potential advantage over classical machines lives in its non-Clifford gates. In a fault-tolerant machine the \(T\) gates are also by far the most expensive operations (Chapter 7), so the "\(T\)-count" of an algorithm is a good first estimate of its cost.</p></div>
 
 <h3 id="sec-i-circ-divincenzo">What hardware must provide</h3>
-<p>DiVincenzo's criteria [@divincenzo2000] list what a physical platform needs: (1) well-defined, scalable qubits; (2) initialisation to a simple state; (3) coherence times long compared with gate times; (4) a universal gate set; (5) qubit-specific measurement. Two more for communication: conversion between stationary and flying qubits, and faithful transmission. Every platform in Books 5 and 6 can be read as a particular trade-off among these, and every problem in the review, from frequency crowding to wiring, is ultimately a threat to criterion 1, "scalable".</p>
+<p>In 2000 David DiVincenzo listed what any physical platform needs to be a quantum computer [@divincenzo2000]. They read like a specification sheet:</p>
+<ol>
+<li><b>Scalable, well-characterised qubits.</b> You must know exactly what your two levels are, and be able to make many.</li>
+<li><b>Initialisation.</b> You must be able to reset every qubit to \(\ket0\) reliably.</li>
+<li><b>Long coherence compared with gate time.</b> The superposition must survive many gates.</li>
+<li><b>A universal set of gates.</b></li>
+<li><b>Qubit-specific measurement.</b></li>
+</ol>
+<p>Two more apply to communication: converting between stationary qubits and "flying" ones (photons), and sending flying qubits faithfully. Every platform in Books 5 and 6 can be scored against this list. Almost every problem in the review that this course prepares for, from frequency crowding to wiring, is a threat to item 1: "scalable".</p>
 
-<div class="eda"><p>A gate is the interface between hardware and software. Its specification (which unitary, how fast, at what error) is the contract a chip design must meet. In the review's terms the error of each gate, \(\varepsilon_i\), is a function of the device parameters \(\boldsymbol\theta\) and the coherence budget (@lf:eq-eps), and that function is what connects chip design to algorithm performance.</p></div>
+<div class="eda"><p>A gate is the contract between hardware and software. Its specification (which unitary, how fast, at what error) is what a chip design must deliver. In the review, each gate's error \(\varepsilon_i\) is written as a function of the chip's physical parameters and coherence (@lf:eq-eps); that function is how chip design reaches all the way up to algorithm performance.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>A qubit is \(\alpha\ket0+\beta\ket1\); measurement gives 0 or 1 with probabilities \(|\alpha|^2, |\beta|^2\) and destroys the superposition.</li>
+<li>Single-qubit gates are rotations of the Bloch sphere; \(H\) swaps the \(x\) and \(z\) axes and converts phase information into bit information.</li>
+<li>Two-qubit gates (CNOT, CZ, iSWAP) are needed to create entanglement; they convert into one another with single-qubit gates.</li>
+<li>Circuits are read left to right; the matrix of "A then B" is \(BA\).</li>
+<li>Clifford + T is the standard universal set; \(T\) gates carry the quantum advantage and the cost.</li>
+</ul></div>
 
 <div class="exercises" id="ex-i-circuits"><h4>Exercises</h4><ol>
-<li>Show that \(HXH = Z\), \(HZH = X\) and \(HYH = -Y\).
-<details><summary>Solution</summary><p>Direct multiplication. Geometrically, \(H\) is a \(\pi\) rotation about \((\hat x+\hat z)/\sqrt2\), which swaps the \(x\) and \(z\) axes and reverses \(y\).</p></details></li>
-<li>Verify \(\mathrm{CNOT} = (I\otimes H)\,\mathrm{CZ}\,(I\otimes H)\) by checking its action on \(\ket{1}\ket{0}\).
-<details><summary>Solution</summary><p>\((I\otimes H)\ket{10} = \ket1\ket+\). CZ applies \(Z\) to the target when the control is 1: \(\ket1\ket-\). Then \((I\otimes H)\) gives \(\ket1\ket1\). So \(\ket{10}\to\ket{11}\), as CNOT does. On \(\ket{0t}\) CZ does nothing and \(H^2 = I\).</p></details></li>
-<li>Compute the state produced by \(\mathrm{CNOT}(H\otimes I)\ket{01}\).
-<details><summary>Solution</summary><p>\((H\otimes I)\ket{01} = \tfrac1{\sqrt2}(\ket{01}+\ket{11})\). CNOT gives \(\tfrac1{\sqrt2}(\ket{01}+\ket{10}) = \ket{\Psi^+}\).</p></details></li>
+<li>Show by matrix multiplication that \(HXH = Z\), \(HZH = X\) and \(HYH = -Y\).
+<details><summary>Solution</summary><p>For example \(HZ = \frac1{\sqrt2}\begin{pmatrix}1&-1\\1&1\end{pmatrix}\), and multiplying by \(H\) on the right gives \(\frac12\begin{pmatrix}0&2\\2&0\end{pmatrix} = X\). The others are similar. Geometrically, \(H\) is a half-turn about the axis \((\hat x+\hat z)/\sqrt2\), which swaps the \(x\) and \(z\) axes and reverses \(y\).</p></details></li>
+<li>Verify \(\mathrm{CNOT} = (I\otimes H)\,\mathrm{CZ}\,(I\otimes H)\) by following \(\ket{10}\) through the right-hand side.
+<details><summary>Solution</summary><p>\((I\otimes H)\ket{10} = \ket1\ket+\). CZ applies \(Z\) to the second qubit because the first is 1: \(\ket1\ket-\). Then \(I\otimes H\) gives \(\ket1\ket1\). So \(\ket{10}\to\ket{11}\), as CNOT does. If the first qubit is 0, CZ does nothing and \(H\cdot H = I\), so the target is unchanged.</p></details></li>
+<li>Compute \(\mathrm{CNOT}(H\otimes I)\ket{01}\). Which Bell state is it?
+<details><summary>Solution</summary><p>\((H\otimes I)\ket{01} = \tfrac{1}{\sqrt2}(\ket{01}+\ket{11})\). CNOT flips the second bit when the first is 1: \(\tfrac{1}{\sqrt2}(\ket{01}+\ket{10}) = \ket{\Psi^+}\).</p></details></li>
 <li>Show that \(T\) is not a Clifford gate by computing \(TXT^\dagger\).
-<details><summary>Solution</summary><p>\(TXT^\dagger = \begin{pmatrix}0&\ee^{-\ii\pi/4}\\ \ee^{\ii\pi/4}&0\end{pmatrix} = (X+Y)/\sqrt2\), which is not a Pauli (times a phase). Clifford gates map Paulis to Paulis; \(T\) does not.</p></details></li>
+<details><summary>Solution</summary><p>\(TXT^\dagger = \begin{pmatrix}0&\ee^{-\ii\pi/4}\\ \ee^{\ii\pi/4}&0\end{pmatrix} = (X+Y)/\sqrt2\). This is not a single Pauli (times a phase), so \(T\) does not map Paulis to Paulis.</p></details></li>
+<li>A circuit applies \(R_x(\pi/2)\), then \(R_z(\pi)\), then \(R_x(\pi/2)\) to \(\ket0\). Use the Bloch sphere to find the output without matrices.
+<details><summary>Solution</summary><p>\(R_x(\pi/2)\) rotates the north pole a quarter-turn about \(x\), to the \(-y\) axis. \(R_z(\pi)\) turns \(-y\) into \(+y\). \(R_x(\pi/2)\) takes \(+y\) a further quarter-turn about \(x\), to the north pole. The output is \(\ket0\) again (up to a global phase).</p></details></li>
+<li>Explain in one paragraph, without equations, why a computer made only of single-qubit gates could never be more powerful than a classical computer.
+<details><summary>Solution</summary><p>With only single-qubit gates, the qubits never become entangled, so the state is always a product of \(n\) separate qubit states. Each can be stored as two complex numbers, so the whole state needs only \(2n\) numbers, and each gate updates just two of them. A classical computer can follow this exactly and cheaply. Quantum advantage requires entanglement, which requires two-qubit gates.</p></details></li>
 </ol></div>
 </section>

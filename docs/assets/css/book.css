@@ -210,3 +210,24 @@ svg.diagram .muted { fill: var(--muted); }
 /* KaTeX's hidden MathML copy is absolutely positioned; give every scrolling box a containing
    block so it cannot widen the page from inside a table cell or a solution. */
 .tblwrap, .exercises details, .example, .defn, .thm, .eda, .goals { position: relative; }
+
+/* Extra teaching blocks (Books 4 onwards): big picture, intuition, common confusions, quick checks, key takeaways */
+.bigpic, .intuition, .pitfall, .quick, .keypoints { padding: 14px 22px 4px; margin: 1.5em 0; border-radius: 0 8px 8px 0; position: relative; overflow-x: auto; overflow-y: hidden; }
+.bigpic { background: var(--surface-2); border-left: 4px solid var(--accent); }
+.intuition { background: var(--surface); border-left: 3px solid var(--accent); }
+.pitfall { background: var(--surface-2); border-left: 3px solid var(--qe-accent-2); }
+.quick { background: var(--surface); border: 1px dashed var(--accent); border-radius: 8px; }
+.keypoints { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; }
+.bigpic > p:first-child::before, .intuition > p:first-child::before, .pitfall > p:first-child::before,
+.quick > p:first-child::before, .keypoints > p:first-child::before {
+  font-family: var(--sans); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; margin-right: .4em; }
+.bigpic > p:first-child::before { content: "The big picture ·"; color: var(--accent); }
+.intuition > p:first-child::before { content: "Intuition ·"; color: var(--accent); }
+.pitfall > p:first-child::before { content: "Common confusion ·"; color: var(--qe-accent-2); }
+.quick > p:first-child::before { content: "Quick check ·"; color: var(--accent); }
+.keypoints > p:first-child::before { content: "Key takeaways"; color: var(--fg); }
+.quick details { margin-bottom: .8em; }
+dl.terms { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 4px 14px; font-size: 16px; }
+dl.terms dt { font-family: var(--sans); font-weight: 600; font-size: 14.5px; }
+dl.terms dd { margin: 0; }
+@media (max-width: 700px) { dl.terms { grid-template-columns: minmax(0, 1fr); } dl.terms dd { margin-bottom: 6px; } }
