@@ -4,36 +4,123 @@
 <li>Formulate electrostatics as Laplace's equation with boundary conditions, and understand why field solvers are needed.</li>
 <li>Define the Maxwell capacitance matrix of a multi-conductor layout and compute simple cases.</li>
 <li>Use the Biot–Savart law, magnetic flux, mutual inductance and the energy in a magnetic field.</li>
+<li>Understand participation ratios: where the field energy sits, and why that sets loss.</li>
 </ul></div>
 
+<div class="bigpic"><p>Chapter 1 said capacitance is the "mass" of a circuit and inductance the "spring". But on a chip nobody solders a capacitor in: the capacitances are whatever the shapes of the metal create. A transmon's pads, a coupler's fingers and a readout resonator's elbow all have capacitances to each other and to ground that depend on every micrometre of the drawing. This chapter explains what those numbers mean physically, how a computer calculates them (by solving one equation, Laplace's), and why the location of the electric field, not only its total, decides how long a qubit lives.</p></div>
+
 <h3 id="sec-c-stat-field">Charges, fields and potentials</h3>
-<p>A point charge \(q\) at the origin produces the electric field \(\mathbf E = q\hat{\mathbf r}/(4\pi\varepsilon_0r^2)\), and the force on a test charge \(q'\) is \(q'\mathbf E\). Fields from many charges add. Because the electrostatic field is <b>conservative</b> (\(\nabla\times\mathbf E = 0\)), it can be written as the gradient of a scalar <b>potential</b>, \(\mathbf E = -\nabla\phi\), with \(\phi = q/(4\pi\varepsilon_0r)\) for a point charge. The potential difference between two points is the work per unit charge to move between them: the <b>voltage</b>.</p>
-<p><b>Gauss's law</b> relates the flux of \(\mathbf E\) out of a closed surface to the charge inside, \(\oint\mathbf E\cdot\dd\mathbf A = Q_{\mathrm{in}}/\varepsilon_0\), or in differential form \(\nabla\cdot\mathbf E = \rho/\varepsilon_0\). Combining with \(\mathbf E = -\nabla\phi\) gives <b>Poisson's equation</b>, and in charge-free regions <b>Laplace's equation</b>:</p>
+<p>Electric charge comes in positive and negative; like charges repel and opposite charges attract. A point charge \(q\) at the origin produces an <b>electric field</b></p>
+\[ \mathbf E = \frac{q}{4\pi\varepsilon_0r^2}\hat{\mathbf r}, \]
+<p>an arrow at every point of space pointing away from the charge (for \(q\gt0\)) with strength falling as \(1/r^2\). A test charge \(q'\) placed there feels a force \(q'\mathbf E\). The constant \(\varepsilon_0\approx8.854\times10^{-12}\) F/m is the <b>permittivity of free space</b>. Fields from many charges simply add (superposition).</p>
+<p>The electrostatic field has a special property: the work done moving a charge from A to B does not depend on the route. (Mathematically, \(\nabla\times\mathbf E = 0\), "the field has no curl".) So we can define a <b>potential</b> \(\phi\) at every point, the work per unit charge needed to bring a charge there from far away. The field points downhill in potential, \(\mathbf E = -\nabla\phi\), and for a point charge \(\phi = q/(4\pi\varepsilon_0r)\). The potential difference between two points is the <b>voltage</b> between them. A scalar \(\phi\) is much easier to compute than a vector \(\mathbf E\): one number per point instead of three.</p>
+<p><b>Gauss's law</b> relates the total "outflow" of \(\mathbf E\) through any closed surface to the charge inside:</p>
+\[ \oint\mathbf E\cdot\dd\mathbf A = \frac{Q_{\mathrm{in}}}{\varepsilon_0}, \qquad\text{or, point by point,}\qquad \nabla\cdot\mathbf E = \frac{\rho}{\varepsilon_0}, \]
+<p>where \(\rho\) is the charge per unit volume and \(\nabla\cdot\) is the divergence (Book 1, Chapter 2). Picture field lines as starting on positive charges and ending on negative ones; Gauss's law counts them. Substituting \(\mathbf E = -\nabla\phi\) gives <b>Poisson's equation</b>, and where there is no charge, <b>Laplace's equation</b>:</p>
 <div class="eq" id="eq-c-poisson">$$ \nabla^2\phi = -\frac{\rho}{\varepsilon_0}, \qquad \nabla^2\phi = 0 \ \text{(charge-free)}. $$</div>
-<p>In a dielectric material, bound charges partially screen the field and \(\varepsilon_0\) is replaced by \(\varepsilon = \varepsilon_r\varepsilon_0\); more precisely \(\nabla\cdot(\varepsilon\nabla\phi) = -\rho_{\mathrm{free}}\). Silicon has \(\varepsilon_r\approx11.45\) at cryogenic temperatures, sapphire about 9.3–11.5 depending on crystal direction, and silicon dioxide about 3.9.</p>
+<div class="intuition"><p>Laplace's equation has a lovely meaning: <i>the potential at any point equals the average of the potential around it</i>. Its solutions are as smooth as possible, like a rubber sheet stretched over a frame whose edges are held at fixed heights (the conductors' voltages). A numerical solver literally uses this: repeatedly replace each grid value by the average of its neighbours until nothing changes. That is the Python example at the end of the chapter.</p></div>
+<p>Inside a <b>dielectric</b> (an insulator such as silicon or sapphire), the material's electrons shift slightly in the field, creating "bound" charges that partly cancel it. The effect is captured by replacing \(\varepsilon_0\) by \(\varepsilon = \varepsilon_r\varepsilon_0\), where \(\varepsilon_r\) is the <b>relative permittivity</b> (the dielectric constant); more precisely \(\nabla\cdot(\varepsilon\nabla\phi) = -\rho_{\mathrm{free}}\). Values that matter for quantum chips: silicon \(\varepsilon_r\approx11.45\) at cryogenic temperatures, sapphire about 9.3–11.5 depending on crystal direction, silicon dioxide about 3.9. A high \(\varepsilon_r\) substrate pulls the field into itself and raises capacitances.</p>
 
 <h3 id="sec-c-stat-cond">Conductors and boundary conditions</h3>
-<p>In a conductor at equilibrium, charges move until the field inside vanishes. So each conductor is an <b>equipotential</b>, any net charge sits on its surface, and the field just outside is perpendicular to the surface with magnitude \(\sigma/\varepsilon\), where \(\sigma\) is the surface charge density. At an interface between two dielectrics, the tangential component of \(\mathbf E\) and the normal component of \(\varepsilon\mathbf E\) are continuous. Laplace's equation with these boundary conditions has a unique solution (the <b>uniqueness theorem</b>), which is what allows a numerical solver to find it.</p>
-<p>A crucial fact for superconducting devices: near the sharp edge of a thin metal film, the charge density and the field diverge. For an infinitely thin half-plane, \(|\mathbf E|\propto r^{-1/2}\) at distance \(r\) from the edge. Most of the field energy of a coplanar structure is concentrated within a few micrometres of its metal edges, exactly where fabrication leaves damaged surfaces and amorphous oxides. Chapter 6 and Book 6 show that this is why surface losses dominate in superconducting qubits, and why simulating them accurately needs very fine meshes at edges (@lf:sec-design-accuracy).</p>
+<p>In a conductor, charges are free to move. At equilibrium they arrange themselves until the field inside is zero (otherwise they would keep moving). Three consequences:</p>
+<ol>
+<li>Each conductor is an <b>equipotential</b>: the whole piece of metal has one voltage.</li>
+<li>Any net charge sits on its surface.</li>
+<li>The field just outside is perpendicular to the surface, with magnitude \(\sigma/\varepsilon\), where \(\sigma\) is the surface charge per area.</li>
+</ol>
+<p>At a boundary between two dielectrics, the part of \(\mathbf E\) along the surface is continuous, and so is the perpendicular part of \(\varepsilon\mathbf E\). Laplace's equation with these boundary conditions has exactly one solution (the <b>uniqueness theorem</b>). That guarantee is what lets a numerical solver claim "the" answer: specify the shapes and voltages of all conductors and the materials, and the field is fixed.</p>
+<p>A crucial fact for superconducting devices: near the sharp edge of a thin metal film, the charge density and the field become very large. For an idealised infinitely thin sheet, \(|\mathbf E|\propto r^{-1/2}\) at distance \(r\) from the edge, which is infinite at the edge itself. So most of the field energy of a flat, coplanar structure is concentrated within a few micrometres of its metal edges, exactly where fabrication leaves damaged surfaces and amorphous oxides. Chapter 6 and Book 6 show that this is why surface losses dominate in superconducting qubits, and why simulating them accurately needs very fine meshes at edges (@lf:sec-design-accuracy).</p>
+<div class="pitfall"><p>A field solver with a coarse mesh near edges will get the total capacitance roughly right (it is dominated by the bulk of the field) but can get the energy in a 3 nm surface layer wrong by a large factor. Different quantities need different mesh quality. Always check convergence of the quantity you actually care about.</p></div>
 
 <h3 id="sec-c-stat-energy">Energy in the electric field</h3>
-<p>Assembling a charge distribution costs work, which is stored in the field with energy density \(\tfrac12\varepsilon|\mathbf E|^2\):</p>
+<p>Pushing charges together costs work, and that work is stored in the field. The energy per unit volume is \(\tfrac12\varepsilon|\mathbf E|^2\), so the total is</p>
 <div class="eq" id="eq-c-ue">$$ U_E = \frac12\int\varepsilon\,|\mathbf E|^2\,\dd V = \frac12\sum_i Q_i\phi_i . $$</div>
-<p>The second form, for a set of conductors at potentials \(\phi_i\) with charges \(Q_i\), is the bridge to circuit theory. The first form tells you <i>where</i> the energy is, which is what loss calculations need: if a fraction \(p_k\) of the electric energy sits in a lossy material \(k\) with loss tangent \(\tan\delta_k\), the resulting quality factor is \(1/Q = \sum_kp_k\tan\delta_k\). The fractions \(p_k\) are called <b>participation ratios</b> (@lf:eq-t1), and they are computed from field solutions of exactly this type.</p>
+<p>The second form, for a set of conductors at potentials \(\phi_i\) carrying charges \(Q_i\), is the bridge to circuit theory: for one capacitor it is \(\tfrac12QV = \tfrac12CV^2\). The first form tells you <i>where</i> the energy is, and that is what loss calculations need.</p>
+<p>Every real insulator absorbs a tiny fraction of the field energy each cycle. That fraction is its <b>loss tangent</b> \(\tan\delta\) (Chapter 5): roughly, the energy lost per radian of oscillation divided by the energy stored. If a fraction \(p_k\) of the electric energy sits in material \(k\), the resulting quality factor is</p>
+\[ \frac1Q = \sum_kp_k\tan\delta_k, \qquad p_k = \frac{\int_{V_k}\varepsilon|\mathbf E|^2\,\dd V}{\int\varepsilon|\mathbf E|^2\,\dd V}. \]
+<p>The fractions \(p_k\) are called <b>participation ratios</b> (@lf:eq-t1). They are computed from field solutions of exactly this type, and they explain one of the most important facts in the field (exercise 4): a 3 nm surface layer with a large loss tangent can dominate the loss of a chip even though it holds only a thousandth of the energy.</p>
 
 <h3 id="sec-c-stat-cmatrix">The capacitance matrix</h3>
-<p>Consider \(N\) conductors plus a ground. Because Laplace's equation is linear, the charge on each conductor is a linear function of all the potentials:</p>
+<p>Consider \(N\) conductors plus a ground. Because Laplace's equation is linear (double all voltages and all charges double), the charge on each conductor is a linear function of all the potentials:</p>
 <div class="eq" id="eq-c-cmatrix">$$ Q_i = \sum_{j=1}^N C_{ij}\,\phi_j , \qquad U_E = \tfrac12\boldsymbol\phi^{\mathsf T}\mathbf C\,\boldsymbol\phi . $$</div>
-<p>\(\mathbf C\) is the <b>Maxwell capacitance matrix</b>. It is symmetric (a consequence of energy conservation) and positive definite. Its diagonal elements are positive, its off-diagonal elements are negative or zero. The matrix is computed column by column: set conductor \(j\) to 1 V and all others to 0 V, solve Laplace's equation, and integrate the surface charge on each conductor \(i\) to get \(C_{ij}\). The <b>mutual capacitance</b> between conductors \(i\) and \(j\) is \(-C_{ij}\) and the capacitance from \(i\) to ground is \(\sum_jC_{ij}\). These are the capacitors you would draw in a circuit diagram, and they are the numbers that enter the circuit Lagrangian of Chapter 1.</p>
-<div class="example"><p><b>Worked example: parallel plates and a transmon pad.</b> Two plates of area \(A\) separated by \(d\) with a dielectric between them have \(C = \varepsilon A/d\) (field \(Q/\varepsilon A\) uniform between the plates, voltage \(Qd/\varepsilon A\)). For \(A = 100\times100\,\mu\)m\(^2\), \(d = 10\,\mu\)m in vacuum, \(C\approx 8.9\) fF. A transmon's two pads are not parallel plates but coplanar rectangles hundreds of micrometres long, separated by tens of micrometres, sitting on silicon. Their field lives mostly in the substrate and in the air above, fringing around the edges. There is no closed formula, and a typical transmon's total capacitance of 60–100 fF must be computed numerically. Coplanar geometries can be handled approximately by conformal mapping, which gives closed forms in terms of elliptic integrals for idealised infinitely long lines (Chapter 6).</p></div>
+<p>\(\mathbf C\) is the <b>Maxwell capacitance matrix</b>. Its properties:</p>
+<ul>
+<li><b>Symmetric</b>, \(C_{ij} = C_{ji}\) (a consequence of energy conservation).</li>
+<li><b>Positive definite</b>: the stored energy is positive for any non-zero voltages.</li>
+<li>Diagonal elements positive; off-diagonal elements negative or zero. (Raise conductor \(j\)'s voltage and it pulls negative charge onto its neighbours.)</li>
+</ul>
+<p><b>How a solver computes it, column by column:</b> set conductor \(j\) to 1 V and all others (and ground) to 0 V; solve Laplace's equation; integrate the surface charge on every conductor \(i\). Those charges are column \(j\), \(C_{ij}\). Repeat for each \(j\). So an \(N\)-conductor layout costs \(N\) field solutions.</p>
+<p>The circuit-diagram capacitors are read off the matrix: the <b>mutual capacitance</b> between \(i\) and \(j\) is \(-C_{ij}\), and the capacitance from \(i\) to ground is the row sum \(\sum_jC_{ij}\). These are the numbers that enter the circuit Lagrangian of Chapter 1, whose kinetic term is \(\tfrac12\dot{\boldsymbol\Phi}^{\mathsf T}\mathbf C\dot{\boldsymbol\Phi}\): the same matrix.</p>
+<div class="example"><p><b>Worked example: from matrix to circuit diagram.</b> A transmon's two pads (1 and 2) and a readout resonator's end (3) have, in fF,</p>
+\[ \mathbf C = \begin{pmatrix}100 & -45 & -6\\ -45 & 95 & -1\\ -6 & -1 & 300\end{pmatrix}. \]
+<p>Mutual capacitances: \(C_{12} = 45\) fF (the junction's shunt), \(C_{13} = 6\) fF and \(C_{23} = 1\) fF (coupling to the resonator). To ground: pad 1, \(100-45-6 = 49\) fF; pad 2, \(95-45-1 = 49\) fF; resonator, \(300-6-1 = 293\) fF. The <i>difference</i> \(C_{13}-C_{23} = 5\) fF is what couples the qubit's mode (pad 1 minus pad 2) to the resonator. Small asymmetries in a drawing change this number directly.</p></div>
+<div class="example"><p><b>Worked example: parallel plates and a transmon pad.</b> Two plates of area \(A\) separated by \(d\) with a dielectric between them have \(C = \varepsilon A/d\). (Gauss's law gives a uniform field \(Q/\varepsilon A\) between the plates, so the voltage is \(Qd/\varepsilon A\).) For \(A = 100\times100\,\mu\)m\(^2\), \(d = 10\,\mu\)m in vacuum, \(C\approx 8.9\) fF. A transmon's two pads are not parallel plates but coplanar rectangles hundreds of micrometres long, separated by tens of micrometres, sitting on silicon. Their field lives mostly in the substrate and in the air above, fringing around the edges. There is no closed formula, and a typical transmon's total capacitance of 60–100 fF must be computed numerically. Coplanar geometries can be handled approximately by conformal mapping, which gives closed forms in terms of elliptic integrals for idealised infinitely long lines (Chapter 6).</p></div>
+<div class="quick"><p>A field solver reports \(C_{11} = 80\) fF, \(C_{12} = -3\) fF for two conductors. What is conductor 1's capacitance to ground?</p>
+<details><summary>Answer</summary><p>The row sum, \(80 - 3 = 77\) fF. The 80 fF is the "total" capacitance seen from conductor 1 with everything else grounded.</p></details></div>
 
 <h3 id="sec-c-stat-mag">Magnetostatics and inductance</h3>
-<p>Steady currents produce magnetic fields. The <b>Biot–Savart law</b> gives the field of a current element, and <b>Ampère's law</b> states \(\oint\mathbf B\cdot\dd\boldsymbol\ell = \mu_0I_{\mathrm{enc}}\), or \(\nabla\times\mathbf B = \mu_0\mathbf J\). There are no magnetic charges, \(\nabla\cdot\mathbf B = 0\), so \(\mathbf B = \nabla\times\mathbf A\) for a <b>vector potential</b> \(\mathbf A\). The <b>magnetic flux</b> through a loop is \(\Phi = \int\mathbf B\cdot\dd\mathbf S = \oint\mathbf A\cdot\dd\boldsymbol\ell\).</p>
-<p>The flux through loop \(i\) is linear in the currents in all loops: \(\Phi_i = \sum_jL_{ij}I_j\). The diagonal elements are <b>self-inductances</b>, the off-diagonal ones <b>mutual inductances</b>. The stored energy is</p>
+<p>Moving charges (currents) produce magnetic fields \(\mathbf B\). The <b>Biot–Savart law</b> gives the field of each small piece of current, falling as \(1/r^2\) and circling around the wire. <b>Ampère's law</b> says the circulation of \(\mathbf B\) around any loop equals \(\mu_0\) times the current threading it:</p>
+\[ \oint\mathbf B\cdot\dd\boldsymbol\ell = \mu_0I_{\mathrm{enc}}, \qquad\text{or}\qquad \nabla\times\mathbf B = \mu_0\mathbf J , \]
+<p>with \(\mu_0 = 4\pi\times10^{-7}\) H/m (approximately) the permeability of free space. Example: a long straight wire carrying current \(I\) has \(B = \mu_0I/2\pi r\) circling it.</p>
+<p>There are no magnetic charges, so field lines always close on themselves (\(\nabla\cdot\mathbf B = 0\)). That allows writing \(\mathbf B = \nabla\times\mathbf A\) with a <b>vector potential</b> \(\mathbf A\). The <b>magnetic flux</b> through a loop is how much field threads it:</p>
+\[ \Phi = \int\mathbf B\cdot\dd\mathbf S = \oint\mathbf A\cdot\dd\boldsymbol\ell . \]
+<p>Flux is central to superconducting qubits: a SQUID loop's behaviour depends on the flux through it, in units of the flux quantum \(\Phi_0 = h/2e\approx2.07\times10^{-15}\) Wb (Book 6).</p>
+<p>By linearity again, the flux through loop \(i\) is linear in the currents in all loops: \(\Phi_i = \sum_jL_{ij}I_j\). The diagonal elements are <b>self-inductances</b>, the off-diagonal ones <b>mutual inductances</b>. The stored energy is</p>
 <div class="eq" id="eq-c-um">$$ U_B = \frac{1}{2\mu_0}\int|\mathbf B|^2\,\dd V = \tfrac12\mathbf I^{\mathsf T}\mathbf L\,\mathbf I . $$</div>
-<p>A straight wire of length \(\ell\) and radius \(r\ll\ell\) has self-inductance roughly \(\frac{\mu_0\ell}{2\pi}[\ln(2\ell/r) - 1]\), about 1 nH per mm for typical on-chip dimensions. Mutual inductance between flux-bias lines and neighbouring qubits is a classic source of crosstalk: current intended to tune one qubit also tunes its neighbours. Superconductors add a second kind of inductance, <b>kinetic inductance</b>, from the inertia of the Cooper pairs. In thin or narrow films it can rival or exceed the geometric inductance; Book 6 and Chapter 5 explain where it comes from.</p>
+<p>Useful numbers: a straight wire of length \(\ell\) and radius \(r\ll\ell\) has self-inductance roughly \(\frac{\mu_0\ell}{2\pi}[\ln(2\ell/r) - 1]\), about 1 nH per mm for typical on-chip dimensions.</p>
+<p>Mutual inductance between flux-bias lines and neighbouring qubits is a classic source of <b>crosstalk</b>: current intended to tune one qubit's flux also tunes its neighbours by a few percent. Calibration must then invert a "crosstalk matrix", one more place where Book 1's linear algebra appears.</p>
+<p>Superconductors add a second kind of inductance, <b>kinetic inductance</b>, from the inertia of the Cooper pairs: the supercurrent's electrons carry kinetic energy, and that acts like extra inductance. In thin or narrow films it can rival or exceed the geometric inductance and shifts resonator frequencies; Chapter 5 and Book 6 explain where it comes from.</p>
+
+<h3 id="sec-c-stat-code">Try it in Python</h3>
+<p>Solve Laplace's equation on a grid for two parallel strips inside a grounded box, and compare the capacitance with the parallel-plate formula.</p>
+<pre class="code"><code>import numpy as np
+import scipy.sparse as sp
+from scipy.sparse.linalg import spsolve
+
+eps0 = 8.854e-12
+h = 1e-6                        # grid spacing: 1 micrometre
+N = 201                         # 200 um x 200 um box, grounded walls
+w, d = 40, 10                   # plate width and gap, in grid cells
+
+phi_fixed = np.full((N, N), np.nan)          # nan = unknown
+phi_fixed[0, :] = phi_fixed[-1, :] = phi_fixed[:, 0] = phi_fixed[:, -1] = 0
+c = N // 2
+phi_fixed[c - d // 2, c - w // 2:c + w // 2 + 1] = 1.0    # top plate at 1 V
+phi_fixed[c + d // 2, c - w // 2:c + w // 2 + 1] = 0.0    # bottom plate at 0 V
+
+# Assemble the 5-point Laplacian ("value = average of neighbours") for unknown cells
+idx = -np.ones((N, N), int)
+unknown = np.isnan(phi_fixed)
+idx[unknown] = np.arange(unknown.sum())
+rows, cols, vals, b = [], [], [], np.zeros(unknown.sum())
+for i, j in zip(*np.nonzero(unknown)):
+    k = idx[i, j]
+    rows.append(k); cols.append(k); vals.append(-4.0)
+    for di, dj in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        if idx[i + di, j + dj] >= 0:
+            rows.append(k); cols.append(idx[i + di, j + dj]); vals.append(1.0)
+        else:
+            b[k] -= phi_fixed[i + di, j + dj]
+A = sp.csr_matrix((vals, (rows, cols)), shape=(len(b), len(b)))
+phi = phi_fixed.copy()
+phi[unknown] = spsolve(A, b)
+
+# Capacitance per unit length from the stored energy U = (1/2) C' V^2
+Ey, Ex = np.gradient(phi, h)
+U = 0.5 * eps0 * np.sum(Ex**2 + Ey**2) * h * h     # J per metre, V = 1
+print("C' from field energy: %.2f pF/m" % (2 * U * 1e12))
+print("C' parallel-plate formula eps0*w/d: %.2f pF/m" % (eps0 * w / d * 1e12))</code></pre>
+<p>The solver gives about 50% more than \(\varepsilon_0w/d\). Two reasons: field lines fringe out around the plate edges, and the top plate also has capacitance to the grounded box. With the bottom plate and box both at 0 V, the number computed is exactly the Maxwell diagonal element \(C_{11}\) per unit length. Make the box larger or the gap smaller and watch the two numbers approach each other.</p>
 
 <div class="eda"><p>Capacitance extraction (Q3D-style quasi-static solvers) is the first step of every superconducting-qubit design flow. It solves @eq:c-poisson for each conductor in turn and assembles @eq:c-cmatrix. The review's first formulation of extraction, "quasi-static lumped models" (@lf:sec-design-extract), is exactly this chapter, and its weakness (structures comparable to a wavelength) is the subject of Chapter 6.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>\(\mathbf E = -\nabla\phi\); Gauss's law gives Poisson's equation, and Laplace's equation where there is no charge.</li>
+<li>Conductors are equipotentials; the solution is unique; fields concentrate at thin-film edges.</li>
+<li>Field energy \(\tfrac12\int\varepsilon|\mathbf E|^2\); participation ratios times loss tangents give \(1/Q\).</li>
+<li>The Maxwell capacitance matrix: one field solve per conductor; mutual capacitance is \(-C_{ij}\), to ground is the row sum.</li>
+<li>Inductance matrix from flux linkage; mutual inductance causes flux crosstalk; superconductors add kinetic inductance.</li>
+</ul></div>
 
 <div class="exercises" id="ex-c-statics"><h4>Exercises</h4><ol>
 <li>Show that the capacitance of an isolated sphere of radius \(R\) is \(4\pi\varepsilon_0R\), and evaluate it for \(R = 100\,\mu\)m.
@@ -44,5 +131,9 @@
 <details><summary>Solution</summary><p>Field \(E = V/d\) uniform in volume \(Ad\): \(U = \tfrac12\varepsilon(V/d)^2Ad = \tfrac12(\varepsilon A/d)V^2 = \tfrac12CV^2\).</p></details></li>
 <li>A resonator stores 90% of its electric energy in the silicon substrate (\(\tan\delta = 10^{-7}\)) and 0.1% in a 3 nm surface oxide (\(\tan\delta = 2\times10^{-3}\)). Which dominates the loss, and what \(Q\) results?
 <details><summary>Solution</summary><p>Substrate: \(0.9\times10^{-7} = 9\times10^{-8}\). Surface: \(10^{-3}\times2\times10^{-3} = 2\times10^{-6}\). The thin surface layer dominates by a factor of 20. \(1/Q\approx2.09\times10^{-6}\), \(Q\approx4.8\times10^5\). This is why surface participation, not bulk material, sets coherence in most superconducting devices.</p></details></li>
+<li>Use Ampère's law to find \(B\) at 10 µm from a wire carrying 1 mA. How much flux does it thread through a 20 µm × 20 µm loop centred 30 µm away, in units of \(\Phi_0\)? (Approximate \(B\) as uniform over the loop.)
+<details><summary>Solution</summary><p>\(B = \mu_0I/2\pi r = 2\times10^{-7}\times10^{-3}/10^{-5} = 2\times10^{-5}\) T at 10 µm. At 30 µm, \(6.7\times10^{-6}\) T; flux \(6.7\times10^{-6}\times4\times10^{-10} = 2.7\times10^{-15}\) Wb \(\approx1.3\,\Phi_0\). A milliamp on a nearby line is more than a flux quantum: flux lines must be routed carefully.</p></details></li>
+<li>Using the three-conductor matrix of the worked example, conductor 3 is held at 1 mV and pads 1 and 2 are floating with zero charge. Estimate the pad voltages (ignore the small coupling of each pad to the other's voltage, i.e. solve the 2×2 system exactly if you prefer).
+<details><summary>Solution</summary><p>Zero charge: \(100\phi_1 - 45\phi_2 = 6\phi_3\), \(-45\phi_1 + 95\phi_2 = \phi_3\). Solving with \(\phi_3 = 1\) mV: determinant \(9500 - 2025 = 7475\); \(\phi_1 = (6\times95 + 45)/7475 = 0.082\) mV, \(\phi_2 = (100 + 270)/7475 = 0.050\) mV. The difference, 0.032 mV, is what drives the qubit mode.</p></details></li>
 </ol></div>
 </section>
