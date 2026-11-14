@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-c-opt-mzi"><span class="tocnum">7.4</span>Mach–Zehnder interferometers</a></li>
 <li class="toc3"><a href="#sec-c-opt-ring"><span class="tocnum">7.5</span>Ring resonators and cavities</a></li>
 <li class="toc3"><a href="#sec-c-opt-loss"><span class="tocnum">7.6</span>Loss in integrated waveguides</a></li>
+<li class="toc3"><a href="#sec-c-opt-code"><span class="tocnum">7.7</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-c-thermal"><span class="tocnum">8</span>Thermal physics, noise and cryogenics</a></li>
 <li class="toc3"><a href="#sec-c-th-boltz"><span class="tocnum">8.1</span>The Boltzmann distribution</a></li>
 <li class="toc3"><a href="#sec-c-th-planck"><span class="tocnum">8.2</span>Thermal oscillators and the Planck distribution</a></li>
@@ -120,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Classical Physics for Quantum Engineers</h1>
   <p class="subtitle">Lagrangian and Hamiltonian mechanics, oscillators, electromagnetism, microwave circuits, waveguides and thermal noise</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">8 chapters · 42 numbered equations · 44 exercises with solutions · about 45 hours of study</p>
+  <p class="meta">8 chapters · 42 numbered equations · 46 exercises with solutions · about 45 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../mathematics/index.html">Book 1: Mathematics</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-c-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -918,37 +919,116 @@ for f in (6.9e9, 6.99e9, 7.0e9 - 1e3, 7.01e9, 7.1e9):
 <li>Use refraction, total internal reflection and the refractive index to understand how light is guided.</li>
 <li>Find the modes of a slab waveguide and define the effective index and group index.</li>
 <li>Derive coupled-mode equations for a directional coupler, and analyse Mach–Zehnder interferometers and ring resonators.</li>
-<li>Know the loss mechanisms of integrated optical waveguides.</li>
+<li>Know the loss mechanisms of integrated optical waveguides, and why loss is the central problem for photonic quantum computing.</li>
 </ul></div>
 
+<div class="bigpic"><p>Photonic quantum computers use single photons of light travelling in tiny glass or silicon "wires" on a chip. Even superconducting and ion-trap machines rely on optics, for lasers, for networking, and increasingly for getting signals in and out of the refrigerator. This chapter covers the classical optics needed for Book 5: how a waveguide traps light, how two waveguides side by side exchange it (a beam splitter), how two beam splitters make an interferometer that acts as a programmable gate, and how rings make resonators. You will find that the mathematics is identical to Chapter 3's coupled oscillators and Chapter 6's resonators. Only the frequency (200 THz instead of 5 GHz) and the size (micrometres) have changed.</p></div>
+
 <h3 id="sec-c-opt-index"><span class="secnum">7.1</span> Refraction and total internal reflection</h3>
-<p>At optical frequencies (around 200 THz for the 1550 nm telecom band) materials are described by a <b>refractive index</b> \(n = \sqrt{\varepsilon_r}\) (non-magnetic materials), and light travels at \(c/n\). Silicon has \(n\approx3.48\) at 1550 nm, silicon nitride about 2.0, silica 1.44, and lithium niobate about 2.2. At an interface, the component of the wavevector along the surface is conserved, which gives <b>Snell's law</b> \(n_1\sin\theta_1 = n_2\sin\theta_2\). Going from high to low index, there is a critical angle \(\sin\theta_c = n_2/n_1\) beyond which no refracted wave exists: <b>total internal reflection</b>. The light is reflected completely, while an <b>evanescent</b> field decays exponentially into the low-index side over a fraction of a wavelength. A core of high index surrounded by low-index cladding traps light by repeated total internal reflection. That is an optical waveguide.</p>
+<p>Light is the same electromagnetic wave as in Chapter 5, at a frequency about 40,000 times higher: around 193 THz for the 1550 nm "telecom" wavelength used by optical fibres. At these frequencies a material is described by its <b>refractive index</b> \(n = \sqrt{\varepsilon_r}\) (for non-magnetic materials), and light travels at \(c/n\). Values for integrated photonics at 1550 nm:</p>
+<figure class="tbl" id="tab-c-index"><figcaption><b>Table 5.</b> Refractive indices of common photonic materials at 1550 nm.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Material</th><th>\(n\)</th><th>Typical use</th></tr>
+<tr><td>Silicon</td><td>3.48</td><td>compact waveguides, foundry silicon photonics</td></tr>
+<tr><td>Lithium niobate</td><td>about 2.2</td><td>fast electro-optic modulators</td></tr>
+<tr><td>Silicon nitride</td><td>about 2.0</td><td>low-loss waveguides, ring resonators</td></tr>
+<tr><td>Silica (glass)</td><td>1.44</td><td>cladding, optical fibre</td></tr>
+</table></div></figure>
+<p>When light crosses an interface, the part of its wave vector along the surface must match on both sides (the wave crests must line up along the boundary). That gives <b>Snell's law</b>:</p>
+\[ n_1\sin\theta_1 = n_2\sin\theta_2 , \]
+<p>with angles measured from the perpendicular. Going from high to low index (\(n_1\gt n_2\)), the refracted ray bends away from the perpendicular, and beyond a <b>critical angle</b> \(\sin\theta_c = n_2/n_1\) there is no refracted wave at all: <b>total internal reflection</b>. All the light is reflected. An <b>evanescent</b> field still pokes into the low-index side, decaying exponentially over a fraction of a wavelength, but it carries no power away.</p>
+<p>A core of high index surrounded by low-index cladding therefore traps light by repeated total internal reflection. That is an <b>optical waveguide</b>, and optical fibre is the most famous example. The larger the index contrast, the steeper the angles that are still trapped, so the tighter the waveguide can bend: silicon in silica can bend around a radius of a few micrometres, while silicon nitride needs tens to hundreds.</p>
 
 <h3 id="sec-c-opt-slab"><span class="secnum">7.2</span> Modes of a slab waveguide</h3>
-<p>Consider a core of index \(n_1\) and thickness \(d\) between claddings of index \(n_2 \lt n_1\). Look for fields of the form \(E(x)\ee^{\ii(\beta z - \omega t)}\) travelling along \(z\). The wave equation becomes, in each layer,</p>
+<p>The ray picture is intuitive but incomplete: in a waveguide only a few wavelengths across, light behaves as a wave with a definite transverse shape. Consider the simplest guide: a flat core of index \(n_1\) and thickness \(d\) between claddings of index \(n_2 \lt n_1\). Look for fields of the form \(E(x)\ee^{\ii(\beta z - \omega t)}\): a fixed profile \(E(x)\) across the guide, travelling along \(z\) with <b>propagation constant</b> \(\beta\). Substituting into the wave equation gives, in each layer,</p>
 <div class="eq" id="eq-c-slab">$$ \frac{\dd^2E}{\dd x^2} + \big(k_0^2n(x)^2 - \beta^2\big)E = 0, \qquad k_0 = \frac{2\pi}{\lambda_0} .  \tag{35}$$</div>
-<p>This is a one-dimensional Schrödinger equation in disguise, with \(-n(x)^2\) playing the role of a potential well and \(-\beta^2\) the energy. Guided modes need oscillation in the core (\(k_0^2n_1^2 > \beta^2\)) and decay in the cladding (\(k_0^2n_2^2 \lt \beta^2\)). Matching \(E\) and \(\dd E/\dd x\) at the interfaces gives a transcendental equation with a finite number of solutions, exactly as for a particle in a finite square well (Book 3). Each solution is a <b>mode</b> with propagation constant \(\beta_m\), and we define the <b>effective index</b> \(n_{\mathrm{eff}} = \beta/k_0\), which lies between \(n_2\) and \(n_1\). Thin cores support only one mode (<b>single-mode</b> operation), which is what quantum photonic circuits use: interference between photons requires them to occupy the same spatial mode.</p>
-<p>A wave packet travels not at the phase velocity \(c/n_{\mathrm{eff}}\) but at the <b>group velocity</b> \(c/n_g\), with group index \(n_g = n_{\mathrm{eff}} - \lambda\,\dd n_{\mathrm{eff}}/\dd\lambda\). In strongly confining silicon waveguides \(n_g\approx4.2\) while \(n_{\mathrm{eff}}\approx2.4\). The group index sets the free spectral range of resonators and the delay of pulses; its variation with wavelength (dispersion) sets how pulses spread.</p>
+<div class="intuition"><p>Compare with the Schrödinger equation of Book 3, \(-\frac{\hbar^2}{2m}\psi'' + V\psi = E\psi\). Rearranged, <a class="xref" href="#eq-c-slab">(35)</a> has the same form with \(-n(x)^2\) playing the role of a potential and \(-\beta^2\) the energy. A high-index core is a potential <i>well</i>, and guided modes are the bound states in it. Everything you learn about a particle in a finite well applies to light in a waveguide, and vice versa.</p></div>
+<p>A <b>guided mode</b> needs the field to oscillate in the core (\(k_0^2n_1^2 \gt \beta^2\)) and to decay in the cladding (\(k_0^2n_2^2 \lt \beta^2\)), so that no power leaks out. Matching \(E\) and \(\dd E/\dd x\) at the two interfaces gives a transcendental equation with a finite number of solutions, exactly as for a particle in a finite square well. Each solution is a <b>mode</b> with its own propagation constant \(\beta_m\) and transverse shape. It is convenient to define the <b>effective index</b></p>
+\[ n_{\mathrm{eff}} = \beta/k_0 , \qquad n_2\lt n_{\mathrm{eff}}\lt n_1 : \]
+<p>the mode travels as if in a uniform material of that index. The fundamental mode has a single hump and the highest \(n_{\mathrm{eff}}\) (most confined); higher modes have more nodes.</p>
+<p>Thin cores support only one mode (<b>single-mode</b> operation). That is what quantum photonic circuits use: two photons interfere (the Hong–Ou–Mandel effect, Book 5) only if they are indistinguishable, including occupying the same spatial mode. A standard silicon photonic waveguide is 220 nm thick and about 450–500 nm wide, single-mode at 1550 nm.</p>
+<p>One more velocity. A pulse (a wave packet) travels not at the phase velocity \(c/n_{\mathrm{eff}}\) but at the <b>group velocity</b> \(c/n_g\), with group index</p>
+\[ n_g = n_{\mathrm{eff}} - \lambda\,\frac{\dd n_{\mathrm{eff}}}{\dd\lambda}. \]
+<p>The difference arises because \(n_{\mathrm{eff}}\) changes with wavelength (the mode's shape changes), and a packet is a mixture of nearby wavelengths whose crests drift relative to its envelope. In strongly confining silicon waveguides \(n_g\approx4.2\) while \(n_{\mathrm{eff}}\approx2.4\). The group index sets the free spectral range of resonators and the delay of pulses; how it varies with wavelength (<b>dispersion</b>) sets how pulses spread. For photon-pair sources, dispersion decides which colours of photon pairs are produced (Book 5).</p>
 
 <h3 id="sec-c-opt-dc"><span class="secnum">7.3</span> Directional couplers and coupled modes</h3>
-<p>Bring two identical waveguides close enough that their evanescent fields overlap. Each mode leaks into the other, and their amplitudes \(a_1(z), a_2(z)\) obey the <b>coupled-mode equations</b></p>
+<p>Bring two identical waveguides close enough, a few hundred nanometres apart, that their evanescent tails overlap. Each mode leaks gradually into the other. Their amplitudes \(a_1(z), a_2(z)\) obey the <b>coupled-mode equations</b></p>
 <div class="eq" id="eq-c-cmt">$$ \frac{\dd}{\dd z}\begin{pmatrix}a_1\\a_2\end{pmatrix} = \ii\begin{pmatrix}\beta & \kappa\\ \kappa & \beta\end{pmatrix}\begin{pmatrix}a_1\\a_2\end{pmatrix},  \tag{36}$$</div>
-<p>which are the coupled oscillators of Chapter 3 with distance \(z\) in place of time. Light launched into waveguide 1 transfers to waveguide 2 as \(|a_2|^2 = \sin^2(\kappa z)\), completely after the <b>coupling length</b> \(L_c = \pi/2\kappa\). Choosing the coupler's length sets the splitting ratio; length \(L_c/2\) gives a 50:50 <b>beam splitter</b>. The transfer matrix of a coupler of length \(L\) (dropping a common phase) is</p>
+<p>where \(\kappa\) is the coupling per unit length. These are exactly the coupled oscillators of Chapter 3 (<a class="xref" href="#eq-c-coupled">(16)</a>), with distance \(z\) in place of time. So everything carries over: on resonance (identical guides) energy swaps completely back and forth. Light launched into waveguide 1 transfers to waveguide 2 as \(|a_2|^2 = \sin^2(\kappa z)\), completely after the <b>coupling length</b> \(L_c = \pi/2\kappa\). Choosing the coupler's length sets the splitting ratio; length \(L_c/2\) gives a 50:50 <b>beam splitter</b>. The transfer matrix of a coupler of length \(L\) (dropping a common phase \(\ee^{\ii\beta L}\)) is</p>
 <div class="eq" id="eq-c-bs">$$ U_{\mathrm{DC}} = \begin{pmatrix}\cos\kappa L & \ii\sin\kappa L\\ \ii\sin\kappa L & \cos\kappa L\end{pmatrix},  \tag{37}$$</div>
-<p>a unitary matrix, as energy conservation requires. Because \(\kappa\) depends exponentially on the gap between the guides (evanescent overlap), a few nanometres of fabrication error in the gap change the splitting ratio noticeably. Multimode interference (MMI) couplers are an alternative that trades some loss for tolerance.</p>
+<p>a unitary matrix, as energy conservation requires (Book 1, Chapter 3). Notice the factor \(\ii\): the light that crosses over picks up a 90° phase relative to the light that stays. That phase is essential for interference, and it is what makes two-photon interference work in Book 5.</p>
+<div class="pitfall"><p>Because \(\kappa\) depends exponentially on the gap between the guides (it comes from the overlap of exponentially decaying tails), a few nanometres of fabrication error in the gap change the splitting ratio noticeably: a coupler designed for 50:50 might come out 45:55. Multimode interference (MMI) couplers are an alternative that trades some loss for tolerance. Quantum circuits that need near-perfect splitting ratios often use two couplers in an MZI arrangement, which can be tuned to any ratio after fabrication.</p></div>
 
 <h3 id="sec-c-opt-mzi"><span class="secnum">7.4</span> Mach–Zehnder interferometers</h3>
-<p>Two 50:50 couplers with a phase shift \(\phi\) in one arm between them form a <b>Mach–Zehnder interferometer</b> (MZI). Multiplying the matrices,</p>
+<p>Two 50:50 couplers with a phase shift \(\phi\) in one arm between them form a <b>Mach–Zehnder interferometer</b> (MZI). Light is split, travels two paths, and recombines; whether it exits one port or the other depends on the relative phase of the two paths. Multiplying the three matrices (right to left in the order the light meets them),</p>
 <div class="eq" id="eq-c-mzi">$$ U_{\mathrm{MZI}}(\phi) = U_{50}\begin{pmatrix}\ee^{\ii\phi}&0\\0&1\end{pmatrix}U_{50} = \ii\,\ee^{\ii\phi/2}\begin{pmatrix}\sin(\phi/2) & \cos(\phi/2)\\ \cos(\phi/2) & -\sin(\phi/2)\end{pmatrix},  \tag{38}$$</div>
-<p>so the power in the "cross" output is \(\cos^2(\phi/2)\) and in the "bar" output \(\sin^2(\phi/2)\). The phase can be set by heating one arm (the thermo-optic effect, \(\dd n/\dd T\approx1.8\times10^{-4}\) K\(^{-1}\) in silicon), by injecting carriers, or by an applied field in an electro-optic material such as lithium niobate (the Pockels effect, fast and low-loss). An MZI with an extra phase shifter on one input is a fully programmable \(2\times2\) unitary, and meshes of MZIs implement any \(N\times N\) unitary, the core of photonic quantum processors (Book 5, <a class="xref ext" href="../../foundations/quantum-photonics/index.html#sec-p-linear" title="Linear optics and two-photon interference">Book 5 §3</a>).</p>
+<p>so the power in the "cross" output is \(\cos^2(\phi/2)\) and in the "bar" output \(\sin^2(\phi/2)\). At \(\phi = 0\) all the light crosses; at \(\phi = \pi\) it all stays; in between, any ratio. An MZI is a <b>tunable beam splitter</b>.</p>
+<p>The phase can be set by:</p>
+<ul>
+<li><b>Heating</b> one arm (the thermo-optic effect, \(\dd n/\dd T\approx1.8\times10^{-4}\) K\(^{-1}\) in silicon). Simple and robust, but slow (microseconds) and power-hungry (milliwatts per phase shifter).</li>
+<li><b>Injecting carriers</b> (free electrons change silicon's index). Fast but lossy.</li>
+<li><b>An applied electric field</b> in an electro-optic material such as lithium niobate (the Pockels effect). Fast (gigahertz) and low-loss.</li>
+</ul>
+<p>An MZI with an extra phase shifter on one input is a fully programmable \(2\times2\) unitary, and meshes of MZIs implement any \(N\times N\) unitary, the core of photonic quantum processors (Book 5, <a class="xref ext" href="../../foundations/quantum-photonics/index.html#sec-p-linear" title="Linear optics and two-photon interference">Book 5 §3</a>).</p>
+<div class="quick"><p>How much must a silicon arm 100 µm long be heated to give a phase shift of \(\pi\) at 1550 nm?</p>
+<details><summary>Answer</summary><p>Phase \(= 2\pi\Delta n L/\lambda = \pi\) needs \(\Delta n = \lambda/2L = 7.75\times10^{-3}\). With \(\dd n/\dd T = 1.8\times10^{-4}\) K\(^{-1}\), \(\Delta T\approx43\) K. (Longer arms need less heating.)</p></details></div>
 
 <h3 id="sec-c-opt-ring"><span class="secnum">7.5</span> Ring resonators and cavities</h3>
-<p>A waveguide closed into a ring of circumference \(L\) resonates when an integer number of wavelengths fits: \(n_{\mathrm{eff}}L = m\lambda\). Resonances are separated by the <b>free spectral range</b> \(\Delta\lambda_{\mathrm{FSR}} = \lambda^2/(n_gL)\). A bus waveguide passing nearby couples light in and out, and the transmission past the ring has the same Lorentzian notch as the microwave hanger resonator of Chapter 6, with intrinsic and coupling quality factors defined identically. Silicon nitride rings reach intrinsic \(Q\) above \(10^7\). Rings are used as filters, modulators and, when the material is nonlinear, as sources of photon pairs (Book 5). Their resonance wavelength shifts by tens of picometres per nanometre of width error, so every ring on a chip usually needs a heater to tune it, a direct analogue of tuning qubit frequencies.</p>
+<p>A waveguide closed into a ring of circumference \(L\) resonates when a whole number of wavelengths fits around it: \(n_{\mathrm{eff}}L = m\lambda\). Resonances are separated by the <b>free spectral range</b></p>
+\[ \Delta\lambda_{\mathrm{FSR}} = \frac{\lambda^2}{n_gL}, \qquad \Delta f_{\mathrm{FSR}} = \frac{c}{n_gL} \]
+<p>(the group index appears because neighbouring resonances differ in wavelength). A bus waveguide passing nearby couples light in and out. The transmission past the ring has the same Lorentzian notch as the microwave hanger resonator of Chapter 6, with intrinsic and coupling quality factors defined identically and the same circle in the complex plane. Silicon nitride rings reach intrinsic \(Q\) above \(10^7\).</p>
+<p>Rings are used as filters, modulators and, when the material is nonlinear, as sources of photon pairs (Book 5). Their resonance wavelength shifts by tens of picometres per nanometre of width error, comparable to their linewidth, so every ring on a chip usually needs a heater to tune it onto the right wavelength. That is a direct analogue of tuning qubit frequencies, with the same statistical design questions.</p>
 
 <h3 id="sec-c-opt-loss"><span class="secnum">7.6</span> Loss in integrated waveguides</h3>
-<p>Light is lost in waveguides by <b>scattering</b> from sidewall roughness (dominant in high-index-contrast silicon, scaling with the square of the index contrast and roughness amplitude), <b>absorption</b> in the material and in surface states, <b>radiation</b> at bends that are too tight, and <b>mode mismatch</b> at junctions and at the chip edge (coupling to fibre). Losses are quoted in dB/cm for straight waveguides (about 1–2 dB/cm for standard silicon, below 0.1 dB/cm for low-confinement silicon nitride) and in dB per component. Transmissions multiply, so decibels add: a path through 100 components at 0.05 dB each loses 5 dB, or 68% of the light. For classical signals that can be amplified away. For single photons it cannot, and Book 5 shows that loss is the central obstacle of photonic quantum computing (<a class="xref ext" href="../../index.html#sec-mod-phot" title="Photonics">Lab to Foundry §8.2</a>).</p>
+<p>Light is lost in waveguides by:</p>
+<ul>
+<li><b>Scattering</b> from sidewall roughness left by etching. Dominant in high-index-contrast silicon; it scales with the square of the index contrast and of the roughness amplitude.</li>
+<li><b>Absorption</b> in the material and in surface states.</li>
+<li><b>Radiation</b> at bends that are too tight (the mode cannot follow the curve).</li>
+<li><b>Mode mismatch</b> at junctions and at the chip edge, especially coupling to an optical fibre whose mode is ten times larger than a silicon waveguide's.</li>
+</ul>
+<p>Losses are quoted in <b>decibels</b>: a loss of \(x\) dB means a transmission of \(10^{-x/10}\). They are given in dB/cm for straight waveguides (about 1–2 dB/cm for standard silicon, below 0.1 dB/cm for low-confinement silicon nitride) and in dB per component. The convenience of decibels is that transmissions multiply, so decibels <i>add</i>: a path through 100 components at 0.05 dB each loses 5 dB, which is \(10^{-0.5} = 32\%\) transmission, i.e. 68% of the light lost.</p>
+<p>For classical signals, loss is merely inconvenient: amplify the signal. For single photons it is fundamental: a photon cannot be amplified or copied (the no-cloning theorem, Book 4), and a lost photon is a lost qubit. Book 5 shows that loss is the central obstacle of photonic quantum computing (<a class="xref ext" href="../../index.html#sec-mod-phot" title="Photonics">Lab to Foundry §8.2</a>).</p>
+
+<h3 id="sec-c-opt-code"><span class="secnum">7.7</span> Try it in Python</h3>
+<p>Solve for the modes of a silicon slab waveguide as a matrix eigenvalue problem (exactly as one would for a quantum particle in a well), then sweep the phase of an MZI.</p>
+<pre class="code"><code>import numpy as np
+from scipy.linalg import eigh_tridiagonal
+
+lam0 = 1.55e-6
+k0 = 2 * np.pi / lam0
+n_core, n_clad = 3.48, 1.44         # silicon core, silica cladding
+
+def slab_modes(d, width=4e-6, N=4000):
+    """TE modes of a slab of thickness d: solve E'' + k0^2 n^2 E = beta^2 E."""
+    x = np.linspace(-width / 2, width / 2, N)
+    h = x[1] - x[0]
+    n = np.where(np.abs(x) &lt; d / 2, n_core, n_clad)
+    diag = -2 / h**2 + (k0 * n) ** 2
+    off = np.full(N - 1, 1 / h**2)
+    beta2, E = eigh_tridiagonal(diag, off)
+    guided = beta2 > (k0 * n_clad) ** 2             # decays in the cladding
+    return np.sqrt(beta2[guided])[::-1] / k0         # effective indices, highest first
+
+for d in (0.1e-6, 0.22e-6, 0.5e-6, 1.0e-6):
+    print(f"core {d*1e9:5.0f} nm: n_eff of guided modes =", np.round(slab_modes(d), 3))
+
+# A Mach-Zehnder interferometer: two 50:50 couplers around a phase shifter
+U50 = np.array([[1, 1j], [1j, 1]]) / np.sqrt(2)
+for phi in np.linspace(0, np.pi, 5):
+    U = U50 @ np.diag([np.exp(1j * phi), 1]) @ U50
+    print(f"phi = {phi:4.2f}: power to cross port {abs(U[1, 0])**2:.3f}, bar port {abs(U[0, 0])**2:.3f}")</code></pre>
+<p>A 220 nm silicon slab is single-mode with \(n_{\mathrm{eff}}\approx2.85\); a 1 µm slab carries five modes. (A real waveguide is also narrow in the other direction, which lowers \(n_{\mathrm{eff}}\) to about 2.4.) Modes with \(n_{\mathrm{eff}}\) barely above 1.44 are near cutoff, weakly confined and sensitive to the size of the simulation box. The MZI output follows \(\cos^2(\phi/2)\).</p>
 
 <div class="eda"><p>Classical photonic design automation is mature: mode solvers for \(n_{\mathrm{eff}}\), FDTD and eigenmode-expansion solvers for components, circuit simulators that chain S-matrices, and foundry process design kits <span class="cite">[<a href="#ref-chrostowski2015">7</a>, <a href="#ref-bogaerts2018">8</a>]</span>. What quantum use adds is statistics at extreme tolerance, a requirement on the <i>worst</i> path through a circuit of thousands of components, and components such as single-photon detectors that classical kits do not contain.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Snell's law; beyond \(\sin\theta_c = n_2/n_1\) light is totally reflected, which is how waveguides trap it.</li>
+<li>Waveguide modes are bound states of an "index well"; \(n_{\mathrm{eff}} = \beta/k_0\); single-mode guides for quantum work; group index for pulses and resonances.</li>
+<li>A directional coupler is two coupled oscillators in space; its matrix is unitary with an \(\ii\) on the cross terms.</li>
+<li>MZI: cross power \(\cos^2(\phi/2)\); meshes of MZIs make any unitary.</li>
+<li>Rings resonate at \(n_{\mathrm{eff}}L = m\lambda\), FSR \(c/n_gL\). Loss in dB adds; for single photons it cannot be amplified away.</li>
+</ul></div>
 
 <div class="exercises" id="ex-c-optics"><h4>Exercises</h4><ol>
 <li>Find the critical angle for total internal reflection at a silicon–silica interface at 1550 nm.
@@ -959,6 +1039,10 @@ for f in (6.9e9, 6.99e9, 7.0e9 - 1e3, 7.01e9, 7.1e9):
 <details><summary>Solution</summary><p>\(\Delta\lambda = (1.55\times10^{-6})^2/(4.2\times10^{-4})\approx5.7\) nm. In frequency, \(\Delta f = c/(n_gL) = 3\times10^8/(4.2\times10^{-4})\approx714\) GHz.</p></details></li>
 <li>A photon crosses 40 MZIs at 0.1 dB each, plus 2 dB of fibre-coupling loss at each of the two chip facets. What is the probability it survives?
 <details><summary>Solution</summary><p>Total loss \(40\times0.1 + 2\times2 = 8\) dB, so transmission \(10^{-0.8}\approx0.16\). The facets alone cost 60%. Integrating sources and detectors on the chip removes the facet loss, which is why photonic quantum computing companies do it.</p></details></li>
+<li>A directional coupler has \(\kappa = 0.05\ \mu\)m\(^{-1}\). What length gives 50:50 splitting, and what length gives full transfer?
+<details><summary>Solution</summary><p>Full transfer at \(L_c = \pi/2\kappa = 31.4\ \mu\)m; 50:50 at \(\kappa L = \pi/4\), \(L = 15.7\ \mu\)m.</p></details></li>
+<li>An 8-photon experiment needs all 8 photons to survive a path with 6 dB of loss each. What is the probability?
+<details><summary>Solution</summary><p>Each survives with \(10^{-0.6} = 0.25\); all eight with \(0.25^8\approx1.5\times10^{-5}\). Loss compounds exponentially with photon number, which is why every tenth of a dB matters.</p></details></li>
 </ol></div>
 </section>
 
