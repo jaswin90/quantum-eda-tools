@@ -1,0 +1,41 @@
+<section id="sec-h-cqed"><h2>Circuit QED: coupling, readout and amplification</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Derive the qubit–resonator coupling \(g\) from capacitances and the transmon's charge matrix element.</li>
+<li>Understand dispersive readout: signal, measurement rate, SNR and assignment fidelity.</li>
+<li>Know the Purcell problem and Purcell filters, measurement-induced dephasing and the readout design trade-offs.</li>
+<li>Know the measurement chain from resonator to digitiser.</li>
+</ul></div>
+
+<h3 id="sec-h-cq-g">The coupling strength</h3>
+<p>A transmon couples to a resonator through a capacitance \(C_g\). The interaction energy is the product of the transmon's charge and the resonator's voltage, scaled by the capacitive division: \(H_{\mathrm{int}} = 2e\,\beta\,V_{\mathrm{rms}}^0\,\hat n\,(a + a^\dagger)\) with \(\beta = C_g/C_\Sigma\) and \(V^0_{\mathrm{rms}} = \sqrt{\hbar\omega_r/2C_r}\) the resonator's zero-point voltage (@b3:eq-q-lc). In the transmon regime \(\bra1\hat n\ket0\approx(E_J/8E_C)^{1/4}/\sqrt2\), so</p>
+<div class="eq" id="eq-h-g">$$ \hbar g \approx 2e\,\frac{C_g}{C_\Sigma}\,\sqrt{\frac{\hbar\omega_r}{2C_r}}\;\frac{1}{\sqrt2}\Big(\frac{E_J}{8E_C}\Big)^{1/4} . $$</div>
+<p>For \(C_g = 5\) fF, \(C_\Sigma = 80\) fF, a 7 GHz resonator with \(C_r = 400\) fF and \(E_J/E_C = 50\), this gives \(g/2\pi\approx\) 80–100 MHz. Every factor is geometric except \(E_J\): designing \(g\) means designing a capacitance, which an electrostatic solver delivers to a few percent. Within the two-level approximation the result is the Jaynes–Cummings model (@b5:eq-p-jc); including higher transmon levels gives the multi-level model of the review (@lf:eq-multi).</p>
+
+<h3 id="sec-h-cq-disp">Dispersive readout</h3>
+<p>With the qubit detuned from the resonator by \(\Delta\gg g\), the resonator frequency depends on the qubit state, \(\omega_r\pm\chi\), with the transmon dispersive shift</p>
+<div class="eq" id="eq-h-chi">$$ \chi = \frac{g^2}{\Delta}\,\frac{\alpha}{\Delta+\alpha} $$</div>
+<p>(@b3:sec-q-pert-sw and @lf:eq-chi). A microwave tone sent through the readout line at the resonator frequency acquires a qubit-state-dependent phase (@b2:eq-c-reflect). After amplification and digitisation, the signal integrated over a time \(\tau\) forms two Gaussian clouds in the in-phase/quadrature plane, one per qubit state. Their separation grows linearly with \(\tau\) while noise grows as \(\sqrt\tau\), so the <b>signal-to-noise ratio</b> grows as \(\sqrt\tau\). The optimum design, for a given photon number \(\bar n\) in the resonator, has</p>
+<div class="eq" id="eq-h-ro">$$ \kappa = 2|\chi|, \qquad \Gamma_{\mathrm{meas}} = \frac{8\chi^2\bar n}{\kappa}\ \ \text{(at } \kappa = 2|\chi|\text{: } 4|\chi|\bar n\text{)}, \qquad \mathrm{SNR}^2\approx2\eta\,\Gamma_{\mathrm{meas}}\tau , $$</div>
+<p>where \(\Gamma_{\mathrm{meas}}\) is the rate at which which-state information leaks out of the resonator and \(\eta\) the quantum efficiency of the measurement chain (the fraction of that information captured, limited by losses and amplifier noise). Typical numbers: \(\chi/2\pi\approx1\) MHz, \(\kappa/2\pi\approx2\) MHz, \(\bar n\approx5\)–\(10\), \(\eta\approx0.2\)–\(0.5\), giving readout fidelities above 99% in 100–500 ns. The <b>assignment fidelity</b> \(F_a = 1 - \tfrac12[P(1|0) + P(0|1)]\) is limited by overlap of the Gaussian clouds and by \(T_1\) decay during readout (which, from @b1:sec-m-ode-first, costs \(\tau/T_1\), about 0.3% for 300 ns and \(T_1 = 100\) µs).</p>
+<p>More photons give faster readout, but the dispersive approximation breaks down at the <b>critical photon number</b> \(n_{\mathrm{crit}} = \Delta^2/4g^2\), and strong drives can excite the transmon out of its qubit subspace ("measurement-induced state transitions"). Readout design is a constrained optimisation over \(g\), \(\Delta\), \(\kappa\) and \(\bar n\).</p>
+
+<h3 id="sec-h-cq-purcell">The Purcell effect and filters</h3>
+<p>The same coupling that enables readout lets the qubit decay through the resonator into the readout line at the Purcell rate</p>
+<div class="eq" id="eq-h-purcell">$$ \Gamma_P\approx\kappa\Big(\frac{g}{\Delta}\Big)^2 . $$</div>
+<p>With \(\kappa/2\pi = 2\) MHz, \(g/2\pi = 100\) MHz and \(\Delta/2\pi = 1.5\) GHz, \(\Gamma_P\approx2\pi\times8.9\) kHz, i.e. a \(T_1\) limit of only 18 µs. Fast readout (large \(\kappa\)) and long \(T_1\) are in direct conflict. The standard solution is a <b>Purcell filter</b>: a band-pass filter (often another resonator, one per readout resonator or shared) between the readout resonator and the line, transparent at \(\omega_r\) and reflective at \(\omega_q\). It suppresses \(\Gamma_P\) by a factor of order \((2\Delta/\kappa_f)^2\) for a filter of bandwidth \(\kappa_f\), and multiplies the number of resonant elements that must land at the right frequency. Equivalent-circuit formulas like this one are approximations; the reliable method is to compute the admittance seen by the junction port with a circuit or field simulation and use \(\Gamma_1 = \Re Y(\omega_q)/C_\Sigma\) (@b3:sec-q-pert-golden).</p>
+<p>Photons in the readout resonator also dephase the qubit through the AC Stark shift: each photon shifts the qubit by \(2\chi\), and photon-number fluctuations (from residual thermal photons, @lf:eq-dephase, or from the readout drive's tail after a measurement) randomise its phase. This is why readout resonators must be cold and empty when the qubit is idle.</p>
+
+<h3 id="sec-h-cq-chain">The measurement chain</h3>
+<p>From the chip, the readout signal passes through circulators or isolators (to stop amplifier noise reaching the qubit), a near-quantum-limited parametric amplifier at the mixing chamber (a JPA or TWPA [@macklin2015], with gain of about 20 dB and noise close to half a photon), a HEMT amplifier at 4 K (noise temperature 2–5 K), and room-temperature amplifiers, mixers and digitisers. The first amplifier's noise dominates, because each later stage's noise is divided by the gain of the stages before it (the Friis formula). Without a parametric amplifier, the HEMT's noise of about 10–20 photons would require far longer integration. Frequency multiplexing puts 5–10 readout resonators, at slightly different frequencies, on one feedline with one amplifier chain, which is how readout wiring scales today.</p>
+
+<div class="eda"><p>Readout is a multi-element microwave design problem with tight frequency targets: each qubit's resonator, Purcell filter and feedline coupling must land within a few MHz of design for the dispersive shift, linewidth and multiplexing plan to work. Resonators are distributed elements longer than a millimetre, so lumped models are inadequate; this is where the review's full-wave and black-box extraction methods are essential (@lf:sec-design-extract).</p></div>
+
+<div class="exercises" id="ex-h-cqed"><h4>Exercises</h4><ol>
+<li>With \(g/2\pi = 90\) MHz, \(\Delta/2\pi = -1.8\) GHz and \(\alpha/2\pi = -220\) MHz, compute \(\chi\), the optimal \(\kappa\), and \(n_{\mathrm{crit}}\).
+<details><summary>Solution</summary><p>\(g^2/\Delta = 8100/(-1800) = -4.5\) MHz; factor \(\alpha/(\Delta+\alpha) = -220/(-2020) = 0.109\); \(\chi/2\pi\approx-0.49\) MHz. Optimal \(\kappa/2\pi\approx0.98\) MHz. \(n_{\mathrm{crit}} = \Delta^2/4g^2 = 3.24\times10^6/32400 = 100\).</p></details></li>
+<li>For the Purcell example in the text, what filter suppression is needed to reach a Purcell-limited \(T_1\) of 2 ms?
+<details><summary>Solution</summary><p>Unfiltered \(T_1^P = 18\) µs; need a factor of about 110. A filter of bandwidth \(\kappa_f/2\pi = 100\) MHz gives roughly \((2\times1500/100)^2 = 900\), enough.</p></details></li>
+<li>An amplifier chain has a JPA (gain 20 dB, noise 0.6 photons) followed by a HEMT with 15 photons of noise. What is the total input-referred noise?
+<details><summary>Solution</summary><p>Friis: \(n_{\mathrm{tot}} = 0.6 + 15/100 = 0.75\) photons. Without the JPA, about 15 photons: a twentyfold increase in the integration time needed for the same SNR.</p></details></li>
+</ol></div>
+</section>

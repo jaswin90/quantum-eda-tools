@@ -1,0 +1,50 @@
+<section id="sec-h-other"><h2>Other qubits: trapped ions, neutral atoms, spins and topological proposals</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand how trapped-ion, neutral-atom and semiconductor spin qubits work: what the qubit is, how it is trapped, how gates and readout are done.</li>
+<li>Know what limits each, and what in each is manufactured and therefore varies.</li>
+<li>Compare platforms on the DiVincenzo criteria and on manufacturing concerns.</li>
+</ul></div>
+
+<h3 id="sec-h-o-ion">Trapped ions</h3>
+<p><b>The qubit.</b> Two levels of a single atomic ion (for example \(^{171}\)Yb\(^+\) or \(^{40}\)Ca\(^+\)): either two hyperfine ground states split by GHz frequencies (very long coherence, seconds to minutes) or a ground and a long-lived optical state. Every ion of an isotope is identical, so there is no qubit-to-qubit fabrication variation [@haffner2008].</p>
+<p><b>The trap.</b> Static electric fields cannot confine a charge in 3D (Earnshaw's theorem, a consequence of Laplace's equation). A <b>Paul trap</b> adds a radio-frequency field at \(\Omega\sim2\pi\times10\)–\(50\) MHz; averaging the fast motion gives an effective "pseudopotential" proportional to \(|\mathbf E_{\mathrm{rf}}|^2\) (@lf:eq-pseudo). Modern traps are <b>surface-electrode</b> chips with ions 50–100 µm above the surface; static voltages on tens to thousands of DC electrodes shape the potential and move ions between zones.</p>
+<p><b>Gates and readout.</b> Ions in a chain share collective motional modes, which act as a quantum bus. Laser or microwave fields couple the internal state to the motion, and the Mølmer–Sørensen gate [@molmer1999] uses a bichromatic field to create an effective \(X\otimes X\) interaction mediated by the motion, without needing the motion to be in its ground state. Two-qubit gate errors below \(10^{-3}\) are routine. Readout uses state-dependent fluorescence: one state scatters many photons under a resonant laser, the other none.</p>
+<p><b>Limits and manufacturing.</b> Gates are slow (tens to hundreds of µs) compared with superconducting gates; electric-field noise from electrode surfaces heats the motion at a rate rising steeply as the ion approaches the surface (@lf:sec-mod-ion); scaling to many ions needs transport, junctions and integrated optics. What is manufactured is the trap chip: electrode geometry (which sets the potentials, computed with electrostatic solvers), multilayer routing for hundreds of electrode lines, integrated waveguides and grating couplers to deliver laser light, and, in microwave-gate designs, current-carrying structures. The variation that matters is in the trap, not the qubit.</p>
+
+<h3 id="sec-h-o-atom">Neutral atoms</h3>
+<p><b>The qubit.</b> Hyperfine or nuclear-spin states of neutral atoms (rubidium, caesium, strontium, ytterbium), held in arrays of optical tweezers, focused laser spots that trap atoms at their intensity maxima. Arrays of hundreds to thousands of atoms are loaded randomly and rearranged by moving tweezers into defect-free patterns.</p>
+<p><b>Gates.</b> Exciting an atom to a high-lying <b>Rydberg state</b> (principal quantum number 50–100) gives it an enormous dipole moment; two Rydberg atoms within several micrometres interact so strongly that only one can be excited at a time (the <b>Rydberg blockade</b>). A sequence of laser pulses exploiting blockade implements a CZ gate [@jaksch2000; @saffman2010]. Fidelities have passed 99.5% [@evered2023].</p>
+<p><b>Limits and manufacturing.</b> Atoms are lost occasionally (an erasure error, which codes handle well); Rydberg states decay; laser intensity and phase noise limit fidelity; readout is slow and often destructive. Reconfigurability is the strength: moving atoms gives flexible connectivity, a natural fit for qLDPC codes (@b4:sec-i-qec2-ldpc). As with ions, the qubits do not vary; the engineering is in the optics, which are moving onto photonic integrated circuits and spatial light modulators, and in vacuum and laser systems (@lf:sec-mod-atom).</p>
+
+<h3 id="sec-h-o-spin">Semiconductor spin qubits</h3>
+<p><b>The qubit.</b> The spin of a single electron (or hole) confined in a gate-defined quantum dot in silicon or germanium, a few tens of nanometres across [@loss1998]. Isotopically purified \(^{28}\)Si removes nuclear spins and gives long coherence. Frequencies are set by a magnetic field, \(hf = g\mu_BB\) (@b3:sec-q-spin-pauli).</p>
+<p><b>Gates and readout.</b> Single-qubit gates use electron spin resonance (microwave magnetic fields) or electric-dipole spin resonance (oscillating the electron in a magnetic field gradient from a micromagnet). Two-qubit gates use the exchange interaction \(J\approx4t^2/U\) (@b3:sec-q-sec-tb), switched by a barrier gate between dots. Readout converts spin to charge (only one spin state can tunnel to a reservoir or neighbour) and detects the charge with a nearby sensor dot.</p>
+<p><b>Limits and manufacturing.</b> Devices are made on CMOS lines with transistor-like gate stacks [@zwerver2022], which promises dense integration and co-integrated cryogenic control electronics. Each dot's operating point depends on local disorder (charge traps, interface roughness, valley splitting in silicon), so threshold voltages vary from dot to dot and must be tuned individually; charge noise couples to qubits through \(\partial J/\partial V\) and the micromagnet gradient. The quantity that most needs a manufacturing model is the variation of dot parameters across a wafer, which is what a quantum-dot compact model in a PDK would capture (@lf:sec-mod-spin).</p>
+
+<h3 id="sec-h-o-topo">Topological qubits</h3>
+<p>Majorana zero modes, predicted at the ends of certain superconductor–semiconductor nanowires in a magnetic field, would store a qubit non-locally in a pair of modes, protecting it from local noise by topology rather than by active error correction [@nayak2008]. Measurement-based braiding would implement Clifford gates natively. Microsoft has reported devices passing its topological gap protocol and single-shot parity measurements, but whether these realise topological protection is disputed (@lf:sec-mod-topo). If validated, the manufacturing problems would resemble those of spin qubits: gate-defined nanostructures in heterostructures, with disorder as the main enemy.</p>
+
+<h3 id="sec-h-o-compare">Comparison</h3>
+<figure class="tbl" id="tab-h-compare"><figcaption>Qubit platforms compared (order-of-magnitude values typical of leading results by 2026).</figcaption>
+<div class="tblwrap"><table>
+<tr><th></th><th>Superconducting</th><th>Trapped ion</th><th>Neutral atom</th><th>Spin (Si)</th><th>Photonic</th></tr>
+<tr><td>Two-qubit gate time</td><td>20–100 ns</td><td>10–200 µs</td><td>0.2–1 µs</td><td>50–500 ns</td><td>fusion per clock</td></tr>
+<tr><td>Two-qubit error</td><td>\(10^{-3}\)</td><td>\(10^{-3}\)–\(10^{-4}\)</td><td>\(5\times10^{-3}\)</td><td>\(10^{-2}\)–\(10^{-3}\)</td><td>loss-dominated</td></tr>
+<tr><td>Coherence</td><td>0.1–1 ms</td><td>s</td><td>s (hyperfine)</td><td>ms (echo)</td><td>n/a (flying)</td></tr>
+<tr><td>Connectivity</td><td>Nearest neighbour</td><td>All-to-all in a chain</td><td>Reconfigurable</td><td>Nearest neighbour</td><td>Set by optics</td></tr>
+<tr><td>Qubits vary in manufacture?</td><td>Yes (junctions)</td><td>No</td><td>No</td><td>Yes (dots)</td><td>Sources and components</td></tr>
+<tr><td>What is manufactured</td><td>Qubit chip</td><td>Trap chip, optics</td><td>Optics</td><td>Qubit chip</td><td>Photonic chip</td></tr>
+</table></div></figure>
+<p>No platform dominates on every axis. For design automation the key row is the second last: where qubits themselves vary, Hamiltonian-level variability tools (the review's §3–§4) are central; where only the control hardware varies, the problem moves to electrode, optical and photonic design.</p>
+
+<div class="eda"><p>The review applies one lens to every platform: what maps layout to Hamiltonian, what varies in manufacture, and what is missing from the tool chain (@lf:sec-mod). This chapter supplies the physics behind each answer; the review supplies the industrial context and the tool gaps.</p></div>
+
+<div class="exercises" id="ex-h-other"><h4>Exercises</h4><ol>
+<li>Why can an ion not be trapped by static electric fields alone?
+<details><summary>Solution</summary><p>In free space the electrostatic potential obeys Laplace's equation, so it has no local minima: the sum of second derivatives is zero, so if the potential curves upward in one direction it curves downward in another. A charge always has an escape direction. Oscillating fields evade this because the time-averaged pseudopotential is not a solution of Laplace's equation.</p></details></li>
+<li>An electron spin qubit has \(g = 2\). What field gives a 20 GHz qubit, and what is the thermal population of the excited state at 100 mK?
+<details><summary>Solution</summary><p>\(B = hf/(g\mu_B) = 1.325\times10^{-23}/(1.855\times10^{-23})\approx0.71\) T. \(hf/k_BT = 20\times0.048/0.1 = 9.6\), population \(\approx\ee^{-9.6}\approx7\times10^{-5}\). Spin qubits can run warmer than transmons, one of their attractions for co-integrated electronics.</p></details></li>
+<li>A neutral-atom array loads each site with probability 0.55. How many sites must be loaded to have 99% probability of at least 200 atoms for rearrangement?
+<details><summary>Solution</summary><p>Binomial with mean \(0.55N\) and standard deviation \(\sqrt{0.2475N}\). Need \(0.55N - 2.33\sqrt{0.2475N}\ge200\); with \(N = 390\): mean 214.5, sd 9.8, \(214.5 - 22.9 = 191.6\), too few. \(N = 405\): mean 222.8, sd 10.0, \(222.8 - 23.3 = 199.5\). So about 406 sites.</p></details></li>
+</ol></div>
+</section>

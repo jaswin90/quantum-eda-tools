@@ -48,14 +48,54 @@ document.addEventListener("DOMContentLoaded", function () {
 <header class="topbar">
 <a class="brand" href="index.html">Book 6 · <span>Quantum Hardware</span></a>
 <span class="spacer"></span>
-<nav><a href="../index.html">Roadmap</a><a href="#references">Exercises</a><a href="../../index.html">Lab to Foundry</a></nav>
+<nav><a href="../index.html">Roadmap</a><a href="#ex-h-super">Exercises</a><a href="../../index.html">Lab to Foundry</a></nav>
 <button class="btn icon-btn" id="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
 </header>
 <div class="layout">
 <nav class="toc" aria-label="Contents">
   <p class="toc-title">Contents</p>
   <ol>
-<li class="toc2"><a href="#sec-soon">In preparation</a></li>
+<li class="toc2"><a href="#sec-h-preface">How to use this book</a></li>
+<li class="toc2"><a href="#sec-h-super"><span class="tocnum">1</span>Superconductivity for quantum engineers</a></li>
+<li class="toc3"><a href="#sec-h-sc-facts"><span class="tocnum">1.1</span>The facts</a></li>
+<li class="toc3"><a href="#sec-h-sc-bcs"><span class="tocnum">1.2</span>Cooper pairs and the gap</a></li>
+<li class="toc3"><a href="#sec-h-sc-psi"><span class="tocnum">1.3</span>The macroscopic wavefunction</a></li>
+<li class="toc3"><a href="#sec-h-sc-lk"><span class="tocnum">1.4</span>Kinetic inductance</a></li>
+<li class="toc3"><a href="#sec-h-sc-qp"><span class="tocnum">1.5</span>Quasiparticles</a></li>
+<li class="toc2"><a href="#sec-h-jj"><span class="tocnum">2</span>The Josephson junction</a></li>
+<li class="toc3"><a href="#sec-h-jj-rel"><span class="tocnum">2.1</span>The Josephson relations</a></li>
+<li class="toc3"><a href="#sec-h-jj-ind"><span class="tocnum">2.2</span>A nonlinear inductor</a></li>
+<li class="toc3"><a href="#sec-h-jj-ab"><span class="tocnum">2.3</span>From room-temperature resistance to \(E_J\)</a></li>
+<li class="toc3"><a href="#sec-h-jj-squid"><span class="tocnum">2.4</span>SQUIDs: tunable junctions</a></li>
+<li class="toc3"><a href="#sec-h-jj-fab"><span class="tocnum">2.5</span>How junctions are made</a></li>
+<li class="toc2"><a href="#sec-h-quant"><span class="tocnum">3</span>Circuit quantisation: from Cooper-pair box to transmon and fluxonium</a></li>
+<li class="toc3"><a href="#sec-h-q-method"><span class="tocnum">3.1</span>The method</a></li>
+<li class="toc3"><a href="#sec-h-q-cpb"><span class="tocnum">3.2</span>The Cooper-pair box</a></li>
+<li class="toc3"><a href="#sec-h-q-transmon"><span class="tocnum">3.3</span>The transmon</a></li>
+<li class="toc3"><a href="#sec-h-q-flux"><span class="tocnum">3.4</span>Fluxonium and other circuits</a></li>
+<li class="toc2"><a href="#sec-h-cqed"><span class="tocnum">4</span>Circuit QED: coupling, readout and amplification</a></li>
+<li class="toc3"><a href="#sec-h-cq-g"><span class="tocnum">4.1</span>The coupling strength</a></li>
+<li class="toc3"><a href="#sec-h-cq-disp"><span class="tocnum">4.2</span>Dispersive readout</a></li>
+<li class="toc3"><a href="#sec-h-cq-purcell"><span class="tocnum">4.3</span>The Purcell effect and filters</a></li>
+<li class="toc3"><a href="#sec-h-cq-chain"><span class="tocnum">4.4</span>The measurement chain</a></li>
+<li class="toc2"><a href="#sec-h-gates"><span class="tocnum">5</span>Gates on superconducting qubits</a></li>
+<li class="toc3"><a href="#sec-h-g-single"><span class="tocnum">5.1</span>Single-qubit gates and DRAG</a></li>
+<li class="toc3"><a href="#sec-h-g-zz"><span class="tocnum">5.2</span>Coupled transmons and the \(ZZ\) problem</a></li>
+<li class="toc3"><a href="#sec-h-g-coupler"><span class="tocnum">5.3</span>Tunable couplers and the CZ gate</a></li>
+<li class="toc3"><a href="#sec-h-g-cr"><span class="tocnum">5.4</span>Cross-resonance</a></li>
+<li class="toc3"><a href="#sec-h-g-budget"><span class="tocnum">5.5</span>From gate scheme to design constraints</a></li>
+<li class="toc2"><a href="#sec-h-decoh"><span class="tocnum">6</span>Where coherence is lost: loss and noise in superconducting circuits</a></li>
+<li class="toc3"><a href="#sec-h-d-budget"><span class="tocnum">6.1</span>The \(T_1\) budget</a></li>
+<li class="toc3"><a href="#sec-h-d-tls"><span class="tocnum">6.2</span>Two-level systems</a></li>
+<li class="toc3"><a href="#sec-h-d-other"><span class="tocnum">6.3</span>Other relaxation channels</a></li>
+<li class="toc3"><a href="#sec-h-d-dephase"><span class="tocnum">6.4</span>Dephasing</a></li>
+<li class="toc2"><a href="#sec-h-other"><span class="tocnum">7</span>Other qubits: trapped ions, neutral atoms, spins and topological proposals</a></li>
+<li class="toc3"><a href="#sec-h-o-ion"><span class="tocnum">7.1</span>Trapped ions</a></li>
+<li class="toc3"><a href="#sec-h-o-atom"><span class="tocnum">7.2</span>Neutral atoms</a></li>
+<li class="toc3"><a href="#sec-h-o-spin"><span class="tocnum">7.3</span>Semiconductor spin qubits</a></li>
+<li class="toc3"><a href="#sec-h-o-topo"><span class="tocnum">7.4</span>Topological qubits</a></li>
+<li class="toc3"><a href="#sec-h-o-compare"><span class="tocnum">7.5</span>Comparison</a></li>
+    <li class="toc2"><a href="#references">References</a></li>
   </ol>
 </nav>
 <main>
@@ -65,11 +105,390 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Quantum Hardware: Superconducting Circuits and Other Qubits</h1>
   <p class="subtitle">Superconductivity, Josephson junctions, circuit quantisation, circuit QED, gates, decoherence, and trapped ions, neutral atoms and spins</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">0 chapters · 0 numbered equations · 0 exercises with solutions · about 55 hours of study</p>
+  <p class="meta">7 chapters · 20 numbered equations · 21 exercises with solutions · about 55 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../classical-physics/index.html">Book 2: Classical Physics</a>, <a href="../quantum-mechanics/index.html">Book 3: Quantum Mechanics</a>, <a href="../quantum-information/index.html">Book 4: Quantum Computing</a>, <a href="../quantum-photonics/index.html">Book 5: Quantum Photonics</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
-<section id="sec-soon" class="unnumbered"><h2>In preparation</h2><p>This book has not been written yet.</p></section>
+<section id="sec-h-preface" class="unnumbered"><h2>How to use this book</h2>
+<p>This book is about building qubits. Most of it concerns superconducting circuits, because they are the platform whose design most resembles classical chip design, whose parameters are set by drawn geometry and fabrication process, and which the review treats in most depth. The final chapter applies the same questions (what is the qubit, what sets its parameters, what limits its coherence, what varies in manufacture) to trapped ions, neutral atoms, spin qubits and topological proposals; photonic qubits were the subject of Book 5.</p>
+<p>The chapters follow the path of a designer: superconductivity (why the metal is special), the Josephson junction (the one nonlinear element), circuit quantisation (from a circuit diagram to a Hamiltonian), circuit QED (how qubits are read out and coupled), gates (how they are controlled), and decoherence (what limits them). By the end you should be able to take the parameters of a real transmon processor, explain where each number comes from, and say what a 1% change in each fabrication input would do. That is the starting point of the review's §3–§5.</p>
+<p>Prerequisites: Book 2 (especially the circuit Lagrangian, transmission lines and thermal noise), Book 3 (oscillators, two-level systems, perturbation theory, open systems) and Book 5 Chapter 4 (Jaynes–Cummings). The engineer's guide by Krantz <i>et al.</i> <span class="cite">[<a href="#ref-krantz2019">1</a>]</span> and the review of circuit QED by Blais <i>et al.</i> <span class="cite">[<a href="#ref-blais2021">2</a>]</span> are the best companions.</p>
+</section>
 
+<section id="sec-h-super"><h2><span class="secnum">1</span> Superconductivity for quantum engineers</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Know the experimental facts of superconductivity and the BCS picture of Cooper pairs and the energy gap.</li>
+<li>Describe the condensate by a macroscopic wavefunction, and derive the London equations and flux quantisation from it.</li>
+<li>Understand kinetic inductance and quasiparticles quantitatively, and know the common materials.</li>
+</ul></div>
+
+<h3 id="sec-h-sc-facts"><span class="secnum">1.1</span> The facts</h3>
+<p>Below a critical temperature \(T_c\), many metals lose all DC resistance and expel magnetic fields (the Meissner effect). Currents in a superconducting ring persist for years. Superconductivity is destroyed by a large enough magnetic field or current. For quantum devices the relevant materials are aluminium (\(T_c = 1.2\) K), used for Josephson junctions; niobium (9.2 K), tantalum (4.4 K in its \(\alpha\) phase), and titanium nitride (around 4.5 K, depending on stoichiometry), used for wiring, capacitors and resonators; and disordered films such as NbN, NbTiN and granular aluminium, used where high kinetic inductance is wanted. Operating at 10–20 mK, far below every \(T_c\), the metals are deep in their superconducting state.</p>
+
+<h3 id="sec-h-sc-bcs"><span class="secnum">1.2</span> Cooper pairs and the gap</h3>
+<p>Cooper showed in 1956 that the filled Fermi sea of a metal is unstable to any attractive interaction between electrons, however weak: two electrons with opposite momenta and spins just above the Fermi surface form a bound pair. In a metal the attraction comes from the lattice: an electron distorts the positive ions around it, and the distortion attracts a second electron a little later. BCS theory <span class="cite">[<a href="#ref-bcs1957">3</a>]</span> showed that all the electrons near the Fermi surface pair up coherently into a single many-body ground state. The excitations above it, called <b>quasiparticles</b>, need energy at least \(\Delta\) each, and since breaking a pair creates two, the minimum energy to disturb the condensate is \(2\Delta\), with</p>
+<div class="eq" id="eq-h-gap">$$ \Delta(0) \approx 1.76\,k_BT_c .  \tag{1}$$</div>
+<p>For aluminium \(\Delta\approx180\) µeV, or \(2\Delta/h\approx88\) GHz. A 5 GHz microwave photon carries far too little energy to break a pair, so the condensate does not absorb it; that is why superconducting resonators can have quality factors above a million <span class="cite">[<a href="#ref-tinkham2004">4</a>]</span>.</p>
+
+<h3 id="sec-h-sc-psi"><span class="secnum">1.3</span> The macroscopic wavefunction</h3>
+<p>Because all pairs occupy the same quantum state, the condensate can be described by a single complex field \(\psi(\mathbf r) = \sqrt{n_s}\,\ee^{\ii\theta(\mathbf r)}\), where \(n_s\) is the density of pairs and \(\theta\) a phase common to all of them. Treating pairs as particles of charge \(q = -2e\) and mass \(m^* = 2m_e\), the quantum-mechanical current density in a vector potential \(\mathbf A\) is</p>
+<div class="eq" id="eq-h-current">$$ \mathbf J_s = \frac{q\,n_s}{m^*}\big(\hbar\nabla\theta - q\mathbf A\big) .  \tag{2}$$</div>
+<p>Two consequences follow immediately.</p>
+<p><b>The London equations.</b> In a simply connected sample with uniform phase, taking the curl of <a class="xref" href="#eq-h-current">(2)</a> gives \(\nabla\times\mathbf J_s = -\frac{q^2n_s}{m^*}\mathbf B\). Combined with Ampère's law, \(\nabla^2\mathbf B = \mathbf B/\lambda_L^2\) with the <b>London penetration depth</b> \(\lambda_L = \sqrt{m^*/\mu_0n_sq^2}\). Fields and currents are confined to a surface layer of about 50–100 nm (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-max-super">Book 2 §5.5</a>).</p>
+<p><b>Flux quantisation.</b> Deep inside a thick superconducting ring, \(\mathbf J_s = 0\), so \(\hbar\nabla\theta = q\mathbf A\). Integrating around the ring, the left side gives \(\hbar\) times the change of phase around the loop, which must be a multiple of \(2\pi\) for \(\psi\) to be single-valued, and the right gives \(q\Phi\). Hence the flux through the ring is quantised:</p>
+<div class="eq" id="eq-h-fluxq">$$ \Phi = n\,\Phi_0, \qquad \Phi_0 = \frac{h}{2e}\approx2.068\times10^{-15}\ \mathrm{Wb} .  \tag{3}$$</div>
+<p>The factor 2 in \(\Phi_0\) was the first direct evidence that the charge carriers are pairs. Flux quantisation underlies SQUIDs, flux-tunable qubits, and, as an engineering hazard, trapped vortices in ground planes, which cause loss and must be pinned by holes in the metal ("flux traps").</p>
+
+<h3 id="sec-h-sc-lk"><span class="secnum">1.4</span> Kinetic inductance</h3>
+<p>The supercurrent's kinetic energy \(\int\tfrac12n_sm^*v_s^2\dd V\) adds to the magnetic energy and acts as an inductance. Writing \(\mathbf J_s = n_sq\mathbf v_s\), the kinetic inductance of a wire of length \(\ell\) and cross-section \(A\) (with thickness and width \(\gg\lambda_L\) for this simple form, or \(\ll\lambda_L\) with \(A\) the full area) is</p>
+<div class="eq" id="eq-h-lk">$$ L_k = \frac{m^*}{n_sq^2}\,\frac{\ell}{A} = \mu_0\lambda_L^2\,\frac{\ell}{A} .  \tag{4}$$</div>
+<p>In thick films it is a small correction to the geometric inductance, but it changes resonator frequencies by a fraction of a percent, enough to matter at the precision of <a class="xref ext" href="../../index.html#eq-sens">Lab to Foundry eq. (8)</a>. In thin disordered films, where \(n_s\) is small, it dominates and is used deliberately: superinductors for fluxonium, compact resonators, and kinetic-inductance parametric amplifiers. Because \(n_s\) depends on temperature and on current, kinetic inductance makes resonators shift with temperature and with power, and it varies with film thickness and stoichiometry across a wafer: a process variable in its own right.</p>
+
+<h3 id="sec-h-sc-qp"><span class="secnum">1.5</span> Quasiparticles</h3>
+<p>In thermal equilibrium the density of quasiparticles is \(n_{qp}\approx2D(E_F)\sqrt{2\pi\Delta k_BT}\,\ee^{-\Delta/k_BT}\), utterly negligible at 20 mK for aluminium (\(\Delta/k_BT\approx100\)). Yet measured devices show residual quasiparticle densities of order \(10^{-8}\)–\(10^{-6}\) per Cooper pair, far above equilibrium. They are generated by stray infrared light leaking into the package, by high-energy radiation (environmental radioactivity and cosmic rays, which deposit energy in the substrate that converts into phonons that break pairs over the whole chip), and by the qubit drive itself. Quasiparticles tunnelling across a Josephson junction relax the qubit, and bursts of quasiparticles from radiation cause correlated errors on many qubits at once <span class="cite">[<a href="#ref-mcewen2022">5</a>]</span>. Mitigations are geometric and material: phonon traps (normal-metal or low-gap islands that absorb phonons), gap engineering (different gaps on the two sides of a junction), infrared shielding, and underground operation in experiments. Each is a design or process choice.</p>
+
+<div class="eda"><p>Material properties enter a design flow as model parameters with uncertainty: penetration depth (hence kinetic inductance), surface resistance, and loss tangents of every interface. The review stresses that these are known only to a few percent and vary across a wafer, which sets a floor on the accuracy of any purely simulated prediction (<a class="xref ext" href="../../index.html#sec-design-accuracy">Lab to Foundry §3.4</a>).</p></div>
+
+<div class="exercises" id="ex-h-super"><h4>Exercises</h4><ol>
+<li>Compute \(2\Delta/h\) for aluminium and niobium from <a class="xref" href="#eq-h-gap">(1)</a>.
+<details><summary>Solution</summary><p>Al: \(\Delta = 1.76\times1.381\times10^{-23}\times1.2 = 2.92\times10^{-23}\) J \(= 182\) µeV; \(2\Delta/h = 88\) GHz. Nb: \(\Delta\approx1.39\) meV (measured about 1.5 meV); \(2\Delta/h\approx680\) GHz.</p></details></li>
+<li>A square superconducting loop of side 20 µm sits in a perpendicular field. What field corresponds to one flux quantum through it?
+<details><summary>Solution</summary><p>\(B = \Phi_0/A = 2.07\times10^{-15}/(4\times10^{-10}) = 5.2\) µT, about a tenth of the Earth's field. That is why magnetic shielding matters for flux-tunable devices.</p></details></li>
+<li>A 200 nm thick aluminium film (\(\lambda_L\approx50\) nm in a thin film, often larger) forms a CPW centre line. Will kinetic inductance be a large or small fraction of the total? What about a 10 nm NbTiN film with \(\lambda_L\approx300\) nm?
+<details><summary>Solution</summary><p>Aluminium: thickness \(\gg\lambda_L\), so current flows in a surface layer and \(L_k\) is a few percent of the geometric inductance (it still shifts frequencies by tens of MHz). NbTiN at 10 nm: \(L_k\approx\mu_0\lambda_L^2/t\approx11\) pH/□ (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-max-super">Book 2 §5.5</a>), more than twice the geometric inductance per square of a 10 µm wide 50 Ω CPW centre line (about 4 pH/□), so \(L_k\) dominates.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-h-jj"><h2><span class="secnum">2</span> The Josephson junction</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Derive the two Josephson relations and the junction's energy \(-E_J\cos\varphi\).</li>
+<li>Treat the junction as a nonlinear inductor, and use the RCSJ model.</li>
+<li>Relate \(E_J\) to the room-temperature resistance (Ambegaokar–Baratoff), and understand its exponential sensitivity to the barrier.</li>
+<li>Use SQUIDs as tunable junctions, and know how junctions are fabricated.</li>
+</ul></div>
+
+<h3 id="sec-h-jj-rel"><span class="secnum">2.1</span> The Josephson relations</h3>
+<p>Two superconductors separated by a barrier thin enough (1–2 nm of aluminium oxide) for Cooper pairs to tunnel form a <b>Josephson junction</b> <span class="cite">[<a href="#ref-josephson1962">6</a>]</span>. Each side has its own condensate phase, and the gauge-invariant phase difference \(\varphi\) across the barrier is the junction's single dynamical variable. Josephson predicted:</p>
+<div class="eq" id="eq-h-josephson">$$ I = I_c\sin\varphi, \qquad V = \frac{\hbar}{2e}\,\frac{\dd\varphi}{\dd t} = \frac{\Phi_0}{2\pi}\,\dot\varphi .  \tag{5}$$</div>
+<p>A supercurrent up to the <b>critical current</b> \(I_c\) flows with zero voltage (the DC effect), and a constant voltage makes the phase wind and the current oscillate at \(2eV/h\approx483.6\) GHz per millivolt (the AC effect, now the basis of the volt standard). A simple derivation models the junction as a two-level tunnelling problem for the number of pairs transferred: coupling \(-\tfrac{E_J}{2}\sum_N(\ket{N}\bra{N+1} + \mathrm{h.c.})\) between states that differ by one tunnelled pair is diagonalised by phase states \(\ket\varphi = \sum_N\ee^{\ii N\varphi}\ket N\), giving energy \(-E_J\cos\varphi\); the current is \(2e\,\dot N = (2e/\hbar)\,\partial E/\partial\varphi\).</p>
+<p>The second relation says the phase is the junction's flux in units of \(\Phi_0/2\pi\): \(\varphi = 2\pi\Phi/\Phi_0\) with \(\Phi = \int V\dd t\), the node flux of <a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-flux">Book 2 eq. (3)</a>. Integrating the power \(IV\) gives the stored energy</p>
+<div class="eq" id="eq-h-ej">$$ U(\varphi) = -E_J\cos\varphi, \qquad E_J = \frac{\hbar I_c}{2e} = \frac{\Phi_0I_c}{2\pi} .  \tag{6}$$</div>
+<p>This is the potential energy of a pendulum in the junction's flux coordinate.</p>
+
+<h3 id="sec-h-jj-ind"><span class="secnum">2.2</span> A nonlinear inductor</h3>
+<p>For small phase, \(I\approx I_c\varphi = (2\pi I_c/\Phi_0)\Phi\), which is an inductor with</p>
+<div class="eq" id="eq-h-lj">$$ L_J = \frac{\Phi_0}{2\pi I_c} = \Big(\frac{\Phi_0}{2\pi}\Big)^2\frac{1}{E_J}, \qquad L_J(\varphi) = \frac{L_J}{\cos\varphi} .  \tag{7}$$</div>
+<p>A junction with \(I_c = 30\) nA has \(L_J\approx11\) nH and \(E_J/h\approx15\) GHz. The inductance grows with current, so the junction is a <b>nonlinear, dissipationless inductor</b>: the only one available in electronics. Nonlinearity without loss is exactly what a qubit needs (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-qho-anharm">Book 3 §4.4</a>), and it is also what makes parametric amplifiers and frequency converters possible. A real junction also has a capacitance \(C_J\) (a parallel-plate capacitor across the thin oxide, about 50 fF per µm²) and, above the gap voltage, a resistance. The <b>RCSJ</b> (resistively and capacitively shunted junction) model puts these in parallel with the ideal element; its classical dynamics are a damped, driven pendulum, which explains the hysteretic current–voltage curves used to characterise junctions.</p>
+
+<h3 id="sec-h-jj-ab"><span class="secnum">2.3</span> From room-temperature resistance to \(E_J\)</h3>
+<p>The critical current is tied to the normal-state tunnel resistance \(R_n\) by the <b>Ambegaokar–Baratoff</b> relation (<a class="xref ext" href="../../index.html#eq-ab">Lab to Foundry eq. (13)</a>),</p>
+<div class="eq" id="eq-h-ab">$$ I_cR_n = \frac{\pi\Delta}{2e}\quad\Longrightarrow\quad E_J = \frac{h\Delta}{8e^2R_n} = \frac{R_Q}{2R_n}\,\Delta ,  \tag{8}$$</div>
+<p>where \(R_Q = h/(2e)^2\approx6.45\) kΩ is the resistance quantum for Cooper pairs. Since \(R_n\) can be measured at room temperature with a probe station in milliseconds, it is the main manufacturing metric for junctions: every junction on a wafer can be measured warm and its \(E_J\), and hence its qubit's frequency, predicted. The prediction is imperfect: the resistance changes on cooling and ageing, and the gap varies with film thickness, which is why the review proposes a statistical "warm-to-cold" model (<a class="xref ext" href="../../index.html#sec-var-bayes">Lab to Foundry §4.5</a>). For aluminium, \(R_n\approx10\) kΩ gives \(E_J/h\approx14\) GHz.</p>
+<p>The tunnel resistance depends exponentially on the barrier thickness (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#eq-q-tunnel">Book 3 eq. (10)</a>) and inversely on area: \(R_n\propto\ee^{2\kappa d}/A\). With \(\kappa\approx5\) nm\(^{-1}\), a 0.01 nm change in average barrier thickness changes \(R_n\) by 10%. Junction areas are typically \(0.01\)–\(0.05\) µm², so a 5 nm error in a 150 nm linewidth changes the area by several percent. Both effects make junction-to-junction spreads of 1–3% hard to beat, and this, through <a class="xref ext" href="../../index.html#eq-sens">Lab to Foundry eq. (8)</a>, is the root of frequency variability in superconducting processors.</p>
+
+<h3 id="sec-h-jj-squid"><span class="secnum">2.4</span> SQUIDs: tunable junctions</h3>
+<p>Two junctions in parallel in a small loop form a DC <b>SQUID</b>. Flux quantisation (<a class="xref" href="#eq-h-fluxq">(3)</a>) constrains the two phases, \(\varphi_1 - \varphi_2 = 2\pi\Phi_{\mathrm{ext}}/\Phi_0\), and for identical junctions the pair acts as one junction with</p>
+<div class="eq" id="eq-h-squid">$$ E_J(\Phi_{\mathrm{ext}}) = 2E_{J0}\,\Big|\cos\frac{\pi\Phi_{\mathrm{ext}}}{\Phi_0}\Big| ,  \tag{9}$$</div>
+<p>tunable from \(2E_{J0}\) to zero by an external flux (with asymmetric junctions, to a nonzero minimum). Flux-tunable transmons and tunable couplers use SQUIDs, with a current line nearby supplying the flux. Tunability helps correct fabrication spread and enables fast two-qubit gates, but it exposes the qubit to flux noise (\(\partial\omega/\partial\Phi\ne0\) away from the "sweet spot" where the derivative vanishes) and requires a control line per tunable element.</p>
+
+<h3 id="sec-h-jj-fab"><span class="secnum">2.5</span> How junctions are made</h3>
+<p>The standard process is <b>double-angle shadow evaporation</b> of aluminium through a suspended resist mask, either a bridge (the Dolan technique <span class="cite">[<a href="#ref-dolan1977">7</a>]</span>) or crossed trenches (the "Manhattan" style). Aluminium is evaporated from one angle, the surface is oxidised in a controlled oxygen atmosphere (pressure × time sets the barrier thickness), and a second aluminium layer is evaporated from another angle so that it overlaps the first only at the junction. The process is simple and gives excellent coherence, but it is sensitive to resist profiles, evaporation angles and oxidation conditions, and it is not native to CMOS-style fabs. Industrial lines (imec, MIT Lincoln Laboratory, foundries such as SkyWater and Rigetti's fab) have developed subtractive, overlap or 300 mm-compatible variants (<a class="xref ext" href="../../index.html#sec-land-foundry">Lab to Foundry §2.2</a>). Post-fabrication <b>laser annealing</b> of junctions changes \(R_n\) by a few percent in a controlled way and is used to trim frequencies after measurement (<a class="xref ext" href="../../index.html#sec-var-trim">Lab to Foundry §4.4</a>).</p>
+
+<div class="eda"><p>The junction is where process and design meet most sharply. A design specifies \(E_J\); the process delivers a distribution of \(R_n\) with a wafer-scale gradient and a local random part; trimming narrows the distribution at a cost in test time. The yield problem of the review's §4 is the propagation of this distribution through the frequency formula to collision constraints.</p></div>
+
+<div class="exercises" id="ex-h-jj"><h4>Exercises</h4><ol>
+<li>Compute \(L_J\) and \(E_J/h\) for \(I_c = 20\) nA.
+<details><summary>Solution</summary><p>\(L_J = 2.068\times10^{-15}/(2\pi\times2\times10^{-8}) = 16.5\) nH. \(E_J = \Phi_0I_c/2\pi = 6.58\times10^{-24}\) J, \(E_J/h\approx9.9\) GHz.</p></details></li>
+<li>An aluminium junction has \(R_n = 8\) kΩ. Using \(E_J = (R_Q/2R_n)\Delta\) with \(\Delta = 180\) µeV and \(R_Q = 6.45\) kΩ, find \(E_J/h\).
+<details><summary>Solution</summary><p>\(E_J = (6.45/16)\times180\) µeV \(= 72.6\) µeV; \(E_J/h = 72.6\times10^{-6}\times2.418\times10^{14}\approx17.6\) GHz.</p></details></li>
+<li>A symmetric SQUID has \(E_{J0}/h = 10\) GHz per junction. At what external flux is \(E_J\) half its maximum? What is \(\partial E_J/\partial\Phi\) there, in GHz per \(\Phi_0\)?
+<details><summary>Solution</summary><p>\(|\cos(\pi\Phi/\Phi_0)| = 1/2\) at \(\Phi = \Phi_0/3\). \(\partial E_J/\partial\Phi = -2E_{J0}(\pi/\Phi_0)\sin(\pi/3) = -2\times10\times\pi\times0.866\approx-54\) GHz per \(\Phi_0\). Flux noise of \(10^{-6}\Phi_0\) then moves \(E_J\) by 54 kHz, and the qubit frequency by roughly half that fraction.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-h-quant"><h2><span class="secnum">3</span> Circuit quantisation: from Cooper-pair box to transmon and fluxonium</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Quantise any lumped superconducting circuit with the node-flux method.</li>
+<li>Solve the Cooper-pair-box Hamiltonian in the charge basis and understand charge dispersion.</li>
+<li>Derive the transmon's frequency and anharmonicity, and design a transmon to specification.</li>
+<li>Know the fluxonium and other qubit circuits, and the trade-offs between them.</li>
+</ul></div>
+
+<h3 id="sec-h-q-method"><span class="secnum">3.1</span> The method</h3>
+<p>Book 2 built the Lagrangian of a circuit from node fluxes, and Book 3 quantised oscillators. Combining them gives a recipe that every circuit-design tool implements <span class="cite">[<a href="#ref-vool2017">8</a>, <a href="#ref-rasmussen2021">9</a>]</span>:</p>
+<ol>
+<li>Choose a ground node and assign a flux \(\Phi_i\) to every other node.</li>
+<li>Write the capacitive energy \(\tfrac12\dot{\boldsymbol\Phi}^{\mathsf T}\mathbf C\dot{\boldsymbol\Phi}\) from the capacitance matrix (extracted from the layout).</li>
+<li>Write the inductive energy: \((\Phi_i-\Phi_j)^2/2L\) for each linear inductor and \(-E_J\cos(2\pi(\Phi_i-\Phi_j)/\Phi_0)\) for each junction, adding external fluxes around any loop that encloses one.</li>
+<li>Legendre transform: \(\mathbf Q = \mathbf C\dot{\boldsymbol\Phi}\), \(H = \tfrac12\mathbf Q^{\mathsf T}\mathbf C^{-1}\mathbf Q + U(\boldsymbol\Phi)\).</li>
+<li>Quantise: \([\hat\Phi_i, \hat Q_j] = \ii\hbar\delta_{ij}\). It is convenient to use the dimensionless phase \(\hat\varphi = 2\pi\hat\Phi/\Phi_0\) and Cooper-pair number \(\hat n = \hat Q/2e\), with \([\hat\varphi, \hat n] = \ii\).</li>
+<li>Choose a basis (charge, flux or harmonic-oscillator), truncate, and diagonalise numerically.</li>
+</ol>
+<p>Two subtleties. A node connected to the rest only through capacitors and junctions (an <b>island</b>) has a periodic potential in \(\varphi\), and its conjugate \(\hat n\) has integer eigenvalues: the island holds a whole number of Cooper pairs. Background charges in the environment then enter as an <b>offset charge</b> \(n_g\), a continuous parameter that drifts randomly. And loops with junctions carry external flux, which must be assigned to branches consistently (the result is gauge invariant only if done carefully when fluxes vary in time).</p>
+
+<h3 id="sec-h-q-cpb"><span class="secnum">3.2</span> The Cooper-pair box</h3>
+<p>The simplest qubit circuit is a junction shunted by a capacitance, with a gate capacitor to a voltage source <span class="cite">[<a href="#ref-nakamura1999">10</a>]</span>. Its Hamiltonian is</p>
+<div class="eq" id="eq-h-cpb">$$ H = 4E_C\,(\hat n - n_g)^2 - E_J\cos\hat\varphi, \qquad E_C = \frac{e^2}{2C_\Sigma} ,  \tag{10}$$</div>
+<p>with \(C_\Sigma\) the total capacitance of the island and \(n_g = C_gV_g/2e\). In the charge basis \(\hat n\ket n = n\ket n\), the cosine is \(\cos\hat\varphi = \tfrac12\sum_n(\ket{n}\bra{n+1} + \ket{n+1}\bra n)\): it moves one Cooper pair across the junction. The Hamiltonian is a tridiagonal matrix with \(4E_C(n-n_g)^2\) on the diagonal and \(-E_J/2\) off it, which can be diagonalised with a few dozen charge states (exactly, in terms of Mathieu functions). The ratio \(E_J/E_C\) decides everything (<a class="xref" href="#fig-h-transmon">Figure 1</a>):</p>
+<ul>
+<li>For \(E_J/E_C\lesssim1\) (the original Cooper-pair box), levels depend strongly on \(n_g\): the qubit frequency shifts with every fluctuation of the background charge, and coherence is short.</li>
+<li>For \(E_J/E_C\gtrsim50\) (the <b>transmon</b> <span class="cite">[<a href="#ref-koch2007">11</a>]</span>), the bands flatten: the phase is well localised near \(\varphi = 0\), its conjugate charge is spread over many values, and the dependence on \(n_g\) becomes exponentially small. The price is a smaller anharmonicity.</li>
+</ul>
+<figure id="fig-h-transmon">
+<img src="../figures/fig-h-transmon.svg" alt="Lowest three energy levels of a Cooper-pair box versus offset charge for E_J/E_C equal to 1, 10 and 50.">
+<figcaption><b>Figure 1.</b> The three lowest eigenvalues of <a class="xref" href="#eq-h-cpb">(10)</a> versus offset charge \(n_g\), computed in a basis of 41 charge states, for \(E_J/E_C = 1\), 10 and 50. Energies are in units of the \(0\to1\) transition at \(n_g = 1/4\). As \(E_J/E_C\) grows, the levels become flat (charge-insensitive) and almost equally spaced (weakly anharmonic).</figcaption>
+</figure>
+
+<h3 id="sec-h-q-transmon"><span class="secnum">3.3</span> The transmon</h3>
+<p>For large \(E_J/E_C\) the phase stays small, so expand the cosine: \(-E_J\cos\varphi\approx-E_J + E_J\varphi^2/2 - E_J\varphi^4/24\). The quadratic part with the charging term is a harmonic oscillator of frequency \(\sqrt{8E_JE_C}/\hbar\) (the "plasma frequency"), and the quartic part, treated in first-order perturbation theory exactly as in <a class="xref ext" href="../../foundations/quantum-mechanics/index.html#eq-q-kerr">Book 3 eq. (17)</a>, gives</p>
+<div class="eq" id="eq-h-transmon">$$ \hbar\omega_{01}\approx\sqrt{8E_JE_C} - E_C, \qquad \hbar\alpha = \hbar(\omega_{12}-\omega_{01})\approx-E_C .  \tag{11}$$</div>
+<p>The charge dispersion, the residual \(n_g\) dependence of level \(m\), falls as \(\ee^{-\sqrt{8E_J/E_C}}\) (<a class="xref ext" href="../../index.html#eq-disp">Lab to Foundry eq. (4)</a>). In practice \(E_C/h\approx200\)–\(300\) MHz (\(C_\Sigma\approx65\)–\(100\) fF) and \(E_J/h\approx10\)–\(25\) GHz, giving qubits at 4–6 GHz with anharmonicity of \(-200\) to \(-300\) MHz. The transmon's design is two capacitor pads (which set \(E_C\) and the couplings) joined by a junction or SQUID (which sets \(E_J\)). It is simple, robust and reproducible, which is why it dominates.</p>
+<div class="example"><p><b>Worked example: designing a transmon.</b> Target \(f_{01} = 5.0\) GHz and \(\alpha/2\pi = -250\) MHz. Then \(E_C/h = 250\) MHz, so \(C_\Sigma = e^2/2E_C = (1.602\times10^{-19})^2/(2\times6.626\times10^{-34}\times2.5\times10^8)\approx77\) fF. From <a class="xref" href="#eq-h-transmon">(11)</a>, \(\sqrt{8E_JE_C}/h = 5.25\) GHz, so \(E_J/h = 5.25^2/(8\times0.25) = 13.8\) GHz, \(E_J/E_C = 55\). By <a class="xref" href="#eq-h-ab">(8)</a>, the junction needs \(R_n = R_Q\Delta/2E_J\approx6.45\,\mathrm{k\Omega}\times180\,\mu\mathrm{eV}/(2\times57\,\mu\mathrm{eV})\approx10.2\) kΩ. The designer draws pads whose extracted capacitance (including couplings to resonator and neighbours) totals 77 fF, and requests a junction of 10.2 kΩ from the process. Every percent of error in either quantity moves \(f_{01}\) by about 25 MHz (<a class="xref ext" href="../../index.html#eq-sens">Lab to Foundry eq. (8)</a>).</p></div>
+
+<h3 id="sec-h-q-flux"><span class="secnum">3.4</span> Fluxonium and other circuits</h3>
+<p>The <b>fluxonium</b> <span class="cite">[<a href="#ref-manucharyan2009">12</a>]</span> shunts a small junction with a very large inductance (a chain of a hundred larger junctions or a high-kinetic-inductance wire, a "superinductor"):</p>
+<div class="eq" id="eq-h-fluxonium">$$ H = 4E_C\hat n^2 + \frac{E_L}{2}\big(\hat\varphi - \varphi_{\mathrm{ext}}\big)^2 - E_J\cos\hat\varphi, \qquad E_L = \frac{(\Phi_0/2\pi)^2}{L} .  \tag{12}$$</div>
+<p>The inductor removes the island, so offset charge disappears; at half a flux quantum (\(\varphi_{\mathrm{ext}} = \pi\)) the potential is a double well and the qubit transition can be below 1 GHz with anharmonicity of several GHz. Long coherence (milliseconds have been reported) and high-fidelity gates have been demonstrated <span class="cite">[<a href="#ref-nguyen2019">13</a>]</span>, at the cost of more complex fabrication (a reproducible superinductor) and low-frequency operation, which brings thermal population and slower gates. Other circuits trade differently: the flux qubit (a loop with three junctions), the "0–\(\pi\)" qubit (designed for intrinsic protection), and bosonic qubits that store information in a high-\(Q\) cavity mode controlled by a transmon. Each is a different solution of the same Hamiltonian-engineering problem, and each requires different cells in a design library.</p>
+
+<div class="eda"><p>Circuit quantisation is automated in open tools (scqubits, QuCAT, SQcircuit) and in commercial flows (<a class="xref ext" href="../../index.html#sec-design-extract">Lab to Foundry §3.3</a>). The inputs are a netlist with \(\mathbf C\), \(L\) and \(E_J\) values; the outputs are spectra, matrix elements and sensitivities. The tools are reliable; the inputs are the problem. A capacitance matrix from a coarse mesh, or an \(E_J\) predicted from a warm resistance without uncertainty, propagates directly into the spectrum.</p></div>
+
+<div class="exercises" id="ex-h-quant"><h4>Exercises</h4><ol>
+<li>Write the \(3\times3\) charge-basis Hamiltonian of <a class="xref" href="#eq-h-cpb">(10)</a> for \(n\in\{-1,0,1\}\) at \(n_g = 0\), and find its lowest eigenvalue for \(E_J = E_C\).
+<details><summary>Solution</summary><p>Diagonal \(4E_C(1, 0, 1)\), off-diagonals \(-E_J/2\) between neighbours. With \(E_C = E_J = 1\): \(\begin{pmatrix}4&-0.5&0\\-0.5&0&-0.5\\0&-0.5&4\end{pmatrix}\). The symmetric sector \((a, b, a)\) gives \(\begin{pmatrix}4 & -0.5\\-1 & 0\end{pmatrix}\) acting on \((a,b)\), eigenvalues \(2\pm\sqrt{4.5}\); the lowest is \(-0.12\). (More charge states change this only slightly at \(E_J/E_C = 1\).)</p></details></li>
+<li>A transmon has \(C_\Sigma = 90\) fF and \(E_J/h = 16\) GHz. Estimate \(f_{01}\) and \(\alpha\).
+<details><summary>Solution</summary><p>\(E_C/h = e^2/(2C_\Sigma h) = 2.566\times10^{-38}/(1.8\times10^{-13}\times6.626\times10^{-34})\approx215\) MHz. \(\sqrt{8\times16\times0.215} = 5.25\) GHz, so \(f_{01}\approx5.03\) GHz and \(\alpha/2\pi\approx-215\) MHz.</p></details></li>
+<li>For the transmon of the worked example, by how much does \(f_{01}\) change if \(R_n\) is 2% high?
+<details><summary>Solution</summary><p>\(E_J\propto1/R_n\) falls by about 2%, so \(\sqrt{8E_JE_C}\) falls by 1%: \(0.01\times5.25\) GHz \(\approx52\) MHz. (The fixed \(-E_C\) term does not change.)</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-h-cqed"><h2><span class="secnum">4</span> Circuit QED: coupling, readout and amplification</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Derive the qubit–resonator coupling \(g\) from capacitances and the transmon's charge matrix element.</li>
+<li>Understand dispersive readout: signal, measurement rate, SNR and assignment fidelity.</li>
+<li>Know the Purcell problem and Purcell filters, measurement-induced dephasing and the readout design trade-offs.</li>
+<li>Know the measurement chain from resonator to digitiser.</li>
+</ul></div>
+
+<h3 id="sec-h-cq-g"><span class="secnum">4.1</span> The coupling strength</h3>
+<p>A transmon couples to a resonator through a capacitance \(C_g\). The interaction energy is the product of the transmon's charge and the resonator's voltage, scaled by the capacitive division: \(H_{\mathrm{int}} = 2e\,\beta\,V_{\mathrm{rms}}^0\,\hat n\,(a + a^\dagger)\) with \(\beta = C_g/C_\Sigma\) and \(V^0_{\mathrm{rms}} = \sqrt{\hbar\omega_r/2C_r}\) the resonator's zero-point voltage (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#eq-q-lc">Book 3 eq. (15)</a>). In the transmon regime \(\bra1\hat n\ket0\approx(E_J/8E_C)^{1/4}/\sqrt2\), so</p>
+<div class="eq" id="eq-h-g">$$ \hbar g \approx 2e\,\frac{C_g}{C_\Sigma}\,\sqrt{\frac{\hbar\omega_r}{2C_r}}\;\frac{1}{\sqrt2}\Big(\frac{E_J}{8E_C}\Big)^{1/4} .  \tag{13}$$</div>
+<p>For \(C_g = 5\) fF, \(C_\Sigma = 80\) fF, a 7 GHz resonator with \(C_r = 400\) fF and \(E_J/E_C = 50\), this gives \(g/2\pi\approx\) 80–100 MHz. Every factor is geometric except \(E_J\): designing \(g\) means designing a capacitance, which an electrostatic solver delivers to a few percent. Within the two-level approximation the result is the Jaynes–Cummings model (<a class="xref ext" href="../../foundations/quantum-photonics/index.html#eq-p-jc">Book 5 eq. (9)</a>); including higher transmon levels gives the multi-level model of the review (<a class="xref ext" href="../../index.html#eq-multi">Lab to Foundry eq. (5)</a>).</p>
+
+<h3 id="sec-h-cq-disp"><span class="secnum">4.2</span> Dispersive readout</h3>
+<p>With the qubit detuned from the resonator by \(\Delta\gg g\), the resonator frequency depends on the qubit state, \(\omega_r\pm\chi\), with the transmon dispersive shift</p>
+<div class="eq" id="eq-h-chi">$$ \chi = \frac{g^2}{\Delta}\,\frac{\alpha}{\Delta+\alpha}  \tag{14}$$</div>
+<p>(<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-pert-sw">Book 3 §6.3</a> and <a class="xref ext" href="../../index.html#eq-chi">Lab to Foundry eq. (6)</a>). A microwave tone sent through the readout line at the resonator frequency acquires a qubit-state-dependent phase (<a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-reflect">Book 2 eq. (15)</a>). After amplification and digitisation, the signal integrated over a time \(\tau\) forms two Gaussian clouds in the in-phase/quadrature plane, one per qubit state. Their separation grows linearly with \(\tau\) while noise grows as \(\sqrt\tau\), so the <b>signal-to-noise ratio</b> grows as \(\sqrt\tau\). The optimum design, for a given photon number \(\bar n\) in the resonator, has</p>
+<div class="eq" id="eq-h-ro">$$ \kappa = 2|\chi|, \qquad \Gamma_{\mathrm{meas}} = \frac{8\chi^2\bar n}{\kappa}\ \ \text{(at } \kappa = 2|\chi|\text{: } 4|\chi|\bar n\text{)}, \qquad \mathrm{SNR}^2\approx2\eta\,\Gamma_{\mathrm{meas}}\tau ,  \tag{15}$$</div>
+<p>where \(\Gamma_{\mathrm{meas}}\) is the rate at which which-state information leaks out of the resonator and \(\eta\) the quantum efficiency of the measurement chain (the fraction of that information captured, limited by losses and amplifier noise). Typical numbers: \(\chi/2\pi\approx1\) MHz, \(\kappa/2\pi\approx2\) MHz, \(\bar n\approx5\)–\(10\), \(\eta\approx0.2\)–\(0.5\), giving readout fidelities above 99% in 100–500 ns. The <b>assignment fidelity</b> \(F_a = 1 - \tfrac12[P(1|0) + P(0|1)]\) is limited by overlap of the Gaussian clouds and by \(T_1\) decay during readout (which, from <a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-ode-first">Book 1 §5.1</a>, costs \(\tau/T_1\), about 0.3% for 300 ns and \(T_1 = 100\) µs).</p>
+<p>More photons give faster readout, but the dispersive approximation breaks down at the <b>critical photon number</b> \(n_{\mathrm{crit}} = \Delta^2/4g^2\), and strong drives can excite the transmon out of its qubit subspace ("measurement-induced state transitions"). Readout design is a constrained optimisation over \(g\), \(\Delta\), \(\kappa\) and \(\bar n\).</p>
+
+<h3 id="sec-h-cq-purcell"><span class="secnum">4.3</span> The Purcell effect and filters</h3>
+<p>The same coupling that enables readout lets the qubit decay through the resonator into the readout line at the Purcell rate</p>
+<div class="eq" id="eq-h-purcell">$$ \Gamma_P\approx\kappa\Big(\frac{g}{\Delta}\Big)^2 .  \tag{16}$$</div>
+<p>With \(\kappa/2\pi = 2\) MHz, \(g/2\pi = 100\) MHz and \(\Delta/2\pi = 1.5\) GHz, \(\Gamma_P\approx2\pi\times8.9\) kHz, i.e. a \(T_1\) limit of only 18 µs. Fast readout (large \(\kappa\)) and long \(T_1\) are in direct conflict. The standard solution is a <b>Purcell filter</b>: a band-pass filter (often another resonator, one per readout resonator or shared) between the readout resonator and the line, transparent at \(\omega_r\) and reflective at \(\omega_q\). It suppresses \(\Gamma_P\) by a factor of order \((2\Delta/\kappa_f)^2\) for a filter of bandwidth \(\kappa_f\), and multiplies the number of resonant elements that must land at the right frequency. Equivalent-circuit formulas like this one are approximations; the reliable method is to compute the admittance seen by the junction port with a circuit or field simulation and use \(\Gamma_1 = \Re Y(\omega_q)/C_\Sigma\) (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-pert-golden">Book 3 §6.5</a>).</p>
+<p>Photons in the readout resonator also dephase the qubit through the AC Stark shift: each photon shifts the qubit by \(2\chi\), and photon-number fluctuations (from residual thermal photons, <a class="xref ext" href="../../index.html#eq-dephase">Lab to Foundry eq. (28)</a>, or from the readout drive's tail after a measurement) randomise its phase. This is why readout resonators must be cold and empty when the qubit is idle.</p>
+
+<h3 id="sec-h-cq-chain"><span class="secnum">4.4</span> The measurement chain</h3>
+<p>From the chip, the readout signal passes through circulators or isolators (to stop amplifier noise reaching the qubit), a near-quantum-limited parametric amplifier at the mixing chamber (a JPA or TWPA <span class="cite">[<a href="#ref-macklin2015">14</a>]</span>, with gain of about 20 dB and noise close to half a photon), a HEMT amplifier at 4 K (noise temperature 2–5 K), and room-temperature amplifiers, mixers and digitisers. The first amplifier's noise dominates, because each later stage's noise is divided by the gain of the stages before it (the Friis formula). Without a parametric amplifier, the HEMT's noise of about 10–20 photons would require far longer integration. Frequency multiplexing puts 5–10 readout resonators, at slightly different frequencies, on one feedline with one amplifier chain, which is how readout wiring scales today.</p>
+
+<div class="eda"><p>Readout is a multi-element microwave design problem with tight frequency targets: each qubit's resonator, Purcell filter and feedline coupling must land within a few MHz of design for the dispersive shift, linewidth and multiplexing plan to work. Resonators are distributed elements longer than a millimetre, so lumped models are inadequate; this is where the review's full-wave and black-box extraction methods are essential (<a class="xref ext" href="../../index.html#sec-design-extract">Lab to Foundry §3.3</a>).</p></div>
+
+<div class="exercises" id="ex-h-cqed"><h4>Exercises</h4><ol>
+<li>With \(g/2\pi = 90\) MHz, \(\Delta/2\pi = -1.8\) GHz and \(\alpha/2\pi = -220\) MHz, compute \(\chi\), the optimal \(\kappa\), and \(n_{\mathrm{crit}}\).
+<details><summary>Solution</summary><p>\(g^2/\Delta = 8100/(-1800) = -4.5\) MHz; factor \(\alpha/(\Delta+\alpha) = -220/(-2020) = 0.109\); \(\chi/2\pi\approx-0.49\) MHz. Optimal \(\kappa/2\pi\approx0.98\) MHz. \(n_{\mathrm{crit}} = \Delta^2/4g^2 = 3.24\times10^6/32400 = 100\).</p></details></li>
+<li>For the Purcell example in the text, what filter suppression is needed to reach a Purcell-limited \(T_1\) of 2 ms?
+<details><summary>Solution</summary><p>Unfiltered \(T_1^P = 18\) µs; need a factor of about 110. A filter of bandwidth \(\kappa_f/2\pi = 100\) MHz gives roughly \((2\times1500/100)^2 = 900\), enough.</p></details></li>
+<li>An amplifier chain has a JPA (gain 20 dB, noise 0.6 photons) followed by a HEMT with 15 photons of noise. What is the total input-referred noise?
+<details><summary>Solution</summary><p>Friis: \(n_{\mathrm{tot}} = 0.6 + 15/100 = 0.75\) photons. Without the JPA, about 15 photons: a twentyfold increase in the integration time needed for the same SNR.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-h-gates"><h2><span class="secnum">5</span> Gates on superconducting qubits</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Design single-qubit pulses and understand leakage and the DRAG correction.</li>
+<li>Understand the main two-qubit gate families: tunable-coupler CZ, cross-resonance, and parametric gates.</li>
+<li>Derive the static \(ZZ\) interaction and see why couplers are needed to suppress it.</li>
+<li>Connect gate schemes to frequency-allocation constraints and to the error budget.</li>
+</ul></div>
+
+<h3 id="sec-h-g-single"><span class="secnum">5.1</span> Single-qubit gates and DRAG</h3>
+<p>A microwave pulse at \(\omega_{01}\) on a capacitively coupled drive line implements rotations as in <a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-spin-gates">Book 3 §5.3</a>. The transmon is not a two-level system, though: the drive also couples \(\ket1\leftrightarrow\ket2\), with a matrix element larger by \(\sqrt2\) and detuned by only \(\alpha\). A pulse of duration \(t_g\) has spectral width about \(1/t_g\), so for \(t_g\lesssim 5/|\alpha|\) it causes <b>leakage</b> into \(\ket2\) and a phase error from the AC Stark shift of the \(1\)–\(2\) transition. The <b>DRAG</b> scheme <span class="cite">[<a href="#ref-motzoi2009">15</a>]</span> adds to the in-phase envelope \(\Omega_x(t)\) a quadrature component proportional to its derivative,</p>
+<div class="eq" id="eq-h-drag">$$ \Omega_y(t) = -\beta\,\frac{\dot\Omega_x(t)}{\alpha},  \tag{17}$$</div>
+<p>with \(\beta\approx1\) calibrated in practice. To first order this cancels the leakage transition, and a small detuning corrects the phase error. With DRAG, 20–30 ns single-qubit gates reach errors near \(10^{-4}\), close to the coherence limit of <a class="xref ext" href="../../foundations/quantum-information/index.html#eq-i-coh">Book 4 eq. (9)</a>. <b>Virtual \(Z\)</b> gates (phase updates of later pulses) are exact and instantaneous. Drive-line crosstalk, where one qubit's drive reaches a neighbour, causes errors when the neighbour is near in frequency, one more reason to keep qubit frequencies apart.</p>
+
+<h3 id="sec-h-g-zz"><span class="secnum">5.2</span> Coupled transmons and the \(ZZ\) problem</h3>
+<p>Two transmons coupled directly by a capacitor have an exchange interaction \(g(a_1^\dagger a_2 + a_1a_2^\dagger)\). Treated in second-order perturbation theory including the second excited levels, the energy of \(\ket{11}\) is not the sum of the energies of \(\ket{01}\) and \(\ket{10}\): the states \(\ket{20}\) and \(\ket{02}\) push it. The mismatch is the static \(ZZ\) interaction (<a class="xref ext" href="../../index.html#eq-zz">Lab to Foundry eq. (7)</a>),</p>
+<div class="eq" id="eq-h-zz">$$ \zeta = \omega_{11}-\omega_{10}-\omega_{01} = \frac{2g^2(\alpha_1+\alpha_2)}{(\Delta+\alpha_1)(\alpha_2-\Delta)} , \qquad \Delta = \omega_1-\omega_2 .  \tag{18}$$</div>
+<p>An always-on \(ZZ\) makes each qubit's frequency depend on its neighbour's state, producing correlated phase errors during idling and other gates. For \(g/2\pi = 5\) MHz and typical parameters, \(\zeta/2\pi\) is tens to hundreds of kHz, which over a 1 µs error-correction cycle is a large error. Fixed-coupling architectures (IBM's earlier devices) chose detunings to keep \(\zeta\) small; modern architectures add <b>tunable couplers</b>.</p>
+
+<h3 id="sec-h-g-coupler"><span class="secnum">5.3</span> Tunable couplers and the CZ gate</h3>
+<p>A <b>tunable coupler</b> is a third circuit element, usually a flux-tunable transmon, between two qubits <span class="cite">[<a href="#ref-yan2018">16</a>]</span>. Each qubit couples to the coupler and weakly to each other. The coupler's virtual exchange adds an indirect coupling \(\tilde g\approx g_{12} + \frac{g_1g_2}{2}\big(\frac1{\Delta_1}+\frac1{\Delta_2}\big)\) (with \(\Delta_i\) the qubit–coupler detunings), whose sign depends on whether the coupler sits above or below the qubits. Biasing the coupler at the point where the direct and indirect couplings cancel switches the interaction off, suppressing \(\zeta\) to a few kHz or less. Pulsing the coupler's flux turns the interaction on for a gate.</p>
+<p>The <b>CZ gate</b> uses the avoided crossing between \(\ket{11}\) and \(\ket{20}\): bringing them close, letting the population make one complete cycle \(\ket{11}\to-\ii\ket{20}\to-\ket{11}\), and returning gives \(\ket{11}\) a phase of \(\pi\) relative to the other states: \(\mathrm{diag}(1,1,1,-1)\) up to single-qubit phases. Google's Sycamore and Willow processors use this kind of gate, with durations of 20–40 ns and errors around \(3\times10^{-3}\) to below \(10^{-3}\). Leakage into \(\ket{20}\) is the main hazard; shaping the flux pulse adiabatically controls it. The same coupler mechanism with the \(\ket{01}\leftrightarrow\ket{10}\) crossing gives iSWAP-like gates.</p>
+
+<h3 id="sec-h-g-cr"><span class="secnum">5.4</span> Cross-resonance</h3>
+<p>Fixed-frequency transmons avoid flux noise and control lines. The <b>cross-resonance</b> gate <span class="cite">[<a href="#ref-rigetti2010">17</a>, <a href="#ref-sheldon2016">18</a>]</span> drives the control qubit at the <i>target's</i> frequency. Through the static coupling, this produces an effective Hamiltonian whose leading term is \(\propto Z\otimes X\): the target rotates about \(x\) in a direction that depends on the control's state. Calibrated with echoes and cancellation tones, a \(ZX(\pi/2)\) rotation is equivalent to CNOT up to single-qubit gates. Its rate is proportional to \(g\,\Omega/\Delta\) times a factor involving \(\alpha\), and it is fast only when the qubits are detuned by less than about one anharmonicity (the "straddling regime"), which collides with the need to avoid spectator transitions. Those competing requirements are exactly the "frequency collisions" of the review (<a class="xref ext" href="../../index.html#sec-var-collisions">Lab to Foundry §4.2</a>): a list of forbidden detuning windows that fabricated frequencies must avoid.</p>
+
+<h3 id="sec-h-g-budget"><span class="secnum">5.5</span> From gate scheme to design constraints</h3>
+<figure class="tbl" id="tab-h-gates"><figcaption><b>Table 1.</b> Two-qubit gate schemes and what they ask of the chip.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Scheme</th><th>Hardware</th><th>Frequency constraints</th><th>Main error sources</th></tr>
+<tr><td>Cross-resonance</td><td>Fixed qubits, fixed coupling, one drive line each</td><td>Detunings inside the straddling window, away from collisions</td><td>Static \(ZZ\), spectator errors, collisions</td></tr>
+<tr><td>Coupler CZ / iSWAP</td><td>Tunable coupler per pair, flux line per coupler</td><td>Coupler idle point and trajectory avoid other levels</td><td>Leakage, flux noise, coupler crosstalk</td></tr>
+<tr><td>Parametric (modulated coupler)</td><td>Coupler modulated at a difference frequency</td><td>Modulation sidebands must avoid other transitions</td><td>Slower gates, spurious sidebands</td></tr>
+</table></div></figure>
+<p>Every scheme turns a gate requirement into a set of constraints on fabricated frequencies and couplings, and every constraint has a tolerance window. A processor's yield is the probability that all its gates' windows are met simultaneously, the model of <a class="xref ext" href="../../index.html#eq-pedge">Lab to Foundry eq. (16)</a> and <a class="xref ext" href="../../index.html#eq-yield">Lab to Foundry eq. (17)</a>.</p>
+
+<div class="eda"><p>The review's frequency-allocation problem (Problem 1) is stated in terms of these gate schemes: choose target frequencies and couplings so that, under the fabrication distribution, the probability that no pair violates its collision windows is maximised. The collision windows come from this chapter's physics; the distribution from Chapter 2's junction statistics.</p></div>
+
+<div class="exercises" id="ex-h-gates"><h4>Exercises</h4><ol>
+<li>Evaluate <a class="xref" href="#eq-h-zz">(18)</a> for \(g/2\pi = 4\) MHz, \(\alpha_1 = \alpha_2 = 2\pi\times(-300)\) MHz and \(\Delta/2\pi = 100\) MHz.
+<details><summary>Solution</summary><p>\(2g^2(\alpha_1+\alpha_2) = 2\times16\times(-600) = -19200\); denominator \((100-300)(-300-100) = (-200)(-400) = 80000\). \(\zeta/2\pi = -0.24\) MHz = \(-240\) kHz. Over a 1 µs cycle, a phase of about \(2\pi\times0.24 = 1.5\) rad: far too large without cancellation.</p></details></li>
+<li>For a Gaussian pulse of width \(\sigma = 4\) ns and \(\alpha/2\pi = -250\) MHz, what fraction of the pulse's spectral weight lies beyond 250 MHz detuning (roughly, the leakage drive)? Why does DRAG help even though the Gaussian tail is small?
+<details><summary>Solution</summary><p>Spectral width \(1/\sigma = 2.5\times10^8\) rad/s, i.e. 40 MHz in ordinary frequency. 250 MHz is about 6.3σ, a tiny Gaussian tail. But real pulses are truncated (typically to ±2σ), which adds sinc-like side lobes, and the \(\sqrt2\)-enhanced 1–2 coupling acts during the pulse through a second-order (AC Stark) process. DRAG cancels the 1–2 transition amplitude at first order regardless of pulse truncation.</p></details></li>
+<li>A coupler gives \(g_1 = g_2 = 2\pi\times100\) MHz, qubit–coupler detunings \(\Delta_1 = \Delta_2 = -2\pi\times1\) GHz. What direct coupling \(g_{12}\) cancels the interaction?
+<details><summary>Solution</summary><p>Indirect term \(\tfrac{g_1g_2}{2}(2/\Delta) = g^2/\Delta = 10^4/(-1000) = -10\) MHz (×2π). A direct coupling of \(+10\) MHz cancels it. Shifting the coupler frequency changes \(\Delta\) and switches the effective coupling on.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-h-decoh"><h2><span class="secnum">6</span> Where coherence is lost: loss and noise in superconducting circuits</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Build a \(T_1\) budget from participation ratios and loss tangents, and know where two-level systems live.</li>
+<li>Understand the temperature and power dependence of TLS loss and the time fluctuations of \(T_1\).</li>
+<li>Know the other relaxation channels: quasiparticles, radiation, Purcell and package modes.</li>
+<li>Know the dephasing channels: flux noise, charge noise, photon shot noise.</li>
+</ul></div>
+
+<h3 id="sec-h-d-budget"><span class="secnum">6.1</span> The \(T_1\) budget</h3>
+<p>A qubit relaxes through every channel that can absorb energy at its frequency, and the rates add. The review writes the budget as (<a class="xref ext" href="../../index.html#eq-t1">Lab to Foundry eq. (23)</a>)</p>
+<div class="eq" id="eq-h-t1">$$ \frac{1}{T_1} = \omega_q\sum_i p_i\tan\delta_i + \Gamma_P + \Gamma_{qp} + \Gamma_{\mathrm{rad}} + \Gamma_{\mathrm{lines}} + \dots, \qquad p_i = \frac{\int_{V_i}\varepsilon|\mathbf E|^2\dd V}{\int\varepsilon|\mathbf E|^2\dd V} .  \tag{19}$$</div>
+<p>The first term is dielectric loss (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-max-dielectric">Book 2 §5.3</a>): the electric field of the qubit mode stores a fraction \(p_i\) of its energy in each material region \(i\), which loses a fraction \(\tan\delta_i\) per radian. The regions are the bulk substrate (\(p\sim0.9\), \(\tan\delta\lesssim10^{-7}\) for good silicon or sapphire) and three thin interfaces, each only nanometres thick but with \(\tan\delta\sim10^{-3}\): metal–substrate (MS), substrate–air (SA) and metal–air (MA) <span class="cite">[<a href="#ref-wang2015">19</a>, <a href="#ref-gambetta2017">20</a>]</span>. Their participations are \(10^{-4}\)–\(10^{-3}\) each, concentrated at metal edges where the field diverges (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-stat-cond">Book 2 §4.2</a>). The interface terms usually dominate. That gives designers one lever, geometry (wider gaps and larger pads dilute the edge field and lower \(p_{\mathrm{MS,SA,MA}}\), at the cost of area and larger coupling to package modes), and gives process engineers another, materials and surface preparation (cleaner interfaces, tantalum instead of niobium, removing native oxides, substrate trenching) <span class="cite">[<a href="#ref-place2021">21</a>, <a href="#ref-deleon2021">22</a>]</span>.</p>
+<div class="example"><p><b>Worked example: a participation budget.</b> A 5 GHz transmon has \(p_{\mathrm{sub}} = 0.9\) at \(\tan\delta = 10^{-7}\), and \(p_{\mathrm{MS}} = 3\times10^{-4}\), \(p_{\mathrm{SA}} = 5\times10^{-4}\), \(p_{\mathrm{MA}} = 1\times10^{-4}\), all at \(\tan\delta = 2\times10^{-3}\). Then \(\sum p_i\tan\delta_i = 9\times10^{-8} + 9\times10^{-4}\times2\times10^{-3} = 9\times10^{-8} + 1.8\times10^{-6}\approx1.9\times10^{-6}\), so \(Q\approx5.3\times10^5\) and \(T_1 = Q/\omega_q\approx17\) µs from dielectrics alone. Halving every interface participation by geometry, or halving the interface loss tangent by process, doubles \(T_1\). Modern devices with \(T_1\) of 200–500 µs reach \(Q\) of several million by doing both.</p></div>
+
+<h3 id="sec-h-d-tls"><span class="secnum">6.2</span> Two-level systems</h3>
+<p>The loss in amorphous interfaces comes mostly from microscopic <b>two-level systems</b> (TLS): atoms or small groups of atoms that can tunnel between two nearly equivalent configurations, carrying an electric dipole <span class="cite">[<a href="#ref-muller2019">23</a>]</span>. A TLS near resonance with the qubit absorbs its energy. Because each TLS can absorb only one quantum at a time, TLS loss <b>saturates</b> at high power and at high temperature (when the TLS are thermally populated):</p>
+<div class="eq" id="eq-h-tls">$$ \tan\delta_{\mathrm{TLS}}(\bar n, T) = \tan\delta_0\,\frac{\tanh(\hbar\omega/2k_BT)}{\sqrt{1 + \bar n/n_c}} .  \tag{20}$$</div>
+<p>This is why resonator measurements of materials loss are made at single-photon power: high-power measurements underestimate the loss qubits see (<a class="xref ext" href="../../index.html#eq-tls">Lab to Foundry eq. (24)</a>). Individual TLS also fluctuate in frequency, as they interact with other, slower fluctuators. When a strongly coupled TLS drifts through the qubit frequency, \(T_1\) drops sharply for minutes to hours; the qubit's \(T_1\) is therefore a random process with large variance <span class="cite">[<a href="#ref-klimov2018">24</a>]</span>. A design tool should treat \(T_1\) as a distribution, not a number.</p>
+
+<h3 id="sec-h-d-other"><span class="secnum">6.3</span> Other relaxation channels</h3>
+<ul>
+<li><b>Quasiparticles</b> tunnelling across the junction (<a class="xref" href="#sec-h-sc-qp">§1.5</a>): rate proportional to the quasiparticle density; mitigated by shielding, phonon traps and gap engineering.</li>
+<li><b>Radiation and correlated events</b>: a gamma ray or cosmic-ray muon deposits energy in the substrate, creating a burst of phonons and quasiparticles that suppresses \(T_1\) over the whole chip for about a millisecond <span class="cite">[<a href="#ref-mcewen2022">5</a>, <a href="#ref-vepsalainen2020">25</a>]</span>. Such events, roughly every 10 seconds on a centimetre-scale chip, produce correlated errors that error correction handles poorly.</li>
+<li><b>Purcell and line coupling</b> (<a class="xref" href="#sec-h-cq-purcell">§4.3</a>): computed from the admittance at the junction.</li>
+<li><b>Package and box modes</b>: the chip and its enclosure form a cavity with modes that can fall near qubit frequencies for large dies (<a class="xref ext" href="../../index.html#eq-box">Lab to Foundry eq. (25)</a>). Through-substrate vias, airbridges tying ground planes together and carefully designed packages push them up or damp them (<a class="xref ext" href="../../index.html#sec-pkg-modes">Lab to Foundry §6.1</a>).</li>
+<li><b>Radiation into free space and slotline modes</b>: asymmetric structures and unconnected ground planes radiate. Airbridges across CPW lines suppress slotline modes.</li>
+</ul>
+
+<h3 id="sec-h-d-dephase"><span class="secnum">6.4</span> Dephasing</h3>
+<p>Dephasing comes from low-frequency fluctuations of the qubit frequency (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-open-spectra">Book 3 §8.3</a>).</p>
+<ul>
+<li><b>Flux noise</b> with a \(1/f\) spectrum of amplitude about \(1\)–\(5\,\mu\Phi_0/\sqrt{\mathrm{Hz}}\) at 1 Hz, believed to come from surface spins on the metal. It affects only flux-tunable elements away from their sweet spots, with a sensitivity \(\partial\omega/\partial\Phi\) from <a class="xref" href="#eq-h-squid">(9)</a>.</li>
+<li><b>Charge noise</b>: negligible for transmons because of the exponentially small charge dispersion, but important for charge qubits and for the higher levels used in some gates.</li>
+<li><b>Photon shot noise</b> in the readout resonator: residual thermal photons dephase the qubit at a rate \(\approx\bar n_{\mathrm{th}}\kappa\cdot4\chi^2/(\kappa^2+4\chi^2)\) (<a class="xref ext" href="../../index.html#eq-dephase">Lab to Foundry eq. (28)</a>), which is why readout lines need heavy attenuation (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-th-cryo">Book 2 §8.5</a>).</li>
+<li><b>Critical-current fluctuations</b> of the junction: usually small, but a floor for very coherent devices.</li>
+</ul>
+
+<div class="eda"><p>Every term in <a class="xref" href="#eq-h-t1">(19)</a> is a functional of the layout (through \(p_i\), \(\Re Y\) and package modes) and of the process (through \(\tan\delta_i\) and quasiparticle environment). That makes coherence partly <i>designable</i>, and the review's materials section argues for exactly this: participation ratios computed with converged meshes at metal edges, combined with loss tangents measured on the same process, to predict \(T_1\) distributions before fabrication (<a class="xref ext" href="../../index.html#sec-mat-gap">Lab to Foundry §5.3</a>).</p></div>
+
+<div class="exercises" id="ex-h-decoh"><h4>Exercises</h4><ol>
+<li>A resonator measured at high power shows \(Q_i = 2\times10^6\); at single-photon power, \(Q_i = 4\times10^5\). Assuming the difference is saturable TLS loss, what is the low-power TLS loss and what fraction of the total does it contribute?
+<details><summary>Solution</summary><p>\(1/Q_{\mathrm{low}} - 1/Q_{\mathrm{high}} = 2.5\times10^{-6} - 0.5\times10^{-6} = 2\times10^{-6}\): 80% of the low-power loss is TLS.</p></details></li>
+<li>Using the worked example, which single improvement gives the larger \(T_1\): eliminating substrate loss entirely, or reducing SA participation by 40%?
+<details><summary>Solution</summary><p>Substrate: removes \(9\times10^{-8}\) of \(1.89\times10^{-6}\), about 5%. SA: removes \(0.4\times5\times10^{-4}\times2\times10^{-3} = 4\times10^{-7}\), about 21%. Interfaces dominate.</p></details></li>
+<li>A flux-tunable transmon at 0.25 \(\Phi_0\) from its sweet spot has \(\partial f/\partial\Phi\approx2\) GHz/\(\Phi_0\). With quasi-static flux noise of \(5\,\mu\Phi_0\) rms, estimate the rms frequency jitter and \(T_2^*\).
+<details><summary>Solution</summary><p>\(\sigma_f = 2\times10^9\times5\times10^{-6} = 10\) kHz. Gaussian decay \(\ee^{-(2\pi\sigma_f t)^2/2}\) reaches \(1/\ee\) at \(t = \sqrt2/(2\pi\sigma_f)\approx22\) µs. At the sweet spot, first-order sensitivity vanishes and \(T_2^*\) is much longer.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-h-other"><h2><span class="secnum">7</span> Other qubits: trapped ions, neutral atoms, spins and topological proposals</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand how trapped-ion, neutral-atom and semiconductor spin qubits work: what the qubit is, how it is trapped, how gates and readout are done.</li>
+<li>Know what limits each, and what in each is manufactured and therefore varies.</li>
+<li>Compare platforms on the DiVincenzo criteria and on manufacturing concerns.</li>
+</ul></div>
+
+<h3 id="sec-h-o-ion"><span class="secnum">7.1</span> Trapped ions</h3>
+<p><b>The qubit.</b> Two levels of a single atomic ion (for example \(^{171}\)Yb\(^+\) or \(^{40}\)Ca\(^+\)): either two hyperfine ground states split by GHz frequencies (very long coherence, seconds to minutes) or a ground and a long-lived optical state. Every ion of an isotope is identical, so there is no qubit-to-qubit fabrication variation <span class="cite">[<a href="#ref-haffner2008">26</a>]</span>.</p>
+<p><b>The trap.</b> Static electric fields cannot confine a charge in 3D (Earnshaw's theorem, a consequence of Laplace's equation). A <b>Paul trap</b> adds a radio-frequency field at \(\Omega\sim2\pi\times10\)–\(50\) MHz; averaging the fast motion gives an effective "pseudopotential" proportional to \(|\mathbf E_{\mathrm{rf}}|^2\) (<a class="xref ext" href="../../index.html#eq-pseudo">Lab to Foundry eq. (31)</a>). Modern traps are <b>surface-electrode</b> chips with ions 50–100 µm above the surface; static voltages on tens to thousands of DC electrodes shape the potential and move ions between zones.</p>
+<p><b>Gates and readout.</b> Ions in a chain share collective motional modes, which act as a quantum bus. Laser or microwave fields couple the internal state to the motion, and the Mølmer–Sørensen gate <span class="cite">[<a href="#ref-molmer1999">27</a>]</span> uses a bichromatic field to create an effective \(X\otimes X\) interaction mediated by the motion, without needing the motion to be in its ground state. Two-qubit gate errors below \(10^{-3}\) are routine. Readout uses state-dependent fluorescence: one state scatters many photons under a resonant laser, the other none.</p>
+<p><b>Limits and manufacturing.</b> Gates are slow (tens to hundreds of µs) compared with superconducting gates; electric-field noise from electrode surfaces heats the motion at a rate rising steeply as the ion approaches the surface (<a class="xref ext" href="../../index.html#sec-mod-ion">Lab to Foundry §8.1</a>); scaling to many ions needs transport, junctions and integrated optics. What is manufactured is the trap chip: electrode geometry (which sets the potentials, computed with electrostatic solvers), multilayer routing for hundreds of electrode lines, integrated waveguides and grating couplers to deliver laser light, and, in microwave-gate designs, current-carrying structures. The variation that matters is in the trap, not the qubit.</p>
+
+<h3 id="sec-h-o-atom"><span class="secnum">7.2</span> Neutral atoms</h3>
+<p><b>The qubit.</b> Hyperfine or nuclear-spin states of neutral atoms (rubidium, caesium, strontium, ytterbium), held in arrays of optical tweezers, focused laser spots that trap atoms at their intensity maxima. Arrays of hundreds to thousands of atoms are loaded randomly and rearranged by moving tweezers into defect-free patterns.</p>
+<p><b>Gates.</b> Exciting an atom to a high-lying <b>Rydberg state</b> (principal quantum number 50–100) gives it an enormous dipole moment; two Rydberg atoms within several micrometres interact so strongly that only one can be excited at a time (the <b>Rydberg blockade</b>). A sequence of laser pulses exploiting blockade implements a CZ gate <span class="cite">[<a href="#ref-jaksch2000">28</a>, <a href="#ref-saffman2010">29</a>]</span>. Fidelities have passed 99.5% <span class="cite">[<a href="#ref-evered2023">30</a>]</span>.</p>
+<p><b>Limits and manufacturing.</b> Atoms are lost occasionally (an erasure error, which codes handle well); Rydberg states decay; laser intensity and phase noise limit fidelity; readout is slow and often destructive. Reconfigurability is the strength: moving atoms gives flexible connectivity, a natural fit for qLDPC codes (<a class="xref ext" href="../../foundations/quantum-information/index.html#sec-i-qec2-ldpc">Book 4 §7.6</a>). As with ions, the qubits do not vary; the engineering is in the optics, which are moving onto photonic integrated circuits and spatial light modulators, and in vacuum and laser systems (<a class="xref ext" href="../../index.html#sec-mod-atom">Lab to Foundry §8.4</a>).</p>
+
+<h3 id="sec-h-o-spin"><span class="secnum">7.3</span> Semiconductor spin qubits</h3>
+<p><b>The qubit.</b> The spin of a single electron (or hole) confined in a gate-defined quantum dot in silicon or germanium, a few tens of nanometres across <span class="cite">[<a href="#ref-loss1998">31</a>]</span>. Isotopically purified \(^{28}\)Si removes nuclear spins and gives long coherence. Frequencies are set by a magnetic field, \(hf = g\mu_BB\) (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-spin-pauli">Book 3 §5.1</a>).</p>
+<p><b>Gates and readout.</b> Single-qubit gates use electron spin resonance (microwave magnetic fields) or electric-dipole spin resonance (oscillating the electron in a magnetic field gradient from a micromagnet). Two-qubit gates use the exchange interaction \(J\approx4t^2/U\) (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-sec-tb">Book 3 §9.3</a>), switched by a barrier gate between dots. Readout converts spin to charge (only one spin state can tunnel to a reservoir or neighbour) and detects the charge with a nearby sensor dot.</p>
+<p><b>Limits and manufacturing.</b> Devices are made on CMOS lines with transistor-like gate stacks <span class="cite">[<a href="#ref-zwerver2022">32</a>]</span>, which promises dense integration and co-integrated cryogenic control electronics. Each dot's operating point depends on local disorder (charge traps, interface roughness, valley splitting in silicon), so threshold voltages vary from dot to dot and must be tuned individually; charge noise couples to qubits through \(\partial J/\partial V\) and the micromagnet gradient. The quantity that most needs a manufacturing model is the variation of dot parameters across a wafer, which is what a quantum-dot compact model in a PDK would capture (<a class="xref ext" href="../../index.html#sec-mod-spin">Lab to Foundry §8.3</a>).</p>
+
+<h3 id="sec-h-o-topo"><span class="secnum">7.4</span> Topological qubits</h3>
+<p>Majorana zero modes, predicted at the ends of certain superconductor–semiconductor nanowires in a magnetic field, would store a qubit non-locally in a pair of modes, protecting it from local noise by topology rather than by active error correction <span class="cite">[<a href="#ref-nayak2008">33</a>]</span>. Measurement-based braiding would implement Clifford gates natively. Microsoft has reported devices passing its topological gap protocol and single-shot parity measurements, but whether these realise topological protection is disputed (<a class="xref ext" href="../../index.html#sec-mod-topo">Lab to Foundry §8.5</a>). If validated, the manufacturing problems would resemble those of spin qubits: gate-defined nanostructures in heterostructures, with disorder as the main enemy.</p>
+
+<h3 id="sec-h-o-compare"><span class="secnum">7.5</span> Comparison</h3>
+<figure class="tbl" id="tab-h-compare"><figcaption><b>Table 2.</b> Qubit platforms compared (order-of-magnitude values typical of leading results by 2026).</figcaption>
+<div class="tblwrap"><table>
+<tr><th></th><th>Superconducting</th><th>Trapped ion</th><th>Neutral atom</th><th>Spin (Si)</th><th>Photonic</th></tr>
+<tr><td>Two-qubit gate time</td><td>20–100 ns</td><td>10–200 µs</td><td>0.2–1 µs</td><td>50–500 ns</td><td>fusion per clock</td></tr>
+<tr><td>Two-qubit error</td><td>\(10^{-3}\)</td><td>\(10^{-3}\)–\(10^{-4}\)</td><td>\(5\times10^{-3}\)</td><td>\(10^{-2}\)–\(10^{-3}\)</td><td>loss-dominated</td></tr>
+<tr><td>Coherence</td><td>0.1–1 ms</td><td>s</td><td>s (hyperfine)</td><td>ms (echo)</td><td>n/a (flying)</td></tr>
+<tr><td>Connectivity</td><td>Nearest neighbour</td><td>All-to-all in a chain</td><td>Reconfigurable</td><td>Nearest neighbour</td><td>Set by optics</td></tr>
+<tr><td>Qubits vary in manufacture?</td><td>Yes (junctions)</td><td>No</td><td>No</td><td>Yes (dots)</td><td>Sources and components</td></tr>
+<tr><td>What is manufactured</td><td>Qubit chip</td><td>Trap chip, optics</td><td>Optics</td><td>Qubit chip</td><td>Photonic chip</td></tr>
+</table></div></figure>
+<p>No platform dominates on every axis. For design automation the key row is the second last: where qubits themselves vary, Hamiltonian-level variability tools (the review's §3–§4) are central; where only the control hardware varies, the problem moves to electrode, optical and photonic design.</p>
+
+<div class="eda"><p>The review applies one lens to every platform: what maps layout to Hamiltonian, what varies in manufacture, and what is missing from the tool chain (<a class="xref ext" href="../../index.html#sec-mod">Lab to Foundry §8</a>). This chapter supplies the physics behind each answer; the review supplies the industrial context and the tool gaps.</p></div>
+
+<div class="exercises" id="ex-h-other"><h4>Exercises</h4><ol>
+<li>Why can an ion not be trapped by static electric fields alone?
+<details><summary>Solution</summary><p>In free space the electrostatic potential obeys Laplace's equation, so it has no local minima: the sum of second derivatives is zero, so if the potential curves upward in one direction it curves downward in another. A charge always has an escape direction. Oscillating fields evade this because the time-averaged pseudopotential is not a solution of Laplace's equation.</p></details></li>
+<li>An electron spin qubit has \(g = 2\). What field gives a 20 GHz qubit, and what is the thermal population of the excited state at 100 mK?
+<details><summary>Solution</summary><p>\(B = hf/(g\mu_B) = 1.325\times10^{-23}/(1.855\times10^{-23})\approx0.71\) T. \(hf/k_BT = 20\times0.048/0.1 = 9.6\), population \(\approx\ee^{-9.6}\approx7\times10^{-5}\). Spin qubits can run warmer than transmons, one of their attractions for co-integrated electronics.</p></details></li>
+<li>A neutral-atom array loads each site with probability 0.55. How many sites must be loaded to have 99% probability of at least 200 atoms for rearrangement?
+<details><summary>Solution</summary><p>Binomial with mean \(0.55N\) and standard deviation \(\sqrt{0.2475N}\). Need \(0.55N - 2.33\sqrt{0.2475N}\ge200\); with \(N = 390\): mean 214.5, sd 9.8, \(214.5 - 22.9 = 191.6\), too few. \(N = 405\): mean 222.8, sd 10.0, \(222.8 - 23.3 = 199.5\). So about 406 sites.</p></details></li>
+</ol></div>
+</section>
+
+<section id="references" class="references">
+  <h2>References and further reading</h2>
+  <p class="refnote">Numbered in order of first citation in this book. Entries tagged “verify details” were compiled from memory; check volume and page before citing them.</p>
+  <ol class="reflist">
+<li id="ref-krantz2019"><span class="refnum">[1]</span> P. Krantz, M. Kjaergaard, F. Yan et al., “A quantum engineer&#x27;s guide to superconducting qubits,” <i>Appl. Phys. Rev.</i> <b>6</b>, 021318 (2019).</li>
+<li id="ref-blais2021"><span class="refnum">[2]</span> A. Blais, A. L. Grimsmo, S. M. Girvin, A. Wallraff, “Circuit quantum electrodynamics,” <i>Rev. Mod. Phys.</i> <b>93</b>, 025005 (2021).</li>
+<li id="ref-bcs1957"><span class="refnum">[3]</span> J. Bardeen, L. N. Cooper, J. R. Schrieffer, “Theory of superconductivity,” <i>Phys. Rev.</i> <b>108</b>, 1175 (1957).</li>
+<li id="ref-tinkham2004"><span class="refnum">[4]</span> M. Tinkham, <i>Introduction to Superconductivity</i>, 2nd ed. (Dover, 2004).</li>
+<li id="ref-mcewen2022"><span class="refnum">[5]</span> M. McEwen et al., “Resolving catastrophic error bursts from cosmic rays in large arrays of superconducting qubits,” <i>Nat. Phys.</i> <b>18</b>, 107 (2022).</li>
+<li id="ref-josephson1962"><span class="refnum">[6]</span> B. D. Josephson, “Possible new effects in superconductive tunnelling,” <i>Phys. Lett.</i> <b>1</b>, 251 (1962).</li>
+<li id="ref-dolan1977"><span class="refnum">[7]</span> G. J. Dolan, “Offset masks for lift-off photoprocessing,” <i>Appl. Phys. Lett.</i> <b>31</b>, 337 (1977).</li>
+<li id="ref-vool2017"><span class="refnum">[8]</span> U. Vool, M. Devoret, “Introduction to quantum electromagnetic circuits,” <i>Int. J. Circuit Theory Appl.</i> <b>45</b>, 897 (2017).</li>
+<li id="ref-rasmussen2021"><span class="refnum">[9]</span> S. E. Rasmussen, K. S. Christensen, S. P. Pedersen et al., “Superconducting circuit companion: an introduction with worked examples,” <i>PRX Quantum</i> <b>2</b>, 040204 (2021).</li>
+<li id="ref-nakamura1999"><span class="refnum">[10]</span> Y. Nakamura, Yu. A. Pashkin, J. S. Tsai, “Coherent control of macroscopic quantum states in a single-Cooper-pair box,” <i>Nature</i> <b>398</b>, 786 (1999).</li>
+<li id="ref-koch2007"><span class="refnum">[11]</span> J. Koch, T. M. Yu, J. Gambetta et al., “Charge-insensitive qubit design derived from the Cooper pair box,” <i>Phys. Rev. A</i> <b>76</b>, 042319 (2007).</li>
+<li id="ref-manucharyan2009"><span class="refnum">[12]</span> V. E. Manucharyan, J. Koch, L. I. Glazman, M. H. Devoret, “Fluxonium: single Cooper-pair circuit free of charge offsets,” <i>Science</i> <b>326</b>, 113 (2009).</li>
+<li id="ref-nguyen2019"><span class="refnum">[13]</span> L. B. Nguyen, Y.-H. Lin, A. Somoroff et al., “High-coherence fluxonium qubit,” <i>Phys. Rev. X</i> <b>9</b>, 041041 (2019).</li>
+<li id="ref-macklin2015"><span class="refnum">[14]</span> C. Macklin, K. O'Brien, D. Hover et al., “A near–quantum-limited Josephson traveling-wave parametric amplifier,” <i>Science</i> <b>350</b>, 307 (2015).</li>
+<li id="ref-motzoi2009"><span class="refnum">[15]</span> F. Motzoi, J. M. Gambetta, P. Rebentrost, F. K. Wilhelm, “Simple pulses for elimination of leakage in weakly nonlinear qubits,” <i>Phys. Rev. Lett.</i> <b>103</b>, 110501 (2009).</li>
+<li id="ref-yan2018"><span class="refnum">[16]</span> F. Yan, P. Krantz, Y. Sung et al., “Tunable coupling scheme for implementing high-fidelity two-qubit gates,” <i>Phys. Rev. Applied</i> <b>10</b>, 054062 (2018).</li>
+<li id="ref-rigetti2010"><span class="refnum">[17]</span> C. Rigetti, M. Devoret, “Fully microwave-tunable universal gates in superconducting qubits with linear couplings and fixed transition frequencies,” <i>Phys. Rev. B</i> <b>81</b>, 134507 (2010).</li>
+<li id="ref-sheldon2016"><span class="refnum">[18]</span> S. Sheldon, E. Magesan, J. M. Chow, J. M. Gambetta, “Procedure for systematically tuning up cross-talk in the cross-resonance gate,” <i>Phys. Rev. A</i> <b>93</b>, 060302 (2016).</li>
+<li id="ref-wang2015"><span class="refnum">[19]</span> C. Wang, C. Axline, Y. Y. Gao et al., “Surface participation and dielectric loss in superconducting qubits,” <i>Appl. Phys. Lett.</i> <b>107</b>, 162601 (2015).</li>
+<li id="ref-gambetta2017"><span class="refnum">[20]</span> J. M. Gambetta, C. E. Murray, Y.-K.-K. Fung et al., “Investigating surface loss effects in superconducting transmon qubits,” <i>IEEE Trans. Appl. Supercond.</i> <b>27</b>, 1700205 (2017).</li>
+<li id="ref-place2021"><span class="refnum">[21]</span> A. P. M. Place et al., “New material platform for superconducting transmon qubits with coherence times exceeding 0.3 milliseconds,” <i>Nat. Commun.</i> <b>12</b>, 1779 (2021).</li>
+<li id="ref-deleon2021"><span class="refnum">[22]</span> N. P. de Leon, K. M. Itoh, D. Kim et al., “Materials challenges and opportunities for quantum computing hardware,” <i>Science</i> <b>372</b>, eabb2823 (2021).</li>
+<li id="ref-muller2019"><span class="refnum">[23]</span> C. Müller, J. H. Cole, J. Lisenfeld, “Towards understanding two-level-systems in amorphous solids: insights from quantum circuits,” <i>Rep. Prog. Phys.</i> <b>82</b>, 124501 (2019).</li>
+<li id="ref-klimov2018"><span class="refnum">[24]</span> P. V. Klimov et al., “Fluctuations of energy-relaxation times in superconducting qubits,” <i>Phys. Rev. Lett.</i> <b>121</b>, 090502 (2018).</li>
+<li id="ref-vepsalainen2020"><span class="refnum">[25]</span> A. P. Vepsäläinen et al., “Impact of ionizing radiation on superconducting qubit coherence,” <i>Nature</i> <b>584</b>, 551 (2020).</li>
+<li id="ref-haffner2008"><span class="refnum">[26]</span> H. Häffner, C. F. Roos, R. Blatt, “Quantum computing with trapped ions,” <i>Phys. Rep.</i> <b>469</b>, 155 (2008).</li>
+<li id="ref-molmer1999"><span class="refnum">[27]</span> A. Sørensen, K. Mølmer, “Quantum computation with ions in thermal motion,” <i>Phys. Rev. Lett.</i> <b>82</b>, 1971 (1999).</li>
+<li id="ref-jaksch2000"><span class="refnum">[28]</span> D. Jaksch, J. I. Cirac, P. Zoller et al., “Fast quantum gates for neutral atoms,” <i>Phys. Rev. Lett.</i> <b>85</b>, 2208 (2000).</li>
+<li id="ref-saffman2010"><span class="refnum">[29]</span> M. Saffman, T. G. Walker, K. Mølmer, “Quantum information with Rydberg atoms,” <i>Rev. Mod. Phys.</i> <b>82</b>, 2313 (2010).</li>
+<li id="ref-evered2023"><span class="refnum">[30]</span> S. J. Evered et al., “High-fidelity parallel entangling gates on a neutral-atom quantum computer,” <i>Nature</i> <b>622</b>, 268 (2023).</li>
+<li id="ref-loss1998"><span class="refnum">[31]</span> D. Loss, D. P. DiVincenzo, “Quantum computation with quantum dots,” <i>Phys. Rev. A</i> <b>57</b>, 120 (1998).</li>
+<li id="ref-zwerver2022"><span class="refnum">[32]</span> A. M. J. Zwerver et al., “Qubits made by advanced semiconductor manufacturing,” <i>Nat. Electron.</i> <b>5</b>, 184 (2022).</li>
+<li id="ref-nayak2008"><span class="refnum">[33]</span> C. Nayak, S. H. Simon, A. Stern et al., “Non-Abelian anyons and topological quantum computation,” <i>Rev. Mod. Phys.</i> <b>80</b>, 1083 (2008).</li>
+  </ol>
+</section>
 <nav class="pager" aria-label="Series"><a class="prev" href="../quantum-photonics/index.html"><span>Previous · Book 5</span>Quantum Photonics</a><a class="next" href="../quantum-manufacturing/index.html"><span>Next · Book 7</span>Making Quantum Chips: Fabrication, Simulation, Yield and Design Automation</a></nav>
 <footer class="page-footer">
   <p>Foundations of Quantum Engineering, Book 6. Source: <code>curriculum/6-quantum-hardware/</code>. Rebuild with <code>make</code>; figures are computed by <code>scripts/make_foundation_figures.py</code>. Built 2026-11-14.</p>

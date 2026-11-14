@@ -1,0 +1,46 @@
+<section id="sec-h-gates"><h2>Gates on superconducting qubits</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Design single-qubit pulses and understand leakage and the DRAG correction.</li>
+<li>Understand the main two-qubit gate families: tunable-coupler CZ, cross-resonance, and parametric gates.</li>
+<li>Derive the static \(ZZ\) interaction and see why couplers are needed to suppress it.</li>
+<li>Connect gate schemes to frequency-allocation constraints and to the error budget.</li>
+</ul></div>
+
+<h3 id="sec-h-g-single">Single-qubit gates and DRAG</h3>
+<p>A microwave pulse at \(\omega_{01}\) on a capacitively coupled drive line implements rotations as in @b3:sec-q-spin-gates. The transmon is not a two-level system, though: the drive also couples \(\ket1\leftrightarrow\ket2\), with a matrix element larger by \(\sqrt2\) and detuned by only \(\alpha\). A pulse of duration \(t_g\) has spectral width about \(1/t_g\), so for \(t_g\lesssim 5/|\alpha|\) it causes <b>leakage</b> into \(\ket2\) and a phase error from the AC Stark shift of the \(1\)–\(2\) transition. The <b>DRAG</b> scheme [@motzoi2009] adds to the in-phase envelope \(\Omega_x(t)\) a quadrature component proportional to its derivative,</p>
+<div class="eq" id="eq-h-drag">$$ \Omega_y(t) = -\beta\,\frac{\dot\Omega_x(t)}{\alpha}, $$</div>
+<p>with \(\beta\approx1\) calibrated in practice. To first order this cancels the leakage transition, and a small detuning corrects the phase error. With DRAG, 20–30 ns single-qubit gates reach errors near \(10^{-4}\), close to the coherence limit of @b4:eq-i-coh. <b>Virtual \(Z\)</b> gates (phase updates of later pulses) are exact and instantaneous. Drive-line crosstalk, where one qubit's drive reaches a neighbour, causes errors when the neighbour is near in frequency, one more reason to keep qubit frequencies apart.</p>
+
+<h3 id="sec-h-g-zz">Coupled transmons and the \(ZZ\) problem</h3>
+<p>Two transmons coupled directly by a capacitor have an exchange interaction \(g(a_1^\dagger a_2 + a_1a_2^\dagger)\). Treated in second-order perturbation theory including the second excited levels, the energy of \(\ket{11}\) is not the sum of the energies of \(\ket{01}\) and \(\ket{10}\): the states \(\ket{20}\) and \(\ket{02}\) push it. The mismatch is the static \(ZZ\) interaction (@lf:eq-zz),</p>
+<div class="eq" id="eq-h-zz">$$ \zeta = \omega_{11}-\omega_{10}-\omega_{01} = \frac{2g^2(\alpha_1+\alpha_2)}{(\Delta+\alpha_1)(\alpha_2-\Delta)} , \qquad \Delta = \omega_1-\omega_2 . $$</div>
+<p>An always-on \(ZZ\) makes each qubit's frequency depend on its neighbour's state, producing correlated phase errors during idling and other gates. For \(g/2\pi = 5\) MHz and typical parameters, \(\zeta/2\pi\) is tens to hundreds of kHz, which over a 1 µs error-correction cycle is a large error. Fixed-coupling architectures (IBM's earlier devices) chose detunings to keep \(\zeta\) small; modern architectures add <b>tunable couplers</b>.</p>
+
+<h3 id="sec-h-g-coupler">Tunable couplers and the CZ gate</h3>
+<p>A <b>tunable coupler</b> is a third circuit element, usually a flux-tunable transmon, between two qubits [@yan2018]. Each qubit couples to the coupler and weakly to each other. The coupler's virtual exchange adds an indirect coupling \(\tilde g\approx g_{12} + \frac{g_1g_2}{2}\big(\frac1{\Delta_1}+\frac1{\Delta_2}\big)\) (with \(\Delta_i\) the qubit–coupler detunings), whose sign depends on whether the coupler sits above or below the qubits. Biasing the coupler at the point where the direct and indirect couplings cancel switches the interaction off, suppressing \(\zeta\) to a few kHz or less. Pulsing the coupler's flux turns the interaction on for a gate.</p>
+<p>The <b>CZ gate</b> uses the avoided crossing between \(\ket{11}\) and \(\ket{20}\): bringing them close, letting the population make one complete cycle \(\ket{11}\to-\ii\ket{20}\to-\ket{11}\), and returning gives \(\ket{11}\) a phase of \(\pi\) relative to the other states: \(\mathrm{diag}(1,1,1,-1)\) up to single-qubit phases. Google's Sycamore and Willow processors use this kind of gate, with durations of 20–40 ns and errors around \(3\times10^{-3}\) to below \(10^{-3}\). Leakage into \(\ket{20}\) is the main hazard; shaping the flux pulse adiabatically controls it. The same coupler mechanism with the \(\ket{01}\leftrightarrow\ket{10}\) crossing gives iSWAP-like gates.</p>
+
+<h3 id="sec-h-g-cr">Cross-resonance</h3>
+<p>Fixed-frequency transmons avoid flux noise and control lines. The <b>cross-resonance</b> gate [@rigetti2010; @sheldon2016] drives the control qubit at the <i>target's</i> frequency. Through the static coupling, this produces an effective Hamiltonian whose leading term is \(\propto Z\otimes X\): the target rotates about \(x\) in a direction that depends on the control's state. Calibrated with echoes and cancellation tones, a \(ZX(\pi/2)\) rotation is equivalent to CNOT up to single-qubit gates. Its rate is proportional to \(g\,\Omega/\Delta\) times a factor involving \(\alpha\), and it is fast only when the qubits are detuned by less than about one anharmonicity (the "straddling regime"), which collides with the need to avoid spectator transitions. Those competing requirements are exactly the "frequency collisions" of the review (@lf:sec-var-collisions): a list of forbidden detuning windows that fabricated frequencies must avoid.</p>
+
+<h3 id="sec-h-g-budget">From gate scheme to design constraints</h3>
+<figure class="tbl" id="tab-h-gates"><figcaption>Two-qubit gate schemes and what they ask of the chip.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Scheme</th><th>Hardware</th><th>Frequency constraints</th><th>Main error sources</th></tr>
+<tr><td>Cross-resonance</td><td>Fixed qubits, fixed coupling, one drive line each</td><td>Detunings inside the straddling window, away from collisions</td><td>Static \(ZZ\), spectator errors, collisions</td></tr>
+<tr><td>Coupler CZ / iSWAP</td><td>Tunable coupler per pair, flux line per coupler</td><td>Coupler idle point and trajectory avoid other levels</td><td>Leakage, flux noise, coupler crosstalk</td></tr>
+<tr><td>Parametric (modulated coupler)</td><td>Coupler modulated at a difference frequency</td><td>Modulation sidebands must avoid other transitions</td><td>Slower gates, spurious sidebands</td></tr>
+</table></div></figure>
+<p>Every scheme turns a gate requirement into a set of constraints on fabricated frequencies and couplings, and every constraint has a tolerance window. A processor's yield is the probability that all its gates' windows are met simultaneously, the model of @lf:eq-pedge and @lf:eq-yield.</p>
+
+<div class="eda"><p>The review's frequency-allocation problem (Problem 1) is stated in terms of these gate schemes: choose target frequencies and couplings so that, under the fabrication distribution, the probability that no pair violates its collision windows is maximised. The collision windows come from this chapter's physics; the distribution from Chapter 2's junction statistics.</p></div>
+
+<div class="exercises" id="ex-h-gates"><h4>Exercises</h4><ol>
+<li>Evaluate @eq:h-zz for \(g/2\pi = 4\) MHz, \(\alpha_1 = \alpha_2 = 2\pi\times(-300)\) MHz and \(\Delta/2\pi = 100\) MHz.
+<details><summary>Solution</summary><p>\(2g^2(\alpha_1+\alpha_2) = 2\times16\times(-600) = -19200\); denominator \((100-300)(-300-100) = (-200)(-400) = 80000\). \(\zeta/2\pi = -0.24\) MHz = \(-240\) kHz. Over a 1 µs cycle, a phase of about \(2\pi\times0.24 = 1.5\) rad: far too large without cancellation.</p></details></li>
+<li>For a Gaussian pulse of width \(\sigma = 4\) ns and \(\alpha/2\pi = -250\) MHz, what fraction of the pulse's spectral weight lies beyond 250 MHz detuning (roughly, the leakage drive)? Why does DRAG help even though the Gaussian tail is small?
+<details><summary>Solution</summary><p>Spectral width \(1/\sigma = 2.5\times10^8\) rad/s, i.e. 40 MHz in ordinary frequency. 250 MHz is about 6.3σ, a tiny Gaussian tail. But real pulses are truncated (typically to ±2σ), which adds sinc-like side lobes, and the \(\sqrt2\)-enhanced 1–2 coupling acts during the pulse through a second-order (AC Stark) process. DRAG cancels the 1–2 transition amplitude at first order regardless of pulse truncation.</p></details></li>
+<li>A coupler gives \(g_1 = g_2 = 2\pi\times100\) MHz, qubit–coupler detunings \(\Delta_1 = \Delta_2 = -2\pi\times1\) GHz. What direct coupling \(g_{12}\) cancels the interaction?
+<details><summary>Solution</summary><p>Indirect term \(\tfrac{g_1g_2}{2}(2/\Delta) = g^2/\Delta = 10^4/(-1000) = -10\) MHz (×2π). A direct coupling of \(+10\) MHz cancels it. Shifting the coupler frequency changes \(\Delta\) and switches the effective coupling on.</p></details></li>
+</ol></div>
+</section>

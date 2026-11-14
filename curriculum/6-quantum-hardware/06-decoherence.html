@@ -1,0 +1,48 @@
+<section id="sec-h-decoh"><h2>Where coherence is lost: loss and noise in superconducting circuits</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Build a \(T_1\) budget from participation ratios and loss tangents, and know where two-level systems live.</li>
+<li>Understand the temperature and power dependence of TLS loss and the time fluctuations of \(T_1\).</li>
+<li>Know the other relaxation channels: quasiparticles, radiation, Purcell and package modes.</li>
+<li>Know the dephasing channels: flux noise, charge noise, photon shot noise.</li>
+</ul></div>
+
+<h3 id="sec-h-d-budget">The \(T_1\) budget</h3>
+<p>A qubit relaxes through every channel that can absorb energy at its frequency, and the rates add. The review writes the budget as (@lf:eq-t1)</p>
+<div class="eq" id="eq-h-t1">$$ \frac{1}{T_1} = \omega_q\sum_i p_i\tan\delta_i + \Gamma_P + \Gamma_{qp} + \Gamma_{\mathrm{rad}} + \Gamma_{\mathrm{lines}} + \dots, \qquad p_i = \frac{\int_{V_i}\varepsilon|\mathbf E|^2\dd V}{\int\varepsilon|\mathbf E|^2\dd V} . $$</div>
+<p>The first term is dielectric loss (@b2:sec-c-max-dielectric): the electric field of the qubit mode stores a fraction \(p_i\) of its energy in each material region \(i\), which loses a fraction \(\tan\delta_i\) per radian. The regions are the bulk substrate (\(p\sim0.9\), \(\tan\delta\lesssim10^{-7}\) for good silicon or sapphire) and three thin interfaces, each only nanometres thick but with \(\tan\delta\sim10^{-3}\): metal–substrate (MS), substrate–air (SA) and metal–air (MA) [@wang2015; @gambetta2017]. Their participations are \(10^{-4}\)–\(10^{-3}\) each, concentrated at metal edges where the field diverges (@b2:sec-c-stat-cond). The interface terms usually dominate. That gives designers one lever, geometry (wider gaps and larger pads dilute the edge field and lower \(p_{\mathrm{MS,SA,MA}}\), at the cost of area and larger coupling to package modes), and gives process engineers another, materials and surface preparation (cleaner interfaces, tantalum instead of niobium, removing native oxides, substrate trenching) [@place2021; @deleon2021].</p>
+<div class="example"><p><b>Worked example: a participation budget.</b> A 5 GHz transmon has \(p_{\mathrm{sub}} = 0.9\) at \(\tan\delta = 10^{-7}\), and \(p_{\mathrm{MS}} = 3\times10^{-4}\), \(p_{\mathrm{SA}} = 5\times10^{-4}\), \(p_{\mathrm{MA}} = 1\times10^{-4}\), all at \(\tan\delta = 2\times10^{-3}\). Then \(\sum p_i\tan\delta_i = 9\times10^{-8} + 9\times10^{-4}\times2\times10^{-3} = 9\times10^{-8} + 1.8\times10^{-6}\approx1.9\times10^{-6}\), so \(Q\approx5.3\times10^5\) and \(T_1 = Q/\omega_q\approx17\) µs from dielectrics alone. Halving every interface participation by geometry, or halving the interface loss tangent by process, doubles \(T_1\). Modern devices with \(T_1\) of 200–500 µs reach \(Q\) of several million by doing both.</p></div>
+
+<h3 id="sec-h-d-tls">Two-level systems</h3>
+<p>The loss in amorphous interfaces comes mostly from microscopic <b>two-level systems</b> (TLS): atoms or small groups of atoms that can tunnel between two nearly equivalent configurations, carrying an electric dipole [@muller2019]. A TLS near resonance with the qubit absorbs its energy. Because each TLS can absorb only one quantum at a time, TLS loss <b>saturates</b> at high power and at high temperature (when the TLS are thermally populated):</p>
+<div class="eq" id="eq-h-tls">$$ \tan\delta_{\mathrm{TLS}}(\bar n, T) = \tan\delta_0\,\frac{\tanh(\hbar\omega/2k_BT)}{\sqrt{1 + \bar n/n_c}} . $$</div>
+<p>This is why resonator measurements of materials loss are made at single-photon power: high-power measurements underestimate the loss qubits see (@lf:eq-tls). Individual TLS also fluctuate in frequency, as they interact with other, slower fluctuators. When a strongly coupled TLS drifts through the qubit frequency, \(T_1\) drops sharply for minutes to hours; the qubit's \(T_1\) is therefore a random process with large variance [@klimov2018]. A design tool should treat \(T_1\) as a distribution, not a number.</p>
+
+<h3 id="sec-h-d-other">Other relaxation channels</h3>
+<ul>
+<li><b>Quasiparticles</b> tunnelling across the junction (@sec:h-sc-qp): rate proportional to the quasiparticle density; mitigated by shielding, phonon traps and gap engineering.</li>
+<li><b>Radiation and correlated events</b>: a gamma ray or cosmic-ray muon deposits energy in the substrate, creating a burst of phonons and quasiparticles that suppresses \(T_1\) over the whole chip for about a millisecond [@mcewen2022; @vepsalainen2020]. Such events, roughly every 10 seconds on a centimetre-scale chip, produce correlated errors that error correction handles poorly.</li>
+<li><b>Purcell and line coupling</b> (@sec:h-cq-purcell): computed from the admittance at the junction.</li>
+<li><b>Package and box modes</b>: the chip and its enclosure form a cavity with modes that can fall near qubit frequencies for large dies (@lf:eq-box). Through-substrate vias, airbridges tying ground planes together and carefully designed packages push them up or damp them (@lf:sec-pkg-modes).</li>
+<li><b>Radiation into free space and slotline modes</b>: asymmetric structures and unconnected ground planes radiate. Airbridges across CPW lines suppress slotline modes.</li>
+</ul>
+
+<h3 id="sec-h-d-dephase">Dephasing</h3>
+<p>Dephasing comes from low-frequency fluctuations of the qubit frequency (@b3:sec-q-open-spectra).</p>
+<ul>
+<li><b>Flux noise</b> with a \(1/f\) spectrum of amplitude about \(1\)–\(5\,\mu\Phi_0/\sqrt{\mathrm{Hz}}\) at 1 Hz, believed to come from surface spins on the metal. It affects only flux-tunable elements away from their sweet spots, with a sensitivity \(\partial\omega/\partial\Phi\) from @eq:h-squid.</li>
+<li><b>Charge noise</b>: negligible for transmons because of the exponentially small charge dispersion, but important for charge qubits and for the higher levels used in some gates.</li>
+<li><b>Photon shot noise</b> in the readout resonator: residual thermal photons dephase the qubit at a rate \(\approx\bar n_{\mathrm{th}}\kappa\cdot4\chi^2/(\kappa^2+4\chi^2)\) (@lf:eq-dephase), which is why readout lines need heavy attenuation (@b2:sec-c-th-cryo).</li>
+<li><b>Critical-current fluctuations</b> of the junction: usually small, but a floor for very coherent devices.</li>
+</ul>
+
+<div class="eda"><p>Every term in @eq:h-t1 is a functional of the layout (through \(p_i\), \(\Re Y\) and package modes) and of the process (through \(\tan\delta_i\) and quasiparticle environment). That makes coherence partly <i>designable</i>, and the review's materials section argues for exactly this: participation ratios computed with converged meshes at metal edges, combined with loss tangents measured on the same process, to predict \(T_1\) distributions before fabrication (@lf:sec-mat-gap).</p></div>
+
+<div class="exercises" id="ex-h-decoh"><h4>Exercises</h4><ol>
+<li>A resonator measured at high power shows \(Q_i = 2\times10^6\); at single-photon power, \(Q_i = 4\times10^5\). Assuming the difference is saturable TLS loss, what is the low-power TLS loss and what fraction of the total does it contribute?
+<details><summary>Solution</summary><p>\(1/Q_{\mathrm{low}} - 1/Q_{\mathrm{high}} = 2.5\times10^{-6} - 0.5\times10^{-6} = 2\times10^{-6}\): 80% of the low-power loss is TLS.</p></details></li>
+<li>Using the worked example, which single improvement gives the larger \(T_1\): eliminating substrate loss entirely, or reducing SA participation by 40%?
+<details><summary>Solution</summary><p>Substrate: removes \(9\times10^{-8}\) of \(1.89\times10^{-6}\), about 5%. SA: removes \(0.4\times5\times10^{-4}\times2\times10^{-3} = 4\times10^{-7}\), about 21%. Interfaces dominate.</p></details></li>
+<li>A flux-tunable transmon at 0.25 \(\Phi_0\) from its sweet spot has \(\partial f/\partial\Phi\approx2\) GHz/\(\Phi_0\). With quasi-static flux noise of \(5\,\mu\Phi_0\) rms, estimate the rms frequency jitter and \(T_2^*\).
+<details><summary>Solution</summary><p>\(\sigma_f = 2\times10^9\times5\times10^{-6} = 10\) kHz. Gaussian decay \(\ee^{-(2\pi\sigma_f t)^2/2}\) reaches \(1/\ee\) at \(t = \sqrt2/(2\pi\sigma_f)\approx22\) µs. At the sweet spot, first-order sensitivity vanishes and \(T_2^*\) is much longer.</p></details></li>
+</ol></div>
+</section>

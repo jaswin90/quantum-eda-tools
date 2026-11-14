@@ -307,7 +307,70 @@ def fig_p_herald():
     save(p, "fig-p-herald.svg", "One-pair and multi-pair probabilities of a heralded source versus mean pair number.")
 
 
-FIGS = [fig_p_hom, fig_p_herald, fig_i_rb, fig_i_threshold, fig_q_qho, fig_q_rabi, fig_q_decoh, fig_m_lorentz, fig_m_yield, fig_c_avoided, fig_c_notch, fig_c_nth]
+# ============================================================== Book 6: quantum hardware
+def tridiag_eigs(d, e, k):
+    """Lowest k eigenvalues of a symmetric tridiagonal matrix (diagonal d, off-diagonal e)
+    by Sturm-sequence bisection. Standard library only."""
+    n = len(d)
+    lo = min(d[i] - abs(e[i - 1] if i > 0 else 0) - abs(e[i] if i < n - 1 else 0) for i in range(n))
+    hi = max(d[i] + abs(e[i - 1] if i > 0 else 0) + abs(e[i] if i < n - 1 else 0) for i in range(n))
+
+    def count_below(x):
+        c, q = 0, d[0] - x
+        if q < 0:
+            c += 1
+        for i in range(1, n):
+            q = d[i] - x - e[i - 1] ** 2 / (q if q != 0 else 1e-300)
+            if q < 0:
+                c += 1
+        return c
+
+    out = []
+    for j in range(k):
+        a, b = lo, hi
+        for _ in range(80):
+            m = 0.5 * (a + b)
+            if count_below(m) > j:
+                b = m
+            else:
+                a = m
+        out.append(0.5 * (a + b))
+    return out
+
+
+def cpb_levels(ej_ec, ng, ncut=20, k=3):
+    ns = range(-ncut, ncut + 1)
+    d = [4.0 * (n - ng) ** 2 for n in ns]          # units of E_C
+    e = [-ej_ec / 2.0] * (len(d) - 1)
+    return tridiag_eigs(d, e, k)
+
+
+def fig_h_transmon():
+    panels = []
+    for r in (1, 10, 50):
+        p = Plot(w=330, h=360, l=58, r=12)
+        ref = cpb_levels(r, 0.25)
+        e01 = ref[1] - ref[0]
+        base = ref[0]
+        ngs = frange(-1, 1, 161)
+        lev = [cpb_levels(r, x) for x in ngs]
+        ymax = max((L[2] - base) / e01 for L in lev)
+        ymin = min((L[0] - base) / e01 for L in lev)
+        p.set_x(-1, 1)
+        p.set_y(min(-0.2, ymin - 0.1), max(2.4, ymax + 0.1))
+        p.axes([-1, 0, 1], [0, 1, 2, 3] if ymax > 2.9 else [0, 1, 2], "offset charge n_g",
+               "E / E₀₁" if r == 1 else "", fmt, fmt)
+        for m, col in ((0, C1), (1, C2), (2, C3)):
+            p.line([(x, (L[m] - base) / e01) for x, L in zip(ngs, lev)], col, width=2.2)
+        p.text(p.X(0), p.t - 12, f"E_J/E_C = {r}", size=14, fill=INK, anchor="middle", weight=600)
+        panels.append(p)
+    combine(panels, "fig-h-transmon.svg",
+            "Lowest three levels of a Cooper-pair box versus offset charge for E_J/E_C = 1, 10 and 50.")
+    r50 = cpb_levels(50, 0.25)
+    return {"alpha_over_E01_at_50": round(((r50[2] - r50[1]) - (r50[1] - r50[0])) / (r50[1] - r50[0]), 3)}
+
+
+FIGS = [fig_h_transmon, fig_p_hom, fig_p_herald, fig_i_rb, fig_i_threshold, fig_q_qho, fig_q_rabi, fig_q_decoh, fig_m_lorentz, fig_m_yield, fig_c_avoided, fig_c_notch, fig_c_nth]
 
 
 def main():

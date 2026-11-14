@@ -1,0 +1,55 @@
+<section id="sec-h-quant"><h2>Circuit quantisation: from Cooper-pair box to transmon and fluxonium</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Quantise any lumped superconducting circuit with the node-flux method.</li>
+<li>Solve the Cooper-pair-box Hamiltonian in the charge basis and understand charge dispersion.</li>
+<li>Derive the transmon's frequency and anharmonicity, and design a transmon to specification.</li>
+<li>Know the fluxonium and other qubit circuits, and the trade-offs between them.</li>
+</ul></div>
+
+<h3 id="sec-h-q-method">The method</h3>
+<p>Book 2 built the Lagrangian of a circuit from node fluxes, and Book 3 quantised oscillators. Combining them gives a recipe that every circuit-design tool implements [@vool2017; @rasmussen2021]:</p>
+<ol>
+<li>Choose a ground node and assign a flux \(\Phi_i\) to every other node.</li>
+<li>Write the capacitive energy \(\tfrac12\dot{\boldsymbol\Phi}^{\mathsf T}\mathbf C\dot{\boldsymbol\Phi}\) from the capacitance matrix (extracted from the layout).</li>
+<li>Write the inductive energy: \((\Phi_i-\Phi_j)^2/2L\) for each linear inductor and \(-E_J\cos(2\pi(\Phi_i-\Phi_j)/\Phi_0)\) for each junction, adding external fluxes around any loop that encloses one.</li>
+<li>Legendre transform: \(\mathbf Q = \mathbf C\dot{\boldsymbol\Phi}\), \(H = \tfrac12\mathbf Q^{\mathsf T}\mathbf C^{-1}\mathbf Q + U(\boldsymbol\Phi)\).</li>
+<li>Quantise: \([\hat\Phi_i, \hat Q_j] = \ii\hbar\delta_{ij}\). It is convenient to use the dimensionless phase \(\hat\varphi = 2\pi\hat\Phi/\Phi_0\) and Cooper-pair number \(\hat n = \hat Q/2e\), with \([\hat\varphi, \hat n] = \ii\).</li>
+<li>Choose a basis (charge, flux or harmonic-oscillator), truncate, and diagonalise numerically.</li>
+</ol>
+<p>Two subtleties. A node connected to the rest only through capacitors and junctions (an <b>island</b>) has a periodic potential in \(\varphi\), and its conjugate \(\hat n\) has integer eigenvalues: the island holds a whole number of Cooper pairs. Background charges in the environment then enter as an <b>offset charge</b> \(n_g\), a continuous parameter that drifts randomly. And loops with junctions carry external flux, which must be assigned to branches consistently (the result is gauge invariant only if done carefully when fluxes vary in time).</p>
+
+<h3 id="sec-h-q-cpb">The Cooper-pair box</h3>
+<p>The simplest qubit circuit is a junction shunted by a capacitance, with a gate capacitor to a voltage source [@nakamura1999]. Its Hamiltonian is</p>
+<div class="eq" id="eq-h-cpb">$$ H = 4E_C\,(\hat n - n_g)^2 - E_J\cos\hat\varphi, \qquad E_C = \frac{e^2}{2C_\Sigma} , $$</div>
+<p>with \(C_\Sigma\) the total capacitance of the island and \(n_g = C_gV_g/2e\). In the charge basis \(\hat n\ket n = n\ket n\), the cosine is \(\cos\hat\varphi = \tfrac12\sum_n(\ket{n}\bra{n+1} + \ket{n+1}\bra n)\): it moves one Cooper pair across the junction. The Hamiltonian is a tridiagonal matrix with \(4E_C(n-n_g)^2\) on the diagonal and \(-E_J/2\) off it, which can be diagonalised with a few dozen charge states (exactly, in terms of Mathieu functions). The ratio \(E_J/E_C\) decides everything (@fig:h-transmon):</p>
+<ul>
+<li>For \(E_J/E_C\lesssim1\) (the original Cooper-pair box), levels depend strongly on \(n_g\): the qubit frequency shifts with every fluctuation of the background charge, and coherence is short.</li>
+<li>For \(E_J/E_C\gtrsim50\) (the <b>transmon</b> [@koch2007]), the bands flatten: the phase is well localised near \(\varphi = 0\), its conjugate charge is spread over many values, and the dependence on \(n_g\) becomes exponentially small. The price is a smaller anharmonicity.</li>
+</ul>
+<figure id="fig-h-transmon">
+<img src="../figures/fig-h-transmon.svg" alt="Lowest three energy levels of a Cooper-pair box versus offset charge for E_J/E_C equal to 1, 10 and 50.">
+<figcaption>The three lowest eigenvalues of @eq:h-cpb versus offset charge \(n_g\), computed in a basis of 41 charge states, for \(E_J/E_C = 1\), 10 and 50. Energies are in units of the \(0\to1\) transition at \(n_g = 1/4\). As \(E_J/E_C\) grows, the levels become flat (charge-insensitive) and almost equally spaced (weakly anharmonic).</figcaption>
+</figure>
+
+<h3 id="sec-h-q-transmon">The transmon</h3>
+<p>For large \(E_J/E_C\) the phase stays small, so expand the cosine: \(-E_J\cos\varphi\approx-E_J + E_J\varphi^2/2 - E_J\varphi^4/24\). The quadratic part with the charging term is a harmonic oscillator of frequency \(\sqrt{8E_JE_C}/\hbar\) (the "plasma frequency"), and the quartic part, treated in first-order perturbation theory exactly as in @b3:eq-q-kerr, gives</p>
+<div class="eq" id="eq-h-transmon">$$ \hbar\omega_{01}\approx\sqrt{8E_JE_C} - E_C, \qquad \hbar\alpha = \hbar(\omega_{12}-\omega_{01})\approx-E_C . $$</div>
+<p>The charge dispersion, the residual \(n_g\) dependence of level \(m\), falls as \(\ee^{-\sqrt{8E_J/E_C}}\) (@lf:eq-disp). In practice \(E_C/h\approx200\)–\(300\) MHz (\(C_\Sigma\approx65\)–\(100\) fF) and \(E_J/h\approx10\)–\(25\) GHz, giving qubits at 4–6 GHz with anharmonicity of \(-200\) to \(-300\) MHz. The transmon's design is two capacitor pads (which set \(E_C\) and the couplings) joined by a junction or SQUID (which sets \(E_J\)). It is simple, robust and reproducible, which is why it dominates.</p>
+<div class="example"><p><b>Worked example: designing a transmon.</b> Target \(f_{01} = 5.0\) GHz and \(\alpha/2\pi = -250\) MHz. Then \(E_C/h = 250\) MHz, so \(C_\Sigma = e^2/2E_C = (1.602\times10^{-19})^2/(2\times6.626\times10^{-34}\times2.5\times10^8)\approx77\) fF. From @eq:h-transmon, \(\sqrt{8E_JE_C}/h = 5.25\) GHz, so \(E_J/h = 5.25^2/(8\times0.25) = 13.8\) GHz, \(E_J/E_C = 55\). By @eq:h-ab, the junction needs \(R_n = R_Q\Delta/2E_J\approx6.45\,\mathrm{k\Omega}\times180\,\mu\mathrm{eV}/(2\times57\,\mu\mathrm{eV})\approx10.2\) kΩ. The designer draws pads whose extracted capacitance (including couplings to resonator and neighbours) totals 77 fF, and requests a junction of 10.2 kΩ from the process. Every percent of error in either quantity moves \(f_{01}\) by about 25 MHz (@lf:eq-sens).</p></div>
+
+<h3 id="sec-h-q-flux">Fluxonium and other circuits</h3>
+<p>The <b>fluxonium</b> [@manucharyan2009] shunts a small junction with a very large inductance (a chain of a hundred larger junctions or a high-kinetic-inductance wire, a "superinductor"):</p>
+<div class="eq" id="eq-h-fluxonium">$$ H = 4E_C\hat n^2 + \frac{E_L}{2}\big(\hat\varphi - \varphi_{\mathrm{ext}}\big)^2 - E_J\cos\hat\varphi, \qquad E_L = \frac{(\Phi_0/2\pi)^2}{L} . $$</div>
+<p>The inductor removes the island, so offset charge disappears; at half a flux quantum (\(\varphi_{\mathrm{ext}} = \pi\)) the potential is a double well and the qubit transition can be below 1 GHz with anharmonicity of several GHz. Long coherence (milliseconds have been reported) and high-fidelity gates have been demonstrated [@nguyen2019], at the cost of more complex fabrication (a reproducible superinductor) and low-frequency operation, which brings thermal population and slower gates. Other circuits trade differently: the flux qubit (a loop with three junctions), the "0–\(\pi\)" qubit (designed for intrinsic protection), and bosonic qubits that store information in a high-\(Q\) cavity mode controlled by a transmon. Each is a different solution of the same Hamiltonian-engineering problem, and each requires different cells in a design library.</p>
+
+<div class="eda"><p>Circuit quantisation is automated in open tools (scqubits, QuCAT, SQcircuit) and in commercial flows (@lf:sec-design-extract). The inputs are a netlist with \(\mathbf C\), \(L\) and \(E_J\) values; the outputs are spectra, matrix elements and sensitivities. The tools are reliable; the inputs are the problem. A capacitance matrix from a coarse mesh, or an \(E_J\) predicted from a warm resistance without uncertainty, propagates directly into the spectrum.</p></div>
+
+<div class="exercises" id="ex-h-quant"><h4>Exercises</h4><ol>
+<li>Write the \(3\times3\) charge-basis Hamiltonian of @eq:h-cpb for \(n\in\{-1,0,1\}\) at \(n_g = 0\), and find its lowest eigenvalue for \(E_J = E_C\).
+<details><summary>Solution</summary><p>Diagonal \(4E_C(1, 0, 1)\), off-diagonals \(-E_J/2\) between neighbours. With \(E_C = E_J = 1\): \(\begin{pmatrix}4&-0.5&0\\-0.5&0&-0.5\\0&-0.5&4\end{pmatrix}\). The symmetric sector \((a, b, a)\) gives \(\begin{pmatrix}4 & -0.5\\-1 & 0\end{pmatrix}\) acting on \((a,b)\), eigenvalues \(2\pm\sqrt{4.5}\); the lowest is \(-0.12\). (More charge states change this only slightly at \(E_J/E_C = 1\).)</p></details></li>
+<li>A transmon has \(C_\Sigma = 90\) fF and \(E_J/h = 16\) GHz. Estimate \(f_{01}\) and \(\alpha\).
+<details><summary>Solution</summary><p>\(E_C/h = e^2/(2C_\Sigma h) = 2.566\times10^{-38}/(1.8\times10^{-13}\times6.626\times10^{-34})\approx215\) MHz. \(\sqrt{8\times16\times0.215} = 5.25\) GHz, so \(f_{01}\approx5.03\) GHz and \(\alpha/2\pi\approx-215\) MHz.</p></details></li>
+<li>For the transmon of the worked example, by how much does \(f_{01}\) change if \(R_n\) is 2% high?
+<details><summary>Solution</summary><p>\(E_J\propto1/R_n\) falls by about 2%, so \(\sqrt{8E_JE_C}\) falls by 1%: \(0.01\times5.25\) GHz \(\approx52\) MHz. (The fixed \(-E_C\) term does not change.)</p></details></li>
+</ol></div>
+</section>

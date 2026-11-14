@@ -1,0 +1,43 @@
+<section id="sec-h-super"><h2>Superconductivity for quantum engineers</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Know the experimental facts of superconductivity and the BCS picture of Cooper pairs and the energy gap.</li>
+<li>Describe the condensate by a macroscopic wavefunction, and derive the London equations and flux quantisation from it.</li>
+<li>Understand kinetic inductance and quasiparticles quantitatively, and know the common materials.</li>
+</ul></div>
+
+<h3 id="sec-h-sc-facts">The facts</h3>
+<p>Below a critical temperature \(T_c\), many metals lose all DC resistance and expel magnetic fields (the Meissner effect). Currents in a superconducting ring persist for years. Superconductivity is destroyed by a large enough magnetic field or current. For quantum devices the relevant materials are aluminium (\(T_c = 1.2\) K), used for Josephson junctions; niobium (9.2 K), tantalum (4.4 K in its \(\alpha\) phase), and titanium nitride (around 4.5 K, depending on stoichiometry), used for wiring, capacitors and resonators; and disordered films such as NbN, NbTiN and granular aluminium, used where high kinetic inductance is wanted. Operating at 10–20 mK, far below every \(T_c\), the metals are deep in their superconducting state.</p>
+
+<h3 id="sec-h-sc-bcs">Cooper pairs and the gap</h3>
+<p>Cooper showed in 1956 that the filled Fermi sea of a metal is unstable to any attractive interaction between electrons, however weak: two electrons with opposite momenta and spins just above the Fermi surface form a bound pair. In a metal the attraction comes from the lattice: an electron distorts the positive ions around it, and the distortion attracts a second electron a little later. BCS theory [@bcs1957] showed that all the electrons near the Fermi surface pair up coherently into a single many-body ground state. The excitations above it, called <b>quasiparticles</b>, need energy at least \(\Delta\) each, and since breaking a pair creates two, the minimum energy to disturb the condensate is \(2\Delta\), with</p>
+<div class="eq" id="eq-h-gap">$$ \Delta(0) \approx 1.76\,k_BT_c . $$</div>
+<p>For aluminium \(\Delta\approx180\) µeV, or \(2\Delta/h\approx88\) GHz. A 5 GHz microwave photon carries far too little energy to break a pair, so the condensate does not absorb it; that is why superconducting resonators can have quality factors above a million [@tinkham2004].</p>
+
+<h3 id="sec-h-sc-psi">The macroscopic wavefunction</h3>
+<p>Because all pairs occupy the same quantum state, the condensate can be described by a single complex field \(\psi(\mathbf r) = \sqrt{n_s}\,\ee^{\ii\theta(\mathbf r)}\), where \(n_s\) is the density of pairs and \(\theta\) a phase common to all of them. Treating pairs as particles of charge \(q = -2e\) and mass \(m^* = 2m_e\), the quantum-mechanical current density in a vector potential \(\mathbf A\) is</p>
+<div class="eq" id="eq-h-current">$$ \mathbf J_s = \frac{q\,n_s}{m^*}\big(\hbar\nabla\theta - q\mathbf A\big) . $$</div>
+<p>Two consequences follow immediately.</p>
+<p><b>The London equations.</b> In a simply connected sample with uniform phase, taking the curl of @eq:h-current gives \(\nabla\times\mathbf J_s = -\frac{q^2n_s}{m^*}\mathbf B\). Combined with Ampère's law, \(\nabla^2\mathbf B = \mathbf B/\lambda_L^2\) with the <b>London penetration depth</b> \(\lambda_L = \sqrt{m^*/\mu_0n_sq^2}\). Fields and currents are confined to a surface layer of about 50–100 nm (@b2:sec-c-max-super).</p>
+<p><b>Flux quantisation.</b> Deep inside a thick superconducting ring, \(\mathbf J_s = 0\), so \(\hbar\nabla\theta = q\mathbf A\). Integrating around the ring, the left side gives \(\hbar\) times the change of phase around the loop, which must be a multiple of \(2\pi\) for \(\psi\) to be single-valued, and the right gives \(q\Phi\). Hence the flux through the ring is quantised:</p>
+<div class="eq" id="eq-h-fluxq">$$ \Phi = n\,\Phi_0, \qquad \Phi_0 = \frac{h}{2e}\approx2.068\times10^{-15}\ \mathrm{Wb} . $$</div>
+<p>The factor 2 in \(\Phi_0\) was the first direct evidence that the charge carriers are pairs. Flux quantisation underlies SQUIDs, flux-tunable qubits, and, as an engineering hazard, trapped vortices in ground planes, which cause loss and must be pinned by holes in the metal ("flux traps").</p>
+
+<h3 id="sec-h-sc-lk">Kinetic inductance</h3>
+<p>The supercurrent's kinetic energy \(\int\tfrac12n_sm^*v_s^2\dd V\) adds to the magnetic energy and acts as an inductance. Writing \(\mathbf J_s = n_sq\mathbf v_s\), the kinetic inductance of a wire of length \(\ell\) and cross-section \(A\) (with thickness and width \(\gg\lambda_L\) for this simple form, or \(\ll\lambda_L\) with \(A\) the full area) is</p>
+<div class="eq" id="eq-h-lk">$$ L_k = \frac{m^*}{n_sq^2}\,\frac{\ell}{A} = \mu_0\lambda_L^2\,\frac{\ell}{A} . $$</div>
+<p>In thick films it is a small correction to the geometric inductance, but it changes resonator frequencies by a fraction of a percent, enough to matter at the precision of @lf:eq-sens. In thin disordered films, where \(n_s\) is small, it dominates and is used deliberately: superinductors for fluxonium, compact resonators, and kinetic-inductance parametric amplifiers. Because \(n_s\) depends on temperature and on current, kinetic inductance makes resonators shift with temperature and with power, and it varies with film thickness and stoichiometry across a wafer: a process variable in its own right.</p>
+
+<h3 id="sec-h-sc-qp">Quasiparticles</h3>
+<p>In thermal equilibrium the density of quasiparticles is \(n_{qp}\approx2D(E_F)\sqrt{2\pi\Delta k_BT}\,\ee^{-\Delta/k_BT}\), utterly negligible at 20 mK for aluminium (\(\Delta/k_BT\approx100\)). Yet measured devices show residual quasiparticle densities of order \(10^{-8}\)–\(10^{-6}\) per Cooper pair, far above equilibrium. They are generated by stray infrared light leaking into the package, by high-energy radiation (environmental radioactivity and cosmic rays, which deposit energy in the substrate that converts into phonons that break pairs over the whole chip), and by the qubit drive itself. Quasiparticles tunnelling across a Josephson junction relax the qubit, and bursts of quasiparticles from radiation cause correlated errors on many qubits at once [@mcewen2022]. Mitigations are geometric and material: phonon traps (normal-metal or low-gap islands that absorb phonons), gap engineering (different gaps on the two sides of a junction), infrared shielding, and underground operation in experiments. Each is a design or process choice.</p>
+
+<div class="eda"><p>Material properties enter a design flow as model parameters with uncertainty: penetration depth (hence kinetic inductance), surface resistance, and loss tangents of every interface. The review stresses that these are known only to a few percent and vary across a wafer, which sets a floor on the accuracy of any purely simulated prediction (@lf:sec-design-accuracy).</p></div>
+
+<div class="exercises" id="ex-h-super"><h4>Exercises</h4><ol>
+<li>Compute \(2\Delta/h\) for aluminium and niobium from @eq:h-gap.
+<details><summary>Solution</summary><p>Al: \(\Delta = 1.76\times1.381\times10^{-23}\times1.2 = 2.92\times10^{-23}\) J \(= 182\) µeV; \(2\Delta/h = 88\) GHz. Nb: \(\Delta\approx1.39\) meV (measured about 1.5 meV); \(2\Delta/h\approx680\) GHz.</p></details></li>
+<li>A square superconducting loop of side 20 µm sits in a perpendicular field. What field corresponds to one flux quantum through it?
+<details><summary>Solution</summary><p>\(B = \Phi_0/A = 2.07\times10^{-15}/(4\times10^{-10}) = 5.2\) µT, about a tenth of the Earth's field. That is why magnetic shielding matters for flux-tunable devices.</p></details></li>
+<li>A 200 nm thick aluminium film (\(\lambda_L\approx50\) nm in a thin film, often larger) forms a CPW centre line. Will kinetic inductance be a large or small fraction of the total? What about a 10 nm NbTiN film with \(\lambda_L\approx300\) nm?
+<details><summary>Solution</summary><p>Aluminium: thickness \(\gg\lambda_L\), so current flows in a surface layer and \(L_k\) is a few percent of the geometric inductance (it still shifts frequencies by tens of MHz). NbTiN at 10 nm: \(L_k\approx\mu_0\lambda_L^2/t\approx11\) pH/□ (@b2:sec-c-max-super), more than twice the geometric inductance per square of a 10 µm wide 50 Ω CPW centre line (about 4 pH/□), so \(L_k\) dominates.</p></details></li>
+</ol></div>
+</section>

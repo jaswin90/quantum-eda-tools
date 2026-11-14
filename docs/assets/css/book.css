@@ -207,3 +207,6 @@ svg.diagram .muted { fill: var(--muted); }
 }
 /* Long inline formulas in solutions and teaching boxes scroll inside their box on phones. */
 .exercises details, .example, .defn, .thm, .eda, .goals { overflow-x: auto; overflow-y: hidden; }
+/* KaTeX's hidden MathML copy is absolutely positioned; give every scrolling box a containing
+   block so it cannot widen the page from inside a table cell or a solution. */
+.tblwrap, .exercises details, .example, .defn, .thm, .eda, .goals { position: relative; }
