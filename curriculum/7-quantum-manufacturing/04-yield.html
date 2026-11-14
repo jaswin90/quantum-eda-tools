@@ -1,0 +1,51 @@
+<section id="sec-f-yield"><h2>Variability and yield</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Classify sources of variation (global, spatially correlated, local random) and model them.</li>
+<li>Use defect-limited yield models (Poisson, negative binomial) and parametric yield.</li>
+<li>Build and analyse a frequency-collision yield model for a qubit lattice.</li>
+<li>Understand sensitivity-based statistical design, chance constraints and post-fabrication trimming.</li>
+</ul></div>
+
+<h3 id="sec-f-y-sources">Sources and structure of variation</h3>
+<p>A manufactured parameter \(x\) (a junction resistance, a film thickness, a linewidth) can be decomposed as</p>
+<div class="eq" id="eq-f-var">$$ x(\mathbf r, w, l) = x_0 + \delta_{\mathrm{lot}}(l) + \delta_{\mathrm{wafer}}(w) + g_w(\mathbf r) + \epsilon(\mathbf r), $$</div>
+<p>a target, lot-to-lot and wafer-to-wafer offsets, a smooth spatial pattern across the wafer \(g_w(\mathbf r)\) (from deposition and oxidation non-uniformity, typically radial), and a local random part \(\epsilon\) that is uncorrelated between devices beyond some short correlation length (Pelgrom mismatch, @eq:f-pelgrom). The decomposition matters because the parts behave differently. Global offsets move every qubit together and are cheap to correct by recentring the process. Smooth gradients are partly predictable from neighbouring test structures. Local randomness is irreducible except by design (larger devices) or by post-fabrication trimming. A <b>nested variance model</b> estimates each component's size from wafer test data, which is the starting point of the hierarchical models of Chapter 6.</p>
+
+<h3 id="sec-f-y-defect">Defect-limited yield</h3>
+<p>Random <b>defects</b> (particles, resist residues, shorts, opens) kill a die if one lands in a critical area \(A\). If defects are scattered independently with density \(D_0\), the number in the critical area is Poisson and the yield is</p>
+<div class="eq" id="eq-f-poisson">$$ Y_{\mathrm{Poisson}} = \ee^{-AD_0}, \qquad Y_{\mathrm{NB}} = \Big(1 + \frac{AD_0}{\alpha}\Big)^{-\alpha} . $$</div>
+<p>Real defects cluster, which the <b>negative binomial</b> model captures with a clustering parameter \(\alpha\) (small \(\alpha\) means strong clustering, and \(\alpha\to\infty\) recovers Poisson) [@stapper1983]. Clustering helps large dies: if defects bunch together, more dies escape them entirely (@fig:f-defect). For quantum chips the "critical area" includes not only shorts and opens but anything that ruins a qubit: a junction that failed to form, a TLS strongly coupled to a qubit, a trapped vortex near a SQUID. Error correction can tolerate a few dead qubits by routing around them, at a cost in effective code distance (@lf:sec-qec-dem), which turns a binary yield into a graded one.</p>
+<figure id="fig-f-defect">
+<img src="../figures/fig-f-defect.svg" alt="Die yield versus critical area for Poisson and negative-binomial defect models.">
+<figcaption>Defect-limited yield from @eq:f-poisson for \(D_0 = 0.1\) defects per cm\(^2\): Poisson (independent defects) and negative binomial with \(\alpha = 2\) and \(\alpha = 0.5\) (clustered). Large dies lose yield rapidly under the Poisson model; clustering softens the loss.</figcaption>
+</figure>
+
+<h3 id="sec-f-y-param">Parametric yield</h3>
+<p>Even without defects, a die fails if its parameters land outside specification. For a parameter vector \(\boldsymbol\theta\) (frequencies, couplings, anharmonicities) produced from process variables \(\mathbf x\) by the design map \(\boldsymbol\theta = f(\mathbf x)\), the <b>parametric yield</b> is</p>
+<div class="eq" id="eq-f-paryield">$$ Y = \Pr_{\mathbf x\sim p(\mathbf x)}\big[f(\mathbf x)\in\mathcal A\big] , $$</div>
+<p>where \(\mathcal A\) is the acceptable region. Linearising \(f\) around the nominal design with its Jacobian \(\mathbf J\), the parameter covariance is \(\mathbf J\Sigma_x\mathbf J^{\mathsf T}\) (@b1:eq-m-propagation), and when \(\mathcal A\) is a box or a polytope the yield is a multivariate Gaussian probability, computed by Monte Carlo or by bounding methods. Design centring moves the nominal point to maximise \(Y\); design for robustness reduces \(\|\mathbf J\|\), the sensitivity, where the physics allows.</p>
+
+<h3 id="sec-f-y-collide">Frequency collisions: a worked model</h3>
+<p>Consider a square lattice of fixed-frequency transmons coupled for cross-resonance gates, with neighbouring qubits designed to differ by \(\mu\) and each frequency independently Gaussian with standard deviation \(\sigma\) around its target. For each coupled pair, the detuning \(\Delta = f_i - f_j\) is Gaussian with mean \(\mu\) and variance \(2\sigma^2\). A pair fails if \(\Delta\) lands in any forbidden window \((c_k - w_k, c_k + w_k)\): near zero (degeneracy), near \(\pm\alpha/2\) (two-photon transitions) and outside the straddling regime (gates too slow) [@brink2018; @hertzberg2021]. The per-pair failure probability is</p>
+<div class="eq" id="eq-f-pedge">$$ p_{\mathrm{edge}}(\sigma) = \sum_k\Big[\Phi\Big(\frac{c_k + w_k - \mu}{\sqrt2\sigma}\Big) - \Phi\Big(\frac{c_k - w_k - \mu}{\sqrt2\sigma}\Big)\Big] + \Pr\big(|\Delta| > \Delta_{\max}\big) , $$</div>
+<p>and, neglecting correlations between edges that share a qubit (and spectator conditions involving three qubits), the probability that a chip with \(E\) couplings has no collision is \(Y\approx(1-p_{\mathrm{edge}})^E\). This is the model behind the review's @lf:fig-yield. Its lessons are stark: because \(E\) grows with qubit count, holding yield fixed requires \(p_{\mathrm{edge}}\propto1/E\), and because \(p_{\mathrm{edge}}\) depends on \(\sigma\) through Gaussian tails, yield collapses over a narrow range of \(\sigma\). At \(\sigma\approx\) 50 MHz (about a 2% junction spread), essentially no large lattice is collision-free; at \(\sigma\approx\) 10–15 MHz, hundred-qubit lattices become feasible. Correlated edges and spectator conditions make the true yield lower; Monte Carlo over the whole lattice gives the exact number for a given model.</p>
+
+<h3 id="sec-f-y-design">Designing for yield</h3>
+<ul>
+<li><b>Frequency allocation</b>: choose the target pattern (how many distinct frequencies, which detunings) to maximise yield, not to hit a nominal optimum. With uncertainty this is a <b>chance-constrained</b> optimisation, \(\max\ Y(\boldsymbol\theta_0)\) or \(\min\ \text{cost}\) subject to \(\Pr[\text{constraints met}]\ge1-\epsilon\) [@morvan2022; @luedtke2008].</li>
+<li><b>Tunability</b>: flux-tunable qubits or couplers absorb fabrication error at the cost of noise and wiring.</li>
+<li><b>Trimming</b>: measure each junction warm, then laser-anneal it towards target. Trimming reduces \(\sigma\) from about 2% to below 0.5% in demonstrated processes [@zhang2022], but it costs test time and depends on predicting cold frequencies from warm resistance, which is itself statistical (@lf:sec-var-trim).</li>
+<li><b>Architecture</b>: tunable couplers widen collision windows; codes and compilers that can skip bad edges convert a hard yield into a graded one.</li>
+</ul>
+
+<div class="eda"><p>This chapter is a compressed version of the review's §4 (@lf:sec-var). The open problems there (statistical sign-off with calibrated uncertainty, chance-constrained allocation with correlated variation, warm-to-cold prediction) all start from the models here, with data from real production lines.</p></div>
+
+<div class="exercises" id="ex-f-yield"><h4>Exercises</h4><ol>
+<li>A 1 cm² die with \(D_0 = 0.1\) cm\(^{-2}\): compute Poisson yield and negative-binomial yield with \(\alpha = 0.5\). Repeat for 4 cm².
+<details><summary>Solution</summary><p>1 cm²: Poisson \(\ee^{-0.1} = 0.905\); NB \((1 + 0.2)^{-0.5} = 0.913\). 4 cm²: Poisson \(\ee^{-0.4} = 0.670\); NB \((1+0.8)^{-0.5} = 0.745\).</p></details></li>
+<li>With a single forbidden window at \(\Delta\in(-17, 17)\) MHz, \(\mu = 100\) MHz and \(\sigma = 30\) MHz, compute \(p_{\mathrm{edge}}\) and the yield of a lattice with 200 edges (ignore other windows).
+<details><summary>Solution</summary><p>\(\sqrt2\sigma = 42.4\). \(\Phi((17-100)/42.4) - \Phi((-17-100)/42.4) = \Phi(-1.96) - \Phi(-2.76) = 0.0250 - 0.0029 = 0.0221\). \(Y = (1-0.0221)^{200}\approx\ee^{-4.47}\approx1.1\%\).</p></details></li>
+<li>In the previous exercise, what \(\sigma\) gives 90% yield?
+<details><summary>Solution</summary><p>Need \(p_{\mathrm{edge}}\approx\ln(1/0.9)/200 = 5.3\times10^{-4}\). Dominated by the upper edge of the window: \(\Phi((17-100)/\sqrt2\sigma)\approx5.3\times10^{-4}\) gives \(83/(\sqrt2\sigma)\approx3.27\), \(\sigma\approx18\) MHz. A factor 1.7 in \(\sigma\) changes yield from 1% to 90%.</p></details></li>
+</ol></div>
+</section>

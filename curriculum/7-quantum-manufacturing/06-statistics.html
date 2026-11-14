@@ -1,0 +1,43 @@
+<section id="sec-f-stats"><h2>Statistical learning for design and manufacturing</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Build surrogate models with Gaussian-process regression and know their uncertainty.</li>
+<li>Use Bayesian optimisation for expensive design problems.</li>
+<li>Build hierarchical (multilevel) models for wafer and fab data, such as warm-to-cold prediction.</li>
+<li>Know how to check that uncertainty estimates are calibrated (conformal prediction), and how to choose experiments (Bayesian experimental design).</li>
+<li>Know where machine learning helps in quantum EDA and where it must not be trusted.</li>
+</ul></div>
+
+<h3 id="sec-f-st-gp">Gaussian-process surrogates</h3>
+<p>An electromagnetic simulation of one qubit cell takes minutes to hours; an optimiser may need thousands of evaluations. A <b>surrogate</b> is a cheap model of the expensive map \(\mathbf x\mapsto y\) (geometry to frequency, say), fitted to a few simulations. A <b>Gaussian process</b> (GP) is a prior over functions such that any finite set of values is jointly Gaussian, with covariance given by a kernel \(k(\mathbf x,\mathbf x')\), commonly the squared exponential \(\sigma_f^2\exp(-\|\mathbf x - \mathbf x'\|^2/2\ell^2)\) [@rasmussen2006]. Given noisy observations \(\mathbf y\) at inputs \(X\), the posterior at a new input \(\mathbf x_*\) is Gaussian with</p>
+<div class="eq" id="eq-f-gp">$$ \mu_* = \mathbf k_*^{\mathsf T}(K + \sigma_n^2I)^{-1}\mathbf y, \qquad \sigma_*^2 = k(\mathbf x_*,\mathbf x_*) - \mathbf k_*^{\mathsf T}(K+\sigma_n^2I)^{-1}\mathbf k_*, $$</div>
+<p>where \(K_{ij} = k(\mathbf x_i,\mathbf x_j)\) and \((\mathbf k_*)_i = k(\mathbf x_i,\mathbf x_*)\). The posterior mean interpolates the data; the posterior variance is small near data and grows away from it (@fig:f-gp). Kernel hyperparameters (\(\ell\), \(\sigma_f\), \(\sigma_n\)) are fitted by maximising the marginal likelihood. GPs are excellent for smooth maps in up to tens of dimensions with hundreds to thousands of points; beyond that, neural-network surrogates and operator-learning models (which map whole fields or geometries to fields) take over [@li2021fno; @lu2021deeponet].</p>
+<figure id="fig-f-gp">
+<img src="../figures/fig-f-gp.svg" alt="Gaussian process regression of a smooth function from six samples, with mean and two-standard-deviation band.">
+<figcaption>A Gaussian-process surrogate fitted to six noisy samples (dots) of a smooth response (dashed), with a squared-exponential kernel. The posterior mean (solid) and ±2σ band (shaded) widen between and beyond the data. This uncertainty is what Bayesian optimisation exploits and what statistical sign-off must respect.</figcaption>
+</figure>
+
+<h3 id="sec-f-st-bo">Bayesian optimisation</h3>
+<p>To minimise an expensive function, fit a GP to the evaluations so far, then choose the next point by maximising an <b>acquisition function</b> that trades off exploitation (low predicted mean) and exploration (high uncertainty). Expected improvement, \(\mathbb E[\max(0, y_{\mathrm{best}} - f(\mathbf x))]\), has a closed form under the GP posterior. Bayesian optimisation typically finds good optima of smooth functions in tens to hundreds of evaluations [@frazier2018], and has been used to design superconducting circuits automatically [@menke2021]. Multi-fidelity variants combine cheap approximate simulations (coarse meshes, lumped models) with expensive accurate ones.</p>
+
+<h3 id="sec-f-st-hier">Hierarchical models</h3>
+<p>Manufacturing data are nested: junctions within dies within wafers within lots. A <b>hierarchical model</b> [@gelman2013] gives each level its own parameters drawn from a population distribution:</p>
+<div class="eq" id="eq-f-hier">$$ y_{ijk}\sim\mathcal N\big(\beta^{\mathsf T}\mathbf z_{ijk} + u_j + v_{jk},\ \sigma^2\big), \qquad u_j\sim\mathcal N(0,\tau_w^2), \qquad v_{jk}\sim\mathcal N(0,\tau_d^2), $$</div>
+<p>for, say, the cold frequency of junction \(i\) on die \(k\) of wafer \(j\), with covariates \(\mathbf z\) (warm resistance, junction area, position on wafer). Fitting it by MCMC or variational inference gives posterior distributions for every parameter, and predicting a new wafer's dies borrows strength from all previous wafers ("partial pooling"), while each new measurement updates the wafer's offset \(u_j\). This is the structure of the review's warm-to-cold model (@lf:eq-hier), and of most useful models in a fab: they combine physics (the covariates come from Ambegaokar–Baratoff and the transmon formula) with data (the random effects absorb what the physics misses).</p>
+
+<h3 id="sec-f-st-cal">Is the uncertainty right?</h3>
+<p>A model's error bars are only useful if they are <b>calibrated</b>: 90% intervals should contain the truth 90% of the time. Check this on held-out data. <b>Conformal prediction</b> [@angelopoulos2023] turns any predictor into one with guaranteed coverage: compute residuals on a calibration set, take the appropriate quantile, and widen every prediction interval by it. The guarantee needs only exchangeability between calibration and future data, so it fails silently when a new design or a new process leaves the training distribution. Detecting such <b>distribution shift</b> (by checking whether new inputs resemble the training set, or whether residuals drift) is as important as accuracy. The review's rule, that a surrogate may propose designs but must not approve them unless its error is bounded on the designs actually submitted, follows from this (@lf:sec-design-inverse).</p>
+
+<h3 id="sec-f-st-doe">Choosing experiments</h3>
+<p>When measurements are expensive (an hour of fridge time, a wafer run), choose them to be informative. Classical <b>design of experiments</b> [@montgomery2012] (factorial and response-surface designs) varies process factors systematically to fit models with few runs. <b>Bayesian experimental design</b> chooses the next experiment \(\xi\) to maximise the expected information gain about parameters \(\theta\), \(\mathrm{EIG}(\xi) = \mathbb E_{y|\xi}\big[\mathrm{KL}(p(\theta|y,\xi)\,\|\,p(\theta))\big]\) (@lf:eq-boed). Adaptive versions already speed up qubit characterisation (choosing Ramsey delays or spectroscopy frequencies on the fly). <b>Simulation-based inference</b> [@cranmer2020] fits models whose likelihood is intractable but which can be simulated (a noisy device model, say) by training neural density estimators on simulations, which suits inferring noise models from benchmark data.</p>
+
+<div class="eda"><p>Every one of the review's seven open problems uses something from this chapter: chance-constrained optimisation (Problem 1), surrogates with certified error (Problem 2), hierarchical warm-to-cold models (Problem 4), Bayesian experimental design for test (Problem 5), and simulation-based inference for error models (Problem 6). The methods exist; what is missing is their careful application to quantum devices with real production data (@lf:sec-prob-ml).</p></div>
+
+<div class="exercises" id="ex-f-stats"><h4>Exercises</h4><ol>
+<li>For a GP with one observation \(y_1\) at \(x_1\), noise \(\sigma_n\), and kernel variance \(\sigma_f^2\), write \(\mu_*\) and \(\sigma_*^2\) at \(x_* = x_1\) and far from \(x_1\).
+<details><summary>Solution</summary><p>At \(x_1\): \(\mu_* = \frac{\sigma_f^2}{\sigma_f^2+\sigma_n^2}y_1\), \(\sigma_*^2 = \sigma_f^2 - \frac{\sigma_f^4}{\sigma_f^2+\sigma_n^2} = \frac{\sigma_f^2\sigma_n^2}{\sigma_f^2+\sigma_n^2}\). Far away, \(k_*\to0\): \(\mu_*\to0\) (the prior mean) and \(\sigma_*^2\to\sigma_f^2\) (the prior variance).</p></details></li>
+<li>A wafer-level model has \(\tau_w = 40\) MHz (wafer offsets) and \(\sigma = 25\) MHz (junction-level noise). After measuring \(n\) dies from a new wafer cold, what is the posterior standard deviation of that wafer's offset?
+<details><summary>Solution</summary><p>Normal–normal updating: posterior variance \(1/(1/\tau_w^2 + n/\sigma^2)\). For \(n = 1\): \(1/(1/1600 + 1/625) = 449\), sd 21 MHz. For \(n = 4\): sd 11.9 MHz; \(n = 16\): 6.1 MHz. A few cold measurements per wafer pin down its offset, sharpening predictions for its untested dies.</p></details></li>
+<li>A conformal calibration set of 200 residuals is used for 90% intervals. Which residual quantile defines the interval width?
+<details><summary>Solution</summary><p>The \(\lceil(n+1)(1-\alpha)\rceil/n\) empirical quantile of absolute residuals: \(\lceil201\times0.9\rceil = 181\), i.e. the 181st smallest of 200.</p></details></li>
+</ol></div>
+</section>

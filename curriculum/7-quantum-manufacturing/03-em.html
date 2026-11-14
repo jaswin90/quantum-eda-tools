@@ -1,0 +1,44 @@
+<section id="sec-f-em"><h2>Electromagnetic simulation: from layout to Hamiltonian</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand the finite-element method for electrostatics and for Maxwell eigenproblems, and why edge elements are used.</li>
+<li>Know the method of moments and the finite-difference time-domain method, and when each is used.</li>
+<li>Set up eigenmode and driven simulations of a qubit chip, with ports, boundaries and mesh refinement, and judge convergence.</li>
+<li>Follow the energy-participation and black-box workflows, and understand model-order reduction and passivity.</li>
+</ul></div>
+
+<h3 id="sec-f-em-fem">Finite elements</h3>
+<p>The finite-element method (FEM, @b1:sec-m-num-discretise) solves a PDE in weak form on a mesh of tetrahedra [@jin2014]. For electrostatics, find \(\phi\) such that \(\int\varepsilon\nabla\phi\cdot\nabla v\,\dd V = 0\) for every test function \(v\), with \(\phi\) fixed on conductors. Expanding \(\phi\) in piecewise-polynomial "hat" functions gives a sparse symmetric positive-definite system, solved by preconditioned conjugate gradients; each capacitance-matrix column costs one solve (@b2:sec-c-stat-cmatrix). For Maxwell's equations the unknown is a vector field, and naive node-based vector elements produce spurious non-physical modes. <b>Edge (Nédélec) elements</b>, whose unknowns are tangential field components along mesh edges, enforce the right continuity and eliminate them. The curl-curl eigenproblem (@b2:eq-c-curlcurl) becomes a generalised sparse eigenproblem \(K\mathbf e = \omega^2M\mathbf e\), solved by shift-invert Arnoldi near the frequencies of interest (@b1:sec-m-num-linear). Commercial solvers (Ansys HFSS, COMSOL) and open ones (AWS Palace, ElmerFEM) all work this way.</p>
+
+<h3 id="sec-f-em-other">Other methods</h3>
+<ul>
+<li><b>Method of moments</b> (MoM) [@harrington1993]: discretise only conductor surfaces and solve an integral equation using the Green's function of the layered substrate. Ideal for planar circuits on uniform stacks (Sonnet, Keysight Momentum, Ansys Q3D for capacitance); the matrices are dense but much smaller than 3D FEM, and fast multipole or hierarchical-matrix methods compress them.</li>
+<li><b>Finite-difference time-domain</b> (FDTD): discretise space on a grid and step Maxwell's equations in time. Natural for broadband optics and photonics (one simulation gives the whole spectrum after a Fourier transform), less so for high-\(Q\) microwave resonators, which ring for millions of periods.</li>
+<li><b>Mode solvers</b>: 2D eigenproblems for the cross-section of a waveguide, giving \(n_{\mathrm{eff}}\), \(Z_0\) and field profiles; the input to circuit-level models of CPWs and optical waveguides.</li>
+</ul>
+
+<h3 id="sec-f-em-setup">Setting up a qubit simulation</h3>
+<p>An eigenmode simulation of a transmon with its readout resonator has these ingredients:</p>
+<ol>
+<li><b>Geometry</b>: metal as zero-thickness perfect conductors (or with kinetic inductance as a surface impedance), substrate and vacuum box, package walls.</li>
+<li><b>Junction</b>: a lumped inductor boundary \(L_J\) on a small rectangle where the junction sits (the linearised junction, @b6:eq-h-lj).</li>
+<li><b>Ports and losses</b>: the readout line terminated in 50 Ω lumped ports or absorbing boundaries, so the modes acquire finite \(Q\) and the Purcell rate can be read off; dielectric loss tangents assigned to regions if loss is to be estimated.</li>
+<li><b>Mesh</b>: adaptive refinement driven by an error estimator, with forced refinement at metal edges and near the junction, because the field singularity at edges (@b2:sec-c-stat-cond) controls both convergence and surface participation.</li>
+<li><b>Convergence</b>: refine until mode frequencies change by less than a tolerance between passes, then check the quantities you actually need (participation ratios converge much more slowly than frequencies). Extrapolate in mesh size where possible (@b1:sec-m-num-discretise).</li>
+</ol>
+<p>The outputs are mode frequencies \(\omega_m\), quality factors, and field distributions. To turn them into a Hamiltonian, compute for each mode the <b>energy-participation ratio</b> \(p_m\) of the junction (the fraction of the mode's inductive energy stored in \(L_J\)), and use @lf:eq-epr: the anharmonicity of mode \(m\) is about \(p_m^2\hbar\omega_m^2/8E_J\) and the cross-Kerr between modes \(m,n\) about \(p_mp_n\hbar\omega_m\omega_n/4E_J\) [@minev2021epr]. For a transmon mode, \(p\approx1\); for the readout mode, \(p\) is small and sets \(\chi\).</p>
+<p>The alternative <b>black-box</b> approach runs a driven simulation with a port at the junction, computes the admittance \(Y(\omega)\) seen by the junction, and finds modes as zeros of \(Y\) with effective impedances from its slope [@nigg2012; @solgun2014]. It naturally includes loss and is the bridge to model-order reduction.</p>
+
+<h3 id="sec-f-em-mor">Model-order reduction and passivity</h3>
+<p>A field simulation has millions of unknowns; a circuit model needs tens. <b>Model-order reduction</b> compresses one into the other. Vector fitting [@gustavsen1999] fits a sampled response with a rational function \(Y(s)\approx\sum_k\frac{r_k}{s - p_k} + d + es\), whose poles \(p_k\) are the modes. Krylov projection methods such as PRIMA [@odabasioglu1998] project the large system onto a small subspace while preserving <b>passivity</b>: the reduced model cannot generate energy. A non-passive reduced model can predict negative loss or spurious gain, and in a quantum context it can predict wrong mode frequencies and wrong decay rates. Hierarchical extraction, where each repeated cell is reduced once and the cells are coupled through their interfaces (@lf:eq-schur), is how classical EDA scales to whole chips, and the review argues the same is needed for quantum processors (@lf:sec-design-scale).</p>
+
+<div class="eda"><p>Problem 2 of the review asks for extraction with certified error bounds at processor scale. This chapter supplies the ingredients: FEM with adaptive refinement for accuracy, reduction with passivity for speed, and hierarchical composition for scale. The open question is how to carry a posteriori error estimates through all three to the uncertainty of each Hamiltonian parameter.</p></div>
+
+<div class="exercises" id="ex-f-em"><h4>Exercises</h4><ol>
+<li>A mesh refinement study gives mode frequencies 5.212, 5.183 and 5.176 GHz at mesh sizes \(h\), \(h/2\), \(h/4\). Estimate the convergence order and the extrapolated frequency.
+<details><summary>Solution</summary><p>Differences 29 and 7 MHz, ratio about 4.1, so order \(p\approx\log_2 4.1\approx2\). Richardson: \(f\approx5.176 - 7/(4-1)\approx5.174\) GHz. The finest mesh is still about 2 MHz off.</p></details></li>
+<li>Using EPR, a transmon mode at 5.0 GHz has \(p = 0.98\) and \(E_J/h = 14\) GHz. Estimate its anharmonicity.
+<details><summary>Solution</summary><p>\(\alpha/2\pi\approx p^2f^2/(8E_J/h) = 0.96\times25/112\approx0.21\) GHz, i.e. \(\alpha/2\pi\approx-214\) MHz (negative sign from the cosine expansion).</p></details></li>
+<li>Why does a non-passive reduced model of a resonator's admittance predict wrong \(T_1\) values?
+<details><summary>Solution</summary><p>\(T_1\) is computed from \(\Re Y(\omega_q)\) (@b3:sec-q-pert-golden). A passive admittance has \(\Re Y\ge0\) at all frequencies; a non-passive fit can have small negative or wrongly small \(\Re Y\) near the qubit frequency, predicting gain or an unphysically long \(T_1\).</p></details></li>
+</ol></div>
+</section>

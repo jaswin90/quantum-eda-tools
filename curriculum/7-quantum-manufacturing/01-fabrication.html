@@ -1,0 +1,42 @@
+<section id="sec-f-fab"><h2>How quantum chips are made</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Know the unit processes of microfabrication: deposition, lithography, etching, lift-off and metrology.</li>
+<li>Follow a superconducting-qubit process flow from bare wafer to diced chip, including junctions, airbridges and 3D integration.</li>
+<li>Understand the difference between a research cleanroom and a production line, and what statistical process control means.</li>
+</ul></div>
+
+<h3 id="sec-f-fab-unit">Unit processes</h3>
+<p>Microfabrication builds a device by repeating a few steps on a wafer (silicon or sapphire, 100–300 mm across) [@plummer2000]:</p>
+<ul>
+<li><b>Deposition</b> adds a film. <i>Evaporation</i> heats a source in vacuum so atoms travel in straight lines to the wafer (directional, good for lift-off and shadow evaporation of junctions). <i>Sputtering</i> knocks atoms off a target with an ion plasma (denser films, conformal coverage, standard for Nb, Ta, TiN). <i>Atomic layer deposition</i> grows films one atomic layer at a time (precise oxides and nitrides). <i>Oxidation</i> grows an oxide on the existing surface, as in the junction barrier.</li>
+<li><b>Lithography</b> defines patterns. A light-sensitive <i>resist</i> is spun on, exposed through a mask (optical lithography) or written point by point with an electron beam (e-beam lithography), and developed. Optical resolution follows \(R = k_1\lambda/\mathrm{NA}\) [@mack2007]: about 250 nm for i-line steppers (365 nm), below 100 nm for deep-UV scanners at 193 nm. E-beam lithography reaches 10 nm but writes slowly, so research labs use it for junctions while production lines prefer optical steppers.</li>
+<li><b>Etching</b> removes material where the resist does not protect it: <i>wet</i> etching in liquid chemicals (isotropic, undercuts) or <i>dry</i> etching in a plasma (reactive-ion etching, anisotropic, vertical sidewalls). Etching the substrate between metal lines ("trenching") reduces the substrate–air participation of @b6:sec-h-d-budget.</li>
+<li><b>Lift-off</b> deposits metal over a patterned resist and dissolves the resist, removing the metal on top of it. It avoids etching the film but leaves edges sensitive to resist profile.</li>
+<li><b>Metrology</b> measures what was made: film thickness (ellipsometry, profilometry), linewidths (scanning electron microscopy), sheet resistance (four-point probes), surface chemistry (XPS), and electrical test structures.</li>
+</ul>
+
+<h3 id="sec-f-fab-flow">A superconducting-qubit process flow</h3>
+<ol>
+<li><b>Substrate preparation</b>: high-resistivity silicon or sapphire, cleaned and often stripped of native oxide (hydrofluoric acid dip) immediately before deposition, because the metal–substrate interface is lossy (@b6:sec-h-d-budget).</li>
+<li><b>Base layer</b>: sputter 100–200 nm of Nb, Ta or Al; pattern ground planes, capacitor pads, resonators, feedlines and control lines by optical lithography and dry etch. Flux-trapping holes are etched into ground planes.</li>
+<li><b>Junctions</b>: e-beam or optical lithography of a bilayer resist with an undercut, double-angle aluminium evaporation with an oxidation step in between (@b6:sec-h-jj-fab), lift-off. An ion-milling step removes native oxide where junction leads must contact the base layer.</li>
+<li><b>Airbridges</b>: resist arches and a metal layer that crosses CPW lines to tie ground planes together and suppress slotline modes.</li>
+<li><b>Room-temperature test</b>: probe junction resistances (and resistance test structures) across the wafer; optionally <b>laser-anneal</b> junctions to trim \(R_n\) (@lf:sec-var-trim).</li>
+<li><b>Dicing and packaging</b>: protect, dice, clean, and mount chips; wirebond or flip-chip bond to a carrier (Chapter 5).</li>
+</ol>
+<p>Larger processors add <b>3D integration</b>: a qubit chip flip-chip bonded with indium bumps to a separate wiring chip carrying readout resonators and control lines, and <b>through-silicon vias</b> that connect top and bottom surfaces and suppress substrate modes. Each adds process steps, new interfaces and new sources of variation (bump height sets the inter-chip gap and hence capacitances).</p>
+
+<h3 id="sec-f-fab-lab">Research cleanroom versus production line</h3>
+<p>A university cleanroom optimises flexibility: tools are shared, recipes change weekly, wafers are processed one at a time, and the record of what was done is a lab notebook. A production line optimises reproducibility: every tool is qualified, every recipe frozen, every wafer tracked through a <b>manufacturing execution system</b>, and every critical parameter measured and plotted on <b>control charts</b>. <b>Statistical process control</b> (SPC) tracks each parameter's mean and spread over time and flags drifts before they ruin product. The capability of a process to meet a specification \([L, U]\) is summarised by</p>
+<div class="eq" id="eq-f-cpk">$$ C_{pk} = \min\Big(\frac{U - \mu}{3\sigma}, \frac{\mu - L}{3\sigma}\Big), $$</div>
+<p>with \(C_{pk}\ge1.33\) a typical industrial requirement (the nearest specification limit is four standard deviations from the mean). Between 2024 and 2026, superconducting, ion-trap, photonic and spin-qubit programmes moved onto 200 and 300 mm production lines and foundries opened to outside customers (@lf:sec-land-foundry). That move makes SPC data available at scale, and it is the precondition for the statistical design methods of Chapters 4 and 6.</p>
+
+<div class="eda"><p>Each process step is a source of variation with a spatial structure: film thickness varies smoothly across a wafer, linewidths vary with local pattern density, and oxidation varies from run to run. A design tool that predicts yield needs a model of this structure, built from metrology and test data. The review's "die record" (@lf:sec-prob-record) is the data structure that links each chip's process history to its measured performance.</p></div>
+
+<div class="exercises" id="ex-f-fab"><h4>Exercises</h4><ol>
+<li>An i-line stepper has NA = 0.57 and \(k_1 = 0.5\). What is its resolution? Can it pattern a 150 nm wide junction lead?
+<details><summary>Solution</summary><p>\(R = 0.5\times365/0.57\approx320\) nm. A 150 nm lead is below the resolution; it needs DUV (193 nm, NA 0.93: about 100 nm at \(k_1 = 0.5\)) or e-beam lithography, or a junction design (overlap junctions) that relaxes the requirement.</p></details></li>
+<li>Junction resistance has a specification of \(10.0\pm0.3\) kΩ. The process gives \(\mu = 10.1\) kΩ and \(\sigma = 0.08\) kΩ. Compute \(C_{pk}\) and the expected fraction out of specification.
+<details><summary>Solution</summary><p>\((10.3 - 10.1)/0.24 = 0.83\) and \((10.1 - 9.7)/0.24 = 1.67\): \(C_{pk} = 0.83\). Upper tail \(1-\Phi(2.5) = 0.62\%\), lower tail \(1-\Phi(5)\approx3\times10^{-7}\): about 0.6% out of specification. Centring the mean would give \(C_{pk} = 1.25\) and 0.02% out.</p></details></li>
+</ol></div>
+</section>

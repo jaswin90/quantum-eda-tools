@@ -11,7 +11,7 @@ Output:   docs/foundations/index.html       roadmap
           docs/foundations/<slug>/index.html  one page per book
 
 Markup is the review's (see scripts/build.py) plus references to other documents:
-  @b3:sec-x   @b3:eq-x   @b3:fig-x       a label in Book 3 of the series
+  @b3:sec-x   @b3:eq-x   @b3:fig-x       a label in Book 3 of the series (@b3:sec-x+ adds its title)
   @lf:sec-x   @lf:eq-x                    a label in the review "From Laboratory to Foundry"
 and two pedagogical blocks that are counted in the page header:
   <div class="exercises"> ... <details><summary>Solution</summary> ... </details>
@@ -36,7 +36,7 @@ CUR = ROOT / "curriculum"
 OUT = ROOT / "docs" / "foundations"
 SERIES = json.loads((CUR / "series.json").read_text())
 BOOKS = SERIES["books"]
-XREF = re.compile(r"@(b\d|lf):((?:sec|eq|fig|tab)-[A-Za-z0-9_-]+)")
+XREF = re.compile(r"@(b\d|lf):((?:sec|eq|fig|tab)-[A-Za-z0-9_-]+)(\+?)")
 
 
 def load_bib() -> dict:
@@ -91,6 +91,7 @@ def main() -> None:
     rev_body = "\n".join(p.read_text() for p in sorted((ROOT / "review" / "sections").glob("*.html")))
     rev = review.assemble(rev_body, bib)
     labels = {"lf": rev["labels"]}
+    titles = {"lf": toc_titles(rev["toc"])}
 
     # Pass 1: number every book; references to other documents are left in place.
     built = {}
@@ -98,6 +99,7 @@ def main() -> None:
         a = review.assemble(book_body(b), bib)
         built[b["n"]] = a
         labels[f"b{b['n']}"] = a["labels"]
+        titles[f"b{b['n']}"] = toc_titles(a["toc"])
     road = review.assemble((CUR / "roadmap.html").read_text(), bib)
 
     def resolve(where: str):
@@ -117,7 +119,11 @@ def main() -> None:
                 bk = next(x for x in BOOKS if x["n"] == n)
                 href = f"{up}foundations/{bk['slug']}/index.html#{key}"
                 text = f"Book {n} {pretty(lab, kind)}"
-            return f'<a class="xref ext" href="{href}">{text}</a>'
+            tip = titles.get(doc, {}).get(key)
+            if m.group(3) and tip:          # "@b2:sec-x+" also prints the section title
+                text += f": {tip}"
+            tip = f' title="{html.escape(tip, quote=True)}"' if tip else ""
+            return f'<a class="xref ext" href="{href}"{tip}>{text}</a>'
         up = "../../" if where != "roadmap" else "../"
         return sub
 
@@ -223,6 +229,13 @@ def main() -> None:
     for s in stats:
         print(f"{s[0]:>4} {s[1]:>3} {s[2]:>4} {s[3]:>5} {s[4]:>10} {s[5]:>5} {s[6]:>6}")
     print(f"total words ~{sum(s[6] for s in stats)}; wrote docs/foundations/")
+
+
+def toc_titles(toc: str) -> dict:
+    out = {}
+    for sid, title in re.findall(r'<a href="#([^"]+)">(?:<span class="tocnum">[^<]*</span>)?(.*?)</a>', toc):
+        out[sid] = re.sub(r"<[^>]+>|\\\(|\\\)", "", title).strip()
+    return out
 
 
 def first_exercises(body: str) -> str:

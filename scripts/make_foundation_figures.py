@@ -370,7 +370,77 @@ def fig_h_transmon():
     return {"alpha_over_E01_at_50": round(((r50[2] - r50[1]) - (r50[1] - r50[0])) / (r50[1] - r50[0]), 3)}
 
 
-FIGS = [fig_h_transmon, fig_p_hom, fig_p_herald, fig_i_rb, fig_i_threshold, fig_q_qho, fig_q_rabi, fig_q_decoh, fig_m_lorentz, fig_m_yield, fig_c_avoided, fig_c_notch, fig_c_nth]
+# ============================================================== Book 7: manufacturing
+def fig_f_defect():
+    p = Plot()
+    p.set_x(0, 20)
+    p.set_y(0, 1.0)
+    p.axes([0, 5, 10, 15, 20], [0, 0.25, 0.5, 0.75, 1.0], "critical area A (cm²)", "die yield", fmt, fmt)
+    D0 = 0.1
+    xs = frange(0, 20, 300)
+    p.line([(a, math.exp(-a * D0)) for a in xs], C2)
+    for al, col in ((2, C1), (0.5, C3)):
+        p.line([(a, (1 + a * D0 / al) ** (-al)) for a in xs], col)
+    p.label(13, math.exp(-1.3), "Poisson", C2, dy=-10)
+    p.label(13, (1 + 1.3 / 2) ** -2, "neg. binomial α = 2", C1, dy=-10)
+    p.label(13, (1 + 1.3 / 0.5) ** -0.5, "α = 0.5 (clustered)", C3, dy=-10)
+    save(p, "fig-f-defect.svg", "Die yield versus critical area for Poisson and negative-binomial defect models.")
+
+
+def chol(A):
+    n = len(A)
+    L = [[0.0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(i + 1):
+            s = A[i][j] - sum(L[i][k] * L[j][k] for k in range(j))
+            L[i][j] = math.sqrt(s) if i == j else s / L[j][j]
+    return L
+
+
+def chol_solve(L, b):
+    n = len(L)
+    y = [0.0] * n
+    for i in range(n):
+        y[i] = (b[i] - sum(L[i][k] * y[k] for k in range(i))) / L[i][i]
+    x = [0.0] * n
+    for i in reversed(range(n)):
+        x[i] = (y[i] - sum(L[k][i] * x[k] for k in range(i + 1, n))) / L[i][i]
+    return x
+
+
+def fig_f_gp():
+    truth = lambda x: math.sin(3 * x) + 0.3 * x
+    xs_obs = [-1.6, -0.9, -0.4, 0.3, 0.8, 1.1]
+    noise = [0.03, -0.05, 0.04, -0.02, 0.05, -0.03]
+    ys = [truth(x) + e for x, e in zip(xs_obs, noise)]
+    sf, ell, sn = 1.0, 0.45, 0.05
+    k = lambda a, b: sf ** 2 * math.exp(-(a - b) ** 2 / (2 * ell * ell))
+    K = [[k(a, b) + (sn ** 2 if i == j else 0) for j, b in enumerate(xs_obs)] for i, a in enumerate(xs_obs)]
+    L = chol(K)
+    alpha = chol_solve(L, ys)
+    grid = frange(-2.5, 2.5, 300)
+    mu, sd = [], []
+    for x in grid:
+        ks = [k(a, x) for a in xs_obs]
+        mu.append(sum(a * b for a, b in zip(ks, alpha)))
+        v = chol_solve(L, ks)
+        sd.append(math.sqrt(max(k(x, x) - sum(a * b for a, b in zip(ks, v)), 0)))
+    p = Plot()
+    p.set_x(-2.5, 2.5)
+    p.set_y(-2.6, 2.6)
+    p.axes([-2, -1, 0, 1, 2], [-2, -1, 0, 1, 2], "design parameter x", "response y", fmt, fmt)
+    up = [(x, m + 2 * s) for x, m, s in zip(grid, mu, sd)]
+    lo = [(x, m - 2 * s) for x, m, s in zip(grid, mu, sd)]
+    poly = " ".join(f"{p.X(x):.1f},{p.Y(max(min(y, 2.6), -2.6)):.1f}" for x, y in up + lo[::-1])
+    p.add(f'<polygon points="{poly}" fill="{C1}" opacity="0.15"/>')
+    p.line([(x, truth(x)) for x in grid], INK2, width=1.6, dash="6 5")
+    p.line(list(zip(grid, mu)), C1)
+    for x, y in zip(xs_obs, ys):
+        p.dot(x, y, C2)
+    save(p, "fig-f-gp.svg", "Gaussian-process regression of a smooth function from six samples.")
+
+
+FIGS = [fig_f_defect, fig_f_gp, fig_h_transmon, fig_p_hom, fig_p_herald, fig_i_rb, fig_i_threshold, fig_q_qho, fig_q_rabi, fig_q_decoh, fig_m_lorentz, fig_m_yield, fig_c_avoided, fig_c_notch, fig_c_nth]
 
 
 def main():

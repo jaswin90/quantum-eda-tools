@@ -1,0 +1,40 @@
+<section id="sec-f-map"><h2>Reading the review: a map and seven projects</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Know, for each section of <i>From Laboratory to Foundry</i>, which chapters of this series prepare for it.</li>
+<li>Turn each of the review's seven open problems into a project you can start with the tools of this course.</li>
+</ul></div>
+
+<h3 id="sec-f-map-table">Section-by-section preparation</h3>
+<p>The review assumes graduate quantum mechanics and fluency in statistics; this series supplies both and the engineering in between. Before each section of the review, re-read the chapters listed.</p>
+<figure class="tbl" id="tab-f-map"><figcaption>Where each part of the review is prepared in the series.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Review section</th><th>Prepare with</th></tr>
+<tr><td>@lf:sec-intro+ and @lf:sec-landscape+</td><td>@b4:sec-i-qec2+ (why error correction drives scale),<br>@b6:sec-h-other+ (the modalities),<br>@b7:sec-f-fab+ (what a production line is)</td></tr>
+<tr><td>@lf:sec-design+</td><td>@b2:sec-c-lagrange+,<br>@b2:sec-c-hamilton+,<br>@b2:sec-c-statics+,<br>@b3:sec-q-pert+,<br>@b6:sec-h-quant+,<br>@b6:sec-h-cqed+,<br>@b7:sec-f-em+,<br>@b1:sec-m-numerics+</td></tr>
+<tr><td>@lf:sec-var+</td><td>@b6:sec-h-jj+,<br>@b6:sec-h-gates+,<br>@b1:sec-m-prob+,<br>@b7:sec-f-yield+,<br>@b7:sec-f-stats+</td></tr>
+<tr><td>@lf:sec-mat+</td><td>@b2:sec-c-maxwell+,<br>@b3:sec-q-open+,<br>@b6:sec-h-super+,<br>@b6:sec-h-decoh+</td></tr>
+<tr><td>@lf:sec-pkg+</td><td>@b2:sec-c-tline+,<br>@b2:sec-c-thermal+,<br>@b7:sec-f-pkg+</td></tr>
+<tr><td>@lf:sec-test+</td><td>@b3:sec-q-spin+,<br>@b4:sec-i-noise+,<br>@b4:sec-i-stack+,<br>@b7:sec-f-pkg+,<br>@b7:sec-f-stats+</td></tr>
+<tr><td>@lf:sec-mod+</td><td>@b5:sec-p-linear+,<br>@b5:sec-p-integrated+,<br>@b5:sec-p-qc+,<br>@b6:sec-h-other+,<br>@b3:sec-q-second+</td></tr>
+<tr><td>@lf:sec-qec+</td><td>@b4:sec-i-noise+,<br>@b4:sec-i-qec1+,<br>@b4:sec-i-qec2+</td></tr>
+<tr><td>@lf:sec-tools+</td><td>@b7:sec-f-eda+,<br>@b7:sec-f-em+</td></tr>
+<tr><td>@lf:sec-prob+</td><td>All of this book, and the projects below</td></tr>
+</table></div></figure>
+
+<h3 id="sec-f-map-projects">Seven projects</h3>
+<p>Each project below is a small, self-contained version of one of the review's open problems, sized for a few weeks with Python, NumPy/SciPy and open-source tools (scqubits, Stim, an open FEM solver such as Palace or Elmer). Each is a stepping stone, not a solution.</p>
+<ol>
+<li><b>Variation-aware frequency planning</b> (<a href="../../index.html#p1">Problem 1</a>). Implement the collision model of @eq:f-pedge for a 5×5 square lattice with three or four frequency groups, including spectator conditions. Estimate yield by Monte Carlo versus \(\sigma\). Then optimise the target frequencies to maximise yield at \(\sigma = 20\) MHz, and compare with the nominal-optimal design. <i>Uses:</i> @sec:f-yield, @b1:sec-m-numerics, @b6:sec-h-gates.</li>
+<li><b>Extraction with an error bar</b> (<a href="../../index.html#p2">Problem 2</a>). Simulate a transmon pad pair with an open electrostatic FEM solver on a sequence of meshes; extract \(C_\Sigma\) and the coupling capacitance; extrapolate in mesh size and report a convergence-based uncertainty. Propagate it to \(f_{01}\) and \(g\). <i>Uses:</i> @sec:f-em, @b2:sec-c-statics, @b6:sec-h-quant.</li>
+<li><b>Layout-versus-Hamiltonian check</b> (<a href="../../index.html#p3">Problem 3</a>). Define a small netlist schema (nodes, capacitances, junctions, couplings) and write a checker that compares the Hamiltonian parameters derived from an extracted netlist with the designer's intended ones, flagging any parameter outside tolerance and any near-collision. <i>Uses:</i> @sec:f-eda, @b6:sec-h-quant, @b3:sec-q-pert.</li>
+<li><b>Warm-to-cold prediction</b> (<a href="../../index.html#p4">Problem 4</a>). Generate synthetic wafer data from the hierarchical model of @eq:f-hier (with a radial gradient and a warm-to-cold shift), fit it with a probabilistic programming library, and use posterior predictions to decide which junctions to laser-trim and which dies to cool. Measure how many cold measurements per wafer are needed. <i>Uses:</i> @sec:f-stats, @b6:sec-h-jj, @sec:f-pkg.</li>
+<li><b>Adaptive characterisation</b> (<a href="../../index.html#p5">Problem 5</a>). Simulate Ramsey experiments on a qubit with unknown detuning and \(T_2^*\), and implement Bayesian adaptive choice of delays. Compare the number of shots needed against a fixed linear sweep. <i>Uses:</i> @b3:sec-q-spin, @b3:sec-q-open, @sec:f-stats.</li>
+<li><b>From device parameters to \(\Lambda\)</b> (<a href="../../index.html#p6">Problem 6</a>). Sample device parameters for a distance-5 surface-code patch from a variation model, convert them to per-gate error rates with @b4:eq-i-coh plus a \(ZZ\) term, build the noisy circuit in Stim, decode with matching, and estimate the distribution of logical error rates and \(\Lambda\) across fabricated chips. <i>Uses:</i> @b4:sec-i-qec2, @b4:sec-i-noise, @b6:sec-h-decoh.</li>
+<li><b>Photonic path-loss sign-off</b> (<a href="../../index.html#p7">Problem 7</a>). Model a 16-mode Clements mesh with per-MZI loss and splitting-ratio distributions; compute by Monte Carlo the probability that every path meets a loss threshold and that the mesh can still be programmed to a target unitary. <i>Uses:</i> @b5:sec-p-linear, @b5:sec-p-integrated, @b5:sec-p-qc.</li>
+</ol>
+
+<h3 id="sec-f-map-next">Where to go next</h3>
+<p>The review's reading guide (@lf:sec-reading) and the annotated reading list in the repository point to the primary literature, tiered by how deep you need to go. With this series behind you, the Tier 1 papers there should read as applications of ideas you have already met. The natural next step is to pick one project above, find the two or three papers the review cites for that problem, and reproduce one of their figures before trying to improve on it.</p>
+
+<div class="eda"><p>The thesis of the review is that quantum processors are now manufactured, and that what separates a research device from a product is the ability to predict, before fabrication, the distribution of what will be made. This series has built the physics and the mathematics behind that sentence. The review is where it is turned into a research agenda.</p></div>
+</section>

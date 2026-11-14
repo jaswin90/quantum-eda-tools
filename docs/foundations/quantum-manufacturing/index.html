@@ -48,14 +48,49 @@ document.addEventListener("DOMContentLoaded", function () {
 <header class="topbar">
 <a class="brand" href="index.html">Book 7 · <span>Making Quantum Chips</span></a>
 <span class="spacer"></span>
-<nav><a href="../index.html">Roadmap</a><a href="#references">Exercises</a><a href="../../index.html">Lab to Foundry</a></nav>
+<nav><a href="../index.html">Roadmap</a><a href="#ex-f-fab">Exercises</a><a href="../../index.html">Lab to Foundry</a></nav>
 <button class="btn icon-btn" id="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
 </header>
 <div class="layout">
 <nav class="toc" aria-label="Contents">
   <p class="toc-title">Contents</p>
   <ol>
-<li class="toc2"><a href="#sec-soon">In preparation</a></li>
+<li class="toc2"><a href="#sec-f-preface">How to use this book</a></li>
+<li class="toc2"><a href="#sec-f-fab"><span class="tocnum">1</span>How quantum chips are made</a></li>
+<li class="toc3"><a href="#sec-f-fab-unit"><span class="tocnum">1.1</span>Unit processes</a></li>
+<li class="toc3"><a href="#sec-f-fab-flow"><span class="tocnum">1.2</span>A superconducting-qubit process flow</a></li>
+<li class="toc3"><a href="#sec-f-fab-lab"><span class="tocnum">1.3</span>Research cleanroom versus production line</a></li>
+<li class="toc2"><a href="#sec-f-eda"><span class="tocnum">2</span>Classical electronic design automation in one chapter</a></li>
+<li class="toc3"><a href="#sec-f-eda-flow"><span class="tocnum">2.1</span>The flow</a></li>
+<li class="toc3"><a href="#sec-f-eda-pdk"><span class="tocnum">2.2</span>The process design kit</a></li>
+<li class="toc3"><a href="#sec-f-eda-compact"><span class="tocnum">2.3</span>Compact models, corners and Monte Carlo</a></li>
+<li class="toc3"><a href="#sec-f-eda-quantum"><span class="tocnum">2.4</span>What transfers to quantum design</a></li>
+<li class="toc2"><a href="#sec-f-em"><span class="tocnum">3</span>Electromagnetic simulation: from layout to Hamiltonian</a></li>
+<li class="toc3"><a href="#sec-f-em-fem"><span class="tocnum">3.1</span>Finite elements</a></li>
+<li class="toc3"><a href="#sec-f-em-other"><span class="tocnum">3.2</span>Other methods</a></li>
+<li class="toc3"><a href="#sec-f-em-setup"><span class="tocnum">3.3</span>Setting up a qubit simulation</a></li>
+<li class="toc3"><a href="#sec-f-em-mor"><span class="tocnum">3.4</span>Model-order reduction and passivity</a></li>
+<li class="toc2"><a href="#sec-f-yield"><span class="tocnum">4</span>Variability and yield</a></li>
+<li class="toc3"><a href="#sec-f-y-sources"><span class="tocnum">4.1</span>Sources and structure of variation</a></li>
+<li class="toc3"><a href="#sec-f-y-defect"><span class="tocnum">4.2</span>Defect-limited yield</a></li>
+<li class="toc3"><a href="#sec-f-y-param"><span class="tocnum">4.3</span>Parametric yield</a></li>
+<li class="toc3"><a href="#sec-f-y-collide"><span class="tocnum">4.4</span>Frequency collisions: a worked model</a></li>
+<li class="toc3"><a href="#sec-f-y-design"><span class="tocnum">4.5</span>Designing for yield</a></li>
+<li class="toc2"><a href="#sec-f-pkg"><span class="tocnum">5</span>Packaging, cryogenics and test</a></li>
+<li class="toc3"><a href="#sec-f-pkg-pkg"><span class="tocnum">5.1</span>The package</a></li>
+<li class="toc3"><a href="#sec-f-pkg-wiring"><span class="tocnum">5.2</span>Heat and noise budgets</a></li>
+<li class="toc3"><a href="#sec-f-pkg-test"><span class="tocnum">5.3</span>Test</a></li>
+<li class="toc2"><a href="#sec-f-stats"><span class="tocnum">6</span>Statistical learning for design and manufacturing</a></li>
+<li class="toc3"><a href="#sec-f-st-gp"><span class="tocnum">6.1</span>Gaussian-process surrogates</a></li>
+<li class="toc3"><a href="#sec-f-st-bo"><span class="tocnum">6.2</span>Bayesian optimisation</a></li>
+<li class="toc3"><a href="#sec-f-st-hier"><span class="tocnum">6.3</span>Hierarchical models</a></li>
+<li class="toc3"><a href="#sec-f-st-cal"><span class="tocnum">6.4</span>Is the uncertainty right?</a></li>
+<li class="toc3"><a href="#sec-f-st-doe"><span class="tocnum">6.5</span>Choosing experiments</a></li>
+<li class="toc2"><a href="#sec-f-map"><span class="tocnum">7</span>Reading the review: a map and seven projects</a></li>
+<li class="toc3"><a href="#sec-f-map-table"><span class="tocnum">7.1</span>Section-by-section preparation</a></li>
+<li class="toc3"><a href="#sec-f-map-projects"><span class="tocnum">7.2</span>Seven projects</a></li>
+<li class="toc3"><a href="#sec-f-map-next"><span class="tocnum">7.3</span>Where to go next</a></li>
+    <li class="toc2"><a href="#references">References</a></li>
   </ol>
 </nav>
 <main>
@@ -65,11 +100,369 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Making Quantum Chips: Fabrication, Simulation, Yield and Design Automation</h1>
   <p class="subtitle">Cleanroom processes, classical EDA, electromagnetic simulation, variability and yield, cryogenic packaging and test, and statistical learning for manufacturing</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">0 chapters · 0 numbered equations · 0 exercises with solutions · about 45 hours of study</p>
+  <p class="meta">7 chapters · 8 numbered equations · 16 exercises with solutions · about 45 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../mathematics/index.html">Book 1: Mathematics</a>, <a href="../classical-physics/index.html">Book 2: Classical Physics</a>, <a href="../quantum-hardware/index.html">Book 6: Quantum Hardware</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
-<section id="sec-soon" class="unnumbered"><h2>In preparation</h2><p>This book has not been written yet.</p></section>
+<section id="sec-f-preface" class="unnumbered"><h2>How to use this book</h2>
+<p>The first six books explained what a quantum processor is and why it behaves as it does. This one explains how it is made, how classical chips are designed so that they can be made reliably, and what it would take to do the same for quantum chips. It is the bridge into the review <i>From Laboratory to Foundry</i>, and it is written so that every section of the review has a chapter here that prepares for it.</p>
+<p>Chapter 1 follows a wafer through a cleanroom. Chapter 2 describes classical electronic design automation (EDA), the industry the review proposes to extend. Chapter 3 opens the black box of electromagnetic solvers. Chapter 4 develops variability and yield, the central technical theme of the review. Chapter 5 covers packaging, cryogenics and test. Chapter 6 assembles the statistical and machine-learning toolkit that the review's open problems call for. Chapter 7 is a map: for each section of the review it lists what to re-read, and it proposes projects that turn the review's open problems into exercises at the scale of a thesis chapter.</p>
+<p>Prerequisites: Book 1 Chapters 7–8 (probability, numerics), Book 2 Chapters 4–6 and 8, and Book 6. Useful references: Plummer, Deal and Griffin for fabrication <span class="cite">[<a href="#ref-plummer2000">1</a>]</span>, Lavagno <i>et al.</i> for EDA <span class="cite">[<a href="#ref-lavagno2016">2</a>]</span>, Jin for finite elements <span class="cite">[<a href="#ref-jin2014">3</a>]</span>, and Gelman <i>et al.</i> for Bayesian statistics <span class="cite">[<a href="#ref-gelman2013">4</a>]</span>.</p>
+</section>
 
+<section id="sec-f-fab"><h2><span class="secnum">1</span> How quantum chips are made</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Know the unit processes of microfabrication: deposition, lithography, etching, lift-off and metrology.</li>
+<li>Follow a superconducting-qubit process flow from bare wafer to diced chip, including junctions, airbridges and 3D integration.</li>
+<li>Understand the difference between a research cleanroom and a production line, and what statistical process control means.</li>
+</ul></div>
+
+<h3 id="sec-f-fab-unit"><span class="secnum">1.1</span> Unit processes</h3>
+<p>Microfabrication builds a device by repeating a few steps on a wafer (silicon or sapphire, 100–300 mm across) <span class="cite">[<a href="#ref-plummer2000">1</a>]</span>:</p>
+<ul>
+<li><b>Deposition</b> adds a film. <i>Evaporation</i> heats a source in vacuum so atoms travel in straight lines to the wafer (directional, good for lift-off and shadow evaporation of junctions). <i>Sputtering</i> knocks atoms off a target with an ion plasma (denser films, conformal coverage, standard for Nb, Ta, TiN). <i>Atomic layer deposition</i> grows films one atomic layer at a time (precise oxides and nitrides). <i>Oxidation</i> grows an oxide on the existing surface, as in the junction barrier.</li>
+<li><b>Lithography</b> defines patterns. A light-sensitive <i>resist</i> is spun on, exposed through a mask (optical lithography) or written point by point with an electron beam (e-beam lithography), and developed. Optical resolution follows \(R = k_1\lambda/\mathrm{NA}\) <span class="cite">[<a href="#ref-mack2007">5</a>]</span>: about 250 nm for i-line steppers (365 nm), below 100 nm for deep-UV scanners at 193 nm. E-beam lithography reaches 10 nm but writes slowly, so research labs use it for junctions while production lines prefer optical steppers.</li>
+<li><b>Etching</b> removes material where the resist does not protect it: <i>wet</i> etching in liquid chemicals (isotropic, undercuts) or <i>dry</i> etching in a plasma (reactive-ion etching, anisotropic, vertical sidewalls). Etching the substrate between metal lines ("trenching") reduces the substrate–air participation of <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-d-budget" title="The T_1 budget">Book 6 §6.1</a>.</li>
+<li><b>Lift-off</b> deposits metal over a patterned resist and dissolves the resist, removing the metal on top of it. It avoids etching the film but leaves edges sensitive to resist profile.</li>
+<li><b>Metrology</b> measures what was made: film thickness (ellipsometry, profilometry), linewidths (scanning electron microscopy), sheet resistance (four-point probes), surface chemistry (XPS), and electrical test structures.</li>
+</ul>
+
+<h3 id="sec-f-fab-flow"><span class="secnum">1.2</span> A superconducting-qubit process flow</h3>
+<ol>
+<li><b>Substrate preparation</b>: high-resistivity silicon or sapphire, cleaned and often stripped of native oxide (hydrofluoric acid dip) immediately before deposition, because the metal–substrate interface is lossy (<a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-d-budget" title="The T_1 budget">Book 6 §6.1</a>).</li>
+<li><b>Base layer</b>: sputter 100–200 nm of Nb, Ta or Al; pattern ground planes, capacitor pads, resonators, feedlines and control lines by optical lithography and dry etch. Flux-trapping holes are etched into ground planes.</li>
+<li><b>Junctions</b>: e-beam or optical lithography of a bilayer resist with an undercut, double-angle aluminium evaporation with an oxidation step in between (<a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-jj-fab" title="How junctions are made">Book 6 §2.5</a>), lift-off. An ion-milling step removes native oxide where junction leads must contact the base layer.</li>
+<li><b>Airbridges</b>: resist arches and a metal layer that crosses CPW lines to tie ground planes together and suppress slotline modes.</li>
+<li><b>Room-temperature test</b>: probe junction resistances (and resistance test structures) across the wafer; optionally <b>laser-anneal</b> junctions to trim \(R_n\) (<a class="xref ext" href="../../index.html#sec-var-trim" title="Post-fabrication trimming">Lab to Foundry §4.4</a>).</li>
+<li><b>Dicing and packaging</b>: protect, dice, clean, and mount chips; wirebond or flip-chip bond to a carrier (Chapter 5).</li>
+</ol>
+<p>Larger processors add <b>3D integration</b>: a qubit chip flip-chip bonded with indium bumps to a separate wiring chip carrying readout resonators and control lines, and <b>through-silicon vias</b> that connect top and bottom surfaces and suppress substrate modes. Each adds process steps, new interfaces and new sources of variation (bump height sets the inter-chip gap and hence capacitances).</p>
+
+<h3 id="sec-f-fab-lab"><span class="secnum">1.3</span> Research cleanroom versus production line</h3>
+<p>A university cleanroom optimises flexibility: tools are shared, recipes change weekly, wafers are processed one at a time, and the record of what was done is a lab notebook. A production line optimises reproducibility: every tool is qualified, every recipe frozen, every wafer tracked through a <b>manufacturing execution system</b>, and every critical parameter measured and plotted on <b>control charts</b>. <b>Statistical process control</b> (SPC) tracks each parameter's mean and spread over time and flags drifts before they ruin product. The capability of a process to meet a specification \([L, U]\) is summarised by</p>
+<div class="eq" id="eq-f-cpk">$$ C_{pk} = \min\Big(\frac{U - \mu}{3\sigma}, \frac{\mu - L}{3\sigma}\Big),  \tag{1}$$</div>
+<p>with \(C_{pk}\ge1.33\) a typical industrial requirement (the nearest specification limit is four standard deviations from the mean). Between 2024 and 2026, superconducting, ion-trap, photonic and spin-qubit programmes moved onto 200 and 300 mm production lines and foundries opened to outside customers (<a class="xref ext" href="../../index.html#sec-land-foundry" title="Vertical integration and the first quantum foundries">Lab to Foundry §2.2</a>). That move makes SPC data available at scale, and it is the precondition for the statistical design methods of Chapters 4 and 6.</p>
+
+<div class="eda"><p>Each process step is a source of variation with a spatial structure: film thickness varies smoothly across a wafer, linewidths vary with local pattern density, and oxidation varies from run to run. A design tool that predicts yield needs a model of this structure, built from metrology and test data. The review's "die record" (<a class="xref ext" href="../../index.html#sec-prob-record" title="Integration: the die record">Lab to Foundry §11.1</a>) is the data structure that links each chip's process history to its measured performance.</p></div>
+
+<div class="exercises" id="ex-f-fab"><h4>Exercises</h4><ol>
+<li>An i-line stepper has NA = 0.57 and \(k_1 = 0.5\). What is its resolution? Can it pattern a 150 nm wide junction lead?
+<details><summary>Solution</summary><p>\(R = 0.5\times365/0.57\approx320\) nm. A 150 nm lead is below the resolution; it needs DUV (193 nm, NA 0.93: about 100 nm at \(k_1 = 0.5\)) or e-beam lithography, or a junction design (overlap junctions) that relaxes the requirement.</p></details></li>
+<li>Junction resistance has a specification of \(10.0\pm0.3\) kΩ. The process gives \(\mu = 10.1\) kΩ and \(\sigma = 0.08\) kΩ. Compute \(C_{pk}\) and the expected fraction out of specification.
+<details><summary>Solution</summary><p>\((10.3 - 10.1)/0.24 = 0.83\) and \((10.1 - 9.7)/0.24 = 1.67\): \(C_{pk} = 0.83\). Upper tail \(1-\Phi(2.5) = 0.62\%\), lower tail \(1-\Phi(5)\approx3\times10^{-7}\): about 0.6% out of specification. Centring the mean would give \(C_{pk} = 1.25\) and 0.02% out.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-f-eda"><h2><span class="secnum">2</span> Classical electronic design automation in one chapter</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Know the classical chip design flow from specification to tape-out, and the role of each tool.</li>
+<li>Understand process design kits, parametrised cells, design-rule checking, layout-versus-schematic and parasitic extraction.</li>
+<li>Understand compact models, corners and Monte Carlo sign-off.</li>
+<li>See which pieces carry over to quantum design and which do not.</li>
+</ul></div>
+
+<h3 id="sec-f-eda-flow"><span class="secnum">2.1</span> The flow</h3>
+<p>A modern digital or analogue chip is designed by a team that never enters a fab. That separation, the <b>fabless</b> model, works because of a contract between designer and foundry, written in software <span class="cite">[<a href="#ref-lavagno2016">2</a>, <a href="#ref-weste2010">6</a>]</span>:</p>
+<ol>
+<li><b>Specification and architecture</b>: what the chip must do, at what power and speed.</li>
+<li><b>Design entry</b>: schematics (analogue) or hardware description languages compiled by <b>logic synthesis</b> into standard cells (digital).</li>
+<li><b>Simulation</b> with compact device models (SPICE for analogue, timing and power models for digital).</li>
+<li><b>Physical design</b>: floorplanning, placement and routing of millions of cells, solved with graph partitioning, analytical placement and maze routing <span class="cite">[<a href="#ref-kahng2011">7</a>]</span>.</li>
+<li><b>Physical verification</b>: design-rule checking (DRC: does the layout obey the foundry's geometric rules?) and layout-versus-schematic (LVS: is the drawn circuit the intended one?).</li>
+<li><b>Parasitic extraction</b>: compute the resistances, capacitances and inductances of the drawn wires, and re-simulate with them.</li>
+<li><b>Sign-off</b>: timing, power, noise, reliability and yield checks across process corners and statistical variation, then <b>tape-out</b> of the layout (GDSII or OASIS file) to the foundry.</li>
+</ol>
+
+<h3 id="sec-f-eda-pdk"><span class="secnum">2.2</span> The process design kit</h3>
+<p>The <b>PDK</b> is the foundry's half of the contract. It contains: the layer stack and its material properties; <b>design rules</b> (minimum widths, spacings, enclosures, densities); <b>compact models</b> of every device the process offers, fitted to measured silicon and including statistical variation; <b>parametrised cells</b> (p-cells) that generate correct layouts for devices from a few parameters; extraction rule decks; and verification decks for DRC and LVS. A design that passes the PDK's checks and simulates correctly with its models will, with high probability, work when fabricated. That probability is what the industry sells.</p>
+<p>Quantum chips have no equivalent yet: no compact models of qubits fitted to process data, no rule decks that encode coherence-relevant rules (keep junctions away from certain interfaces, keep the field at metal edges below a participation target), and no statistical models of junction variation shipped with the process. The review's §10 maps exactly which pieces exist (<a class="xref ext" href="../../index.html#sec-tools-gap" title="The gap map">Lab to Foundry §10.4</a>).</p>
+
+<h3 id="sec-f-eda-compact"><span class="secnum">2.3</span> Compact models, corners and Monte Carlo</h3>
+<p>A <b>compact model</b> is a set of equations with fitted parameters that predicts a device's terminal behaviour quickly enough to simulate millions of devices. SPICE transistor models (BSIM and successors) have hundreds of parameters, each extracted from measurements of test structures <span class="cite">[<a href="#ref-nagel1975">8</a>]</span>. Variation is represented in two ways. <b>Corners</b> are worst-case combinations (fast-fast, slow-slow, and so on) of global process shifts; a design must work at all of them. <b>Monte Carlo</b> analysis samples the statistical model of global and local (mismatch) variation and simulates many instances. Local mismatch follows <b>Pelgrom's law</b> <span class="cite">[<a href="#ref-pelgrom1989">9</a>]</span>:</p>
+<div class="eq" id="eq-f-pelgrom">$$ \sigma(\Delta P) = \frac{A_P}{\sqrt{WL}} ,  \tag{2}$$</div>
+<p>the standard deviation of the difference of a parameter \(P\) between two nominally identical devices falls with the square root of their area, because random microscopic fluctuations average over the area. Exactly this law applies to Josephson junctions: larger junctions are more reproducible, at the cost of more capacitance and less flexibility. Analogue designers routinely size devices by Pelgrom's law to meet matching specifications.</p>
+
+<h3 id="sec-f-eda-quantum"><span class="secnum">2.4</span> What transfers to quantum design</h3>
+<figure class="tbl" id="tab-f-transfer"><figcaption><b>Table 1.</b> Classical EDA components and their quantum counterparts.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Classical</th><th>Quantum counterpart</th><th>Status</th></tr>
+<tr><td>Layout editors, p-cells, GDS</td><td>Parametrised qubit, resonator, coupler cells</td><td>Exists (Quantum Metal, KQCircuits, gdsfactory)</td></tr>
+<tr><td>DRC / LVS</td><td>Geometric rules plus coherence-aware rules; Hamiltonian-versus-schematic</td><td>Geometric DRC exists; physics-aware checks missing</td></tr>
+<tr><td>Parasitic extraction</td><td>Capacitance, EM eigenmodes, energy participation</td><td>Exists, but slow and without error bounds</td></tr>
+<tr><td>SPICE compact models</td><td>Hamiltonian-level models of qubits fitted to process data</td><td>Largely missing</td></tr>
+<tr><td>Corners and Monte Carlo</td><td>Frequency-collision and coherence yield analysis</td><td>Research scripts</td></tr>
+<tr><td>Timing sign-off</td><td>Error-budget and logical-error sign-off</td><td>Missing</td></tr>
+</table></div></figure>
+<p>The biggest conceptual difference is the target. Classical sign-off asks whether each signal meets timing with margin; quantum sign-off must ask whether a Hamiltonian lands inside windows of order \(10^{-3}\) relative, and whether the whole processor's error model gives the required logical error rate. The second is a probability statement over a high-dimensional distribution, which is why the review frames quantum EDA as a statistics problem as much as a simulation problem.</p>
+
+<div class="eda"><p>Read the review's §10 alongside this chapter: it surveys incumbent vendors (Synopsys/Ansys, Cadence, Keysight), fabrication and test equipment makers, and quantum-native tools, and places each on the gap map. Knowing the classical flow lets you judge which gaps are engineering (porting an existing method) and which are research (no method exists).</p></div>
+
+<div class="exercises" id="ex-f-eda"><h4>Exercises</h4><ol>
+<li>Junction critical currents follow Pelgrom's law with \(A_P = 2\%\cdot\mu\mathrm m\) (relative mismatch times root area). What is the expected relative mismatch for junctions of \(0.02\) µm² and of \(0.2\) µm²?
+<details><summary>Solution</summary><p>\(\sigma = 2\%/\sqrt{0.02} = 14\%\) and \(2\%/\sqrt{0.2} = 4.5\%\). (Real processes do better through careful control, but the scaling with area holds; this is one reason fluxonium's large array junctions are reproducible while its small junction is not.)</p></details></li>
+<li>List three rules you would add to a DRC deck for a superconducting qubit process that a classical deck would not contain.
+<details><summary>Solution</summary><p>Examples: minimum distance from junction to any lossy dielectric (such as a crossover's oxide); maximum interface participation for capacitor geometries (a physics check, not a pure geometry check); airbridge spacing along CPW lines to suppress slotline modes; maximum ground-plane area without flux-trapping holes; keep-out zones around qubits for unrelated lines (crosstalk); symmetry rules for SQUID loops (flux-noise and asymmetry).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-f-em"><h2><span class="secnum">3</span> Electromagnetic simulation: from layout to Hamiltonian</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand the finite-element method for electrostatics and for Maxwell eigenproblems, and why edge elements are used.</li>
+<li>Know the method of moments and the finite-difference time-domain method, and when each is used.</li>
+<li>Set up eigenmode and driven simulations of a qubit chip, with ports, boundaries and mesh refinement, and judge convergence.</li>
+<li>Follow the energy-participation and black-box workflows, and understand model-order reduction and passivity.</li>
+</ul></div>
+
+<h3 id="sec-f-em-fem"><span class="secnum">3.1</span> Finite elements</h3>
+<p>The finite-element method (FEM, <a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-num-discretise" title="Discretising differential equations">Book 1 §8.3</a>) solves a PDE in weak form on a mesh of tetrahedra <span class="cite">[<a href="#ref-jin2014">3</a>]</span>. For electrostatics, find \(\phi\) such that \(\int\varepsilon\nabla\phi\cdot\nabla v\,\dd V = 0\) for every test function \(v\), with \(\phi\) fixed on conductors. Expanding \(\phi\) in piecewise-polynomial "hat" functions gives a sparse symmetric positive-definite system, solved by preconditioned conjugate gradients; each capacitance-matrix column costs one solve (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-stat-cmatrix" title="The capacitance matrix">Book 2 §4.4</a>). For Maxwell's equations the unknown is a vector field, and naive node-based vector elements produce spurious non-physical modes. <b>Edge (Nédélec) elements</b>, whose unknowns are tangential field components along mesh edges, enforce the right continuity and eliminate them. The curl-curl eigenproblem (<a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-curlcurl">Book 2 eq. (24)</a>) becomes a generalised sparse eigenproblem \(K\mathbf e = \omega^2M\mathbf e\), solved by shift-invert Arnoldi near the frequencies of interest (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-num-linear" title="Solving linear systems and eigenproblems">Book 1 §8.2</a>). Commercial solvers (Ansys HFSS, COMSOL) and open ones (AWS Palace, ElmerFEM) all work this way.</p>
+
+<h3 id="sec-f-em-other"><span class="secnum">3.2</span> Other methods</h3>
+<ul>
+<li><b>Method of moments</b> (MoM) <span class="cite">[<a href="#ref-harrington1993">10</a>]</span>: discretise only conductor surfaces and solve an integral equation using the Green's function of the layered substrate. Ideal for planar circuits on uniform stacks (Sonnet, Keysight Momentum, Ansys Q3D for capacitance); the matrices are dense but much smaller than 3D FEM, and fast multipole or hierarchical-matrix methods compress them.</li>
+<li><b>Finite-difference time-domain</b> (FDTD): discretise space on a grid and step Maxwell's equations in time. Natural for broadband optics and photonics (one simulation gives the whole spectrum after a Fourier transform), less so for high-\(Q\) microwave resonators, which ring for millions of periods.</li>
+<li><b>Mode solvers</b>: 2D eigenproblems for the cross-section of a waveguide, giving \(n_{\mathrm{eff}}\), \(Z_0\) and field profiles; the input to circuit-level models of CPWs and optical waveguides.</li>
+</ul>
+
+<h3 id="sec-f-em-setup"><span class="secnum">3.3</span> Setting up a qubit simulation</h3>
+<p>An eigenmode simulation of a transmon with its readout resonator has these ingredients:</p>
+<ol>
+<li><b>Geometry</b>: metal as zero-thickness perfect conductors (or with kinetic inductance as a surface impedance), substrate and vacuum box, package walls.</li>
+<li><b>Junction</b>: a lumped inductor boundary \(L_J\) on a small rectangle where the junction sits (the linearised junction, <a class="xref ext" href="../../foundations/quantum-hardware/index.html#eq-h-lj">Book 6 eq. (7)</a>).</li>
+<li><b>Ports and losses</b>: the readout line terminated in 50 Ω lumped ports or absorbing boundaries, so the modes acquire finite \(Q\) and the Purcell rate can be read off; dielectric loss tangents assigned to regions if loss is to be estimated.</li>
+<li><b>Mesh</b>: adaptive refinement driven by an error estimator, with forced refinement at metal edges and near the junction, because the field singularity at edges (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-stat-cond" title="Conductors and boundary conditions">Book 2 §4.2</a>) controls both convergence and surface participation.</li>
+<li><b>Convergence</b>: refine until mode frequencies change by less than a tolerance between passes, then check the quantities you actually need (participation ratios converge much more slowly than frequencies). Extrapolate in mesh size where possible (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-num-discretise" title="Discretising differential equations">Book 1 §8.3</a>).</li>
+</ol>
+<p>The outputs are mode frequencies \(\omega_m\), quality factors, and field distributions. To turn them into a Hamiltonian, compute for each mode the <b>energy-participation ratio</b> \(p_m\) of the junction (the fraction of the mode's inductive energy stored in \(L_J\)), and use <a class="xref ext" href="../../index.html#eq-epr">Lab to Foundry eq. (10)</a>: the anharmonicity of mode \(m\) is about \(p_m^2\hbar\omega_m^2/8E_J\) and the cross-Kerr between modes \(m,n\) about \(p_mp_n\hbar\omega_m\omega_n/4E_J\) <span class="cite">[<a href="#ref-minev2021epr">11</a>]</span>. For a transmon mode, \(p\approx1\); for the readout mode, \(p\) is small and sets \(\chi\).</p>
+<p>The alternative <b>black-box</b> approach runs a driven simulation with a port at the junction, computes the admittance \(Y(\omega)\) seen by the junction, and finds modes as zeros of \(Y\) with effective impedances from its slope <span class="cite">[<a href="#ref-nigg2012">12</a>, <a href="#ref-solgun2014">13</a>]</span>. It naturally includes loss and is the bridge to model-order reduction.</p>
+
+<h3 id="sec-f-em-mor"><span class="secnum">3.4</span> Model-order reduction and passivity</h3>
+<p>A field simulation has millions of unknowns; a circuit model needs tens. <b>Model-order reduction</b> compresses one into the other. Vector fitting <span class="cite">[<a href="#ref-gustavsen1999">14</a>]</span> fits a sampled response with a rational function \(Y(s)\approx\sum_k\frac{r_k}{s - p_k} + d + es\), whose poles \(p_k\) are the modes. Krylov projection methods such as PRIMA <span class="cite">[<a href="#ref-odabasioglu1998">15</a>]</span> project the large system onto a small subspace while preserving <b>passivity</b>: the reduced model cannot generate energy. A non-passive reduced model can predict negative loss or spurious gain, and in a quantum context it can predict wrong mode frequencies and wrong decay rates. Hierarchical extraction, where each repeated cell is reduced once and the cells are coupled through their interfaces (<a class="xref ext" href="../../index.html#eq-schur">Lab to Foundry eq. (11)</a>), is how classical EDA scales to whole chips, and the review argues the same is needed for quantum processors (<a class="xref ext" href="../../index.html#sec-design-scale" title="The scaling wall">Lab to Foundry §3.5</a>).</p>
+
+<div class="eda"><p>Problem 2 of the review asks for extraction with certified error bounds at processor scale. This chapter supplies the ingredients: FEM with adaptive refinement for accuracy, reduction with passivity for speed, and hierarchical composition for scale. The open question is how to carry a posteriori error estimates through all three to the uncertainty of each Hamiltonian parameter.</p></div>
+
+<div class="exercises" id="ex-f-em"><h4>Exercises</h4><ol>
+<li>A mesh refinement study gives mode frequencies 5.212, 5.183 and 5.176 GHz at mesh sizes \(h\), \(h/2\), \(h/4\). Estimate the convergence order and the extrapolated frequency.
+<details><summary>Solution</summary><p>Differences 29 and 7 MHz, ratio about 4.1, so order \(p\approx\log_2 4.1\approx2\). Richardson: \(f\approx5.176 - 7/(4-1)\approx5.174\) GHz. The finest mesh is still about 2 MHz off.</p></details></li>
+<li>Using EPR, a transmon mode at 5.0 GHz has \(p = 0.98\) and \(E_J/h = 14\) GHz. Estimate its anharmonicity.
+<details><summary>Solution</summary><p>\(\alpha/2\pi\approx p^2f^2/(8E_J/h) = 0.96\times25/112\approx0.21\) GHz, i.e. \(\alpha/2\pi\approx-214\) MHz (negative sign from the cosine expansion).</p></details></li>
+<li>Why does a non-passive reduced model of a resonator's admittance predict wrong \(T_1\) values?
+<details><summary>Solution</summary><p>\(T_1\) is computed from \(\Re Y(\omega_q)\) (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-pert-golden" title="Fermi&#x27;s golden rule and noise-induced transitions">Book 3 §6.5</a>). A passive admittance has \(\Re Y\ge0\) at all frequencies; a non-passive fit can have small negative or wrongly small \(\Re Y\) near the qubit frequency, predicting gain or an unphysically long \(T_1\).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-f-yield"><h2><span class="secnum">4</span> Variability and yield</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Classify sources of variation (global, spatially correlated, local random) and model them.</li>
+<li>Use defect-limited yield models (Poisson, negative binomial) and parametric yield.</li>
+<li>Build and analyse a frequency-collision yield model for a qubit lattice.</li>
+<li>Understand sensitivity-based statistical design, chance constraints and post-fabrication trimming.</li>
+</ul></div>
+
+<h3 id="sec-f-y-sources"><span class="secnum">4.1</span> Sources and structure of variation</h3>
+<p>A manufactured parameter \(x\) (a junction resistance, a film thickness, a linewidth) can be decomposed as</p>
+<div class="eq" id="eq-f-var">$$ x(\mathbf r, w, l) = x_0 + \delta_{\mathrm{lot}}(l) + \delta_{\mathrm{wafer}}(w) + g_w(\mathbf r) + \epsilon(\mathbf r),  \tag{3}$$</div>
+<p>a target, lot-to-lot and wafer-to-wafer offsets, a smooth spatial pattern across the wafer \(g_w(\mathbf r)\) (from deposition and oxidation non-uniformity, typically radial), and a local random part \(\epsilon\) that is uncorrelated between devices beyond some short correlation length (Pelgrom mismatch, <a class="xref" href="#eq-f-pelgrom">(2)</a>). The decomposition matters because the parts behave differently. Global offsets move every qubit together and are cheap to correct by recentring the process. Smooth gradients are partly predictable from neighbouring test structures. Local randomness is irreducible except by design (larger devices) or by post-fabrication trimming. A <b>nested variance model</b> estimates each component's size from wafer test data, which is the starting point of the hierarchical models of Chapter 6.</p>
+
+<h3 id="sec-f-y-defect"><span class="secnum">4.2</span> Defect-limited yield</h3>
+<p>Random <b>defects</b> (particles, resist residues, shorts, opens) kill a die if one lands in a critical area \(A\). If defects are scattered independently with density \(D_0\), the number in the critical area is Poisson and the yield is</p>
+<div class="eq" id="eq-f-poisson">$$ Y_{\mathrm{Poisson}} = \ee^{-AD_0}, \qquad Y_{\mathrm{NB}} = \Big(1 + \frac{AD_0}{\alpha}\Big)^{-\alpha} .  \tag{4}$$</div>
+<p>Real defects cluster, which the <b>negative binomial</b> model captures with a clustering parameter \(\alpha\) (small \(\alpha\) means strong clustering, and \(\alpha\to\infty\) recovers Poisson) <span class="cite">[<a href="#ref-stapper1983">16</a>]</span>. Clustering helps large dies: if defects bunch together, more dies escape them entirely (<a class="xref" href="#fig-f-defect">Figure 1</a>). For quantum chips the "critical area" includes not only shorts and opens but anything that ruins a qubit: a junction that failed to form, a TLS strongly coupled to a qubit, a trapped vortex near a SQUID. Error correction can tolerate a few dead qubits by routing around them, at a cost in effective code distance (<a class="xref ext" href="../../index.html#sec-qec-dem" title="From device data to logical error">Lab to Foundry §9.4</a>), which turns a binary yield into a graded one.</p>
+<figure id="fig-f-defect">
+<img src="../figures/fig-f-defect.svg" alt="Die yield versus critical area for Poisson and negative-binomial defect models.">
+<figcaption><b>Figure 1.</b> Defect-limited yield from <a class="xref" href="#eq-f-poisson">(4)</a> for \(D_0 = 0.1\) defects per cm\(^2\): Poisson (independent defects) and negative binomial with \(\alpha = 2\) and \(\alpha = 0.5\) (clustered). Large dies lose yield rapidly under the Poisson model; clustering softens the loss.</figcaption>
+</figure>
+
+<h3 id="sec-f-y-param"><span class="secnum">4.3</span> Parametric yield</h3>
+<p>Even without defects, a die fails if its parameters land outside specification. For a parameter vector \(\boldsymbol\theta\) (frequencies, couplings, anharmonicities) produced from process variables \(\mathbf x\) by the design map \(\boldsymbol\theta = f(\mathbf x)\), the <b>parametric yield</b> is</p>
+<div class="eq" id="eq-f-paryield">$$ Y = \Pr_{\mathbf x\sim p(\mathbf x)}\big[f(\mathbf x)\in\mathcal A\big] ,  \tag{5}$$</div>
+<p>where \(\mathcal A\) is the acceptable region. Linearising \(f\) around the nominal design with its Jacobian \(\mathbf J\), the parameter covariance is \(\mathbf J\Sigma_x\mathbf J^{\mathsf T}\) (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-propagation">Book 1 eq. (36)</a>), and when \(\mathcal A\) is a box or a polytope the yield is a multivariate Gaussian probability, computed by Monte Carlo or by bounding methods. Design centring moves the nominal point to maximise \(Y\); design for robustness reduces \(\|\mathbf J\|\), the sensitivity, where the physics allows.</p>
+
+<h3 id="sec-f-y-collide"><span class="secnum">4.4</span> Frequency collisions: a worked model</h3>
+<p>Consider a square lattice of fixed-frequency transmons coupled for cross-resonance gates, with neighbouring qubits designed to differ by \(\mu\) and each frequency independently Gaussian with standard deviation \(\sigma\) around its target. For each coupled pair, the detuning \(\Delta = f_i - f_j\) is Gaussian with mean \(\mu\) and variance \(2\sigma^2\). A pair fails if \(\Delta\) lands in any forbidden window \((c_k - w_k, c_k + w_k)\): near zero (degeneracy), near \(\pm\alpha/2\) (two-photon transitions) and outside the straddling regime (gates too slow) <span class="cite">[<a href="#ref-brink2018">17</a>, <a href="#ref-hertzberg2021">18</a>]</span>. The per-pair failure probability is</p>
+<div class="eq" id="eq-f-pedge">$$ p_{\mathrm{edge}}(\sigma) = \sum_k\Big[\Phi\Big(\frac{c_k + w_k - \mu}{\sqrt2\sigma}\Big) - \Phi\Big(\frac{c_k - w_k - \mu}{\sqrt2\sigma}\Big)\Big] + \Pr\big(|\Delta| > \Delta_{\max}\big) ,  \tag{6}$$</div>
+<p>and, neglecting correlations between edges that share a qubit (and spectator conditions involving three qubits), the probability that a chip with \(E\) couplings has no collision is \(Y\approx(1-p_{\mathrm{edge}})^E\). This is the model behind the review's <a class="xref ext" href="../../index.html#fig-yield">Lab to Foundry Figure 3</a>. Its lessons are stark: because \(E\) grows with qubit count, holding yield fixed requires \(p_{\mathrm{edge}}\propto1/E\), and because \(p_{\mathrm{edge}}\) depends on \(\sigma\) through Gaussian tails, yield collapses over a narrow range of \(\sigma\). At \(\sigma\approx\) 50 MHz (about a 2% junction spread), essentially no large lattice is collision-free; at \(\sigma\approx\) 10–15 MHz, hundred-qubit lattices become feasible. Correlated edges and spectator conditions make the true yield lower; Monte Carlo over the whole lattice gives the exact number for a given model.</p>
+
+<h3 id="sec-f-y-design"><span class="secnum">4.5</span> Designing for yield</h3>
+<ul>
+<li><b>Frequency allocation</b>: choose the target pattern (how many distinct frequencies, which detunings) to maximise yield, not to hit a nominal optimum. With uncertainty this is a <b>chance-constrained</b> optimisation, \(\max\ Y(\boldsymbol\theta_0)\) or \(\min\ \text{cost}\) subject to \(\Pr[\text{constraints met}]\ge1-\epsilon\) <span class="cite">[<a href="#ref-morvan2022">19</a>, <a href="#ref-luedtke2008">20</a>]</span>.</li>
+<li><b>Tunability</b>: flux-tunable qubits or couplers absorb fabrication error at the cost of noise and wiring.</li>
+<li><b>Trimming</b>: measure each junction warm, then laser-anneal it towards target. Trimming reduces \(\sigma\) from about 2% to below 0.5% in demonstrated processes <span class="cite">[<a href="#ref-zhang2022">21</a>]</span>, but it costs test time and depends on predicting cold frequencies from warm resistance, which is itself statistical (<a class="xref ext" href="../../index.html#sec-var-trim" title="Post-fabrication trimming">Lab to Foundry §4.4</a>).</li>
+<li><b>Architecture</b>: tunable couplers widen collision windows; codes and compilers that can skip bad edges convert a hard yield into a graded one.</li>
+</ul>
+
+<div class="eda"><p>This chapter is a compressed version of the review's §4 (<a class="xref ext" href="../../index.html#sec-var" title="Variability, frequency allocation and yield">Lab to Foundry §4</a>). The open problems there (statistical sign-off with calibrated uncertainty, chance-constrained allocation with correlated variation, warm-to-cold prediction) all start from the models here, with data from real production lines.</p></div>
+
+<div class="exercises" id="ex-f-yield"><h4>Exercises</h4><ol>
+<li>A 1 cm² die with \(D_0 = 0.1\) cm\(^{-2}\): compute Poisson yield and negative-binomial yield with \(\alpha = 0.5\). Repeat for 4 cm².
+<details><summary>Solution</summary><p>1 cm²: Poisson \(\ee^{-0.1} = 0.905\); NB \((1 + 0.2)^{-0.5} = 0.913\). 4 cm²: Poisson \(\ee^{-0.4} = 0.670\); NB \((1+0.8)^{-0.5} = 0.745\).</p></details></li>
+<li>With a single forbidden window at \(\Delta\in(-17, 17)\) MHz, \(\mu = 100\) MHz and \(\sigma = 30\) MHz, compute \(p_{\mathrm{edge}}\) and the yield of a lattice with 200 edges (ignore other windows).
+<details><summary>Solution</summary><p>\(\sqrt2\sigma = 42.4\). \(\Phi((17-100)/42.4) - \Phi((-17-100)/42.4) = \Phi(-1.96) - \Phi(-2.76) = 0.0250 - 0.0029 = 0.0221\). \(Y = (1-0.0221)^{200}\approx\ee^{-4.47}\approx1.1\%\).</p></details></li>
+<li>In the previous exercise, what \(\sigma\) gives 90% yield?
+<details><summary>Solution</summary><p>Need \(p_{\mathrm{edge}}\approx\ln(1/0.9)/200 = 5.3\times10^{-4}\). Dominated by the upper edge of the window: \(\Phi((17-100)/\sqrt2\sigma)\approx5.3\times10^{-4}\) gives \(83/(\sqrt2\sigma)\approx3.27\), \(\sigma\approx18\) MHz. A factor 1.7 in \(\sigma\) changes yield from 1% to 90%.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-f-pkg"><h2><span class="secnum">5</span> Packaging, cryogenics and test</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand what a quantum-chip package must do and the electromagnetic problems it creates.</li>
+<li>Budget heat and noise for the wiring of a cryogenic system.</li>
+<li>Know the test flow from wafer probing at room temperature to cryogenic characterisation, and why cold test is the bottleneck.</li>
+</ul></div>
+
+<h3 id="sec-f-pkg-pkg"><span class="secnum">5.1</span> The package</h3>
+<p>A package holds the chip, connects it to the outside world, thermalises it to the mixing chamber, and shields it. For superconducting chips it is usually a machined copper or aluminium enclosure with a printed circuit board fanning out signal lines to coaxial connectors, and wirebonds or spring pins from board to chip <span class="cite">[<a href="#ref-krinner2019">22</a>]</span>. Its electromagnetic requirements are demanding:</p>
+<ul>
+<li><b>No modes near qubit frequencies.</b> The cavity formed by the enclosure (and by the chip's substrate itself) has modes at frequencies scaling inversely with size (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-max-waves" title="Electromagnetic waves">Book 2 §5.2</a>, <a class="xref ext" href="../../index.html#eq-box">Lab to Foundry eq. (25)</a>). Large dies push the lowest mode into the qubit band, so packages use pillars, through-chip vias or segmented enclosures to raise it (<a class="xref ext" href="../../index.html#sec-pkg-modes" title="The package is a microwave cavity">Lab to Foundry §6.1</a>).</li>
+<li><b>Continuous ground.</b> Ground planes on chip and board must be tied together densely (many wirebonds, bump bonds or vias) or they support slot modes and become antennas.</li>
+<li><b>Low crosstalk</b> between control lines in the board, connectors and bonds.</li>
+<li><b>Shielding</b> against magnetic fields (mu-metal and superconducting shields), infrared radiation (blackbody-tight enclosures, absorptive coatings), and, increasingly, ionising radiation.</li>
+</ul>
+<p>Flip-chip and multi-chip modules move wiring off the qubit chip; superconducting through-silicon vias and bump bonds carry signals vertically. Each interface must be designed and simulated as part of the microwave circuit, not added afterwards.</p>
+
+<h3 id="sec-f-pkg-wiring"><span class="secnum">5.2</span> Heat and noise budgets</h3>
+<p>Every line from room temperature conducts heat and carries thermal noise (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-th-cryo" title="Cryogenics and the attenuation chain">Book 2 §8.5</a>). Passive heat load per line depends on cable material (stainless steel and superconducting NbTi conduct little heat; copper conducts a lot but has low loss) and on thermal anchoring at each stage. Active load comes from signal power dissipated in attenuators and from DC currents in flux lines. Summing over lines and stages gives the review's constraint (<a class="xref ext" href="../../index.html#eq-heat">Lab to Foundry eq. (26)</a>): total load at each stage must stay below its cooling power. With roughly two to three coaxial lines per qubit today, a large dilution refrigerator supports on the order of a thousand qubits; beyond that, multiplexing, cryo-CMOS, flex cables and optical links are needed (<a class="xref ext" href="../../index.html#sec-pkg-wiring" title="Wiring: a heat budget and a noise budget">Lab to Foundry §6.2</a>). This is a system-design problem whose variables include chip layout (which lines are needed), packaging (how lines get to the chip) and control architecture.</p>
+
+<h3 id="sec-f-pkg-test"><span class="secnum">5.3</span> Test</h3>
+<p>Test happens at several stages, each cheaper and less informative than the next:</p>
+<ol>
+<li><b>Room-temperature wafer probing</b>: junction resistances, line continuity, leakage. Seconds per die, fully automated, done on every die. Predicts \(E_J\) through Ambegaokar–Baratoff, with a warm-to-cold uncertainty.</li>
+<li><b>Cryogenic probing at 4 K or below</b>: emerging cryogenic wafer probers measure resonator frequencies, critical currents and some loss at a few kelvin, for many dies per cooldown.</li>
+<li><b>Millikelvin characterisation</b>: spectroscopy, \(T_1\), \(T_2\), gate calibration and benchmarking in a dilution refrigerator. Each cooldown takes one to several days and holds a handful of chips; full characterisation of a large processor takes days to weeks (<a class="xref ext" href="../../foundations/quantum-information/index.html#sec-i-stack-cal" title="Calibration">Book 4 §8.4</a>).</li>
+</ol>
+<p>Cold test is the scarce resource (<a class="xref ext" href="../../index.html#sec-test-scarce" title="Cold test is the scarce resource">Lab to Foundry §7.2</a>): it is where the quantities that matter are measured, and it is too slow to apply to every chip. That makes two things valuable. Prediction: models that infer cold behaviour from warm data and design data, with calibrated uncertainty, so that only promising chips are cooled. And experimental design: choosing which measurements to make on a cooled chip to learn the most per hour of fridge time (<a class="xref ext" href="../../index.html#eq-boed">Lab to Foundry eq. (30)</a>). Chapter 6 introduces the statistics for both.</p>
+
+<div class="eda"><p>The review's §6–§7 cover this chapter's topics in depth. Packaging is the place where chip design meets mechanical and thermal design, so a quantum design flow must extend beyond the die boundary; test is where predictions meet data, so the flow must ingest measurements as well as produce layouts.</p></div>
+
+<div class="exercises" id="ex-f-pkg"><h4>Exercises</h4><ol>
+<li>A silicon chip of 12 × 12 mm in a tightly fitting box (\(\varepsilon_r = 11.45\)) has its first box mode at roughly \(f\approx\frac{c}{2\sqrt{\varepsilon_r}}\sqrt{2}/a\). Estimate it.
+<details><summary>Solution</summary><p>\(c/(2\sqrt{11.45}) = 4.43\times10^7\) m/s; \(\times\sqrt2/0.012 = 5.2\) GHz, inside the qubit band. A 12 mm die needs mode suppression.</p></details></li>
+<li>A refrigerator offers 20 µW at the mixing chamber. Each drive line dissipates 0.5 nW in its mixing-chamber attenuator during operation and conducts 2 nW of passive heat. How many lines can it support at that stage?
+<details><summary>Solution</summary><p>2.5 nW per line, so 8,000 lines in principle; other stages (the still, the 4 K plate where HEMTs dissipate milliwatts) and flux-line DC currents usually bind first, and real budgets keep large margins.</p></details></li>
+<li>Warm probing of a wafer predicts frequencies with 60 MHz uncertainty; a chip is useful if all 20 qubits are within ±100 MHz of target after cooldown. How might you decide which chips to cool?
+<details><summary>Solution</summary><p>For each chip, compute the predicted probability that all 20 cold frequencies fall in the window, using the warm predictions and their uncertainty (including correlations from the wafer-level model). Cool chips in order of that probability, and update the warm-to-cold model with each measured chip. This is the decision problem the review's hierarchical model (<a class="xref ext" href="../../index.html#eq-hier">Lab to Foundry eq. (20)</a>) is meant to serve.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-f-stats"><h2><span class="secnum">6</span> Statistical learning for design and manufacturing</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Build surrogate models with Gaussian-process regression and know their uncertainty.</li>
+<li>Use Bayesian optimisation for expensive design problems.</li>
+<li>Build hierarchical (multilevel) models for wafer and fab data, such as warm-to-cold prediction.</li>
+<li>Know how to check that uncertainty estimates are calibrated (conformal prediction), and how to choose experiments (Bayesian experimental design).</li>
+<li>Know where machine learning helps in quantum EDA and where it must not be trusted.</li>
+</ul></div>
+
+<h3 id="sec-f-st-gp"><span class="secnum">6.1</span> Gaussian-process surrogates</h3>
+<p>An electromagnetic simulation of one qubit cell takes minutes to hours; an optimiser may need thousands of evaluations. A <b>surrogate</b> is a cheap model of the expensive map \(\mathbf x\mapsto y\) (geometry to frequency, say), fitted to a few simulations. A <b>Gaussian process</b> (GP) is a prior over functions such that any finite set of values is jointly Gaussian, with covariance given by a kernel \(k(\mathbf x,\mathbf x')\), commonly the squared exponential \(\sigma_f^2\exp(-\|\mathbf x - \mathbf x'\|^2/2\ell^2)\) <span class="cite">[<a href="#ref-rasmussen2006">23</a>]</span>. Given noisy observations \(\mathbf y\) at inputs \(X\), the posterior at a new input \(\mathbf x_*\) is Gaussian with</p>
+<div class="eq" id="eq-f-gp">$$ \mu_* = \mathbf k_*^{\mathsf T}(K + \sigma_n^2I)^{-1}\mathbf y, \qquad \sigma_*^2 = k(\mathbf x_*,\mathbf x_*) - \mathbf k_*^{\mathsf T}(K+\sigma_n^2I)^{-1}\mathbf k_*,  \tag{7}$$</div>
+<p>where \(K_{ij} = k(\mathbf x_i,\mathbf x_j)\) and \((\mathbf k_*)_i = k(\mathbf x_i,\mathbf x_*)\). The posterior mean interpolates the data; the posterior variance is small near data and grows away from it (<a class="xref" href="#fig-f-gp">Figure 2</a>). Kernel hyperparameters (\(\ell\), \(\sigma_f\), \(\sigma_n\)) are fitted by maximising the marginal likelihood. GPs are excellent for smooth maps in up to tens of dimensions with hundreds to thousands of points; beyond that, neural-network surrogates and operator-learning models (which map whole fields or geometries to fields) take over <span class="cite">[<a href="#ref-li2021fno">24</a>, <a href="#ref-lu2021deeponet">25</a>]</span>.</p>
+<figure id="fig-f-gp">
+<img src="../figures/fig-f-gp.svg" alt="Gaussian process regression of a smooth function from six samples, with mean and two-standard-deviation band.">
+<figcaption><b>Figure 2.</b> A Gaussian-process surrogate fitted to six noisy samples (dots) of a smooth response (dashed), with a squared-exponential kernel. The posterior mean (solid) and ±2σ band (shaded) widen between and beyond the data. This uncertainty is what Bayesian optimisation exploits and what statistical sign-off must respect.</figcaption>
+</figure>
+
+<h3 id="sec-f-st-bo"><span class="secnum">6.2</span> Bayesian optimisation</h3>
+<p>To minimise an expensive function, fit a GP to the evaluations so far, then choose the next point by maximising an <b>acquisition function</b> that trades off exploitation (low predicted mean) and exploration (high uncertainty). Expected improvement, \(\mathbb E[\max(0, y_{\mathrm{best}} - f(\mathbf x))]\), has a closed form under the GP posterior. Bayesian optimisation typically finds good optima of smooth functions in tens to hundreds of evaluations <span class="cite">[<a href="#ref-frazier2018">26</a>]</span>, and has been used to design superconducting circuits automatically <span class="cite">[<a href="#ref-menke2021">27</a>]</span>. Multi-fidelity variants combine cheap approximate simulations (coarse meshes, lumped models) with expensive accurate ones.</p>
+
+<h3 id="sec-f-st-hier"><span class="secnum">6.3</span> Hierarchical models</h3>
+<p>Manufacturing data are nested: junctions within dies within wafers within lots. A <b>hierarchical model</b> <span class="cite">[<a href="#ref-gelman2013">4</a>]</span> gives each level its own parameters drawn from a population distribution:</p>
+<div class="eq" id="eq-f-hier">$$ y_{ijk}\sim\mathcal N\big(\beta^{\mathsf T}\mathbf z_{ijk} + u_j + v_{jk},\ \sigma^2\big), \qquad u_j\sim\mathcal N(0,\tau_w^2), \qquad v_{jk}\sim\mathcal N(0,\tau_d^2),  \tag{8}$$</div>
+<p>for, say, the cold frequency of junction \(i\) on die \(k\) of wafer \(j\), with covariates \(\mathbf z\) (warm resistance, junction area, position on wafer). Fitting it by MCMC or variational inference gives posterior distributions for every parameter, and predicting a new wafer's dies borrows strength from all previous wafers ("partial pooling"), while each new measurement updates the wafer's offset \(u_j\). This is the structure of the review's warm-to-cold model (<a class="xref ext" href="../../index.html#eq-hier">Lab to Foundry eq. (20)</a>), and of most useful models in a fab: they combine physics (the covariates come from Ambegaokar–Baratoff and the transmon formula) with data (the random effects absorb what the physics misses).</p>
+
+<h3 id="sec-f-st-cal"><span class="secnum">6.4</span> Is the uncertainty right?</h3>
+<p>A model's error bars are only useful if they are <b>calibrated</b>: 90% intervals should contain the truth 90% of the time. Check this on held-out data. <b>Conformal prediction</b> <span class="cite">[<a href="#ref-angelopoulos2023">28</a>]</span> turns any predictor into one with guaranteed coverage: compute residuals on a calibration set, take the appropriate quantile, and widen every prediction interval by it. The guarantee needs only exchangeability between calibration and future data, so it fails silently when a new design or a new process leaves the training distribution. Detecting such <b>distribution shift</b> (by checking whether new inputs resemble the training set, or whether residuals drift) is as important as accuracy. The review's rule, that a surrogate may propose designs but must not approve them unless its error is bounded on the designs actually submitted, follows from this (<a class="xref ext" href="../../index.html#sec-design-inverse" title="Inverse design and the role of learning">Lab to Foundry §3.6</a>).</p>
+
+<h3 id="sec-f-st-doe"><span class="secnum">6.5</span> Choosing experiments</h3>
+<p>When measurements are expensive (an hour of fridge time, a wafer run), choose them to be informative. Classical <b>design of experiments</b> <span class="cite">[<a href="#ref-montgomery2012">29</a>]</span> (factorial and response-surface designs) varies process factors systematically to fit models with few runs. <b>Bayesian experimental design</b> chooses the next experiment \(\xi\) to maximise the expected information gain about parameters \(\theta\), \(\mathrm{EIG}(\xi) = \mathbb E_{y|\xi}\big[\mathrm{KL}(p(\theta|y,\xi)\,\|\,p(\theta))\big]\) (<a class="xref ext" href="../../index.html#eq-boed">Lab to Foundry eq. (30)</a>). Adaptive versions already speed up qubit characterisation (choosing Ramsey delays or spectroscopy frequencies on the fly). <b>Simulation-based inference</b> <span class="cite">[<a href="#ref-cranmer2020">30</a>]</span> fits models whose likelihood is intractable but which can be simulated (a noisy device model, say) by training neural density estimators on simulations, which suits inferring noise models from benchmark data.</p>
+
+<div class="eda"><p>Every one of the review's seven open problems uses something from this chapter: chance-constrained optimisation (Problem 1), surrogates with certified error (Problem 2), hierarchical warm-to-cold models (Problem 4), Bayesian experimental design for test (Problem 5), and simulation-based inference for error models (Problem 6). The methods exist; what is missing is their careful application to quantum devices with real production data (<a class="xref ext" href="../../index.html#sec-prob-ml" title="A note on machine learning">Lab to Foundry §11.2</a>).</p></div>
+
+<div class="exercises" id="ex-f-stats"><h4>Exercises</h4><ol>
+<li>For a GP with one observation \(y_1\) at \(x_1\), noise \(\sigma_n\), and kernel variance \(\sigma_f^2\), write \(\mu_*\) and \(\sigma_*^2\) at \(x_* = x_1\) and far from \(x_1\).
+<details><summary>Solution</summary><p>At \(x_1\): \(\mu_* = \frac{\sigma_f^2}{\sigma_f^2+\sigma_n^2}y_1\), \(\sigma_*^2 = \sigma_f^2 - \frac{\sigma_f^4}{\sigma_f^2+\sigma_n^2} = \frac{\sigma_f^2\sigma_n^2}{\sigma_f^2+\sigma_n^2}\). Far away, \(k_*\to0\): \(\mu_*\to0\) (the prior mean) and \(\sigma_*^2\to\sigma_f^2\) (the prior variance).</p></details></li>
+<li>A wafer-level model has \(\tau_w = 40\) MHz (wafer offsets) and \(\sigma = 25\) MHz (junction-level noise). After measuring \(n\) dies from a new wafer cold, what is the posterior standard deviation of that wafer's offset?
+<details><summary>Solution</summary><p>Normal–normal updating: posterior variance \(1/(1/\tau_w^2 + n/\sigma^2)\). For \(n = 1\): \(1/(1/1600 + 1/625) = 449\), sd 21 MHz. For \(n = 4\): sd 11.9 MHz; \(n = 16\): 6.1 MHz. A few cold measurements per wafer pin down its offset, sharpening predictions for its untested dies.</p></details></li>
+<li>A conformal calibration set of 200 residuals is used for 90% intervals. Which residual quantile defines the interval width?
+<details><summary>Solution</summary><p>The \(\lceil(n+1)(1-\alpha)\rceil/n\) empirical quantile of absolute residuals: \(\lceil201\times0.9\rceil = 181\), i.e. the 181st smallest of 200.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-f-map"><h2><span class="secnum">7</span> Reading the review: a map and seven projects</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Know, for each section of <i>From Laboratory to Foundry</i>, which chapters of this series prepare for it.</li>
+<li>Turn each of the review's seven open problems into a project you can start with the tools of this course.</li>
+</ul></div>
+
+<h3 id="sec-f-map-table"><span class="secnum">7.1</span> Section-by-section preparation</h3>
+<p>The review assumes graduate quantum mechanics and fluency in statistics; this series supplies both and the engineering in between. Before each section of the review, re-read the chapters listed.</p>
+<figure class="tbl" id="tab-f-map"><figcaption><b>Table 2.</b> Where each part of the review is prepared in the series.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Review section</th><th>Prepare with</th></tr>
+<tr><td><a class="xref ext" href="../../index.html#sec-intro" title="Introduction">Lab to Foundry §1: Introduction</a> and <a class="xref ext" href="../../index.html#sec-landscape" title="The industrial landscape, 2024–2026">Lab to Foundry §2: The industrial landscape, 2024–2026</a></td><td><a class="xref ext" href="../../foundations/quantum-information/index.html#sec-i-qec2" title="Quantum error correction II: the surface code and fault tolerance">Book 4 §7: Quantum error correction II: the surface code and fault tolerance</a> (why error correction drives scale),<br><a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-other" title="Other qubits: trapped ions, neutral atoms, spins and topological proposals">Book 6 §7: Other qubits: trapped ions, neutral atoms, spins and topological proposals</a> (the modalities),<br><a class="xref ext" href="../../foundations/quantum-manufacturing/index.html#sec-f-fab" title="How quantum chips are made">Book 7 §1: How quantum chips are made</a> (what a production line is)</td></tr>
+<tr><td><a class="xref ext" href="../../index.html#sec-design" title="From geometry to Hamiltonian: superconducting circuit design">Lab to Foundry §3: From geometry to Hamiltonian: superconducting circuit design</a></td><td><a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-lagrange" title="From Newton to Lagrange: the principle of least action">Book 2 §1: From Newton to Lagrange: the principle of least action</a>,<br><a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-hamilton" title="Hamiltonian mechanics and phase space">Book 2 §2: Hamiltonian mechanics and phase space</a>,<br><a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-statics" title="Electrostatics, magnetostatics and the capacitance matrix">Book 2 §4: Electrostatics, magnetostatics and the capacitance matrix</a>,<br><a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-pert" title="Approximation methods: perturbation theory and effective Hamiltonians">Book 3 §6: Approximation methods: perturbation theory and effective Hamiltonians</a>,<br><a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-quant" title="Circuit quantisation: from Cooper-pair box to transmon and fluxonium">Book 6 §3: Circuit quantisation: from Cooper-pair box to transmon and fluxonium</a>,<br><a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-cqed" title="Circuit QED: coupling, readout and amplification">Book 6 §4: Circuit QED: coupling, readout and amplification</a>,<br><a class="xref ext" href="../../foundations/quantum-manufacturing/index.html#sec-f-em" title="Electromagnetic simulation: from layout to Hamiltonian">Book 7 §3: Electromagnetic simulation: from layout to Hamiltonian</a>,<br><a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-numerics" title="Numerical methods and optimisation">Book 1 §8: Numerical methods and optimisation</a></td></tr>
+<tr><td><a class="xref ext" href="../../index.html#sec-var" title="Variability, frequency allocation and yield">Lab to Foundry §4: Variability, frequency allocation and yield</a></td><td><a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-jj" title="The Josephson junction">Book 6 §2: The Josephson junction</a>,<br><a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-gates" title="Gates on superconducting qubits">Book 6 §5: Gates on superconducting qubits</a>,<br><a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-prob" title="Probability, statistics and inference">Book 1 §7: Probability, statistics and inference</a>,<br><a class="xref ext" href="../../foundations/quantum-manufacturing/index.html#sec-f-yield" title="Variability and yield">Book 7 §4: Variability and yield</a>,<br><a class="xref ext" href="../../foundations/quantum-manufacturing/index.html#sec-f-stats" title="Statistical learning for design and manufacturing">Book 7 §6: Statistical learning for design and manufacturing</a></td></tr>
+<tr><td><a class="xref ext" href="../../index.html#sec-mat" title="Materials, interfaces and the coherence budget">Lab to Foundry §5: Materials, interfaces and the coherence budget</a></td><td><a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-maxwell" title="Maxwell&#x27;s equations, waves and materials">Book 2 §5: Maxwell's equations, waves and materials</a>,<br><a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-open" title="Open quantum systems and decoherence">Book 3 §8: Open quantum systems and decoherence</a>,<br><a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-super" title="Superconductivity for quantum engineers">Book 6 §1: Superconductivity for quantum engineers</a>,<br><a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-decoh" title="Where coherence is lost: loss and noise in superconducting circuits">Book 6 §6: Where coherence is lost: loss and noise in superconducting circuits</a></td></tr>
+<tr><td><a class="xref ext" href="../../index.html#sec-pkg" title="Packaging, three-dimensional integration and wiring">Lab to Foundry §6: Packaging, three-dimensional integration and wiring</a></td><td><a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-tline" title="Transmission lines, resonators and microwave networks">Book 2 §6: Transmission lines, resonators and microwave networks</a>,<br><a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-thermal" title="Thermal physics, noise and cryogenics">Book 2 §8: Thermal physics, noise and cryogenics</a>,<br><a class="xref ext" href="../../foundations/quantum-manufacturing/index.html#sec-f-pkg" title="Packaging, cryogenics and test">Book 7 §5: Packaging, cryogenics and test</a></td></tr>
+<tr><td><a class="xref ext" href="../../index.html#sec-test" title="Test, characterisation and calibration">Lab to Foundry §7: Test, characterisation and calibration</a></td><td><a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-spin" title="Spin, two-level systems and Rabi oscillations">Book 3 §5: Spin, two-level systems and Rabi oscillations</a>,<br><a class="xref ext" href="../../foundations/quantum-information/index.html#sec-i-noise" title="Noise, fidelity and benchmarking">Book 4 §5: Noise, fidelity and benchmarking</a>,<br><a class="xref ext" href="../../foundations/quantum-information/index.html#sec-i-stack" title="From program to pulses: the quantum computing stack">Book 4 §8: From program to pulses: the quantum computing stack</a>,<br><a class="xref ext" href="../../foundations/quantum-manufacturing/index.html#sec-f-pkg" title="Packaging, cryogenics and test">Book 7 §5: Packaging, cryogenics and test</a>,<br><a class="xref ext" href="../../foundations/quantum-manufacturing/index.html#sec-f-stats" title="Statistical learning for design and manufacturing">Book 7 §6: Statistical learning for design and manufacturing</a></td></tr>
+<tr><td><a class="xref ext" href="../../index.html#sec-mod" title="Other modalities through the same lens">Lab to Foundry §8: Other modalities through the same lens</a></td><td><a class="xref ext" href="../../foundations/quantum-photonics/index.html#sec-p-linear" title="Linear optics and two-photon interference">Book 5 §3: Linear optics and two-photon interference</a>,<br><a class="xref ext" href="../../foundations/quantum-photonics/index.html#sec-p-integrated" title="Integrated quantum photonics: platforms, components and fabrication">Book 5 §6: Integrated quantum photonics: platforms, components and fabrication</a>,<br><a class="xref ext" href="../../foundations/quantum-photonics/index.html#sec-p-qc" title="Photonic quantum computing: from KLM to fusion and GKP">Book 5 §7: Photonic quantum computing: from KLM to fusion and GKP</a>,<br><a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-other" title="Other qubits: trapped ions, neutral atoms, spins and topological proposals">Book 6 §7: Other qubits: trapped ions, neutral atoms, spins and topological proposals</a>,<br><a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-second" title="Identical particles and second quantisation">Book 3 §9: Identical particles and second quantisation</a></td></tr>
+<tr><td><a class="xref ext" href="../../index.html#sec-qec" title="Error correction: the layer every stack shares">Lab to Foundry §9: Error correction: the layer every stack shares</a></td><td><a class="xref ext" href="../../foundations/quantum-information/index.html#sec-i-noise" title="Noise, fidelity and benchmarking">Book 4 §5: Noise, fidelity and benchmarking</a>,<br><a class="xref ext" href="../../foundations/quantum-information/index.html#sec-i-qec1" title="Quantum error correction I: codes and stabilisers">Book 4 §6: Quantum error correction I: codes and stabilisers</a>,<br><a class="xref ext" href="../../foundations/quantum-information/index.html#sec-i-qec2" title="Quantum error correction II: the surface code and fault tolerance">Book 4 §7: Quantum error correction II: the surface code and fault tolerance</a></td></tr>
+<tr><td><a class="xref ext" href="../../index.html#sec-tools" title="The existing tool landscape">Lab to Foundry §10: The existing tool landscape</a></td><td><a class="xref ext" href="../../foundations/quantum-manufacturing/index.html#sec-f-eda" title="Classical electronic design automation in one chapter">Book 7 §2: Classical electronic design automation in one chapter</a>,<br><a class="xref ext" href="../../foundations/quantum-manufacturing/index.html#sec-f-em" title="Electromagnetic simulation: from layout to Hamiltonian">Book 7 §3: Electromagnetic simulation: from layout to Hamiltonian</a></td></tr>
+<tr><td><a class="xref ext" href="../../index.html#sec-prob" title="Seven open problems">Lab to Foundry §11: Seven open problems</a></td><td>All of this book, and the projects below</td></tr>
+</table></div></figure>
+
+<h3 id="sec-f-map-projects"><span class="secnum">7.2</span> Seven projects</h3>
+<p>Each project below is a small, self-contained version of one of the review's open problems, sized for a few weeks with Python, NumPy/SciPy and open-source tools (scqubits, Stim, an open FEM solver such as Palace or Elmer). Each is a stepping stone, not a solution.</p>
+<ol>
+<li><b>Variation-aware frequency planning</b> (<a href="../../index.html#p1">Problem 1</a>). Implement the collision model of <a class="xref" href="#eq-f-pedge">(6)</a> for a 5×5 square lattice with three or four frequency groups, including spectator conditions. Estimate yield by Monte Carlo versus \(\sigma\). Then optimise the target frequencies to maximise yield at \(\sigma = 20\) MHz, and compare with the nominal-optimal design. <i>Uses:</i> <a class="xref" href="#sec-f-yield">§4</a>, <a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-numerics" title="Numerical methods and optimisation">Book 1 §8</a>, <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-gates" title="Gates on superconducting qubits">Book 6 §5</a>.</li>
+<li><b>Extraction with an error bar</b> (<a href="../../index.html#p2">Problem 2</a>). Simulate a transmon pad pair with an open electrostatic FEM solver on a sequence of meshes; extract \(C_\Sigma\) and the coupling capacitance; extrapolate in mesh size and report a convergence-based uncertainty. Propagate it to \(f_{01}\) and \(g\). <i>Uses:</i> <a class="xref" href="#sec-f-em">§3</a>, <a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-statics" title="Electrostatics, magnetostatics and the capacitance matrix">Book 2 §4</a>, <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-quant" title="Circuit quantisation: from Cooper-pair box to transmon and fluxonium">Book 6 §3</a>.</li>
+<li><b>Layout-versus-Hamiltonian check</b> (<a href="../../index.html#p3">Problem 3</a>). Define a small netlist schema (nodes, capacitances, junctions, couplings) and write a checker that compares the Hamiltonian parameters derived from an extracted netlist with the designer's intended ones, flagging any parameter outside tolerance and any near-collision. <i>Uses:</i> <a class="xref" href="#sec-f-eda">§2</a>, <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-quant" title="Circuit quantisation: from Cooper-pair box to transmon and fluxonium">Book 6 §3</a>, <a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-pert" title="Approximation methods: perturbation theory and effective Hamiltonians">Book 3 §6</a>.</li>
+<li><b>Warm-to-cold prediction</b> (<a href="../../index.html#p4">Problem 4</a>). Generate synthetic wafer data from the hierarchical model of <a class="xref" href="#eq-f-hier">(8)</a> (with a radial gradient and a warm-to-cold shift), fit it with a probabilistic programming library, and use posterior predictions to decide which junctions to laser-trim and which dies to cool. Measure how many cold measurements per wafer are needed. <i>Uses:</i> <a class="xref" href="#sec-f-stats">§6</a>, <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-jj" title="The Josephson junction">Book 6 §2</a>, <a class="xref" href="#sec-f-pkg">§5</a>.</li>
+<li><b>Adaptive characterisation</b> (<a href="../../index.html#p5">Problem 5</a>). Simulate Ramsey experiments on a qubit with unknown detuning and \(T_2^*\), and implement Bayesian adaptive choice of delays. Compare the number of shots needed against a fixed linear sweep. <i>Uses:</i> <a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-spin" title="Spin, two-level systems and Rabi oscillations">Book 3 §5</a>, <a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-open" title="Open quantum systems and decoherence">Book 3 §8</a>, <a class="xref" href="#sec-f-stats">§6</a>.</li>
+<li><b>From device parameters to \(\Lambda\)</b> (<a href="../../index.html#p6">Problem 6</a>). Sample device parameters for a distance-5 surface-code patch from a variation model, convert them to per-gate error rates with <a class="xref ext" href="../../foundations/quantum-information/index.html#eq-i-coh">Book 4 eq. (9)</a> plus a \(ZZ\) term, build the noisy circuit in Stim, decode with matching, and estimate the distribution of logical error rates and \(\Lambda\) across fabricated chips. <i>Uses:</i> <a class="xref ext" href="../../foundations/quantum-information/index.html#sec-i-qec2" title="Quantum error correction II: the surface code and fault tolerance">Book 4 §7</a>, <a class="xref ext" href="../../foundations/quantum-information/index.html#sec-i-noise" title="Noise, fidelity and benchmarking">Book 4 §5</a>, <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-decoh" title="Where coherence is lost: loss and noise in superconducting circuits">Book 6 §6</a>.</li>
+<li><b>Photonic path-loss sign-off</b> (<a href="../../index.html#p7">Problem 7</a>). Model a 16-mode Clements mesh with per-MZI loss and splitting-ratio distributions; compute by Monte Carlo the probability that every path meets a loss threshold and that the mesh can still be programmed to a target unitary. <i>Uses:</i> <a class="xref ext" href="../../foundations/quantum-photonics/index.html#sec-p-linear" title="Linear optics and two-photon interference">Book 5 §3</a>, <a class="xref ext" href="../../foundations/quantum-photonics/index.html#sec-p-integrated" title="Integrated quantum photonics: platforms, components and fabrication">Book 5 §6</a>, <a class="xref ext" href="../../foundations/quantum-photonics/index.html#sec-p-qc" title="Photonic quantum computing: from KLM to fusion and GKP">Book 5 §7</a>.</li>
+</ol>
+
+<h3 id="sec-f-map-next"><span class="secnum">7.3</span> Where to go next</h3>
+<p>The review's reading guide (<a class="xref ext" href="../../index.html#sec-reading" title="Reading guide">Lab to Foundry Appendix C</a>) and the annotated reading list in the repository point to the primary literature, tiered by how deep you need to go. With this series behind you, the Tier 1 papers there should read as applications of ideas you have already met. The natural next step is to pick one project above, find the two or three papers the review cites for that problem, and reproduce one of their figures before trying to improve on it.</p>
+
+<div class="eda"><p>The thesis of the review is that quantum processors are now manufactured, and that what separates a research device from a product is the ability to predict, before fabrication, the distribution of what will be made. This series has built the physics and the mathematics behind that sentence. The review is where it is turned into a research agenda.</p></div>
+</section>
+
+<section id="references" class="references">
+  <h2>References and further reading</h2>
+  <p class="refnote">Numbered in order of first citation in this book. Entries tagged “verify details” were compiled from memory; check volume and page before citing them.</p>
+  <ol class="reflist">
+<li id="ref-plummer2000"><span class="refnum">[1]</span> J. D. Plummer, M. D. Deal, P. B. Griffin, <i>Silicon VLSI Technology: Fundamentals, Practice and Modeling</i> (Prentice Hall, 2000).</li>
+<li id="ref-lavagno2016"><span class="refnum">[2]</span> L. Lavagno, I. L. Markov, G. Martin, L. K. Scheffer, <i>Electronic Design Automation for IC Implementation, Circuit Design, and Process Technology</i>, 2nd ed. (CRC Press, 2016).</li>
+<li id="ref-jin2014"><span class="refnum">[3]</span> J.-M. Jin, <i>The Finite Element Method in Electromagnetics</i>, 3rd ed. (Wiley, 2014).</li>
+<li id="ref-gelman2013"><span class="refnum">[4]</span> A. Gelman, J. B. Carlin, H. S. Stern et al., <i>Bayesian Data Analysis</i>, 3rd ed. (CRC Press, 2013).</li>
+<li id="ref-mack2007"><span class="refnum">[5]</span> C. Mack, <i>Fundamental Principles of Optical Lithography</i> (Wiley, 2007).</li>
+<li id="ref-weste2010"><span class="refnum">[6]</span> N. H. E. Weste, D. M. Harris, <i>CMOS VLSI Design: A Circuits and Systems Perspective</i>, 4th ed. (Addison-Wesley, 2010).</li>
+<li id="ref-kahng2011"><span class="refnum">[7]</span> A. B. Kahng, J. Lienig, I. L. Markov, J. Hu, <i>VLSI Physical Design: From Graph Partitioning to Timing Closure</i> (Springer, 2011).</li>
+<li id="ref-nagel1975"><span class="refnum">[8]</span> L. W. Nagel, “SPICE2: A computer program to simulate semiconductor circuits,” University of California, Berkeley, report ERL-M520 (1975).</li>
+<li id="ref-pelgrom1989"><span class="refnum">[9]</span> M. J. M. Pelgrom, A. C. J. Duinmaijer, A. P. G. Welbers, “Matching properties of MOS transistors,” <i>IEEE J. Solid-State Circuits</i> <b>24</b>, 1433 (1989).</li>
+<li id="ref-harrington1993"><span class="refnum">[10]</span> R. F. Harrington, <i>Field Computation by Moment Methods</i> (IEEE Press, 1993).</li>
+<li id="ref-minev2021epr"><span class="refnum">[11]</span> Z. K. Minev, Z. Leghtas, S. O. Mundhada et al., “Energy-participation quantization of Josephson circuits,” <i>npj Quantum Inf.</i> <b>7</b>, 131 (2021).</li>
+<li id="ref-nigg2012"><span class="refnum">[12]</span> S. E. Nigg, H. Paik, B. Vlastakis et al., “Black-box superconducting circuit quantization,” <i>Phys. Rev. Lett.</i> <b>108</b>, 240502 (2012).</li>
+<li id="ref-solgun2014"><span class="refnum">[13]</span> F. Solgun, D. W. Abraham, D. P. DiVincenzo, “Blackbox quantization of superconducting circuits using exact impedance synthesis,” <i>Phys. Rev. B</i> <b>90</b>, 134504 (2014).</li>
+<li id="ref-gustavsen1999"><span class="refnum">[14]</span> B. Gustavsen, A. Semlyen, “Rational approximation of frequency domain responses by vector fitting,” <i>IEEE Trans. Power Delivery</i> <b>14</b>, 1052 (1999).</li>
+<li id="ref-odabasioglu1998"><span class="refnum">[15]</span> A. Odabasioglu, M. Celik, L. T. Pileggi, “PRIMA: passive reduced-order interconnect macromodeling algorithm,” <i>IEEE Trans. Comput.-Aided Des.</i> <b>17</b>, 645 (1998).</li>
+<li id="ref-stapper1983"><span class="refnum">[16]</span> C. H. Stapper, F. M. Armstrong, K. Saji, “Integrated circuit yield statistics,” <i>Proc. IEEE</i> <b>71</b>, 453 (1983).</li>
+<li id="ref-brink2018"><span class="refnum">[17]</span> M. Brink, J. M. Chow, J. Hertzberg et al., “Device challenges for near term superconducting quantum processors: frequency collisions,” in <i>IEEE International Electron Devices Meeting (IEDM)</i> (2018).</li>
+<li id="ref-hertzberg2021"><span class="refnum">[18]</span> J. B. Hertzberg, E. J. Zhang, S. Rosenblatt et al., “Laser-annealing Josephson junctions for yielding scaled-up superconducting quantum processors,” <i>npj Quantum Inf.</i> <b>7</b>, 129 (2021).</li>
+<li id="ref-morvan2022"><span class="refnum">[19]</span> A. Morvan, L. Chen, J. M. Larson et al., “Optimizing frequency allocation for fixed-frequency superconducting quantum processors,” <i>Phys. Rev. Research</i> <b>4</b>, 023079 (2022).</li>
+<li id="ref-luedtke2008"><span class="refnum">[20]</span> J. Luedtke, S. Ahmed, “A sample approximation approach for optimization with probabilistic constraints,” <i>SIAM J. Optim.</i> <b>19</b>, 674 (2008).</li>
+<li id="ref-zhang2022"><span class="refnum">[21]</span> E. J. Zhang, S. Srinivasan, N. Sundaresan et al., “High-performance superconducting quantum processors via laser annealing of transmon qubits,” <i>Sci. Adv.</i> <b>8</b>, eabi6690 (2022).</li>
+<li id="ref-krinner2019"><span class="refnum">[22]</span> S. Krinner, S. Storz, P. Kurpiers et al., “Engineering cryogenic setups for 100-qubit scale superconducting circuit systems,” <i>EPJ Quantum Technol.</i> <b>6</b>, 2 (2019).</li>
+<li id="ref-rasmussen2006"><span class="refnum">[23]</span> C. E. Rasmussen, C. K. I. Williams, <i>Gaussian Processes for Machine Learning</i> (MIT Press, 2006).</li>
+<li id="ref-li2021fno"><span class="refnum">[24]</span> Z. Li, N. Kovachki, K. Azizzadenesheli et al., “Fourier neural operator for parametric partial differential equations,” in <i>International Conference on Learning Representations (ICLR)</i> (2021).</li>
+<li id="ref-lu2021deeponet"><span class="refnum">[25]</span> L. Lu, P. Jin, G. Pang et al., “Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators,” <i>Nat. Mach. Intell.</i> <b>3</b>, 218 (2021).</li>
+<li id="ref-frazier2018"><span class="refnum">[26]</span> P. I. Frazier, “A tutorial on Bayesian optimization”, <a href="https://arxiv.org/abs/1807.02811">arXiv:1807.02811</a> (2018).</li>
+<li id="ref-menke2021"><span class="refnum">[27]</span> T. Menke, F. Häse, S. Gustavsson et al., “Automated design of superconducting circuits and its application to 4-local couplers,” <i>npj Quantum Inf.</i> <b>7</b>, 49 (2021).</li>
+<li id="ref-angelopoulos2023"><span class="refnum">[28]</span> A. N. Angelopoulos, S. Bates, “Conformal prediction: a gentle introduction,” <i>Found. Trends Mach. Learn.</i> <b>16</b>, 494 (2023).</li>
+<li id="ref-montgomery2012"><span class="refnum">[29]</span> D. C. Montgomery, <i>Design and Analysis of Experiments</i>, 8th ed. (Wiley, 2012).</li>
+<li id="ref-cranmer2020"><span class="refnum">[30]</span> K. Cranmer, J. Brehmer, G. Louppe, “The frontier of simulation-based inference,” <i>Proc. Natl. Acad. Sci. USA</i> <b>117</b>, 30055 (2020).</li>
+  </ol>
+</section>
 <nav class="pager" aria-label="Series"><a class="prev" href="../quantum-hardware/index.html"><span>Previous · Book 6</span>Quantum Hardware: Superconducting Circuits and Other Qubits</a><a class="next" href="../../index.html"><span>Capstone</span>From Laboratory to Foundry: Design Automation for Quantum Processors</a></nav>
 <footer class="page-footer">
   <p>Foundations of Quantum Engineering, Book 7. Source: <code>curriculum/7-quantum-manufacturing/</code>. Rebuild with <code>make</code>; figures are computed by <code>scripts/make_foundation_figures.py</code>. Built 2026-11-14.</p>

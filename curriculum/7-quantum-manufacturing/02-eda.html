@@ -1,0 +1,51 @@
+<section id="sec-f-eda"><h2>Classical electronic design automation in one chapter</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Know the classical chip design flow from specification to tape-out, and the role of each tool.</li>
+<li>Understand process design kits, parametrised cells, design-rule checking, layout-versus-schematic and parasitic extraction.</li>
+<li>Understand compact models, corners and Monte Carlo sign-off.</li>
+<li>See which pieces carry over to quantum design and which do not.</li>
+</ul></div>
+
+<h3 id="sec-f-eda-flow">The flow</h3>
+<p>A modern digital or analogue chip is designed by a team that never enters a fab. That separation, the <b>fabless</b> model, works because of a contract between designer and foundry, written in software [@lavagno2016; @weste2010]:</p>
+<ol>
+<li><b>Specification and architecture</b>: what the chip must do, at what power and speed.</li>
+<li><b>Design entry</b>: schematics (analogue) or hardware description languages compiled by <b>logic synthesis</b> into standard cells (digital).</li>
+<li><b>Simulation</b> with compact device models (SPICE for analogue, timing and power models for digital).</li>
+<li><b>Physical design</b>: floorplanning, placement and routing of millions of cells, solved with graph partitioning, analytical placement and maze routing [@kahng2011].</li>
+<li><b>Physical verification</b>: design-rule checking (DRC: does the layout obey the foundry's geometric rules?) and layout-versus-schematic (LVS: is the drawn circuit the intended one?).</li>
+<li><b>Parasitic extraction</b>: compute the resistances, capacitances and inductances of the drawn wires, and re-simulate with them.</li>
+<li><b>Sign-off</b>: timing, power, noise, reliability and yield checks across process corners and statistical variation, then <b>tape-out</b> of the layout (GDSII or OASIS file) to the foundry.</li>
+</ol>
+
+<h3 id="sec-f-eda-pdk">The process design kit</h3>
+<p>The <b>PDK</b> is the foundry's half of the contract. It contains: the layer stack and its material properties; <b>design rules</b> (minimum widths, spacings, enclosures, densities); <b>compact models</b> of every device the process offers, fitted to measured silicon and including statistical variation; <b>parametrised cells</b> (p-cells) that generate correct layouts for devices from a few parameters; extraction rule decks; and verification decks for DRC and LVS. A design that passes the PDK's checks and simulates correctly with its models will, with high probability, work when fabricated. That probability is what the industry sells.</p>
+<p>Quantum chips have no equivalent yet: no compact models of qubits fitted to process data, no rule decks that encode coherence-relevant rules (keep junctions away from certain interfaces, keep the field at metal edges below a participation target), and no statistical models of junction variation shipped with the process. The review's §10 maps exactly which pieces exist (@lf:sec-tools-gap).</p>
+
+<h3 id="sec-f-eda-compact">Compact models, corners and Monte Carlo</h3>
+<p>A <b>compact model</b> is a set of equations with fitted parameters that predicts a device's terminal behaviour quickly enough to simulate millions of devices. SPICE transistor models (BSIM and successors) have hundreds of parameters, each extracted from measurements of test structures [@nagel1975]. Variation is represented in two ways. <b>Corners</b> are worst-case combinations (fast-fast, slow-slow, and so on) of global process shifts; a design must work at all of them. <b>Monte Carlo</b> analysis samples the statistical model of global and local (mismatch) variation and simulates many instances. Local mismatch follows <b>Pelgrom's law</b> [@pelgrom1989]:</p>
+<div class="eq" id="eq-f-pelgrom">$$ \sigma(\Delta P) = \frac{A_P}{\sqrt{WL}} , $$</div>
+<p>the standard deviation of the difference of a parameter \(P\) between two nominally identical devices falls with the square root of their area, because random microscopic fluctuations average over the area. Exactly this law applies to Josephson junctions: larger junctions are more reproducible, at the cost of more capacitance and less flexibility. Analogue designers routinely size devices by Pelgrom's law to meet matching specifications.</p>
+
+<h3 id="sec-f-eda-quantum">What transfers to quantum design</h3>
+<figure class="tbl" id="tab-f-transfer"><figcaption>Classical EDA components and their quantum counterparts.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Classical</th><th>Quantum counterpart</th><th>Status</th></tr>
+<tr><td>Layout editors, p-cells, GDS</td><td>Parametrised qubit, resonator, coupler cells</td><td>Exists (Quantum Metal, KQCircuits, gdsfactory)</td></tr>
+<tr><td>DRC / LVS</td><td>Geometric rules plus coherence-aware rules; Hamiltonian-versus-schematic</td><td>Geometric DRC exists; physics-aware checks missing</td></tr>
+<tr><td>Parasitic extraction</td><td>Capacitance, EM eigenmodes, energy participation</td><td>Exists, but slow and without error bounds</td></tr>
+<tr><td>SPICE compact models</td><td>Hamiltonian-level models of qubits fitted to process data</td><td>Largely missing</td></tr>
+<tr><td>Corners and Monte Carlo</td><td>Frequency-collision and coherence yield analysis</td><td>Research scripts</td></tr>
+<tr><td>Timing sign-off</td><td>Error-budget and logical-error sign-off</td><td>Missing</td></tr>
+</table></div></figure>
+<p>The biggest conceptual difference is the target. Classical sign-off asks whether each signal meets timing with margin; quantum sign-off must ask whether a Hamiltonian lands inside windows of order \(10^{-3}\) relative, and whether the whole processor's error model gives the required logical error rate. The second is a probability statement over a high-dimensional distribution, which is why the review frames quantum EDA as a statistics problem as much as a simulation problem.</p>
+
+<div class="eda"><p>Read the review's §10 alongside this chapter: it surveys incumbent vendors (Synopsys/Ansys, Cadence, Keysight), fabrication and test equipment makers, and quantum-native tools, and places each on the gap map. Knowing the classical flow lets you judge which gaps are engineering (porting an existing method) and which are research (no method exists).</p></div>
+
+<div class="exercises" id="ex-f-eda"><h4>Exercises</h4><ol>
+<li>Junction critical currents follow Pelgrom's law with \(A_P = 2\%\cdot\mu\mathrm m\) (relative mismatch times root area). What is the expected relative mismatch for junctions of \(0.02\) µm² and of \(0.2\) µm²?
+<details><summary>Solution</summary><p>\(\sigma = 2\%/\sqrt{0.02} = 14\%\) and \(2\%/\sqrt{0.2} = 4.5\%\). (Real processes do better through careful control, but the scaling with area holds; this is one reason fluxonium's large array junctions are reproducible while its small junction is not.)</p></details></li>
+<li>List three rules you would add to a DRC deck for a superconducting qubit process that a classical deck would not contain.
+<details><summary>Solution</summary><p>Examples: minimum distance from junction to any lossy dielectric (such as a crossover's oxide); maximum interface participation for capacitor geometries (a physics check, not a pure geometry check); airbridge spacing along CPW lines to suppress slotline modes; maximum ground-plane area without flux-trapping holes; keep-out zones around qubits for unrelated lines (crosstalk); symmetry rules for SQUID loops (flux-noise and asymmetry).</p></details></li>
+</ol></div>
+</section>

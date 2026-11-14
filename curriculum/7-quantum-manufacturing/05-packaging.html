@@ -1,0 +1,40 @@
+<section id="sec-f-pkg"><h2>Packaging, cryogenics and test</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand what a quantum-chip package must do and the electromagnetic problems it creates.</li>
+<li>Budget heat and noise for the wiring of a cryogenic system.</li>
+<li>Know the test flow from wafer probing at room temperature to cryogenic characterisation, and why cold test is the bottleneck.</li>
+</ul></div>
+
+<h3 id="sec-f-pkg-pkg">The package</h3>
+<p>A package holds the chip, connects it to the outside world, thermalises it to the mixing chamber, and shields it. For superconducting chips it is usually a machined copper or aluminium enclosure with a printed circuit board fanning out signal lines to coaxial connectors, and wirebonds or spring pins from board to chip [@krinner2019]. Its electromagnetic requirements are demanding:</p>
+<ul>
+<li><b>No modes near qubit frequencies.</b> The cavity formed by the enclosure (and by the chip's substrate itself) has modes at frequencies scaling inversely with size (@b2:sec-c-max-waves, @lf:eq-box). Large dies push the lowest mode into the qubit band, so packages use pillars, through-chip vias or segmented enclosures to raise it (@lf:sec-pkg-modes).</li>
+<li><b>Continuous ground.</b> Ground planes on chip and board must be tied together densely (many wirebonds, bump bonds or vias) or they support slot modes and become antennas.</li>
+<li><b>Low crosstalk</b> between control lines in the board, connectors and bonds.</li>
+<li><b>Shielding</b> against magnetic fields (mu-metal and superconducting shields), infrared radiation (blackbody-tight enclosures, absorptive coatings), and, increasingly, ionising radiation.</li>
+</ul>
+<p>Flip-chip and multi-chip modules move wiring off the qubit chip; superconducting through-silicon vias and bump bonds carry signals vertically. Each interface must be designed and simulated as part of the microwave circuit, not added afterwards.</p>
+
+<h3 id="sec-f-pkg-wiring">Heat and noise budgets</h3>
+<p>Every line from room temperature conducts heat and carries thermal noise (@b2:sec-c-th-cryo). Passive heat load per line depends on cable material (stainless steel and superconducting NbTi conduct little heat; copper conducts a lot but has low loss) and on thermal anchoring at each stage. Active load comes from signal power dissipated in attenuators and from DC currents in flux lines. Summing over lines and stages gives the review's constraint (@lf:eq-heat): total load at each stage must stay below its cooling power. With roughly two to three coaxial lines per qubit today, a large dilution refrigerator supports on the order of a thousand qubits; beyond that, multiplexing, cryo-CMOS, flex cables and optical links are needed (@lf:sec-pkg-wiring). This is a system-design problem whose variables include chip layout (which lines are needed), packaging (how lines get to the chip) and control architecture.</p>
+
+<h3 id="sec-f-pkg-test">Test</h3>
+<p>Test happens at several stages, each cheaper and less informative than the next:</p>
+<ol>
+<li><b>Room-temperature wafer probing</b>: junction resistances, line continuity, leakage. Seconds per die, fully automated, done on every die. Predicts \(E_J\) through Ambegaokar–Baratoff, with a warm-to-cold uncertainty.</li>
+<li><b>Cryogenic probing at 4 K or below</b>: emerging cryogenic wafer probers measure resonator frequencies, critical currents and some loss at a few kelvin, for many dies per cooldown.</li>
+<li><b>Millikelvin characterisation</b>: spectroscopy, \(T_1\), \(T_2\), gate calibration and benchmarking in a dilution refrigerator. Each cooldown takes one to several days and holds a handful of chips; full characterisation of a large processor takes days to weeks (@b4:sec-i-stack-cal).</li>
+</ol>
+<p>Cold test is the scarce resource (@lf:sec-test-scarce): it is where the quantities that matter are measured, and it is too slow to apply to every chip. That makes two things valuable. Prediction: models that infer cold behaviour from warm data and design data, with calibrated uncertainty, so that only promising chips are cooled. And experimental design: choosing which measurements to make on a cooled chip to learn the most per hour of fridge time (@lf:eq-boed). Chapter 6 introduces the statistics for both.</p>
+
+<div class="eda"><p>The review's §6–§7 cover this chapter's topics in depth. Packaging is the place where chip design meets mechanical and thermal design, so a quantum design flow must extend beyond the die boundary; test is where predictions meet data, so the flow must ingest measurements as well as produce layouts.</p></div>
+
+<div class="exercises" id="ex-f-pkg"><h4>Exercises</h4><ol>
+<li>A silicon chip of 12 × 12 mm in a tightly fitting box (\(\varepsilon_r = 11.45\)) has its first box mode at roughly \(f\approx\frac{c}{2\sqrt{\varepsilon_r}}\sqrt{2}/a\). Estimate it.
+<details><summary>Solution</summary><p>\(c/(2\sqrt{11.45}) = 4.43\times10^7\) m/s; \(\times\sqrt2/0.012 = 5.2\) GHz, inside the qubit band. A 12 mm die needs mode suppression.</p></details></li>
+<li>A refrigerator offers 20 µW at the mixing chamber. Each drive line dissipates 0.5 nW in its mixing-chamber attenuator during operation and conducts 2 nW of passive heat. How many lines can it support at that stage?
+<details><summary>Solution</summary><p>2.5 nW per line, so 8,000 lines in principle; other stages (the still, the 4 K plate where HEMTs dissipate milliwatts) and flux-line DC currents usually bind first, and real budgets keep large margins.</p></details></li>
+<li>Warm probing of a wafer predicts frequencies with 60 MHz uncertainty; a chip is useful if all 20 qubits are within ±100 MHz of target after cooldown. How might you decide which chips to cool?
+<details><summary>Solution</summary><p>For each chip, compute the predicted probability that all 20 cold frequencies fall in the window, using the warm predictions and their uncertainty (including correlations from the wafer-level model). Cool chips in order of that probability, and update the warm-to-cold model with each measured chip. This is the decision problem the review's hierarchical model (@lf:eq-hier) is meant to serve.</p></details></li>
+</ol></div>
+</section>

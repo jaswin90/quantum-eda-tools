@@ -10,6 +10,27 @@ equations offline with vendored KaTeX.
 
 ![Title page and abstract](screenshots/01-title-abstract.png)
 
+## Companion course: Foundations of Quantum Engineering
+
+A seven-book course, written as preparation for the review, in `docs/foundations/`
+(open [`docs/foundations/index.html`](docs/foundations/index.html)). Every chapter has goals,
+derivations, worked examples, a "Toward quantum EDA" box linking it to design tools and to the
+review, and exercises with full solutions. Books link to each other and into the review.
+
+| # | Book | Covers |
+|---|---|---|
+| 1 | Mathematics for Quantum Engineering | complex numbers, Dirac notation, eigenvalues, tensor products, ODEs, Fourier analysis, probability, numerics and optimisation |
+| 2 | Classical Physics for Quantum Engineers | Lagrangians and Hamiltonians, oscillators, capacitance matrices, Maxwell, transmission lines, waveguides, thermal noise |
+| 3 | Quantum Mechanics | postulates, tunnelling, harmonic oscillator, Rabi, perturbation theory, density matrices, decoherence, second quantisation |
+| 4 | Quantum Information and Computation | circuits, teleportation, Grover, Shor, benchmarking, stabiliser codes, surface code, the stack |
+| 5 | Quantum Photonics | field quantisation, states of light, Hong–Ou–Mandel, cavity QED, sources and detectors, integrated photonics, fusion and GKP |
+| 6 | Quantum Hardware | superconductivity, Josephson junctions, transmon and fluxonium, circuit QED, gates, loss budgets, ions, atoms, spins |
+| 7 | Making Quantum Chips | fabrication, classical EDA, EM simulation, yield, packaging and test, statistical learning, a map of the review |
+
+Recommended order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → the review (the roadmap page shows the
+dependencies and shorter routes). About 56,000 words, 178 numbered equations, 15 computed figures
+and 195 exercises with solutions.
+
 ## Contents of the review
 
 1. Introduction: the 2024–2026 industrial moment, and the thesis
@@ -36,6 +57,13 @@ About 12,600 words, 39 numbered equations, 7 computed figures, 7 tables and 205 
 ## Repository layout
 
 ```
+curriculum/
+  series.json            the seven books: order, prerequisites, titles
+  template.html          page shell shared by every book
+  roadmap.html           body of the series roadmap page
+  <n>-<name>/*.html      chapters of each book, in reading order
+  references.bib         textbooks and papers cited by the series
+  library-site-json.patch  entries for jaswin90.github.io/site.json (see below)
 review/
   template.html          page shell (title block, contents, KaTeX set-up)
   sections/*.html        the article, one file per section, in reading order
@@ -45,8 +73,12 @@ references/
 scripts/
   make_figures.py        computes every figure from the equations in the text
   build.py               numbers sections/equations/figures, resolves citations
+  make_foundation_figures.py  computed figures for the series
+  build_foundations.py   builds docs/foundations/ (books, roadmap, cross-references)
+  roadmap_svg.py         redraws the reading-order diagram from series.json
 docs/                    built site (GitHub Pages root)
   index.html             the assembled article (generated; do not edit)
+  foundations/           the series: index.html (roadmap) and one folder per book (generated)
   assets/css/book.css   book stylesheet (library theme variables)
   assets/js/book.js     dark-mode toggle and library hooks
   figures/*.svg          generated figures
@@ -60,10 +92,23 @@ Makefile
 Python 3.9+ only, standard library; no packages to install.
 
 ```sh
-make            # regenerate figures and rebuild docs/index.html
-make figures    # figures only
-make html       # article only
+make              # regenerate all figures, the review and the series
+make figures      # figures only
+make html         # review only
+make foundations  # series only
 ```
+
+The series uses the review's markup (below) plus `@b3:sec-x` for a label in Book 3, `@lf:sec-x`
+for a label in the review, and `@b3:sec-x+` to print the section title as well. The build fails on
+an unresolved reference and on a `<` inside maths (write `\lt`, since a raw `<` starts an HTML tag).
+
+### Publishing the series in the library
+
+Each book of the series is published as a volume inside this repository's book on
+jaswin90.github.io (`"within": "Lab-to-Foundry"` with a `path` under `foundations/`).
+`curriculum/library-site-json.patch` adds the roadmap and the seven books to the
+Quantum Engineering field of `site.json` and points the Lab-to-Foundry entry at the branch that
+contains the series. Apply it in the jaswin90.github.io repository (`git apply`) and push.
 
 ### Writing conventions in `review/sections/`
 
