@@ -33,7 +33,7 @@ and 309 exercises with solutions. All seven books are written for readers with n
 each chapter has a plain-language overview, step-by-step worked examples, quick checks,
 common-confusion boxes and key takeaways. Books 1–3 and 5–7 add glossaries, and Books 1–3
 end every chapter with a short runnable Python example (NumPy and SciPy only, each one
-tested); Books 1 and 5–7 also include worked design chapters.
+tested), Book 7 has several more, and Books 1 and 5–7 include worked design chapters.
 
 ## Contents of the review
 
