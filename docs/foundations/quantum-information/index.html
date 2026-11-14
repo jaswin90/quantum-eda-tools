@@ -73,9 +73,12 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-i-ent-dense"><span class="tocnum">2.5</span>Superdense coding</a></li>
 <li class="toc3"><a href="#sec-i-ent-swap"><span class="tocnum">2.6</span>Entanglement swapping and quantum networks</a></li>
 <li class="toc2"><a href="#sec-i-alg1"><span class="tocnum">3</span>Quantum algorithms I: interference, oracles and search</a></li>
-<li class="toc3"><a href="#sec-i-alg1-par"><span class="tocnum">3.1</span>Parallelism and interference</a></li>
-<li class="toc3"><a href="#sec-i-alg1-dj"><span class="tocnum">3.2</span>Deutsch–Jozsa and Bernstein–Vazirani</a></li>
-<li class="toc3"><a href="#sec-i-alg1-grover"><span class="tocnum">3.3</span>Grover's search</a></li>
+<li class="toc3"><a href="#sec-i-alg1-oracle"><span class="tocnum">3.1</span>Functions as quantum gates</a></li>
+<li class="toc3"><a href="#sec-i-alg1-par"><span class="tocnum">3.2</span>Parallelism alone gives nothing</a></li>
+<li class="toc3"><a href="#sec-i-alg1-kick"><span class="tocnum">3.3</span>Phase kickback</a></li>
+<li class="toc3"><a href="#sec-i-alg1-dj"><span class="tocnum">3.4</span>Deutsch–Jozsa: constant or balanced in one query</a></li>
+<li class="toc3"><a href="#sec-i-alg1-bv"><span class="tocnum">3.5</span>Bernstein–Vazirani: a hidden string in one query</a></li>
+<li class="toc3"><a href="#sec-i-alg1-grover"><span class="tocnum">3.6</span>Grover's search</a></li>
 <li class="toc2"><a href="#sec-i-alg2"><span class="tocnum">4</span>Quantum algorithms II: Fourier transform, phase estimation, factoring and simulation</a></li>
 <li class="toc3"><a href="#sec-i-alg2-qft"><span class="tocnum">4.1</span>The quantum Fourier transform</a></li>
 <li class="toc3"><a href="#sec-i-alg2-pe"><span class="tocnum">4.2</span>Phase estimation</a></li>
@@ -116,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Quantum Information and Computation</h1>
   <p class="subtitle">Gates and circuits, entanglement, algorithms, noise and benchmarking, quantum error correction and the hardware stack</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">8 chapters · 14 numbered equations · 32 exercises with solutions · about 50 hours of study</p>
+  <p class="meta">8 chapters · 15 numbered equations · 35 exercises with solutions · about 50 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../quantum-mechanics/index.html">Book 3: Quantum Mechanics</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-i-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -335,33 +338,75 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <section id="sec-i-alg1"><h2><span class="secnum">3</span> Quantum algorithms I: interference, oracles and search</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>Understand quantum parallelism and why interference, not parallelism, gives speed-ups.</li>
-<li>Work through Deutsch–Jozsa and Bernstein–Vazirani in the oracle model.</li>
-<li>Derive Grover's search algorithm geometrically, and know its optimality.</li>
+<li>Understand why "trying all inputs at once" is not, by itself, a speed-up, and why interference is.</li>
+<li>Build reversible oracles and use phase kickback to move answers into phases.</li>
+<li>Work through the Deutsch–Jozsa and Bernstein–Vazirani algorithms in full.</li>
+<li>Derive Grover's search algorithm with a two-dimensional geometric picture, and know when it is useful.</li>
 </ul></div>
 
-<h3 id="sec-i-alg1-par"><span class="secnum">3.1</span> Parallelism and interference</h3>
-<p>A classical function \(f:\{0,1\}^n\to\{0,1\}\) can be implemented reversibly as a unitary <b>oracle</b> \(U_f\ket x\ket y = \ket x\ket{y\oplus f(x)}\). Applying it to the uniform superposition \(H^{\otimes n}\ket{0}^{\otimes n} = 2^{-n/2}\sum_x\ket x\) evaluates \(f\) on all \(2^n\) inputs "at once". But a measurement returns only one random \(x\) with its \(f(x)\): nothing gained. Speed-ups come from arranging the computation so that amplitudes for wrong answers <i>interfere destructively</i> and those for the right answer constructively, before measuring. Every quantum algorithm is a careful choreography of interference.</p>
-<p>A useful trick: if the target qubit is prepared in \(\ket-\), then \(U_f\ket x\ket- = (-1)^{f(x)}\ket x\ket-\). The function value has been moved into a phase (<b>phase kickback</b>). Phases are what interfere.</p>
+<div class="bigpic"><p>A quantum algorithm is a recipe for arranging interference. The computer is put into a superposition over many possibilities, a function is evaluated on all of them at once, and then gates are applied so that the amplitudes of wrong answers cancel and the amplitudes of right answers add up. A measurement then finds a right answer with high probability. Popular descriptions say a quantum computer "tries every answer in parallel"; the important half of the sentence they leave out is "and then makes the wrong answers interfere away". This chapter shows how on three problems small enough to follow line by line.</p></div>
 
-<h3 id="sec-i-alg1-dj"><span class="secnum">3.2</span> Deutsch–Jozsa and Bernstein–Vazirani</h3>
-<p>Suppose \(f\) is promised to be either constant or balanced (0 on exactly half the inputs). Classically, a deterministic answer needs \(2^{n-1}+1\) queries in the worst case. The Deutsch–Jozsa circuit uses one: prepare \(H^{\otimes n}\ket0^{\otimes n}\), apply the phase oracle, apply \(H^{\otimes n}\) again, and measure. The amplitude of \(\ket{0\dots0}\) is</p>
-<div class="eq" id="eq-i-dj">$$ \frac{1}{2^n}\sum_x(-1)^{f(x)} = \begin{cases}\pm1 & f \text{ constant}\\ 0 & f\text{ balanced}\end{cases}  \tag{5}$$</div>
-<p>so outcome \(0\dots0\) occurs with certainty if \(f\) is constant and never if it is balanced. Bernstein–Vazirani uses the same circuit for \(f(x) = s\cdot x \bmod 2\) and recovers the hidden string \(s\) in one query (classically \(n\)), because \(H^{\otimes n}\) maps \(2^{-n/2}\sum_x(-1)^{s\cdot x}\ket x\) exactly to \(\ket s\). These are toy problems, but they show the structure of useful algorithms: Hadamards create superpositions, the oracle writes phases, and a Fourier-type transform (here \(H^{\otimes n}\), the Fourier transform over bit strings) concentrates amplitude on the answer.</p>
+<h3 id="sec-i-alg1-oracle"><span class="secnum">3.1</span> Functions as quantum gates</h3>
+<p>Many algorithms are stated in terms of a function \(f\) that takes an \(n\)-bit input \(x\) and returns one bit, \(f(x)\in\{0,1\}\). We treat \(f\) as a black box (an <b>oracle</b>) and count how many times we must call it. Quantum gates must be reversible, but \(f\) generally is not (you cannot recover \(x\) from one bit). The standard fix keeps the input and writes the answer into an extra qubit with XOR:</p>
+<div class="eq" id="eq-i-oracle">$$ U_f\ket x\ket y = \ket x\ket{y\oplus f(x)} .  \tag{5}$$</div>
+<p>Applying \(U_f\) twice undoes it (\(y\oplus f\oplus f = y\)), so it is reversible and, as a permutation of basis states, unitary. Any classical circuit for \(f\) can be converted into such a quantum circuit with modest overhead, using Toffoli gates (controlled-controlled-NOT) and extra "scratch" qubits that are cleaned up afterwards.</p>
 
-<h3 id="sec-i-alg1-grover"><span class="secnum">3.3</span> Grover's search</h3>
-<p>Search \(N = 2^n\) items for the one marked by \(f(w) = 1\). Classically this needs about \(N/2\) queries on average. Grover's algorithm <span class="cite">[<a href="#ref-grover1996">6</a>]</span> needs about \(\tfrac\pi4\sqrt N\). Start in the uniform superposition \(\ket s\). Repeat two reflections: the oracle \(O = I - 2\ketbra ww\) (flip the sign of the marked item) and the <b>diffusion</b> \(D = 2\ketbra ss - I\) (reflect about the mean). Everything happens in the two-dimensional plane spanned by \(\ket w\) and the uniform superposition of unmarked items \(\ket{s'}\). The starting state makes a small angle \(\theta/2\) with \(\ket{s'}\), with \(\sin(\theta/2) = 1/\sqrt N\). Two reflections compose to a rotation by \(\theta\), so after \(k\) iterations</p>
-<div class="eq" id="eq-i-grover">$$ \Pr(w) = \sin^2\!\Big(\frac{(2k+1)\theta}{2}\Big), \qquad k_{\mathrm{opt}}\approx\frac{\pi}{4}\sqrt N .  \tag{6}$$</div>
-<p>Iterating too long rotates past the target, and the success probability falls again. The quadratic speed-up is provably optimal for unstructured search. Its generalisation, <b>amplitude amplification</b>, boosts the success probability of any quantum subroutine quadratically faster than classical repetition, and appears as a component in many algorithms.</p>
-<div class="box warn"><p><strong>Why quadratic speed-ups are fragile.</strong> A fault-tolerant logical operation is roughly \(10^3\)–\(10^4\) times slower than a classical processor operation, and each oracle call may contain thousands of logical gates. A \(\sqrt N\) advantage pays off only for very large \(N\), and analyses suggest that quadratic speed-ups alone are unlikely to give practical advantage on early fault-tolerant machines. Exponential speed-ups (Chapter 4) are what drive the roadmaps.</p></div>
+<h3 id="sec-i-alg1-par"><span class="secnum">3.2</span> Parallelism alone gives nothing</h3>
+<p>Put \(n\) qubits through Hadamards: \(H^{\otimes n}\ket{0\dots0} = 2^{-n/2}\sum_x\ket x\), an equal superposition of all \(2^n\) inputs (Exercise 1). Apply \(U_f\) once:</p>
+\[ U_f\,\frac{1}{2^{n/2}}\sum_x\ket x\ket0 = \frac{1}{2^{n/2}}\sum_x\ket x\ket{f(x)} . \]
+<p>All \(2^n\) values of \(f\) now sit in one state. But measuring returns a single random \(x\) and its \(f(x)\): exactly what evaluating \(f\) at a random input classically would give. The information is there, but measurement only lets us extract one sample. To gain anything, we must make the many terms interfere so that a <i>global</i> property of \(f\) shows up in the probabilities.</p>
+
+<h3 id="sec-i-alg1-kick"><span class="secnum">3.3</span> Phase kickback</h3>
+<p>Interference acts on phases, so it helps to put the answer into a phase rather than into a qubit's value. Prepare the extra qubit in \(\ket- = (\ket0-\ket1)/\sqrt2\). Then</p>
+\[ U_f\ket x\ket- = \ket x\,\frac{\ket{f(x)} - \ket{1\oplus f(x)}}{\sqrt2} = (-1)^{f(x)}\ket x\ket- . \]
+<p>(If \(f(x) = 0\), nothing changes; if \(f(x) = 1\), the two terms swap, which flips the sign.) The extra qubit is unchanged and can be ignored; the input register has acquired a phase \((-1)^{f(x)}\). This trick, <b>phase kickback</b>, is used in almost every algorithm. From now on we write the <b>phase oracle</b> as \(O_f\ket x = (-1)^{f(x)}\ket x\).</p>
+
+<h3 id="sec-i-alg1-dj"><span class="secnum">3.4</span> Deutsch–Jozsa: constant or balanced in one query</h3>
+<p><b>Problem.</b> \(f\) is promised to be either <i>constant</i> (the same output for every input) or <i>balanced</i> (0 for exactly half the inputs, 1 for the other half). Which is it? A deterministic classical algorithm may need \(2^{n-1}+1\) queries in the worst case: if the first half of the inputs you check all give 0, the function could still be either.</p>
+<p><b>Quantum algorithm.</b> (1) Start in \(\ket{0}^{\otimes n}\); apply \(H^{\otimes n}\). (2) Apply the phase oracle once. (3) Apply \(H^{\otimes n}\) again. (4) Measure. Follow the state:</p>
+\[ \ket{0\dots0} \xrightarrow{H^{\otimes n}} \frac{1}{2^{n/2}}\sum_x\ket x \xrightarrow{O_f} \frac{1}{2^{n/2}}\sum_x(-1)^{f(x)}\ket x \xrightarrow{H^{\otimes n}} \sum_z\Big[\frac{1}{2^n}\sum_x(-1)^{f(x) + x\cdot z}\Big]\ket z , \]
+<p>using the identity \(H^{\otimes n}\ket x = 2^{-n/2}\sum_z(-1)^{x\cdot z}\ket z\), where \(x\cdot z\) is the bitwise dot product mod 2 (Exercise 2). The amplitude of the all-zeros outcome \(z = 0\dots0\) is</p>
+<div class="eq" id="eq-i-dj">$$ \frac{1}{2^n}\sum_x(-1)^{f(x)} = \begin{cases}\pm1 & f \text{ constant}\\ 0 & f\text{ balanced}\end{cases} .  \tag{6}$$</div>
+<p>If \(f\) is constant, every term has the same sign and they add to \(\pm1\): we see all zeros with certainty. If balanced, half the terms are \(+1\) and half \(-1\), and they cancel exactly: we never see all zeros. One query decides. This is the clearest illustration of the "parallelism + interference" recipe.</p>
+<div class="pitfall"><p>Deutsch–Jozsa's advantage is real but narrow. A <i>randomised</i> classical algorithm that checks a few random inputs answers correctly with high probability (if it ever sees both 0 and 1, the function is balanced). The problem is a teaching example, not a useful application. Its value is that it shows the structure that real algorithms share.</p></div>
+
+<h3 id="sec-i-alg1-bv"><span class="secnum">3.5</span> Bernstein–Vazirani: a hidden string in one query</h3>
+<p>Suppose \(f(x) = s\cdot x \bmod 2\) for an unknown \(n\)-bit string \(s\). Classically, each query reveals one bit of information about \(s\), so \(n\) queries are needed (query \(x = 100\dots0\) to get \(s_1\), and so on). The same circuit as Deutsch–Jozsa finds \(s\) in one query: after the oracle the register holds \(2^{-n/2}\sum_x(-1)^{s\cdot x}\ket x\), which is exactly \(H^{\otimes n}\ket s\), so the final Hadamards return \(\ket s\). The \(H^{\otimes n}\) transform is the Fourier transform over bit strings, and the lesson generalises: an oracle that writes a <i>periodic</i> pattern into phases, followed by a Fourier transform, concentrates amplitude on the period. Shor's algorithm (Chapter 4) is this idea with the ordinary Fourier transform.</p>
+
+<h3 id="sec-i-alg1-grover"><span class="secnum">3.6</span> Grover's search</h3>
+<p><b>Problem.</b> Among \(N = 2^n\) items, exactly one, \(w\), is marked: \(f(w) = 1\) and \(f(x) = 0\) otherwise. Find \(w\). With no structure to exploit, a classical search checks items one by one, on average \(N/2\) queries. Grover's algorithm <span class="cite">[<a href="#ref-grover1996">6</a>]</span> needs about \(\tfrac\pi4\sqrt N\).</p>
+<p><b>The two reflections.</b> Start in the uniform superposition \(\ket s = N^{-1/2}\sum_x\ket x\). Repeat the following pair of operations:</p>
+<ol>
+<li><b>Oracle</b> \(O = I - 2\ketbra ww\): flips the sign of the marked item's amplitude and leaves the rest. (This is the phase oracle.)</li>
+<li><b>Diffusion</b> \(D = 2\ketbra ss - I\): reflects every amplitude about the average amplitude. Implemented as \(H^{\otimes n}\,(2\ketbra{0}{0} - I)\,H^{\otimes n}\), a handful of gates.</li>
+</ol>
+<div class="example"><p><b>Worked example: the amplitudes, \(N = 4\).</b> Start: all four amplitudes are \(\tfrac12\). Oracle (say \(w = 2\)): amplitudes \((\tfrac12, \tfrac12, -\tfrac12, \tfrac12)\). Their average is \(\tfrac14\). Reflect each about \(\tfrac14\) (new value = \(2\times\tfrac14 - \) old value): \((0, 0, 1, 0)\). After one iteration the marked item has amplitude 1. Measuring finds it with certainty, using one oracle call instead of an average of 2.25 classically (Exercise 4).</p></div>
+<p><b>The geometric picture.</b> All the action happens in a plane spanned by two vectors: \(\ket w\) and \(\ket{s'}\), the uniform superposition of the \(N-1\) unmarked items. The starting state \(\ket s\) lies in this plane at a small angle \(\theta/2\) from \(\ket{s'}\), with \(\sin(\theta/2) = \braket ws = 1/\sqrt N\). The oracle reflects about \(\ket{s'}\) (it flips the \(\ket w\) component), and the diffusion reflects about \(\ket s\). Two reflections about lines at angle \(\theta/2\) compose into a <i>rotation</i> by \(\theta\) (a fact from plane geometry). So each iteration rotates the state by \(\theta\) towards \(\ket w\), and after \(k\) iterations the angle from \(\ket{s'}\) is \((2k+1)\theta/2\):</p>
+<div class="eq" id="eq-i-grover">$$ \Pr(w) = \sin^2\!\Big(\frac{(2k+1)\theta}{2}\Big), \qquad k_{\mathrm{opt}}\approx\frac{\pi}{4}\sqrt N .  \tag{7}$$</div>
+<p>To reach \(\Pr\approx1\), the angle must be about \(\pi/2\), so \(k\theta\approx\pi/2\), and since \(\theta\approx2/\sqrt N\), \(k\approx\tfrac\pi4\sqrt N\). Stopping early leaves the state short of \(\ket w\); iterating too long rotates past it and the success probability drops again. That is unlike classical search, where more effort never hurts.</p>
+<p>The \(\sqrt N\) speed-up is provably the best possible for unstructured search: no quantum algorithm can do better. Its generalisation, <b>amplitude amplification</b>, boosts the success probability of any quantum subroutine quadratically faster than classical repetition, and appears inside many larger algorithms.</p>
+<div class="box warn"><p><strong>Why quadratic speed-ups are fragile in practice.</strong> A fault-tolerant logical operation is roughly a thousand to ten thousand times slower than a classical processor operation, and each oracle call may contain thousands of logical gates. A \(\sqrt N\) advantage pays off only for very large \(N\). Analyses suggest that quadratic speed-ups alone are unlikely to give practical advantage on early fault-tolerant machines; the exponential speed-ups of the next chapter are what drive industry roadmaps.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Evaluating \(f\) on a superposition of all inputs is easy; extracting useful information requires interference.</li>
+<li>Phase kickback converts \(f(x)\) into a sign \((-1)^{f(x)}\), which can interfere.</li>
+<li>Deutsch–Jozsa and Bernstein–Vazirani: Hadamard, phase oracle, Hadamard; a Fourier transform concentrates amplitude on a global property of \(f\).</li>
+<li>Grover search rotates the state towards the answer by a fixed angle per query: \(\tfrac\pi4\sqrt N\) queries instead of \(N/2\), and no better is possible.</li>
+</ul></div>
 
 <div class="exercises" id="ex-i-alg1"><h4>Exercises</h4><ol>
+<li>Show that \(H\otimes H\ket{00} = \tfrac12(\ket{00}+\ket{01}+\ket{10}+\ket{11})\).
+<details><summary>Solution</summary><p>\(H\ket0\otimes H\ket0 = \tfrac{1}{\sqrt2}(\ket0+\ket1)\otimes\tfrac{1}{\sqrt2}(\ket0+\ket1)\); expanding the product gives the four terms with coefficient ½.</p></details></li>
+<li>Prove \(H\ket x = \tfrac{1}{\sqrt2}\sum_{z\in\{0,1\}}(-1)^{xz}\ket z\) for one qubit, and deduce the \(n\)-qubit formula.
+<details><summary>Solution</summary><p>For \(x = 0\): \((\ket0+\ket1)/\sqrt2\), all signs \(+\). For \(x = 1\): \((\ket0-\ket1)/\sqrt2\), sign \((-1)^{z}\). Both match \((-1)^{xz}\). For \(n\) qubits, the tensor product multiplies the signs: \(\prod_i(-1)^{x_iz_i} = (-1)^{x\cdot z}\).</p></details></li>
 <li>For \(n = 1\) (Deutsch's problem), list the four functions \(f:\{0,1\}\to\{0,1\}\) and show the circuit distinguishes constant from balanced with one query.
-<details><summary>Solution</summary><p>\(f = 0\), \(f = 1\) (constant), \(f(x) = x\), \(f(x) = 1-x\) (balanced). After \(H\), phase oracle and \(H\), the amplitude of \(\ket0\) is \(\tfrac12[(-1)^{f(0)}+(-1)^{f(1)}]\): \(\pm1\) for constant, 0 for balanced.</p></details></li>
-<li>For \(N = 4\), how many Grover iterations give the marked item with certainty?
-<details><summary>Solution</summary><p>\(\sin(\theta/2) = 1/2\), so \(\theta = \pi/3\). After \(k = 1\), \(\sin^2(3\theta/2) = \sin^2(\pi/2) = 1\). One iteration suffices.</p></details></li>
-<li>For \(N = 2^{40}\), estimate the optimal number of iterations and compare with the classical average.
+<details><summary>Solution</summary><p>\(f = 0\), \(f = 1\) (constant), \(f(x) = x\), \(f(x) = 1-x\) (balanced). The amplitude of \(\ket0\) at the end is \(\tfrac12[(-1)^{f(0)}+(-1)^{f(1)}]\): \(\pm1\) for constant, 0 for balanced.</p></details></li>
+<li>Classically, how many queries on average does it take to find the marked item among 4, checking items in random order and stopping when found (the last item need not be checked)?
+<details><summary>Solution</summary><p>Found on query 1, 2 or 3 with probabilities ¼, ¼, ¼; if the first three are unmarked (probability ¼) we know it is the fourth after 3 queries. Average \(= \tfrac14(1+2+3+3) = 2.25\).</p></details></li>
+<li>For \(N = 2^{40}\), estimate the optimal number of Grover iterations and compare with the classical average.
 <details><summary>Solution</summary><p>\(\tfrac\pi4\sqrt{2^{40}} = \tfrac\pi4\times2^{20}\approx8.2\times10^5\) versus \(2^{39}\approx5.5\times10^{11}\).</p></details></li>
+<li>For \(N = 8\), what is the success probability after one, two and three iterations? Which is best?
+<details><summary>Solution</summary><p>\(\sin(\theta/2) = 1/\sqrt8\), \(\theta/2 = 0.3614\) rad. \(k=1\): \(\sin^2(3\times0.3614) = \sin^2(1.084) = 0.781\). \(k=2\): \(\sin^2(1.807) = 0.945\). \(k=3\): \(\sin^2(2.530) = 0.330\). Two iterations are best; the third overshoots.</p></details></li>
 </ol></div>
 </section>
 
@@ -375,11 +420,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <h3 id="sec-i-alg2-qft"><span class="secnum">4.1</span> The quantum Fourier transform</h3>
 <p>The discrete Fourier transform of Book 1 (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-dft">Book 1 eq. (33)</a>), normalised to be unitary, acts on basis states of \(n\) qubits (\(N = 2^n\)) as</p>
-<div class="eq" id="eq-i-qft">$$ \mathrm{QFT}\ket j = \frac{1}{\sqrt N}\sum_{k=0}^{N-1}\ee^{2\pi\ii jk/N}\ket k = \frac{1}{\sqrt N}\bigotimes_{l=1}^{n}\big(\ket0 + \ee^{2\pi\ii\,j/2^l}\ket1\big).  \tag{7}$$</div>
+<div class="eq" id="eq-i-qft">$$ \mathrm{QFT}\ket j = \frac{1}{\sqrt N}\sum_{k=0}^{N-1}\ee^{2\pi\ii jk/N}\ket k = \frac{1}{\sqrt N}\bigotimes_{l=1}^{n}\big(\ket0 + \ee^{2\pi\ii\,j/2^l}\ket1\big).  \tag{8}$$</div>
 <p>The product form shows that each output qubit carries one binary digit of \(j\) in its phase. A circuit of \(n\) Hadamards and \(n(n-1)/2\) controlled phase rotations \(R_k = \mathrm{diag}(1, \ee^{2\pi\ii/2^k})\) implements it, compared with \(O(n2^n)\) operations for the classical FFT on a vector of length \(2^n\). The catch is the same as always: the QFT transforms amplitudes, which cannot be read out. It is useful only as a step inside an algorithm whose output after the QFT is concentrated on a few outcomes. Small rotations \(R_k\) with \(k\gtrsim\log_2(n/\epsilon)\) can be dropped with error \(\epsilon\) (the <b>approximate QFT</b>).</p>
 
 <h3 id="sec-i-alg2-pe"><span class="secnum">4.2</span> Phase estimation</h3>
-<p>Given a unitary \(U\) and one of its eigenvectors, \(U\ket u = \ee^{2\pi\ii\varphi}\ket u\), <b>phase estimation</b> finds \(\varphi\) to \(t\) bits. Prepare \(t\) ancillas in \(\ket+\), apply controlled-\(U^{2^k}\) from ancilla \(k\) to the register holding \(\ket u\). By phase kickback, ancilla \(k\) acquires the phase \(\ee^{2\pi\ii\,2^k\varphi}\), so the ancilla register is exactly in the product state of <a class="xref" href="#eq-i-qft">(7)</a> with \(j/2^t\) replaced by \(\varphi\). An inverse QFT then yields the binary expansion of \(\varphi\). Precision \(2^{-t}\) costs about \(2^t\) applications of \(U\), the "Heisenberg scaling" that also underlies quantum-enhanced metrology. Phase estimation is how quantum computers find energies of molecules (with \(U = \ee^{-\ii Ht}\)) and periods of functions.</p>
+<p>Given a unitary \(U\) and one of its eigenvectors, \(U\ket u = \ee^{2\pi\ii\varphi}\ket u\), <b>phase estimation</b> finds \(\varphi\) to \(t\) bits. Prepare \(t\) ancillas in \(\ket+\), apply controlled-\(U^{2^k}\) from ancilla \(k\) to the register holding \(\ket u\). By phase kickback, ancilla \(k\) acquires the phase \(\ee^{2\pi\ii\,2^k\varphi}\), so the ancilla register is exactly in the product state of <a class="xref" href="#eq-i-qft">(8)</a> with \(j/2^t\) replaced by \(\varphi\). An inverse QFT then yields the binary expansion of \(\varphi\). Precision \(2^{-t}\) costs about \(2^t\) applications of \(U\), the "Heisenberg scaling" that also underlies quantum-enhanced metrology. Phase estimation is how quantum computers find energies of molecules (with \(U = \ee^{-\ii Ht}\)) and periods of functions.</p>
 
 <h3 id="sec-i-alg2-shor"><span class="secnum">4.3</span> Shor's algorithm</h3>
 <p>Factoring an integer \(N\) reduces, by classical number theory, to finding the <b>order</b> \(r\) of a random \(a\) modulo \(N\): the smallest \(r\) with \(a^r\equiv1 \pmod N\). If \(r\) is even, \(\gcd(a^{r/2}\pm1, N)\) is likely to be a nontrivial factor. The unitary \(U\ket y = \ket{ay\bmod N}\) has eigenvalues \(\ee^{2\pi\ii s/r}\), so phase estimation on \(U\) returns \(s/r\) for random \(s\), and continued fractions recover \(r\) <span class="cite">[<a href="#ref-shor1997">7</a>]</span>. The quantum cost is dominated by modular exponentiation, implemented with reversible arithmetic circuits of \(O(n^3)\) gates for an \(n\)-bit number (with faster variants). Classically, the best known algorithm (the number field sieve) takes time \(\exp(O(n^{1/3}\log^{2/3}n))\). This exponential separation is why factoring RSA-2048 is the benchmark of fault-tolerant roadmaps.</p>
@@ -387,7 +432,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <h3 id="sec-i-alg2-sim"><span class="secnum">4.4</span> Hamiltonian simulation</h3>
 <p>Feynman's original motivation for quantum computers was simulating quantum systems, whose state vectors grow exponentially (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-tensor-exp" title="The exponential wall">Book 1 §4.4</a>). For a Hamiltonian that is a sum of local terms, \(H = \sum_jH_j\), the <b>Trotter–Suzuki</b> product formula approximates evolution by alternating short evolutions under each term <span class="cite">[<a href="#ref-lloyd1996">10</a>]</span>:</p>
-<div class="eq" id="eq-i-trotter">$$ \ee^{-\ii Ht} \approx \Big(\prod_j\ee^{-\ii H_jt/r}\Big)^r, \qquad \text{error } = O\Big(\frac{t^2}{r}\sum_{j\lt k}\big\|[H_j,H_k]\big\|\Big).  \tag{8}$$</div>
+<div class="eq" id="eq-i-trotter">$$ \ee^{-\ii Ht} \approx \Big(\prod_j\ee^{-\ii H_jt/r}\Big)^r, \qquad \text{error } = O\Big(\frac{t^2}{r}\sum_{j\lt k}\big\|[H_j,H_k]\big\|\Big).  \tag{9}$$</div>
 <p>The error comes from the non-commuting terms, through the Baker–Campbell–Hausdorff formula (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-bch">Book 1 eq. (19)</a>). Each factor is a small circuit. Applications in chemistry and materials (catalysts, battery materials, high-temperature superconductors) are among the most credible uses of fault-tolerant machines, typically needing hundreds to thousands of logical qubits and \(10^8\)–\(10^{12}\) \(T\) gates.</p>
 
 <h3 id="sec-i-alg2-var"><span class="secnum">4.5</span> Variational and near-term algorithms</h3>
@@ -415,15 +460,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <h3 id="sec-i-noise-model"><span class="secnum">5.1</span> Gate errors as channels</h3>
 <p>A real gate implements not the ideal unitary \(U\) but a channel \(\tilde{\mathcal U}\). It is convenient to write \(\tilde{\mathcal U} = \mathcal E\circ\mathcal U\): the ideal gate followed by an error channel \(\mathcal E\) (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#eq-q-kraus">Book 3 eq. (34)</a>). A general error channel on \(n\) qubits has \(16^n - 4^n\) real parameters, too many to measure or use. The <b>Pauli channel</b> is the workhorse simplification:</p>
-<div class="eq" id="eq-i-pauli">$$ \mathcal E(\rho) = \sum_{P\in\{I,X,Y,Z\}^{\otimes n}} p_P\,P\rho P, \qquad \sum_Pp_P = 1,  \tag{9}$$</div>
+<div class="eq" id="eq-i-pauli">$$ \mathcal E(\rho) = \sum_{P\in\{I,X,Y,Z\}^{\otimes n}} p_P\,P\rho P, \qquad \sum_Pp_P = 1,  \tag{10}$$</div>
 <p>a random Pauli applied with probabilities \(p_P\). The <b>depolarising</b> channel is the special case with all non-identity Paulis equally likely. Any channel can be converted into a Pauli channel with the same average fidelity by <b>Pauli twirling</b>: surround the gate with random Paulis (and their compensating Paulis afterwards). Twirling is used in experiments (randomised compiling) and justifies Pauli models in error-correction simulations, which is crucial because Pauli errors on Clifford circuits can be simulated efficiently (Chapter 6).</p>
 <p>For a qubit with relaxation and dephasing during a gate of duration \(t_g\), twirling the amplitude- and phase-damping channels gives approximately</p>
-<div class="eq" id="eq-i-coh">$$ p_X = p_Y \approx \frac{t_g}{4T_1}, \qquad p_Z\approx\frac{t_g}{2T_2} - \frac{t_g}{4T_1}, \qquad 1 - \bar F \approx \frac{t_g}{3}\Big(\frac{1}{T_1} + \frac{1}{T_\varphi}\Big)  \tag{10}$$</div>
+<div class="eq" id="eq-i-coh">$$ p_X = p_Y \approx \frac{t_g}{4T_1}, \qquad p_Z\approx\frac{t_g}{2T_2} - \frac{t_g}{4T_1}, \qquad 1 - \bar F \approx \frac{t_g}{3}\Big(\frac{1}{T_1} + \frac{1}{T_\varphi}\Big)  \tag{11}$$</div>
 <p>(for \(t_g\ll T_1, T_2\); the last expression uses \(1/T_2 = 1/2T_1 + 1/T_\varphi\)). A 25 ns single-qubit gate with \(T_1 = T_\varphi = 100\) µs has a coherence limit of about \(1.7\times10^{-4}\); a 60 ns two-qubit gate on two such qubits about \(8\times10^{-4}\). These coherence limits are the first line of the error budget in the review (<a class="xref ext" href="../../index.html#eq-eps">Lab to Foundry eq. (37)</a>).</p>
 
 <h3 id="sec-i-noise-fid"><span class="secnum">5.2</span> Measures of gate quality</h3>
 <p>The <b>average gate fidelity</b> of an implemented channel \(\tilde{\mathcal U}\) to the target \(U\) is \(\bar F = \int\dd\psi\,\bra\psi U^\dagger\tilde{\mathcal U}(\ketbra\psi\psi)U\ket\psi\), averaged over all pure input states. The <b>process (entanglement) fidelity</b> \(F_e\) is the fidelity of the Choi state of the channel, and for a Pauli channel it is simply \(p_I\). They are related by</p>
-<div class="eq" id="eq-i-favg">$$ \bar F = \frac{dF_e + 1}{d+1}, \qquad d = 2^n .  \tag{11}$$</div>
+<div class="eq" id="eq-i-favg">$$ \bar F = \frac{dF_e + 1}{d+1}, \qquad d = 2^n .  \tag{12}$$</div>
 <p>The <b>error rate</b> \(r = 1 - \bar F\) is the number most often quoted. For error correction, though, the average hides what matters: a coherent over-rotation by angle \(\epsilon\) has infidelity of order \(\epsilon^2\), but repeated \(N\) times in phase it builds up to \(N^2\epsilon^2\), while stochastic errors build up only as \(N\epsilon^2\). The worst-case measure, the <b>diamond norm</b> distance, can be as large as \(\sqrt{r}\) for coherent errors. Twirling converts coherent into stochastic errors, which is one reason it is used.</p>
 
 <h3 id="sec-i-noise-tomo"><span class="secnum">5.3</span> Tomography</h3>
@@ -431,11 +476,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <h3 id="sec-i-noise-rb"><span class="secnum">5.4</span> Randomised benchmarking</h3>
 <p><b>Randomised benchmarking</b> (RB) <span class="cite">[<a href="#ref-magesan2011">12</a>]</span> avoids both problems. Apply a random sequence of \(m\) Clifford gates, followed by the single Clifford that inverts the whole sequence, and measure the probability \(F(m)\) of returning to the initial state. Averaging over random sequences twirls the noise into a depolarising channel with parameter \(p\) per gate, and</p>
-<div class="eq" id="eq-i-rb">$$ F(m) = A\,p^m + B, \qquad r = \frac{(d-1)(1-p)}{d} .  \tag{12}$$</div>
+<div class="eq" id="eq-i-rb">$$ F(m) = A\,p^m + B, \qquad r = \frac{(d-1)(1-p)}{d} .  \tag{13}$$</div>
 <p>SPAM errors only affect \(A\) and \(B\), not the decay rate, so \(r\) is a clean per-gate error (<a class="xref ext" href="../../index.html#eq-rb">Lab to Foundry eq. (29)</a>). <b>Interleaved</b> RB inserts a specific gate between the random Cliffords and compares decay rates to extract that gate's error. <b>Cross-entropy benchmarking</b> uses random non-Clifford circuits and compares measured output distributions with ideal ones; it was used in the 2019 "supremacy" experiment. <b>Simultaneous</b> RB on many qubits at once exposes crosstalk. <a class="xref" href="#fig-i-rb">Figure 1</a> shows a typical RB decay.</p>
 <figure id="fig-i-rb">
 <img src="../figures/fig-i-rb.svg" alt="Randomised benchmarking survival probability decaying with sequence length for two error rates.">
-<figcaption><b>Figure 1.</b> Randomised benchmarking decays from <a class="xref" href="#eq-i-rb">(12)</a> for a single qubit (\(d=2\)) with error per Clifford \(r = 10^{-3}\) and \(5\times10^{-3}\), \(A = 0.48\), \(B = 0.5\) (the asymptote, a fully mixed qubit). Points mimic averages over random sequences with shot noise.</figcaption>
+<figcaption><b>Figure 1.</b> Randomised benchmarking decays from <a class="xref" href="#eq-i-rb">(13)</a> for a single qubit (\(d=2\)) with error per Clifford \(r = 10^{-3}\) and \(5\times10^{-3}\), \(A = 0.48\), \(B = 0.5\) (the asymptote, a fully mixed qubit). Points mimic averages over random sequences with shot noise.</figcaption>
 </figure>
 
 <h3 id="sec-i-noise-beyond"><span class="secnum">5.5</span> Errors the simple models miss</h3>
@@ -451,7 +496,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="exercises" id="ex-i-noise"><h4>Exercises</h4><ol>
 <li>A single-qubit depolarising channel with \(p_X = p_Y = p_Z = 10^{-4}\). What are \(F_e\) and \(\bar F\)?
 <details><summary>Solution</summary><p>\(F_e = p_I = 1 - 3\times10^{-4}\). \(\bar F = (2F_e+1)/3 = 1 - 2\times10^{-4}\). The error rate \(r = 2\times10^{-4}\).</p></details></li>
-<li>Estimate the coherence-limited error of a 40 ns CZ gate between two qubits each with \(T_1 = 150\) µs and \(T_\varphi = 200\) µs, using <a class="xref" href="#eq-i-coh">(10)</a> per qubit and adding.
+<li>Estimate the coherence-limited error of a 40 ns CZ gate between two qubits each with \(T_1 = 150\) µs and \(T_\varphi = 200\) µs, using <a class="xref" href="#eq-i-coh">(11)</a> per qubit and adding.
 <details><summary>Solution</summary><p>Per qubit: \(\tfrac{40\,\mathrm{ns}}{3}(1/150 + 1/200)\,\mu\mathrm s^{-1} = 13.3\times0.01167\times10^{-3}\approx1.56\times10^{-4}\). Two qubits: about \(3.1\times10^{-4}\). (For two-qubit gates the prefactor differs slightly because the average is over a 4-dimensional space; this is an estimate.)</p></details></li>
 <li>An RB experiment fits \(p = 0.9985\) per Clifford on one qubit. What is \(r\)? If a Clifford averages 1.875 physical gates, what is the error per physical gate?
 <details><summary>Solution</summary><p>\(r = (1 - p)/2 = 7.5\times10^{-4}\). Per gate \(\approx7.5\times10^{-4}/1.875 = 4\times10^{-4}\).</p></details></li>
@@ -478,7 +523,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <h3 id="sec-i-qec1-stab"><span class="secnum">6.3</span> The stabiliser formalism</h3>
 <p>Describing codes by their states becomes unwieldy. Gottesman's insight <span class="cite">[<a href="#ref-gottesman1997">14</a>]</span> was to describe them by the operators that leave them unchanged. A <b>stabiliser group</b> \(\mathcal S\) is an abelian group of \(n\)-qubit Pauli operators not containing \(-I\). The code space is</p>
-<div class="eq" id="eq-i-codespace">$$ \mathcal C = \{\ket\psi : S\ket\psi = \ket\psi\ \ \forall S\in\mathcal S\} .  \tag{13}$$</div>
+<div class="eq" id="eq-i-codespace">$$ \mathcal C = \{\ket\psi : S\ket\psi = \ket\psi\ \ \forall S\in\mathcal S\} .  \tag{14}$$</div>
 <p>If \(\mathcal S\) has \(n-k\) independent generators, \(\mathcal C\) has dimension \(2^k\): it encodes \(k\) logical qubits. For the bit-flip code, \(\mathcal S = \langle Z_1Z_2, Z_2Z_3\rangle\), \(n=3\), \(k=1\).</p>
 <ul>
 <li><b>Syndromes.</b> A Pauli error \(E\) either commutes or anticommutes with each generator \(S_j\). If it anticommutes, \(S_jE\ket\psi = -E\ket\psi\), so measuring \(S_j\) gives \(-1\). The pattern of signs is the syndrome.</li>
@@ -525,11 +570,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <h3 id="sec-i-qec2-threshold"><span class="secnum">7.4</span> Threshold and the suppression factor</h3>
 <p>If physical errors are independent with rate \(p\), a distance-\(d\) code fails when roughly \((d+1)/2\) errors line up along a logical path. Counting such paths gives the scaling law</p>
-<div class="eq" id="eq-i-scaling">$$ p_L(d) \approx A\Big(\frac{p}{p_{\mathrm{th}}}\Big)^{(d+1)/2}, \qquad \Lambda = \frac{p_L(d)}{p_L(d+2)} \approx \frac{p_{\mathrm{th}}}{p} .  \tag{14}$$</div>
+<div class="eq" id="eq-i-scaling">$$ p_L(d) \approx A\Big(\frac{p}{p_{\mathrm{th}}}\Big)^{(d+1)/2}, \qquad \Lambda = \frac{p_L(d)}{p_L(d+2)} \approx \frac{p_{\mathrm{th}}}{p} .  \tag{15}$$</div>
 <p>Below the <b>threshold</b> \(p_{\mathrm{th}}\) (about 1% for the surface code with circuit-level depolarising noise and MWPM), increasing the distance suppresses logical errors exponentially, by a factor \(\Lambda\) for each step \(d\to d+2\). Above it, larger codes are worse (<a class="xref" href="#fig-i-threshold">Figure 2</a>). The <b>suppression factor</b> \(\Lambda\) is the single most important figure of merit of an error-corrected processor: it decides the distance, and hence the qubit count, needed for a target logical error rate. Google's Willow processor reported \(\Lambda\approx2.1\) in 2024–25 (<a class="xref ext" href="../../index.html#eq-pl">Lab to Foundry eq. (35)</a>); the review shows that raising \(\Lambda\) from about 2 to 4 cuts the physical qubits per logical qubit by more than half.</p>
 <figure id="fig-i-threshold">
 <img src="../figures/fig-i-threshold.svg" alt="Logical error rate versus physical error rate for surface codes of distance 3, 5, 7 and 9, crossing at the threshold.">
-<figcaption><b>Figure 2.</b> The scaling law <a class="xref" href="#eq-i-scaling">(14)</a> with \(A = 0.1\) and \(p_{\mathrm{th}} = 1\%\) for distances 3 to 9. Below threshold, larger codes win, and the gap between curves is \(\Lambda = p_{\mathrm{th}}/p\). Real codes deviate near threshold, but this is the shape every experiment is compared against.</figcaption>
+<figcaption><b>Figure 2.</b> The scaling law <a class="xref" href="#eq-i-scaling">(15)</a> with \(A = 0.1\) and \(p_{\mathrm{th}} = 1\%\) for distances 3 to 9. Below threshold, larger codes win, and the gap between curves is \(\Lambda = p_{\mathrm{th}}/p\). Real codes deviate near threshold, but this is the shape every experiment is compared against.</figcaption>
 </figure>
 <p>Thresholds assume independent errors. Correlated errors (cosmic rays, leakage, crosstalk) can create long error chains that the decoder does not expect, and can flatten the exponential suppression at low \(p_L\). Establishing that a chip's error model is close enough to independent that \(\Lambda\) keeps holding at large \(d\) is one of the hardest verification problems in the field.</p>
 
