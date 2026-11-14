@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Mathematics for Quantum Engineering</h1>
   <p class="subtitle">Complex numbers, linear algebra, differential equations, Fourier analysis, probability and numerical methods, taught with quantum devices in mind</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">8 chapters · 40 numbered equations · 46 exercises with solutions · about 40 hours of study</p>
+  <p class="meta">8 chapters · 40 numbered equations · 47 exercises with solutions · about 40 hours of study</p>
   <p class="meta prereq">Before this book: school algebra and some calculus. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-m-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -485,69 +485,92 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <section id="sec-m-ode"><h2><span class="secnum">5</span> Differential equations and linear dynamics</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>Solve first-order linear equations and recognise exponential growth and decay with a time constant.</li>
-<li>Solve the harmonic, damped and driven oscillator, and define the quality factor \(Q\).</li>
-<li>Write a system of linear equations as \(\dot{\mathbf x} = A\mathbf x\) and solve it with eigenvectors or the matrix exponential.</li>
-<li>Know the main partial differential equations of the series (wave, diffusion, Laplace, Schrödinger) and the method of separation of variables.</li>
+<li>Understand what a differential equation says, and solve the first-order decay equation with and without a source.</li>
+<li>Solve the harmonic oscillator, the damped oscillator and the driven oscillator, and define the quality factor \(Q\).</li>
+<li>Write any linear system as \(\dot{\mathbf x} = A\mathbf x\) and solve it with eigenvectors or the matrix exponential, including normal modes of coupled oscillators.</li>
+<li>Know the partial differential equations of the series and the method of separation of variables.</li>
 </ul></div>
 
+<div class="bigpic"><p>Physics states its laws as <b>differential equations</b>: rules for how something changes from moment to moment. "The current through a capacitor is proportional to how fast its voltage changes", "the acceleration of a mass is proportional to the force on it", "the rate of change of a quantum state is the Hamiltonian acting on it". Solving such an equation means finding the whole history from the rule plus a starting point. Almost every system in quantum engineering is, to a good approximation, <i>linear</i>, and linear differential equations can be solved with the tools of the previous chapters: exponentials, complex numbers and eigenvalues. This chapter builds the solutions you will use repeatedly: decay, oscillation, resonance and coupled modes.</p></div>
+
 <h3 id="sec-m-ode-first"><span class="secnum">5.1</span> First-order equations: decay</h3>
-<p>The simplest dynamical law says that a quantity decreases at a rate proportional to itself: \(\dot x = -\gamma x\). Its solution is \(x(t) = x(0)\ee^{-\gamma t}\), with <b>time constant</b> \(\tau = 1/\gamma\). After \(\tau\), \(x\) has fallen to \(1/\ee\approx 37\%\). The excited-state population of a qubit relaxing to its ground state follows exactly this law, and its time constant is the famous \(T_1\). An RC circuit discharges with \(\tau = RC\). Radioactive decay, photon loss in a cavity, and heat flow to a cold plate are all first-order decays.</p>
-<p>With a source term, \(\dot x = -\gamma x + f(t)\), multiply by the <b>integrating factor</b> \(\ee^{\gamma t}\) to get \(\frac{\dd}{\dd t}(\ee^{\gamma t}x) = \ee^{\gamma t}f\), and integrate:</p>
+<p>The simplest law says a quantity shrinks at a rate proportional to its size: \(\dot x = -\gamma x\) (the dot means \(\dd/\dd t\)). Try \(x = \ee^{st}\): then \(\dot x = s\ee^{st}\), so \(s = -\gamma\), and with the starting value \(x(0)\),</p>
+\[ x(t) = x(0)\,\ee^{-\gamma t}, \qquad \tau = 1/\gamma . \]
+<p>After one <b>time constant</b> \(\tau\), \(x\) has fallen to \(1/\ee\approx37\%\); after \(5\tau\), below 1%. Examples everywhere: a capacitor discharging through a resistor (\(\tau = RC\)), photons leaking out of a cavity, heat flowing to a cold plate, and, central to this series, a qubit's excited-state population relaxing to the ground state, whose time constant is the famous \(T_1\).</p>
+<p>With a source term, \(\dot x = -\gamma x + f(t)\): multiply both sides by \(\ee^{\gamma t}\) (the "integrating factor"). The left side becomes \(\frac{\dd}{\dd t}(\ee^{\gamma t}x)\) by the product rule, so integrating from 0 to \(t\) gives</p>
 <div class="eq" id="eq-m-firstorder">$$ x(t) = x(0)\,\ee^{-\gamma t} + \int_0^t \ee^{-\gamma(t-s)}\,f(s)\,\dd s .  \tag{24}$$</div>
-<p>The response is a weighted memory of past inputs, with weight \(\ee^{-\gamma(t-s)}\) that forgets on the time scale \(\tau\). This is our first <b>convolution</b>, the central idea of Chapter 6.</p>
+<p>Read it: the initial value decays away, and the response at time \(t\) is a weighted sum of all past inputs \(f(s)\), with weight \(\ee^{-\gamma(t-s)}\) that forgets inputs older than about \(\tau\). This "weighted memory of the past" is a <b>convolution</b>, the central idea of Chapter 6.</p>
+<div class="example"><p><b>Worked example: charging a capacitor.</b> An RC circuit with \(\tau = 1\) µs, initially uncharged, connected at \(t = 0\) to a constant source so that \(f(t) = \gamma V_0\). Then \(x(t) = \int_0^t\ee^{-\gamma(t-s)}\gamma V_0\,\dd s = V_0(1 - \ee^{-t/\tau})\). After 1 µs the voltage is 63% of \(V_0\), after 5 µs 99%. The same curve describes a qubit's excited population rising towards its thermal value, or a resonator filling with photons when a drive is switched on.</p></div>
 
 <h3 id="sec-m-ode-osc"><span class="secnum">5.2</span> The harmonic oscillator</h3>
-<p>A mass on a spring, a pendulum at small amplitude, and an LC circuit all obey</p>
-<div class="eq" id="eq-m-sho">$$ \ddot x + \omega_0^2\,x = 0 .  \tag{25}$$</div>
-<p>Try \(x = \ee^{st}\). Substitution gives \(s^2 + \omega_0^2 = 0\), so \(s = \pm\ii\omega_0\), and the general real solution is \(x(t) = A\cos(\omega_0t + \phi)\). The frequency \(\omega_0\) is set by the system (\(\sqrt{k/m}\) for a spring, \(1/\sqrt{LC}\) for a circuit); the amplitude and phase are set by the initial conditions. Energy sloshes between two forms (kinetic and potential, or magnetic and electric) while the total stays constant. The quantum harmonic oscillator of Book 3 is the quantisation of exactly this equation, and every resonator and every transmon qubit is, to first approximation, one.</p>
+<p>A mass on a spring feels a restoring force proportional to its displacement, \(F = -kx\), so Newton's law \(m\ddot x = -kx\) gives</p>
+<div class="eq" id="eq-m-sho">$$ \ddot x + \omega_0^2\,x = 0, \qquad \omega_0 = \sqrt{k/m} .  \tag{25}$$</div>
+<p>Try \(x = \ee^{st}\) again: \(s^2 + \omega_0^2 = 0\), so \(s = \pm\ii\omega_0\). Imaginary exponents mean oscillation (Chapter 1). Combining the two solutions into a real one: \(x(t) = A\cos(\omega_0t + \phi)\). The frequency \(\omega_0\) is fixed by the system; the amplitude \(A\) and phase \(\phi\) by how it was started. Energy sloshes between kinetic (\(\tfrac12m\dot x^2\)) and potential (\(\tfrac12kx^2\)) while the total stays constant.</p>
+<p>The same equation describes a pendulum at small angles, an LC circuit (with \(\omega_0 = 1/\sqrt{LC}\), Book 2), every mode of a cavity, and the small motions of almost any system near equilibrium (because any smooth potential looks like a parabola near its minimum). Its quantum version (Book 3) describes resonators and photons, and a transmon qubit is, to first approximation, one too.</p>
 
 <h3 id="sec-m-ode-damped"><span class="secnum">5.3</span> Damping and the quality factor</h3>
-<p>Adding friction proportional to velocity gives</p>
+<p>Add friction proportional to velocity, \(-m\gamma\dot x\):</p>
 <div class="eq" id="eq-m-damped">$$ \ddot x + \gamma\,\dot x + \omega_0^2 x = 0, \qquad s = -\frac\gamma2 \pm \ii\sqrt{\omega_0^2 - \frac{\gamma^2}{4}} .  \tag{26}$$</div>
-<p>When \(\gamma \ll \omega_0\) (<b>underdamped</b>), \(x(t) \approx A\ee^{-\gamma t/2}\cos(\omega_0t+\phi)\): the amplitude decays at \(\gamma/2\) and the energy, proportional to amplitude squared, at \(\gamma\). The <b>quality factor</b> measures how many oscillations happen before the energy is lost:</p>
+<p>(From \(s^2 + \gamma s + \omega_0^2 = 0\) and the quadratic formula.) The real part of \(s\) gives decay, the imaginary part oscillation. Three regimes:</p>
+<ul>
+<li><b>Underdamped</b> (\(\gamma \lt 2\omega_0\)): oscillation inside a decaying envelope, \(x\approx A\ee^{-\gamma t/2}\cos(\omega_0t+\phi)\) when \(\gamma\ll\omega_0\). The amplitude decays at \(\gamma/2\), the energy (proportional to amplitude squared) at \(\gamma\).</li>
+<li><b>Critically damped</b> (\(\gamma = 2\omega_0\)): the fastest return to rest without overshooting (how car suspensions are tuned).</li>
+<li><b>Overdamped</b> (\(\gamma > 2\omega_0\)): slow creeping back with no oscillation.</li>
+</ul>
+<p>For high-quality oscillators, the useful measure is the <b>quality factor</b>:</p>
 <div class="eq" id="eq-m-Q">$$ Q = \frac{\omega_0}{\gamma} = 2\pi\times\frac{\text{energy stored}}{\text{energy lost per cycle}} .  \tag{27}$$</div>
-<p>Superconducting resonators reach \(Q\sim10^6\); at 5 GHz that means energy survives for \(Q/\omega_0 \approx 30\,\mu\)s. Loss in quantum hardware is almost always quoted as a \(Q\) or its inverse, a <b>loss tangent</b>. When \(\gamma > 2\omega_0\) the roots are real and the motion decays without oscillating (<b>overdamped</b>); \(\gamma = 2\omega_0\) is <b>critical damping</b>.</p>
+<p>Roughly, \(Q\) is how many radians of oscillation happen before the energy is gone (\(Q/2\pi\) cycles). A guitar string has \(Q\sim10^3\); superconducting microwave resonators reach \(Q\sim10^6\); at 5 GHz that means energy lasts \(Q/\omega_0\approx30\) µs. Loss in quantum hardware is almost always quoted as a \(Q\) or as its inverse, a <b>loss tangent</b> (Book 2).</p>
 
 <h3 id="sec-m-ode-driven"><span class="secnum">5.4</span> Driven oscillators and resonance</h3>
-<p>Drive the oscillator with a force \(F\cos\omega t\). Using a phasor (Chapter 1), \(x = \Re[\tilde X\ee^{\ii\omega t}]\), the derivative becomes \(\ii\omega\) and</p>
+<p>Push the oscillator with a periodic force \(F\cos\omega t\). After the start-up transient has decayed, it oscillates at the drive frequency \(\omega\). Use a phasor (Chapter 1), \(x = \Re[\tilde X\ee^{\ii\omega t}]\), so each time derivative becomes \(\ii\omega\): \((-\omega^2 + \ii\gamma\omega + \omega_0^2)\tilde X = F\), hence</p>
 <div class="eq" id="eq-m-response">$$ \tilde X = \frac{F}{\omega_0^2 - \omega^2 + \ii\gamma\omega}, \qquad |\tilde X|^2 \approx \frac{F^2/4\omega_0^2}{(\omega-\omega_0)^2 + (\gamma/2)^2}\quad(\omega\approx\omega_0).  \tag{28}$$</div>
-<p>Near resonance the response is a <b>Lorentzian</b> of full width at half maximum \(\gamma\). The width in frequency is the inverse of the decay time: a narrow resonance means a long-lived oscillator. Reading the width of a measured resonance is how you measure \(Q = \omega_0/\gamma\). The phase of \(\tilde X\) swings by \(\pi\) as \(\omega\) passes through \(\omega_0\), which is why a resonance traces a circle in the complex plane.</p>
+<p>(The approximation uses \(\omega_0^2 - \omega^2 = (\omega_0-\omega)(\omega_0+\omega)\approx2\omega_0(\omega_0-\omega)\) near resonance.) The response peaks sharply at \(\omega = \omega_0\): <b>resonance</b>. The peak shape is a <b>Lorentzian</b> whose full width at half maximum is \(\gamma\). So <i>the width of a resonance in frequency equals the decay rate in time</i>: a narrow line means a long-lived oscillator, and \(Q = \omega_0/\gamma\) can be read from a frequency sweep. The phase of \(\tilde X\) swings by \(\pi\) as \(\omega\) passes through \(\omega_0\) (the oscillator lags the drive by 90° exactly on resonance), which is why a resonance traces a circle in the complex plane.</p>
+<div class="example"><p><b>Worked example: reading \(Q\) from a measurement.</b> A resonator at 6 GHz shows a resonance 60 kHz wide (full width at half the peak power). Then \(Q = 6\times10^9/6\times10^4 = 10^5\), and the energy lifetime is \(1/\gamma = 1/(2\pi\times60\,\mathrm{kHz}) = 2.65\) µs. A network analyser sweep of a few seconds measures what would otherwise need nanosecond-resolved time measurements.</p></div>
 
 <h3 id="sec-m-ode-systems"><span class="secnum">5.5</span> Systems of linear equations: \(\dot{\mathbf x} = A\mathbf x\)</h3>
-<p>Any linear ODE can be rewritten as a first-order system. For the oscillator, set \(\mathbf x = (x, \dot x)\); then</p>
+<p>Any linear differential equation can be rewritten as a set of first-order equations. For the damped oscillator, use \(\mathbf x = (x, \dot x)\):</p>
 \[ \frac{\dd}{\dd t}\begin{pmatrix}x\\ \dot x\end{pmatrix} = \begin{pmatrix}0&1\\-\omega_0^2 & -\gamma\end{pmatrix}\begin{pmatrix}x\\ \dot x\end{pmatrix}. \]
-<p>The general system \(\dot{\mathbf x} = A\mathbf x\) has solution</p>
+<p>(The first row just says "the derivative of \(x\) is \(\dot x\)"; the second is the equation of motion.) The general system \(\dot{\mathbf x} = A\mathbf x\) has the solution</p>
 <div class="eq" id="eq-m-expAt">$$ \mathbf x(t) = \ee^{At}\,\mathbf x(0) = \sum_k c_k\,\ee^{\lambda_kt}\,\mathbf v_k ,  \tag{29}$$</div>
-<p>where \(\lambda_k, \mathbf v_k\) are the eigenvalues and eigenvectors of \(A\) (when \(A\) is diagonalisable) and \(c_k\) are the coefficients of \(\mathbf x(0)\) in the eigenbasis. The real parts of the eigenvalues decide stability (negative: decay), and their imaginary parts give oscillation frequencies. You can check <a class="xref" href="#eq-m-expAt">(29)</a> by differentiating the power series of \(\ee^{At}\) term by term: \(\frac{\dd}{\dd t}\ee^{At} = A\ee^{At}\).</p>
-<p>The Schrödinger equation \(\ii\hbar\,\dd\ket\psi/\dd t = H\ket\psi\) is exactly of this form with \(A = -\ii H/\hbar\). Because \(H\) is Hermitian, the eigenvalues of \(A\) are purely imaginary, so there is no decay: quantum evolution of a closed system is pure oscillation, \(\ket{\psi(t)} = \sum_k c_k\ee^{-\ii E_kt/\hbar}\ket{E_k}\). Decay enters only when the system is coupled to an environment (Book 3, open systems).</p>
-<div class="example"><p><b>Worked example: normal modes of two coupled oscillators.</b> Two identical LC circuits coupled by a small capacitor obey \(\ddot x_1 = -\omega_0^2x_1 + \kappa x_2\) and \(\ddot x_2 = -\omega_0^2x_2 + \kappa x_1\). In matrix form \(\ddot{\mathbf x} = -K\mathbf x\) with \(K = \begin{pmatrix}\omega_0^2 & -\kappa\\ -\kappa & \omega_0^2\end{pmatrix}\). Trying \(\mathbf x = \mathbf v\,\ee^{\ii\omega t}\) gives \(K\mathbf v = \omega^2\mathbf v\): an eigenproblem. The eigenvectors are \((1,1)\) (in phase) and \((1,-1)\) (out of phase), with \(\omega^2 = \omega_0^2\mp\kappa\). If you excite only oscillator 1, which is a superposition of both normal modes, the energy beats back and forth between the two oscillators at the difference frequency \(\approx\kappa/\omega_0\). The quantum version of this energy swap is the iSWAP gate between two qubits (Book 6).</p></div>
+<p>where \(\lambda_k, \mathbf v_k\) are the eigenvalues and eigenvectors of \(A\) (Chapter 3), and \(c_k\) are the components of \(\mathbf x(0)\) along the eigenvectors. Why: along an eigenvector, \(A\) acts as multiplication by \(\lambda_k\), so each component obeys its own simple equation \(\dot c = \lambda_kc\) and grows or decays as \(\ee^{\lambda_kt}\). The real parts of the eigenvalues decide stability (negative means decay), and the imaginary parts give oscillation frequencies.</p>
+<div class="intuition"><p>The Schrödinger equation \(\ii\hbar\,\dd\ket\psi/\dd t = H\ket\psi\) is exactly of this form, with \(A = -\ii H/\hbar\). Because \(H\) is Hermitian, its eigenvalues \(E_k\) are real, so the eigenvalues of \(A\) are purely imaginary, \(-\ii E_k/\hbar\): pure oscillation, no decay. Closed quantum systems never lose anything; every state is a sum of energy eigenstates each spinning at its own frequency. Decay appears only when the system is coupled to an environment (Book 3, Chapter 8).</p></div>
+<div class="example"><p><b>Worked example: normal modes of two coupled oscillators.</b> Two identical LC circuits coupled by a small capacitor obey \(\ddot x_1 = -\omega_0^2x_1 + \kappa x_2\) and \(\ddot x_2 = -\omega_0^2x_2 + \kappa x_1\), i.e. \(\ddot{\mathbf x} = -K\mathbf x\) with \(K = \begin{pmatrix}\omega_0^2 & -\kappa\\ -\kappa & \omega_0^2\end{pmatrix}\). Try \(\mathbf x = \mathbf v\,\ee^{\ii\omega t}\): \(K\mathbf v = \omega^2\mathbf v\), an eigenproblem. The eigenvectors are \((1,1)\) (both oscillating in step) and \((1,-1)\) (in opposition), with \(\omega^2 = \omega_0^2\mp\kappa\). These are the <b>normal modes</b>: patterns that oscillate at a single frequency. If you excite only oscillator 1, that is half of each normal mode; their slightly different frequencies make them drift in and out of phase, and the energy beats back and forth between the two oscillators with period about \(2\pi\omega_0/\kappa\). The quantum version of this energy swap is the iSWAP gate between two qubits (Book 4).</p></div>
 
 <h3 id="sec-m-ode-pde"><span class="secnum">5.6</span> Partial differential equations</h3>
-<p>Fields depend on space as well as time, and obey partial differential equations. Four appear repeatedly in the series:</p>
+<p>Fields (voltage along a transmission line, electric field in a chip, the wavefunction of an electron) depend on position as well as time and obey <b>partial differential equations</b> (PDEs), involving derivatives in several variables. Four appear repeatedly in the series:</p>
 <figure class="tbl" id="tab-m-pdes"><figcaption><b>Table 1.</b> The partial differential equations used in this series.</figcaption>
 <div class="tblwrap"><table>
 <tr><th>Equation</th><th>Form</th><th>Where it appears</th></tr>
 <tr><td>Laplace / Poisson</td><td>\(\nabla^2\phi = -\rho/\varepsilon\)</td><td>Electrostatics, capacitance extraction, ion-trap potentials, quantum-dot gates</td></tr>
 <tr><td>Wave / Helmholtz</td><td>\(\nabla^2 u = \frac{1}{c^2}\partial_t^2u\); \(\nabla^2u + k^2u = 0\)</td><td>Transmission lines, waveguides, cavity and package modes</td></tr>
-<tr><td>Diffusion</td><td>\(\partial_t u = D\nabla^2u\)</td><td>Heat flow, dopant and oxygen diffusion in fabrication, quasiparticle diffusion</td></tr>
+<tr><td>Diffusion</td><td>\(\partial_t u = D\nabla^2u\)</td><td>Heat flow, diffusion in fabrication, quasiparticle diffusion</td></tr>
 <tr><td>Schrödinger</td><td>\(\ii\hbar\,\partial_t\psi = -\frac{\hbar^2}{2m}\nabla^2\psi + V\psi\)</td><td>Electrons in dots, tunnelling, every quantum system</td></tr>
 </table></div></figure>
-<p>The standard analytic tool is <b>separation of variables</b>. For the wave equation on a string of length \(L\) with fixed ends, try \(u(x,t) = X(x)T(t)\). Substituting and dividing by \(XT\) gives \(X''/X = T''/(c^2T)\). The left side depends only on \(x\), the right only on \(t\), so both equal a constant \(-k^2\). Then \(X = \sin kx\) with \(k = n\pi/L\) to satisfy the boundary conditions, and \(T = \cos(ck t + \phi)\). The allowed frequencies \(\omega_n = n\pi c/L\) are the modes of the string, of a half-wave transmission-line resonator and of an optical cavity. A field configuration is a sum over these modes, each behaving like an independent harmonic oscillator. That observation, made quantum, is the quantisation of the electromagnetic field in Book 5.</p>
+<p>(\(\nabla^2 = \partial_x^2 + \partial_y^2 + \partial_z^2\) adds up the curvature in each direction.) The classic analytic method is <b>separation of variables</b>. For the wave equation on a string of length \(L\) with fixed ends, try \(u(x,t) = X(x)T(t)\). Substituting and dividing by \(XT\) gives \(X''/X = T''/(c^2T)\). The left side depends only on \(x\), the right only on \(t\), so both must equal the same constant, call it \(-k^2\). Then \(X = \sin kx\), and the fixed ends require \(kL = n\pi\); and \(T = \cos(ckt + \phi)\). The allowed frequencies \(\omega_n = n\pi c/L\) are the <b>modes</b> of the string, of a half-wave transmission-line resonator and of an optical cavity. Any motion is a sum of modes, each behaving like an independent harmonic oscillator. That observation, made quantum, is how light is quantised in Book 5.</p>
 
-<div class="eda"><p>When a design tool reports "mode 3 at 7.21 GHz with \(Q = 2.4\times10^5\)", it has solved a large version of \(\dot{\mathbf x}=A\mathbf x\) and read off the imaginary part (frequency) and real part (loss) of an eigenvalue: \(\lambda = -\gamma/2 + \ii\omega\), so \(Q = \omega/\gamma = -\Im\lambda/(2\Re\lambda)\). Unwanted package modes (<a class="xref ext" href="../../index.html#sec-pkg-modes" title="The package is a microwave cavity">Lab to Foundry §6.1</a>) are simply eigenvalues that landed too close to a qubit frequency.</p></div>
+<div class="eda"><p>When a design tool reports "mode 3 at 7.21 GHz with \(Q = 2.4\times10^5\)", it has solved a huge version of \(\dot{\mathbf x}=A\mathbf x\) and read off an eigenvalue \(\lambda = -\gamma/2 + \ii\omega\): the imaginary part is the frequency and the real part the loss, so \(Q = \omega/\gamma = -\Im\lambda/(2\Re\lambda)\). Unwanted package modes (<a class="xref ext" href="../../index.html#sec-pkg-modes" title="The package is a microwave cavity">Lab to Foundry §6.1</a>) are simply eigenvalues that landed too close to a qubit frequency.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Linear equations are solved by trying \(\ee^{st}\): real \(s\) gives decay, imaginary \(s\) oscillation, complex \(s\) both.</li>
+<li>Decay with time constant \(\tau\); with a source, the response is a convolution of past inputs.</li>
+<li>Oscillator \(\omega_0 = \sqrt{k/m}\); damping \(\gamma\); quality factor \(Q = \omega_0/\gamma\); resonance linewidth = decay rate.</li>
+<li>\(\dot{\mathbf x} = A\mathbf x\) is solved by eigenvectors; coupled oscillators have normal modes and beat.</li>
+<li>Separation of variables turns wave equations into modes, each an oscillator.</li>
+</ul></div>
 
 <div class="exercises" id="ex-m-ode"><h4>Exercises</h4><ol>
 <li>A qubit has \(T_1 = 100\,\mu\)s. What fraction of an excited population survives a 40 ns gate? A 1 µs readout?
-<details><summary>Solution</summary><p>\(\ee^{-0.04/100}\approx 1 - 4\times10^{-4}\), so about 0.04% is lost in the gate. \(\ee^{-1/100}\approx0.990\), so about 1% is lost during readout. This is why readout errors are typically larger than gate errors.</p></details></li>
-<li>A resonator at 6 GHz has a measured full width at half maximum of 60 kHz. What are \(Q\) and the photon lifetime?
-<details><summary>Solution</summary><p>\(Q = f_0/\Delta f = 6\times10^9/6\times10^4 = 10^5\). The energy decay rate is \(\gamma = 2\pi\times 60\) kHz, so the lifetime is \(1/\gamma\approx 2.65\,\mu\)s.</p></details></li>
+<details><summary>Solution</summary><p>\(\ee^{-0.04/100}\approx1 - 4\times10^{-4}\), so 0.04% is lost in the gate. \(\ee^{-1/100}\approx0.990\), so about 1% during readout.</p></details></li>
+<li>A resonator at 6 GHz has a measured linewidth of 60 kHz. What are \(Q\) and the photon lifetime?
+<details><summary>Solution</summary><p>\(Q = 10^5\); lifetime \(1/(2\pi\times60\,\mathrm{kHz})\approx2.65\) µs.</p></details></li>
 <li>Find the eigenvalues of \(A = \begin{pmatrix}0&1\\-\omega_0^2&-\gamma\end{pmatrix}\) and show they match <a class="xref" href="#eq-m-damped">(26)</a>.
-<details><summary>Solution</summary><p>\(\Tr A = -\gamma\), \(\det A = \omega_0^2\), so by <a class="xref" href="#eq-m-2x2">(13)</a> \(\lambda = -\gamma/2\pm\sqrt{\gamma^2/4-\omega_0^2} = -\gamma/2 \pm\ii\sqrt{\omega_0^2-\gamma^2/4}\).</p></details></li>
-<li>In the coupled-oscillator example, start with \(x_1(0) = 1\), \(x_2(0)=0\) and zero velocities. Show that \(x_2(t)\) reaches its maximum amplitude after \(t \approx \pi\omega_0/\kappa\).
-<details><summary>Solution</summary><p>\(\mathbf x(0) = \frac12[(1,1) + (1,-1)]\), so \(x_2(t) = \frac12[\cos\omega_+t - \cos\omega_-t]\) with \(\omega_\pm = \sqrt{\omega_0^2\mp\kappa}\approx\omega_0\mp\kappa/2\omega_0\). Using \(\cos a - \cos b = -2\sin\frac{a+b}2\sin\frac{a-b}2\), \(x_2 = \sin(\omega_0t)\sin(\kappa t/2\omega_0)\) approximately. The envelope \(\sin(\kappa t/2\omega_0)\) first peaks when \(\kappa t/2\omega_0 = \pi/2\), i.e. \(t = \pi\omega_0/\kappa\).</p></details></li>
-<li>Find the first three resonance frequencies of a 10 mm long transmission line, open at both ends, in which waves travel at \(c/\sqrt{\varepsilon_{\mathrm{eff}}}\) with \(\varepsilon_{\mathrm{eff}} = 6.2\) (a coplanar line on silicon).
-<details><summary>Solution</summary><p>Open ends also give standing waves with \(k = n\pi/L\) (cosines instead of sines). \(v = 3\times10^8/\sqrt{6.2}\approx1.20\times10^8\) m/s. \(f_n = nv/2L = n\times 6.0\) GHz. So 6.0, 12.0 and 18.0 GHz. This is a typical readout resonator length.</p></details></li>
+<details><summary>Solution</summary><p>\(\Tr A = -\gamma\), \(\det A = \omega_0^2\); by <a class="xref" href="#eq-m-2x2">(13)</a>, \(\lambda = -\gamma/2\pm\sqrt{\gamma^2/4-\omega_0^2}\), which is \(-\gamma/2\pm\ii\sqrt{\omega_0^2-\gamma^2/4}\) when underdamped.</p></details></li>
+<li>In the coupled-oscillator example, start with \(x_1(0) = 1\), \(x_2(0)=0\) and zero velocities. Show that \(x_2(t)\) reaches its largest amplitude after \(t\approx\pi\omega_0/\kappa\).
+<details><summary>Solution</summary><p>\(\mathbf x(0) = \frac12[(1,1) + (1,-1)]\), so \(x_2(t) = \frac12[\cos\omega_1t - \cos\omega_2t]\) with \(\omega_{1,2}\approx\omega_0\mp\kappa/2\omega_0\). Using \(\cos a - \cos b = -2\sin\frac{a+b}2\sin\frac{a-b}2\), \(|x_2|\) has envelope \(|\sin(\kappa t/2\omega_0)|\), which first peaks at \(t = \pi\omega_0/\kappa\).</p></details></li>
+<li>Find the first three resonance frequencies of a 10 mm long transmission line, open at both ends, in which waves travel at \(c/\sqrt{6.2}\).
+<details><summary>Solution</summary><p>\(v\approx1.20\times10^8\) m/s, \(f_n = nv/2L = n\times6.0\) GHz: 6, 12 and 18 GHz.</p></details></li>
+<li>A mass–spring system has \(\omega_0/2\pi = 1\) kHz and \(Q = 50\). How long does its energy take to fall to 1/e? How many oscillations is that?
+<details><summary>Solution</summary><p>\(\gamma = \omega_0/Q = 2\pi\times1000/50 = 126\) s\(^{-1}\); energy lifetime \(1/\gamma = 8\) ms, i.e. 8 oscillations (\(Q/2\pi\)).</p></details></li>
 </ol></div>
 </section>
 
