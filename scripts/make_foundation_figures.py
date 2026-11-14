@@ -165,7 +165,73 @@ def fig_c_nth():
     save(p, "fig-c-nth.svg", "Thermal photon number versus temperature for 1, 5 and 10 GHz modes.")
 
 
-FIGS = [fig_m_lorentz, fig_m_yield, fig_c_avoided, fig_c_notch, fig_c_nth]
+# ============================================================== Book 3: quantum mechanics
+def hermite(n, x):
+    h0, h1 = 1.0, 2 * x
+    if n == 0:
+        return h0
+    for k in range(1, n):
+        h0, h1 = h1, 2 * x * h1 - 2 * k * h0
+    return h1
+
+
+def fig_q_qho():
+    p = Plot()
+    p.set_x(-5, 5)
+    p.set_y(0, 5.6)
+    p.axes([-4, -2, 0, 2, 4], [0.5, 1.5, 2.5, 3.5, 4.5], "position x / x_zpf", "energy / ħω", fmt, fmt)
+    xs = frange(-5, 5, 500)
+    # V = (1/2) m w^2 x^2 with x = s * x_zpf:  V/hbar w = s^2 / 4
+    p.line([(s, s * s / 4) for s in xs if s * s / 4 <= 5.6], INK2, width=2)
+    cols = [C1, C2, C3, C1, C2]
+    for n in range(5):
+        E = n + 0.5
+        p.add(f'<line x1="{p.X(-2*math.sqrt(E)):.1f}" y1="{p.Y(E):.1f}" x2="{p.X(2*math.sqrt(E)):.1f}" y2="{p.Y(E):.1f}" '
+              f'stroke="{AXIS}" stroke-width="1" stroke-dasharray="4 4"/>')
+        norm = 1 / math.sqrt(2 ** n * math.factorial(n))
+        amp = 0.42
+        pts = [(s, E + amp * norm * hermite(n, s / math.sqrt(2)) * math.exp(-s * s / 4)) for s in xs]
+        p.line(pts, cols[n], width=2)
+        p.label(4.1, E, f"n = {n}", cols[n], dy=5, size=13)
+    save(p, "fig-q-qho.svg", "Harmonic oscillator potential with its first five levels and wavefunctions.")
+
+
+def fig_q_rabi():
+    p = Plot()
+    p.set_x(0, 4)
+    p.set_y(0, 1.05)
+    p.axes([0, 1, 2, 3, 4], [0, 0.5, 1], "time × Ω_R / 2π", "excited-state probability P₁", fmt, fmt)
+    for d, col, lab in ((0, C1, "Δ = 0"), (1, C2, "Δ = Ω_R"), (2, C3, "Δ = 2Ω_R")):
+        W = math.sqrt(1 + d * d)
+        pts = [(tt, 1 / W ** 2 * math.sin(W * 2 * math.pi * tt / 2) ** 2) for tt in frange(0, 4, 800)]
+        p.line(pts, col)
+    p.vline(0.5)
+    p.label(0.5, 1.0, "π pulse", INK2, dx=6, dy=14, size=13, weight=400)
+    p.label(3.15, 0.93, "Δ = 0", C1, size=13)
+    p.label(3.15, 0.56, "Δ = Ω_R", C2, size=13)
+    p.label(3.15, 0.27, "Δ = 2Ω_R", C3, size=13)
+    save(p, "fig-q-rabi.svg", "Rabi oscillations for three detunings.")
+
+
+def fig_q_decoh():
+    T1, Tphi, sig, det = 100.0, 300.0, 2 * math.pi * 5e-3, 2 * math.pi * 0.05   # us, rad/us
+    T2 = 1 / (1 / (2 * T1) + 1 / Tphi)
+    p = Plot()
+    p.set_x(0, 200)
+    p.set_y(0, 1.02)
+    p.axes([0, 50, 100, 150, 200], [0, 0.5, 1], "delay τ (µs)", "signal", fmt, fmt)
+    ts = frange(0, 200, 2000)
+    p.line([(t, math.exp(-t / T1)) for t in ts], C2)
+    p.line([(t, 0.5 + 0.5 * math.exp(-t / T2 - (sig * t) ** 2 / 2) * math.cos(det * t)) for t in ts], C1, width=1.3)
+    p.line([(t, 0.5 + 0.5 * math.exp(-t / T2)) for t in ts], C3, dash="7 4")
+    p.label(150, math.exp(-1.5), "T₁ decay", C2, dy=-10, size=13)
+    p.label(120, 0.5 + 0.5 * math.exp(-120 / T2), "echo envelope", C3, dy=-10, size=13)
+    p.label(8, 0.08, "Ramsey fringes", C1, size=13)
+    save(p, "fig-q-decoh.svg", "T1 decay, Ramsey fringes and echo envelope for a qubit.")
+    return {"T2_us": round(T2, 1)}
+
+
+FIGS = [fig_q_qho, fig_q_rabi, fig_q_decoh, fig_m_lorentz, fig_m_yield, fig_c_avoided, fig_c_notch, fig_c_nth]
 
 
 def main():

@@ -1,0 +1,40 @@
+<section id="sec-q-second"><h2>Identical particles and second quantisation</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand why identical particles are bosons or fermions, and the consequences: Pauli exclusion and bunching.</li>
+<li>Use creation and annihilation operators for many modes, with commutation and anticommutation relations.</li>
+<li>Write tight-binding (hopping) Hamiltonians and see how energy bands form.</li>
+<li>Prepare the ground for photons (Book 5) and Cooper pairs (Book 6).</li>
+</ul></div>
+
+<h3 id="sec-q-sec-ident">Identical particles</h3>
+<p>Two electrons cannot be labelled: swapping them must leave every probability unchanged, so the two-particle state can at most change sign under exchange. Nature uses both options. <b>Bosons</b> (photons, phonons, helium-4 atoms, Cooper pairs as composite objects) have symmetric states; <b>fermions</b> (electrons, protons, neutrons) have antisymmetric states. For two particles in single-particle states \(\ket a\) and \(\ket b\),</p>
+<div class="eq" id="eq-q-sym">$$ \ket{\psi_\pm} = \frac{1}{\sqrt2}\big(\ket a_1\ket b_2 \pm \ket b_1\ket a_2\big) . $$</div>
+<p>For fermions, \(a = b\) gives zero: two fermions cannot occupy the same state (<b>Pauli exclusion</b>). That fills the energy levels of atoms and solids one electron per state and gives metals their Fermi energy. For bosons, the symmetric combination enhances the probability of two particles in the same state relative to distinguishable particles: bosons <b>bunch</b>. Two identical photons arriving at a beam splitter always leave together, the Hong–Ou–Mandel effect (Book 5), and the macroscopic occupation of a single state by bosons underlies lasers, Bose–Einstein condensates and superconductivity.</p>
+
+<h3 id="sec-q-sec-fock">Second quantisation</h3>
+<p>Symmetrising wavefunctions by hand becomes unmanageable for many particles. Instead, specify how many particles occupy each single-particle mode \(k\): \(\ket{n_1, n_2, \dots}\). Introduce, for each mode, an annihilation operator \(c_k\) and creation operator \(c_k^\dagger\). For bosons they behave like the oscillator ladder operators of Chapter 4, one oscillator per mode, with</p>
+<div class="eq" id="eq-q-ccr">$$ [b_j, b_k^\dagger] = \delta_{jk}, \qquad [b_j,b_k] = 0 . $$</div>
+<p>For fermions the commutators are replaced by <b>anticommutators</b>,</p>
+<div class="eq" id="eq-q-car">$$ \{c_j, c_k^\dagger\} = \delta_{jk}, \qquad \{c_j,c_k\} = 0 \;\Rightarrow\; (c_k^\dagger)^2 = 0 , $$</div>
+<p>so each fermionic mode holds 0 or 1 particle. Exchange symmetry is now automatic: it is built into the algebra. A one-body operator such as kinetic energy becomes \(\sum_{jk}h_{jk}c_j^\dagger c_k\) ("remove a particle from mode \(k\), put it in mode \(j\), with amplitude \(h_{jk}\)"), and a two-body interaction becomes a sum of terms with two creation and two annihilation operators. The name "second quantisation" is historical: the field is quantised, not the particle twice.</p>
+<p>For photons, the modes are the electromagnetic eigenmodes of a cavity or waveguide, and \(a_k^\dagger\) creates a photon in mode \(k\). The free field is \(H = \sum_k\hbar\omega_k(a_k^\dagger a_k + \tfrac12)\): one oscillator per mode, exactly as foreshadowed in @b1:sec-m-ode-pde. Linear optical elements (beam splitters, phase shifters) act as linear transformations of the mode operators, \(a_j\to\sum_kU_{jk}a_k\), which is why a beam splitter's S-matrix (@b2:eq-c-bs) is also its quantum description (Book 5).</p>
+
+<h3 id="sec-q-sec-tb">Hopping and bands</h3>
+<p>Electrons in a crystal or in an array of quantum dots hop between neighbouring sites. The <b>tight-binding</b> Hamiltonian for a chain of sites with on-site energy \(\epsilon\) and hopping amplitude \(t\) is</p>
+<div class="eq" id="eq-q-tb">$$ H = \sum_j\epsilon\,c_j^\dagger c_j - t\sum_j\big(c_j^\dagger c_{j+1} + c_{j+1}^\dagger c_j\big). $$</div>
+<p>Plane-wave modes \(c_k = N^{-1/2}\sum_j\ee^{-\ii kja}c_j\) diagonalise it with energies \(E(k) = \epsilon - 2t\cos ka\): a <b>band</b> of width \(4t\). Many atomic orbitals give many bands, separated by gaps. Fermions fill the lowest states up to the Fermi energy; if it falls inside a band the material is a metal, if in a gap an insulator or semiconductor. Two dots with one electron each, with hopping \(t\) and on-site repulsion \(U\) (the <b>Hubbard model</b>), have an effective spin–spin interaction \(J = 4t^2/U\) from second-order perturbation theory (Chapter 6). That exchange coupling is the two-qubit gate of silicon spin qubits (@lf:sec-mod-spin), and its exponential dependence on gate voltage through \(t\) is a central manufacturing sensitivity.</p>
+
+<h3 id="sec-q-sec-sc">A first look at superconductivity</h3>
+<p>In some metals at low temperature, a weak attraction between electrons mediated by lattice vibrations binds electrons near the Fermi surface into <b>Cooper pairs</b> of opposite momentum and spin. Pairs behave, collectively, like bosons and condense into a single macroscopic quantum state described by a complex order parameter \(\Psi = |\Psi|\ee^{\ii\varphi}\). The BCS theory [@bcs1957] shows that breaking a pair costs at least \(2\Delta\), where the gap \(\Delta\approx1.76k_BT_c\), so at temperatures far below \(T_c\) the condensate cannot be excited by small perturbations: it flows without resistance. The phase \(\varphi\) of the condensate is a single, macroscopic quantum variable. Two superconductors separated by a thin barrier have a phase difference across it, and Cooper pairs tunnel through the barrier with an energy that depends on that difference as \(-E_J\cos\varphi\). That is the Josephson junction, with which Book 6 begins.</p>
+
+<div class="eda"><p>Second quantisation is the notation of every Hamiltonian a quantum design tool writes down: \(a_i^\dagger a_j\) for resonator and qubit couplings, \(c_j^\dagger c_{j+1}\) for dot arrays, \(a^\dagger a^\dagger aa\) for Kerr nonlinearities. Being fluent in it is a prerequisite for reading the hardware literature and the review's @lf:eq-multi.</p></div>
+
+<div class="exercises" id="ex-q-second"><h4>Exercises</h4><ol>
+<li>Show that \(c^\dagger c\) has eigenvalues 0 and 1 for a fermionic mode.
+<details><summary>Solution</summary><p>\((c^\dagger c)^2 = c^\dagger(cc^\dagger)c = c^\dagger(1 - c^\dagger c)c = c^\dagger c - (c^\dagger)^2c^2 = c^\dagger c\). A projector: eigenvalues 0 and 1.</p></details></li>
+<li>For the two-site tight-binding model with one particle, find the eigenstates and energies.
+<details><summary>Solution</summary><p>In the basis \(c_1^\dagger\ket{0}, c_2^\dagger\ket0\), \(H = \begin{pmatrix}\epsilon & -t\\-t&\epsilon\end{pmatrix}\). Eigenstates \((1,\pm1)/\sqrt2\) with energies \(\epsilon\mp t\): bonding and antibonding orbitals, split by \(2t\).</p></details></li>
+<li>Estimate \(J = 4t^2/U\) for \(t = 10\) µeV and \(U = 2\) meV, in MHz. If \(t\) depends on a barrier gate as \(t\propto\ee^{-V/V_0}\) with \(V_0 = 10\) mV, how much does \(J\) change for a 1 mV shift?
+<details><summary>Solution</summary><p>\(J = 4\times10^{-10}/2\times10^{-3}\) eV \(= 0.2\) µeV, i.e. \(0.2\times10^{-6}\times1.6\times10^{-19}/6.63\times10^{-34}\approx48\) MHz. \(J\propto t^2\propto\ee^{-2V/V_0}\), so a 1 mV shift changes \(J\) by \(\ee^{-0.2}\approx0.82\), an 18% change.</p></details></li>
+</ol></div>
+</section>

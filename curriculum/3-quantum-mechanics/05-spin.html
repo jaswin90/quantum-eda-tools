@@ -1,0 +1,49 @@
+<section id="sec-q-spin"><h2>Spin, two-level systems and Rabi oscillations</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Describe spin-½ and any two-level system with Pauli operators, and picture its dynamics as rotation on the Bloch sphere.</li>
+<li>Solve the driven two-level system: rotating frame, rotating-wave approximation and the Rabi formula.</li>
+<li>Understand Ramsey interference as a frequency measurement, and how pulse area sets a gate.</li>
+</ul></div>
+
+<h3 id="sec-q-spin-pauli">Two-level Hamiltonians and precession</h3>
+<p>An electron's spin has magnetic moment \(\boldsymbol\mu = -\tfrac{g\mu_B}{\hbar}\mathbf S\) with \(\mathbf S = \tfrac\hbar2\boldsymbol\sigma\) and \(g\approx2\). In a field \(\mathbf B\) its energy is \(H = -\boldsymbol\mu\cdot\mathbf B = \tfrac{g\mu_B}{2}\mathbf B\cdot\boldsymbol\sigma\). More generally, any Hermitian \(2\times2\) Hamiltonian can be written (@b1:sec-m-op-pauli)</p>
+<div class="eq" id="eq-q-h2">$$ H = \frac{\hbar}{2}\,\boldsymbol\Omega\cdot\boldsymbol\sigma \quad(\text{plus a multiple of } I), $$</div>
+<p>with a real vector \(\boldsymbol\Omega\). By @b1:eq-m-paulirot, \(U(t) = \ee^{-\ii t\,\boldsymbol\Omega\cdot\boldsymbol\sigma/2}\) is a rotation by angle \(|\boldsymbol\Omega|t\) about the axis \(\hat{\boldsymbol\Omega}\). In the Heisenberg picture the Bloch vector obeys</p>
+<div class="eq" id="eq-q-precess">$$ \frac{\dd\mathbf r}{\dd t} = \boldsymbol\Omega\times\mathbf r , $$</div>
+<p>the same equation as a classical magnetic moment precessing in a field (Larmor precession). For an electron \(|\boldsymbol\Omega|/2\pi = g\mu_BB/h\approx28\) GHz per tesla, the frequency of a silicon spin qubit in a field of a fraction of a tesla. For a superconducting qubit the "field" is not magnetic, but the mathematics is identical: the two lowest levels with splitting \(\hbar\omega_q\) give \(H = -\tfrac{\hbar\omega_q}{2}Z\) (with \(\ket0\) the lower level), and a superposition precesses about \(z\) at \(\omega_q\).</p>
+
+<h3 id="sec-q-spin-drive">The driven qubit</h3>
+<p>To control a qubit we drive it near its frequency. For a superconducting qubit, a microwave voltage on a capacitively coupled line adds a term proportional to the charge, which in the two-level subspace is proportional to \(X\):</p>
+<div class="eq" id="eq-q-drive">$$ H(t) = -\frac{\hbar\omega_q}{2}Z + \hbar\Omega_R\cos(\omega_dt + \phi)\,X . $$</div>
+<p>\(\Omega_R\) is the <b>Rabi frequency</b>, proportional to the drive amplitude, and \(\omega_d\) the drive frequency. Move to a frame rotating at \(\omega_d\) about \(z\) (the interaction picture with \(H_0 = -\tfrac{\hbar\omega_d}{2}Z\)). Using \(\ee^{-\ii\omega_dtZ/2}X\ee^{\ii\omega_dtZ/2} = X\cos\omega_dt + Y\sin\omega_dt\) and expanding the cosine, the drive term contains pieces oscillating at \(\omega_d-\omega_d = 0\) and at \(2\omega_d\). Dropping the fast terms is the <b>rotating-wave approximation</b> (RWA), valid when \(\Omega_R\ll\omega_d\) (@b1:sec-m-complex-euler). The result is time-independent:</p>
+<div class="eq" id="eq-q-rwa">$$ \tilde H = -\frac{\hbar\Delta}{2}Z + \frac{\hbar\Omega_R}{2}\big(\cos\phi\,X + \sin\phi\,Y\big), \qquad \Delta = \omega_q - \omega_d . $$</div>
+<p>In the rotating frame the qubit sees a static effective field with a \(z\) component equal to the detuning and an \(xy\) component equal to the Rabi frequency, pointing in a direction set by the drive phase \(\phi\). Its Bloch vector precesses about this field at the <b>generalised Rabi frequency</b> \(\Omega = \sqrt{\Omega_R^2+\Delta^2}\). Starting in \(\ket0\), the probability of finding \(\ket1\) is the <b>Rabi formula</b>:</p>
+<div class="eq" id="eq-q-rabi">$$ P_1(t) = \frac{\Omega_R^2}{\Omega_R^2+\Delta^2}\,\sin^2\!\Big(\frac{\sqrt{\Omega_R^2+\Delta^2}}{2}\,t\Big). $$</div>
+<p>On resonance the population oscillates completely between \(\ket0\) and \(\ket1\); off resonance the oscillation is faster but incomplete (@fig:q-rabi). This is the quantum counterpart of the energy exchange between coupled oscillators in @b2:sec-c-osc-coupled, with the same Lorentzian envelope \(\Omega_R^2/(\Omega_R^2+\Delta^2)\).</p>
+<figure id="fig-q-rabi">
+<img src="../figures/fig-q-rabi.svg" alt="Excited-state probability versus time for detunings of zero, one and two Rabi frequencies.">
+<figcaption>Rabi oscillations from @eq:q-rabi for detuning \(\Delta = 0\), \(\Omega_R\) and \(2\Omega_R\). A resonant pulse of duration \(\pi/\Omega_R\) (dashed line) inverts the qubit; detuning reduces the contrast and speeds up the oscillation.</figcaption>
+</figure>
+
+<h3 id="sec-q-spin-gates">Pulses as rotations</h3>
+<p>On resonance (\(\Delta=0\)) a pulse of constant amplitude for a time \(t\) rotates the Bloch vector by the angle \(\theta = \Omega_Rt\) about an axis in the \(xy\) plane at angle \(\phi\). For a shaped envelope \(\Omega_R(t)\) the rotation angle is the <b>pulse area</b> \(\theta = \int\Omega_R(t)\,\dd t\). A "\(\pi\) pulse" (\(\theta = \pi\)) about \(x\) is the gate \(X\) up to phase; a "\(\pi/2\) pulse" creates an equal superposition. Choosing \(\phi = 0\) or \(\pi/2\) selects rotations about \(x\) or \(y\). Rotations about \(z\) can be done "virtually" by shifting the phase of all subsequent pulses, which is free and exact. These three facts make arbitrary single-qubit gates (Book 4).</p>
+<p>The approximations above hide two engineering problems. First, the RWA neglects the counter-rotating terms, which shift the qubit frequency slightly (the Bloch–Siegert shift, \(\approx\Omega_R^2/4\omega_q\)). Second, a real transmon has a third level only \(|\alpha|\) below the drive, and a fast pulse leaks into it (@b1:sec-m-fourier-transform). Pulse shaping (DRAG) addresses the second; calibration absorbs the first (Book 6).</p>
+
+<h3 id="sec-q-spin-ramsey">Ramsey interference</h3>
+<p>Apply a \(\pi/2\) pulse, wait a time \(\tau\) with no drive, and apply a second \(\pi/2\) pulse. In the rotating frame, during the wait the Bloch vector precesses about \(z\) by the angle \(\Delta\tau\). The second pulse converts that phase into population:</p>
+<div class="eq" id="eq-q-ramsey">$$ P_1(\tau) = \frac{1+\cos(\Delta\tau)}{2} . $$</div>
+<p>The fringes oscillate at the detuning, so a Ramsey experiment measures the qubit frequency with a precision that improves with the longest usable \(\tau\). It is the principle of atomic clocks and the standard way to calibrate qubit frequencies. Its fringes decay because of dephasing, which Chapter 8 analyses; the decay time is \(T_2^*\).</p>
+
+<div class="eda"><p>Calibration software performs Rabi and Ramsey experiments on every qubit, fits @eq:q-rabi and @eq:q-ramsey, and updates the drive amplitudes and frequencies. The number of such experiments grows with qubit count and drift, and it is one of the review's arguments for designs that need less calibration (@lf:sec-test-cal).</p></div>
+
+<div class="exercises" id="ex-q-spin"><h4>Exercises</h4><ol>
+<li>An electron spin in silicon (\(g = 2\)) sits in a 0.5 T field. What is its qubit frequency?
+<details><summary>Solution</summary><p>\(f = g\mu_BB/h = 2\times9.274\times10^{-24}\times0.5/6.626\times10^{-34}\approx14\) GHz.</p></details></li>
+<li>A qubit has \(\Omega_R/2\pi = 25\) MHz. How long is a \(\pi\) pulse? If the drive is detuned by 5 MHz, what is the maximum excited population?
+<details><summary>Solution</summary><p>\(t_\pi = \pi/\Omega_R = 1/(2\times25\,\mathrm{MHz}) = 20\) ns. Max population \(\Omega_R^2/(\Omega_R^2+\Delta^2) = 625/650 = 0.96\). A 5 MHz miscalibration costs 4% of the population, which is why frequencies must be tracked to well below 1 MHz.</p></details></li>
+<li>Show that the rotating-frame Hamiltonian @eq:q-rwa with \(\Delta = 0\), \(\phi = 0\), applied for time \(t = \pi/\Omega_R\), gives \(U = -\ii X\).
+<details><summary>Solution</summary><p>\(U = \ee^{-\ii(\Omega_Rt/2)X} = \cos(\pi/2) I - \ii\sin(\pi/2)X = -\ii X\).</p></details></li>
+<li>In a Ramsey experiment the fringe period is 400 ns. What is the detuning between drive and qubit? Can you tell its sign from this experiment alone?
+<details><summary>Solution</summary><p>\(|\Delta|/2\pi = 1/400\,\mathrm{ns} = 2.5\) MHz. \(\cos(\Delta\tau)\) is even in \(\Delta\), so the sign is ambiguous; a second Ramsey experiment with a known deliberate detuning, or a phase advance on the second pulse, resolves it.</p></details></li>
+</ol></div>
+</section>

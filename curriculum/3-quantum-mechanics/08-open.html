@@ -1,0 +1,47 @@
+<section id="sec-q-open"><h2>Open quantum systems and decoherence</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Describe noisy evolution with quantum channels and Kraus operators.</li>
+<li>Write and solve the Lindblad master equation for relaxation and dephasing, and define \(T_1\), \(T_\varphi\), \(T_2\) and \(T_2^*\).</li>
+<li>Relate decoherence rates to noise spectral densities, and see how spin echo and dynamical decoupling filter low-frequency noise.</li>
+</ul></div>
+
+<h3 id="sec-q-open-channels">Quantum channels</h3>
+<p>A system that interacts with an environment, after the environment is traced out, undergoes a <b>quantum channel</b>: a linear map \(\rho\mapsto\mathcal E(\rho)\) that takes density matrices to density matrices, even when the system is part of a larger entangled state (<b>complete positivity</b>). Every such map has a <b>Kraus representation</b></p>
+<div class="eq" id="eq-q-kraus">$$ \mathcal E(\rho) = \sum_k K_k\,\rho\,K_k^\dagger, \qquad \sum_k K_k^\dagger K_k = I . $$</div>
+<p>Two channels describe most qubit noise. <b>Amplitude damping</b> (energy loss with probability \(\gamma\)) has \(K_0 = \begin{pmatrix}1&0\\0&\sqrt{1-\gamma}\end{pmatrix}\), \(K_1 = \begin{pmatrix}0&\sqrt\gamma\\0&0\end{pmatrix}\): \(K_1\) takes \(\ket1\to\ket0\), and \(K_0\) shrinks the excited amplitude in the no-jump case. <b>Phase damping</b> (loss of phase with probability \(p\)) has \(K_0 = \sqrt{1-p}\,I\), \(K_1 = \sqrt p\,Z\): with probability \(p\) the qubit suffers a random \(Z\), which leaves populations alone and multiplies coherences by \(1-2p\). The <b>depolarising</b> channel \(\rho\mapsto(1-p)\rho + p\,I/2\) shrinks the Bloch vector uniformly. Book 4 builds error models from these.</p>
+
+<h3 id="sec-q-open-lindblad">The Lindblad master equation</h3>
+<p>When the environment is large, has a short memory compared with the system's dynamics (the <b>Markov approximation</b>), and couples weakly, the continuous-time evolution takes the universal <b>Lindblad form</b> [@lindblad1976; @breuer2002]:</p>
+<div class="eq" id="eq-q-lindblad">$$ \frac{\dd\rho}{\dd t} = -\frac{\ii}{\hbar}[H,\rho] + \sum_k\gamma_k\Big(L_k\rho L_k^\dagger - \frac12\big\{L_k^\dagger L_k, \rho\big\}\Big), $$</div>
+<p>where each <b>jump operator</b> \(L_k\) and rate \(\gamma_k\) describe one dissipative process, and \(\{A,B\} = AB+BA\). For a qubit, relaxation has \(L = \sigma_- = \ketbra01\) at rate \(\Gamma_1\), excitation \(\sigma_+\) at rate \(\Gamma_\uparrow\) (small at low temperature), and pure dephasing \(L = Z\) at rate \(\Gamma_\varphi/2\). Solving for the matrix elements gives the <b>Bloch equations</b>:</p>
+<div class="eq" id="eq-q-blocheq">$$ \rho_{11}(t) = \rho_{11}(0)\,\ee^{-t/T_1}, \qquad \rho_{01}(t) = \rho_{01}(0)\,\ee^{-t/T_2}\,\ee^{\ii\omega_qt}, \qquad \frac1{T_2} = \frac1{2T_1} + \frac1{T_\varphi} $$</div>
+<p>(at zero temperature, in the frame where \(\ket0\) is the ground state). Populations decay at \(1/T_1\); coherences decay at \(1/T_2\). Energy relaxation necessarily destroys coherence too, which gives the factor \(\tfrac12\) and the bound \(T_2\le2T_1\). Pure dephasing \(T_\varphi\) destroys coherence without exchanging energy. For a damped harmonic oscillator, \(L = a\) at rate \(\kappa\) gives \(\dd\expval{a}/\dd t = -(\ii\omega+\kappa/2)\expval a\): the quantum version of the classical damped amplitude, consistent with @b2:eq-c-inout.</p>
+
+<h3 id="sec-q-open-spectra">Where the rates come from</h3>
+<p>Microscopically, rates are set by the noise spectrum of whatever couples to the qubit. Write the qubit–environment coupling as \(H_{\mathrm{int}} = \tfrac\hbar2(\lambda_\perp(t)X + \lambda_\parallel(t)Z)\), with transverse and longitudinal noise. Then (@eq:q-gamma1)</p>
+<div class="eq" id="eq-q-rates">$$ \Gamma_1 = \tfrac14\big[S_{\perp}(\omega_q) + S_\perp(-\omega_q)\big], \qquad \Gamma_\varphi = \tfrac12 S_{\parallel}(\omega\to0) \quad\text{(white noise)} . $$</div>
+<p>Relaxation samples noise at the qubit frequency; dephasing samples it near zero frequency. Different physical mechanisms dominate each. A transmon's \(T_1\) is set by dielectric loss, two-level systems, quasiparticles and radiation into lines and package (@lf:eq-t1); its \(T_\varphi\) by flux noise (if tunable), residual photons in the readout resonator (@lf:eq-dephase) and charge noise.</p>
+<p>Low-frequency noise is usually not white but \(1/f\)-like, and then the decay is not exponential. If the qubit frequency fluctuates by \(\delta\omega(t)\), a superposition accumulates a random phase \(\varphi(\tau) = \int_0^\tau\delta\omega\,\dd t\), and the coherence is \(\expval{\ee^{\ii\varphi}} = \ee^{-\expval{\varphi^2}/2}\) for Gaussian noise. In the frequency domain,</p>
+<div class="eq" id="eq-q-filter">$$ \expval{\varphi^2} = \frac{1}{2\pi}\int S_{\delta\omega}(\omega)\,\frac{|F(\omega\tau)|^2}{\omega^2}\,\dd\omega , $$</div>
+<p>where \(F\) is the <b>filter function</b> of the pulse sequence. For a plain Ramsey experiment \(|F|^2 = 4\sin^2(\omega\tau/2)\), which passes low frequencies, so slow drifts dominate and the decay time is the short \(T_2^*\). A <b>spin echo</b> (a \(\pi\) pulse halfway through) reverses the sign of the accumulated phase for the second half, so static and slow fluctuations cancel: its filter function vanishes at \(\omega\to0\) and the decay time \(T_{2E}\) is longer. Sequences of many \(\pi\) pulses (CPMG, dynamical decoupling) push the filter's passband to higher frequency and can map out the noise spectrum. The spread between \(T_2^*\), \(T_{2E}\) and \(2T_1\) tells an experimentalist what kind of noise limits a device (@fig:q-decoh).</p>
+<figure id="fig-q-decoh">
+<img src="../figures/fig-q-decoh.svg" alt="Energy relaxation, Ramsey fringes and echo decay curves for a qubit with T1 = 100 µs.">
+<figcaption>Typical coherence measurements for a qubit with \(T_1 = 100\) µs, white dephasing \(T_\varphi = 300\) µs and quasi-static frequency noise of 5 kHz rms. \(T_1\) decay of the excited population; Ramsey fringes at 50 kHz detuning, damped by the Gaussian factor from slow noise; and the echo envelope, from which slow noise has been removed.</figcaption>
+</figure>
+
+<h3 id="sec-q-open-limits">Beyond the Lindblad picture</h3>
+<p>The Markov approximation fails when the environment has memory comparable to the dynamics: strongly coupled two-level systems, \(1/f\) noise, a coupler mode close to a qubit, or a qubit near a structured filter. Non-Markovian effects show up as non-exponential decays, revivals and fluctuating \(T_1\). They matter for error correction because they create errors correlated in time and space, which the simple Pauli models of Book 4 do not capture. Treating the near environment (a resonator, a coupler, a strongly coupled defect) as part of the system, and only the far environment as a bath, usually restores the Lindblad form.</p>
+
+<div class="eda"><p>Coherence is the end product that a design and fabrication process delivers. The chain from layout (participation ratios), materials (loss tangents) and circuit (Purcell and line coupling) through @eq:q-rates to \(T_1\) and \(T_2\), and from there to gate error and logical error (@lf:eq-eps), is the chain the review argues a quantum EDA system must automate.</p></div>
+
+<div class="exercises" id="ex-q-open"><h4>Exercises</h4><ol>
+<li>Apply the amplitude-damping channel to \(\ket+\) and find the new Bloch vector.
+<details><summary>Solution</summary><p>\(\rho = \tfrac12\begin{pmatrix}1&1\\1&1\end{pmatrix}\). \(K_0\rho K_0^\dagger = \tfrac12\begin{pmatrix}1&\sqrt{1-\gamma}\\ \sqrt{1-\gamma}&1-\gamma\end{pmatrix}\), \(K_1\rho K_1^\dagger = \tfrac12\begin{pmatrix}\gamma&0\\0&0\end{pmatrix}\). Sum: \(\tfrac12\begin{pmatrix}1+\gamma&\sqrt{1-\gamma}\\ \sqrt{1-\gamma}&1-\gamma\end{pmatrix}\). Bloch vector \((\sqrt{1-\gamma}, 0, \gamma)\): coherence shrinks as \(\sqrt{1-\gamma}\) while the vector moves toward \(\ket0\).</p></details></li>
+<li>A qubit has \(T_1 = 80\) µs and \(T_2 = 60\) µs (echo). What is \(T_\varphi\)?
+<details><summary>Solution</summary><p>\(1/T_\varphi = 1/T_2 - 1/2T_1 = 1/60 - 1/160 = 0.01042\) µs\(^{-1}\), so \(T_\varphi\approx96\) µs.</p></details></li>
+<li>Show from the Lindblad equation with \(L = \sigma_-\) that \(\dot\rho_{11} = -\Gamma_1\rho_{11}\).
+<details><summary>Solution</summary><p>\(\sigma_-\rho\sigma_+\) has \((0,0)\) element \(\rho_{11}\) and \((1,1)\) element 0. \(\sigma_+\sigma_- = \ketbra11\), so \(\{\sigma_+\sigma_-,\rho\}_{11} = 2\rho_{11}\). Hence \(\dot\rho_{11} = \Gamma_1(0 - \rho_{11})\).</p></details></li>
+<li>Quasi-static Gaussian frequency noise with rms \(\sigma\) (in rad/s) gives Ramsey coherence \(\ee^{-\sigma^2\tau^2/2}\). For \(\sigma/2\pi = 5\) kHz, what is the \(1/\ee\) time? Why does an echo remove this decay?
+<details><summary>Solution</summary><p>\(\sigma^2\tau^2/2 = 1\) gives \(\tau = \sqrt2/\sigma = \sqrt2/(2\pi\times5000)\approx45\) µs. In an echo the phase accumulated in the first half, \(\delta\omega\tau/2\), is cancelled by \(-\delta\omega\tau/2\) in the second half when \(\delta\omega\) is constant during the sequence.</p></details></li>
+</ol></div>
+</section>

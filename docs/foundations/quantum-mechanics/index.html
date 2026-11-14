@@ -48,14 +48,65 @@ document.addEventListener("DOMContentLoaded", function () {
 <header class="topbar">
 <a class="brand" href="index.html">Book 3 · <span>Quantum Mechanics</span></a>
 <span class="spacer"></span>
-<nav><a href="../index.html">Roadmap</a><a href="#references">Exercises</a><a href="../../index.html">Lab to Foundry</a></nav>
+<nav><a href="../index.html">Roadmap</a><a href="#ex-q-why">Exercises</a><a href="../../index.html">Lab to Foundry</a></nav>
 <button class="btn icon-btn" id="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
 </header>
 <div class="layout">
 <nav class="toc" aria-label="Contents">
   <p class="toc-title">Contents</p>
   <ol>
-<li class="toc2"><a href="#sec-soon">In preparation</a></li>
+<li class="toc2"><a href="#sec-q-preface">How to use this book</a></li>
+<li class="toc2"><a href="#sec-q-why"><span class="tocnum">1</span>Why quantum mechanics: experiments and the qubit</a></li>
+<li class="toc3"><a href="#sec-q-why-energy"><span class="tocnum">1.1</span>Energy comes in packets</a></li>
+<li class="toc3"><a href="#sec-q-why-duality"><span class="tocnum">1.2</span>Waves and particles</a></li>
+<li class="toc3"><a href="#sec-q-why-sg"><span class="tocnum">1.3</span>Stern–Gerlach and the qubit</a></li>
+<li class="toc3"><a href="#sec-q-why-scales"><span class="tocnum">1.4</span>Scales and the limits of the classical picture</a></li>
+<li class="toc2"><a href="#sec-q-postulates"><span class="tocnum">2</span>States, observables and measurement</a></li>
+<li class="toc3"><a href="#sec-q-post-list"><span class="tocnum">2.1</span>The postulates</a></li>
+<li class="toc3"><a href="#sec-q-post-qubit"><span class="tocnum">2.2</span>Measuring a qubit</a></li>
+<li class="toc3"><a href="#sec-q-post-expect"><span class="tocnum">2.3</span>Expectation values and variance</a></li>
+<li class="toc3"><a href="#sec-q-post-uncert"><span class="tocnum">2.4</span>Compatible observables and the uncertainty relation</a></li>
+<li class="toc3"><a href="#sec-q-post-mixture"><span class="tocnum">2.5</span>Superposition is not ignorance</a></li>
+<li class="toc3"><a href="#sec-q-post-povm"><span class="tocnum">2.6</span>Generalised measurements</a></li>
+<li class="toc2"><a href="#sec-q-dynamics"><span class="tocnum">3</span>Dynamics, wavefunctions and tunnelling</a></li>
+<li class="toc3"><a href="#sec-q-dyn-u"><span class="tocnum">3.1</span>The time-evolution operator</a></li>
+<li class="toc3"><a href="#sec-q-dyn-pictures"><span class="tocnum">3.2</span>Pictures</a></li>
+<li class="toc3"><a href="#sec-q-dyn-wave"><span class="tocnum">3.3</span>Wavefunctions</a></li>
+<li class="toc3"><a href="#sec-q-dyn-tunnel"><span class="tocnum">3.4</span>Tunnelling</a></li>
+<li class="toc2"><a href="#sec-q-qho"><span class="tocnum">4</span>The quantum harmonic oscillator</a></li>
+<li class="toc3"><a href="#sec-q-qho-ladder"><span class="tocnum">4.1</span>Ladder operators</a></li>
+<li class="toc3"><a href="#sec-q-qho-lc"><span class="tocnum">4.2</span>Quantising an LC circuit</a></li>
+<li class="toc3"><a href="#sec-q-qho-coherent"><span class="tocnum">4.3</span>Coherent states</a></li>
+<li class="toc3"><a href="#sec-q-qho-anharm"><span class="tocnum">4.4</span>Adding a nonlinearity</a></li>
+<li class="toc2"><a href="#sec-q-spin"><span class="tocnum">5</span>Spin, two-level systems and Rabi oscillations</a></li>
+<li class="toc3"><a href="#sec-q-spin-pauli"><span class="tocnum">5.1</span>Two-level Hamiltonians and precession</a></li>
+<li class="toc3"><a href="#sec-q-spin-drive"><span class="tocnum">5.2</span>The driven qubit</a></li>
+<li class="toc3"><a href="#sec-q-spin-gates"><span class="tocnum">5.3</span>Pulses as rotations</a></li>
+<li class="toc3"><a href="#sec-q-spin-ramsey"><span class="tocnum">5.4</span>Ramsey interference</a></li>
+<li class="toc2"><a href="#sec-q-pert"><span class="tocnum">6</span>Approximation methods: perturbation theory and effective Hamiltonians</a></li>
+<li class="toc3"><a href="#sec-q-pert-nd"><span class="tocnum">6.1</span>Non-degenerate perturbation theory</a></li>
+<li class="toc3"><a href="#sec-q-pert-deg"><span class="tocnum">6.2</span>Degenerate levels</a></li>
+<li class="toc3"><a href="#sec-q-pert-sw"><span class="tocnum">6.3</span>Effective Hamiltonians and the dispersive regime</a></li>
+<li class="toc3"><a href="#sec-q-pert-td"><span class="tocnum">6.4</span>Time-dependent perturbation theory</a></li>
+<li class="toc3"><a href="#sec-q-pert-golden"><span class="tocnum">6.5</span>Fermi's golden rule and noise-induced transitions</a></li>
+<li class="toc3"><a href="#sec-q-pert-var"><span class="tocnum">6.6</span>The variational method and numerics</a></li>
+<li class="toc2"><a href="#sec-q-composite"><span class="tocnum">7</span>Density matrices, composite systems and entanglement</a></li>
+<li class="toc3"><a href="#sec-q-comp-rho"><span class="tocnum">7.1</span>The density matrix</a></li>
+<li class="toc3"><a href="#sec-q-comp-reduced"><span class="tocnum">7.2</span>Subsystems and the partial trace</a></li>
+<li class="toc3"><a href="#sec-q-comp-ent"><span class="tocnum">7.3</span>Entanglement</a></li>
+<li class="toc3"><a href="#sec-q-comp-bell"><span class="tocnum">7.4</span>Bell's inequality</a></li>
+<li class="toc3"><a href="#sec-q-comp-fid"><span class="tocnum">7.5</span>Distance between states</a></li>
+<li class="toc2"><a href="#sec-q-open"><span class="tocnum">8</span>Open quantum systems and decoherence</a></li>
+<li class="toc3"><a href="#sec-q-open-channels"><span class="tocnum">8.1</span>Quantum channels</a></li>
+<li class="toc3"><a href="#sec-q-open-lindblad"><span class="tocnum">8.2</span>The Lindblad master equation</a></li>
+<li class="toc3"><a href="#sec-q-open-spectra"><span class="tocnum">8.3</span>Where the rates come from</a></li>
+<li class="toc3"><a href="#sec-q-open-limits"><span class="tocnum">8.4</span>Beyond the Lindblad picture</a></li>
+<li class="toc2"><a href="#sec-q-second"><span class="tocnum">9</span>Identical particles and second quantisation</a></li>
+<li class="toc3"><a href="#sec-q-sec-ident"><span class="tocnum">9.1</span>Identical particles</a></li>
+<li class="toc3"><a href="#sec-q-sec-fock"><span class="tocnum">9.2</span>Second quantisation</a></li>
+<li class="toc3"><a href="#sec-q-sec-tb"><span class="tocnum">9.3</span>Hopping and bands</a></li>
+<li class="toc3"><a href="#sec-q-sec-sc"><span class="tocnum">9.4</span>A first look at superconductivity</a></li>
+    <li class="toc2"><a href="#references">References</a></li>
   </ol>
 </nav>
 <main>
@@ -65,11 +116,470 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Quantum Mechanics</h1>
   <p class="subtitle">States, measurement, dynamics, the harmonic oscillator, two-level systems, perturbation theory, entanglement and open systems</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">0 chapters · 0 numbered equations · 0 exercises with solutions · about 60 hours of study</p>
+  <p class="meta">9 chapters · 42 numbered equations · 35 exercises with solutions · about 60 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../mathematics/index.html">Book 1: Mathematics</a>, <a href="../classical-physics/index.html">Book 2: Classical Physics</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
-<section id="sec-soon" class="unnumbered"><h2>In preparation</h2><p>This book has not been written yet.</p></section>
+<section id="sec-q-preface" class="unnumbered"><h2>How to use this book</h2>
+<p>This book teaches quantum mechanics the way a quantum engineer uses it. It begins with the smallest quantum system, a two-level system or qubit, because almost every idea of the theory can be seen there with \(2\times2\) matrices. It then adds continuous systems (wavefunctions, tunnelling), the harmonic oscillator that describes every resonator and photon, the approximation methods that produce effective Hamiltonians, the density matrix that describes noisy and entangled systems, and the master equation that describes decoherence. It ends with second quantisation, the language of many identical particles, which Books 5 and 6 use for photons and superconductors.</p>
+<p>The mathematics is that of Book 1, Chapters 1–5: complex numbers, Dirac notation, Hermitian and unitary operators, the matrix exponential and tensor products. The physics of Book 2, Chapters 1–3 (Hamiltonians, Poisson brackets and oscillators) is used from Chapter 3 on. If a step seems unmotivated, look for the classical analogue there first; the correspondence is close.</p>
+<p>Units: we keep \(\hbar\) explicit in the early chapters and sometimes set \(\hbar = 1\) later, so that energies and angular frequencies are interchangeable. Frequencies quoted "in GHz" mean \(\omega/2\pi\).</p>
+</section>
 
+<section id="sec-q-why"><h2><span class="secnum">1</span> Why quantum mechanics: experiments and the qubit</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Know the experiments that forced quantum theory: quantised energy, wave–particle duality and sequential spin measurements.</li>
+<li>See how the Stern–Gerlach experiment leads directly to complex two-dimensional state vectors.</li>
+<li>Understand superposition, interference and the role of measurement, before any formalism.</li>
+<li>Know the energy scales that decide when quantum effects are visible in engineered devices.</li>
+</ul></div>
+
+<h3 id="sec-q-why-energy"><span class="secnum">1.1</span> Energy comes in packets</h3>
+<p>By 1900 classical physics predicted that a hot cavity should radiate infinite power at high frequencies, because equipartition gives every mode an energy \(k_BT\) and there are infinitely many modes. Planck fixed this by assuming that a mode of frequency \(\nu\) exchanges energy only in multiples of \(h\nu\). High-frequency modes then cannot be excited at low temperature, exactly the behaviour of <a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-nth">Book 2 eq. (40)</a>. Einstein then explained the photoelectric effect (light ejects electrons only above a threshold frequency, however intense it is) by taking the packets literally: light consists of <b>photons</b> of energy \(E = h\nu = \hbar\omega\). Bohr explained the sharp spectral lines of hydrogen by allowing electrons only certain orbits. In each case a continuous classical quantity turned out to be discrete.</p>
+<p>In engineered quantum devices the same discreteness appears when the level spacing \(\hbar\omega\) exceeds the thermal energy \(k_BT\) and the loss rate \(\hbar\gamma\). A 5 GHz superconducting resonator has \(\hbar\omega/k_B\approx 0.24\) K, so at 20 mK its energy levels are resolved; at 4 K they are washed out by thermal fluctuations. An optical photon at 1550 nm has \(\hbar\omega/k_B\approx9300\) K and is quantum at room temperature.</p>
+
+<h3 id="sec-q-why-duality"><span class="secnum">1.2</span> Waves and particles</h3>
+<p>In a double-slit experiment with electrons, photons, neutrons or even large molecules sent one at a time, each particle arrives at a single point on the screen, like a particle. After many arrivals, the pattern of points shows interference fringes, like a wave passing through both slits. Closing one slit removes the fringes. Trying to detect which slit each particle used also removes the fringes, even if the detection is gentle. The consistent description, due to de Broglie, Schrödinger and Born, assigns the particle a complex <b>amplitude</b> for each path, adds the amplitudes, and takes the modulus squared to get a probability:</p>
+<div class="eq" id="eq-q-born0">$$ P(x) = \big|\psi_1(x) + \psi_2(x)\big|^2 = |\psi_1|^2 + |\psi_2|^2 + 2\Re\big(\psi_1^*\psi_2\big).  \tag{1}$$</div>
+<p>The interference term is what classical probability lacks. Recording which path was taken makes the two paths distinguishable, and distinguishable alternatives add as probabilities, not as amplitudes. That rule (amplitudes for indistinguishable alternatives, probabilities for distinguishable ones) carries most of quantum mechanics, and it is the key to the Hong–Ou–Mandel effect of Book 5 and to decoherence in Chapter 8.</p>
+
+<h3 id="sec-q-why-sg"><span class="secnum">1.3</span> Stern–Gerlach and the qubit</h3>
+<p>In 1922 Stern and Gerlach sent silver atoms through an inhomogeneous magnetic field, which deflects a magnetic moment according to its component along the field gradient. Classically, randomly oriented moments should produce a continuous smear. Instead the beam split into exactly two spots, "up" and "down". The atom's magnetic moment along any chosen axis takes only two values. Now chain the devices, as Sakurai does in his textbook <span class="cite">[<a href="#ref-sakurai2020">1</a>]</span>:</p>
+<ol>
+<li>Select the atoms that went up along \(z\), and measure \(z\) again. All go up. The measurement is repeatable.</li>
+<li>Select \(z\)-up atoms and measure along \(x\). Half go \(x\)-up and half \(x\)-down, at random.</li>
+<li>Select \(z\)-up, then \(x\)-up atoms, and measure \(z\) again. Half go \(z\)-down. The intermediate \(x\) measurement erased the \(z\) information.</li>
+</ol>
+<p>A description that fits all three needs states that are vectors in a two-dimensional space. Write \(\ket{\uparrow_z}\) and \(\ket{\downarrow_z}\) as an orthonormal basis. Experiment 2 says \(|\braket{\uparrow_x}{\uparrow_z}|^2 = \tfrac12\), so we can take \(\ket{\uparrow_x} = (\ket{\uparrow_z}+\ket{\downarrow_z})/\sqrt2\) and \(\ket{\downarrow_x} = (\ket{\uparrow_z}-\ket{\downarrow_z})/\sqrt2\). Repeating with a \(y\) axis requires a third pair of states with overlap \(\tfrac12\) with all four of these. No real vectors can do it; complex ones can: \(\ket{\uparrow_y} = (\ket{\uparrow_z}+\ii\ket{\downarrow_z})/\sqrt2\). This is the strongest elementary argument that quantum amplitudes must be complex.</p>
+<p>Any physical system with two distinguishable states and the ability to be in superpositions of them is a <b>qubit</b>: a spin in a magnetic field, the two lowest levels of an atom, a photon in one of two waveguides, or the two lowest energy levels of a superconducting circuit. The mathematics is identical, which is why quantum computing can be discussed without committing to hardware, and why hardware can be compared on common terms (Book 6).</p>
+
+<h3 id="sec-q-why-scales"><span class="secnum">1.4</span> Scales and the limits of the classical picture</h3>
+<p>Planck's constant sets the scale where quantum effects matter: whenever an action (energy × time, or momentum × distance) of a system is comparable to \(\hbar\approx1.05\times10^{-34}\) J s. A transmon has zero-point phase fluctuations of a few tenths of a radian (<a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-zpf">Book 2 eq. (12)</a>) and is fully quantum, even though it contains about \(10^{11}\) electrons, because all the Cooper pairs move together as a single collective coordinate. Engineering quantum devices is the art of isolating one such collective coordinate from everything else, coupling it to controls, and protecting it from an environment that constantly tries to measure it. The rest of this book makes those ideas precise.</p>
+
+<div class="exercises" id="ex-q-why"><h4>Exercises</h4><ol>
+<li>Compute the energy of one photon at 5 GHz and at 1550 nm in joules and in electronvolts, and the corresponding temperature \(E/k_B\).
+<details><summary>Solution</summary><p>5 GHz: \(E = 6.626\times10^{-34}\times5\times10^9 = 3.3\times10^{-24}\) J \(= 20.7\) µeV, \(E/k_B = 0.24\) K. 1550 nm: \(\nu = c/\lambda = 1.93\times10^{14}\) Hz, \(E = 1.28\times10^{-19}\) J \(= 0.80\) eV, \(E/k_B\approx9300\) K.</p></details></li>
+<li>Check that \(\ket{\uparrow_y} = (\ket{\uparrow_z}+\ii\ket{\downarrow_z})/\sqrt2\) has overlap probability \(\tfrac12\) with \(\ket{\uparrow_z}\), \(\ket{\downarrow_z}\), \(\ket{\uparrow_x}\) and \(\ket{\downarrow_x}\).
+<details><summary>Solution</summary><p>With \(\ket{\uparrow_z}\): \(1/\sqrt2\), probability \(\tfrac12\). With \(\ket{\downarrow_z}\): \(\ii/\sqrt2\), probability \(\tfrac12\). With \(\ket{\uparrow_x}\): \(\tfrac12(1+\ii)\), modulus squared \(\tfrac12\). With \(\ket{\downarrow_x}\): \(\tfrac12(1-\ii)\), modulus squared \(\tfrac12\).</p></details></li>
+<li>In a double slit, amplitudes at a point are \(\psi_1 = a\) and \(\psi_2 = a\,\ee^{\ii\phi}\). Find \(P\) as a function of \(\phi\). If a which-path detector randomises \(\phi\) uniformly, what is the average?
+<details><summary>Solution</summary><p>\(P = 2|a|^2(1+\cos\phi)\), oscillating between 0 and \(4|a|^2\). Averaging over random \(\phi\) gives \(2|a|^2\): the sum of the two single-slit probabilities, with no fringes. Randomised relative phase is exactly what decoherence does.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-q-postulates"><h2><span class="secnum">2</span> States, observables and measurement</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>State the postulates of quantum mechanics and apply them to a qubit.</li>
+<li>Compute measurement probabilities, post-measurement states and expectation values.</li>
+<li>Understand compatible and incompatible observables, and derive the uncertainty relation.</li>
+<li>Know the difference between global and relative phase, and between superposition and mixture.</li>
+</ul></div>
+
+<h3 id="sec-q-post-list"><span class="secnum">2.1</span> The postulates</h3>
+<div class="defn"><p><b>Postulate 1 (states).</b> The state of an isolated system is a unit vector \(\ket\psi\) in a complex Hilbert space \(\mathcal H\). Vectors differing only by a global phase, \(\ket\psi\) and \(\ee^{\ii\chi}\ket\psi\), describe the same state.</p></div>
+<div class="defn"><p><b>Postulate 2 (observables).</b> Every measurable quantity is represented by a Hermitian operator \(A\). The possible results of measuring it are its eigenvalues \(a_k\).</p></div>
+<div class="defn"><p><b>Postulate 3 (Born rule).</b> If \(A = \sum_k a_kP_k\), with \(P_k\) the projector onto the eigenspace of \(a_k\), a measurement on \(\ket\psi\) gives \(a_k\) with probability</p>
+<div class="eq" id="eq-q-born">$$ p(a_k) = \bra\psi P_k\ket\psi = \|P_k\ket\psi\|^2 \qquad\big(= |\braket{a_k}{\psi}|^2 \text{ for a non-degenerate eigenvalue}\big),  \tag{2}$$</div>
+<p>and immediately afterwards the state is \(P_k\ket\psi/\|P_k\ket\psi\|\) (the <b>projection postulate</b>).</p></div>
+<div class="defn"><p><b>Postulate 4 (dynamics).</b> Between measurements, the state evolves by the Schrödinger equation \(\ii\hbar\,\dd\ket\psi/\dd t = H\ket\psi\), where the Hamiltonian \(H\) is the energy observable.</p></div>
+<div class="defn"><p><b>Postulate 5 (composition).</b> The state space of a composite system is the tensor product of the component spaces.</p></div>
+<p>The probabilities in Postulate 3 sum to one because the projectors resolve the identity (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-resolution">Book 1 eq. (10)</a>) and \(\ket\psi\) is normalised. The spectral theorem (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-op-spectral">Book 1 §3.4</a>) guarantees that every Hermitian operator has such a decomposition, so every observable has a well-defined set of outcomes.</p>
+
+<h3 id="sec-q-post-qubit"><span class="secnum">2.2</span> Measuring a qubit</h3>
+<p>Take \(\ket\psi = \alpha\ket0+\beta\ket1\). Measuring \(Z\) (eigenvalues \(+1\) for \(\ket0\), \(-1\) for \(\ket1\)) gives \(+1\) with probability \(|\alpha|^2\) and \(-1\) with probability \(|\beta|^2\). Measuring \(X\) instead projects onto \(\ket\pm\): \(p(\pm) = |\braket{\pm}{\psi}|^2 = \tfrac12|\alpha\pm\beta|^2\). These depend on the relative phase of \(\alpha\) and \(\beta\), which \(Z\) measurements cannot see. A complete characterisation of an unknown state (<b>state tomography</b>) therefore needs measurements along several axes.</p>
+<p>Because of the global-phase freedom and normalisation, a qubit state has two real parameters. It is conventional to write</p>
+<div class="eq" id="eq-q-bloch">$$ \ket\psi = \cos\frac\theta2\,\ket0 + \ee^{\ii\phi}\sin\frac\theta2\,\ket1, \qquad 0\le\theta\le\pi,\ 0\le\phi \lt 2\pi,  \tag{3}$$</div>
+<p>which identifies each state with a point on a sphere, the <b>Bloch sphere</b>, at polar angle \(\theta\) and azimuth \(\phi\). \(\ket0\) is the north pole, \(\ket1\) the south pole, \(\ket\pm\) are on the \(x\) axis and \(\ket{\pm\ii}\) on the \(y\) axis. The Bloch vector is \(\mathbf r = (\expval X, \expval Y, \expval Z) = (\sin\theta\cos\phi, \sin\theta\sin\phi, \cos\theta)\). Orthogonal states are antipodal on the sphere, not at right angles: the half-angles in <a class="xref" href="#eq-q-bloch">(3)</a> are responsible. Chapter 5 shows that every single-qubit gate is a rotation of this sphere.</p>
+
+<h3 id="sec-q-post-expect"><span class="secnum">2.3</span> Expectation values and variance</h3>
+<p>The mean result of many measurements of \(A\) on identically prepared systems is</p>
+<div class="eq" id="eq-q-expval">$$ \expval{A} = \sum_k a_k\,p(a_k) = \bra\psi A\ket\psi , \qquad (\Delta A)^2 = \expval{A^2} - \expval{A}^2 .  \tag{4}$$</div>
+<p>Expectation values are what experiments estimate. For a qubit, \(\expval Z = |\alpha|^2 - |\beta|^2\), and estimating it to precision \(\epsilon\) takes about \(1/\epsilon^2\) repetitions ("shots"), by the binomial statistics of Book 1. That counting is behind the cost of calibrating and characterising large processors.</p>
+
+<h3 id="sec-q-post-uncert"><span class="secnum">2.4</span> Compatible observables and the uncertainty relation</h3>
+<p>Two observables are <b>compatible</b> if they commute. Commuting Hermitian operators share an eigenbasis, so both can have definite values at once, and measuring one does not disturb the other. Non-commuting observables cannot. Applying Cauchy–Schwarz (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-vectors-inner">Book 1 §2.2</a>) to the vectors \((A-\expval A)\ket\psi\) and \((B-\expval B)\ket\psi\) gives the <b>Robertson uncertainty relation</b>:</p>
+<div class="eq" id="eq-q-robertson">$$ \Delta A\,\Delta B \;\ge\; \frac12\,\big|\expval{[A,B]}\big| .  \tag{5}$$</div>
+<p>For position and momentum, \([x,p] = \ii\hbar\) gives Heisenberg's \(\Delta x\Delta p\ge\hbar/2\). For a qubit, \([X,Y] = 2\ii Z\) gives \(\Delta X\Delta Y\ge|\expval Z|\): a state polarised along \(z\) must be uncertain in \(x\) and \(y\). For a circuit, \([\Phi,Q] = \ii\hbar\) (<a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-canonical">Book 2 eq. (10)</a>) means a superconducting island cannot have both a definite charge and a definite phase. The transmon is designed to sit in the regime where the phase is well defined and the charge is not, which makes it insensitive to charge noise (Book 6).</p>
+<p>The uncertainty relation is not about clumsy measurement. It is a property of the state: there is no state with definite values of two non-commuting observables.</p>
+
+<h3 id="sec-q-post-mixture"><span class="secnum">2.5</span> Superposition is not ignorance</h3>
+<p>Compare two preparations. In the first, every qubit is in \(\ket+ = (\ket0+\ket1)/\sqrt2\). In the second, each qubit is randomly \(\ket0\) or \(\ket1\) with probability \(\tfrac12\) each, a statistical <b>mixture</b>. Measured in the \(Z\) basis, both give 50:50 outcomes. Measured in the \(X\) basis, the first gives \(+\) every time, while the second still gives 50:50. A superposition carries phase information that a mixture lacks. Chapter 7 introduces the density matrix to describe both on equal footing; Chapter 8 shows how coupling to an environment turns superpositions into mixtures, which is decoherence.</p>
+
+<h3 id="sec-q-post-povm"><span class="secnum">2.6</span> Generalised measurements</h3>
+<p>Real detectors are not ideal projectors: a qubit readout has a small probability of reporting the wrong result, and a photon detector misses some photons. The general description assigns each outcome \(m\) a positive operator \(E_m\) with \(\sum_mE_m = I\) (a <b>POVM</b>), and \(p(m) = \bra\psi E_m\ket\psi\). For a qubit readout with assignment errors \(\epsilon_{01} = P(\text{"1"}\,|\,0)\) and \(\epsilon_{10} = P(\text{"0"}\,|\,1)\), \(E_{\text{"1"}} = \epsilon_{01}\ketbra00 + (1-\epsilon_{10})\ketbra11\). Book 4 uses this to define readout fidelity, and Book 1's Bayes example was exactly this POVM.</p>
+
+<div class="eda"><p>Measurement statistics set the cost of test. Every number a characterisation flow reports (a frequency, a \(T_1\), a gate fidelity) is an estimate from finitely many projective measurements, with a binomial uncertainty that scales as \(1/\sqrt{\text{shots}}\). Choosing which measurements to make, and how many shots to spend, is an experimental-design problem (<a class="xref ext" href="../../index.html#eq-boed">Lab to Foundry eq. (30)</a>).</p></div>
+
+<div class="exercises" id="ex-q-postulates"><h4>Exercises</h4><ol>
+<li>For \(\ket\psi = \tfrac{1}{\sqrt3}\ket0 + \sqrt{\tfrac23}\,\ee^{\ii\pi/4}\ket1\), compute the probabilities of \(Z = \pm1\), \(X=\pm1\), and the Bloch vector.
+<details><summary>Solution</summary><p>\(p(Z{=}{+}1) = 1/3\), \(p(Z{=}{-}1) = 2/3\). \(\expval X = 2\Re(\alpha^*\beta) = 2\cdot\tfrac{1}{\sqrt3}\sqrt{\tfrac23}\cos\tfrac\pi4 = \tfrac{2}{3}\), so \(p(X{=}{+}1) = (1+\expval X)/2 = 5/6\). \(\expval Y = 2\Im(\alpha^*\beta) = 2/3\), \(\expval Z = -1/3\). Bloch vector \((2/3, 2/3, -1/3)\), unit length as it must be.</p></details></li>
+<li>Show that \(\expval X = 2\Re(\alpha^*\beta)\) and \(\expval Y = 2\Im(\alpha^*\beta)\) for \(\alpha\ket0+\beta\ket1\).
+<details><summary>Solution</summary><p>\(X\ket\psi = \beta\ket0+\alpha\ket1\), so \(\expval X = \alpha^*\beta + \beta^*\alpha = 2\Re(\alpha^*\beta)\). \(Y\ket\psi = -\ii\beta\ket0 + \ii\alpha\ket1\), so \(\expval Y = -\ii\alpha^*\beta + \ii\beta^*\alpha = 2\Im(\alpha^*\beta)\).</p></details></li>
+<li>Verify the uncertainty relation \(\Delta X\Delta Y\ge|\expval Z|\) for \(\ket0\) and for \(\ket+\).
+<details><summary>Solution</summary><p>For \(\ket0\): \(\expval X = \expval Y = 0\), \(\expval{X^2} = \expval{Y^2} = 1\), so \(\Delta X = \Delta Y = 1\), product 1, and \(|\expval Z| = 1\): equality. For \(\ket+\): \(\Delta X = 0\), \(\Delta Y = 1\), product 0, and \(\expval Z = 0\): satisfied.</p></details></li>
+<li>A readout has \(\epsilon_{01} = 0.02\) and \(\epsilon_{10} = 0.05\). For a qubit prepared in \(\ket+\), what is the probability of reporting "1"?
+<details><summary>Solution</summary><p>\(p(\text{"1"}) = 0.02\times\tfrac12 + 0.95\times\tfrac12 = 0.485\). Assignment errors bias the estimate of \(\expval Z\) unless corrected.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-q-dynamics"><h2><span class="secnum">3</span> Dynamics, wavefunctions and tunnelling</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Solve the Schrödinger equation with the time-evolution operator and energy eigenstates.</li>
+<li>Use the Schrödinger, Heisenberg and interaction pictures.</li>
+<li>Work with wavefunctions: the particle in a box, the finite well and the free particle.</li>
+<li>Compute tunnelling through a barrier and see why junction properties depend exponentially on barrier thickness.</li>
+</ul></div>
+
+<h3 id="sec-q-dyn-u"><span class="secnum">3.1</span> The time-evolution operator</h3>
+<p>For a time-independent Hamiltonian, the Schrödinger equation \(\ii\hbar\,\dd\ket\psi/\dd t = H\ket\psi\) is a linear system of the form \(\dot{\mathbf x} = A\mathbf x\) (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-expAt">Book 1 eq. (29)</a>), so</p>
+<div class="eq" id="eq-q-U">$$ \ket{\psi(t)} = U(t)\ket{\psi(0)}, \qquad U(t) = \ee^{-\ii Ht/\hbar} = \sum_n \ee^{-\ii E_nt/\hbar}\,\ketbra{E_n}{E_n},  \tag{6}$$</div>
+<p>where \(H\ket{E_n} = E_n\ket{E_n}\) is the <b>time-independent Schrödinger equation</b>. The recipe is: find the energy eigenstates, expand the initial state in them, attach a phase \(\ee^{-\ii E_nt/\hbar}\) to each, and add up. Eigenstates themselves only acquire a phase, so all their measurable properties are constant: they are <b>stationary states</b>. Anything that changes in time does so through interference between eigenstates of different energy, at the <b>Bohr frequencies</b> \((E_n - E_m)/\hbar\). A qubit in \((\ket0+\ket1)/\sqrt2\) with splitting \(\hbar\omega_q\) has \(\expval{X}(t) = \cos\omega_qt\): it precesses at the qubit frequency. Because \(H\) is Hermitian, \(U\) is unitary, so norms and probabilities are conserved.</p>
+<p>When \(H\) depends on time (a qubit under a control pulse), \(U\) is the solution of \(\ii\hbar\,\dot U = H(t)U\), \(U(0)=I\). If \(H\) at different times does not commute, \(U\) is not simply \(\ee^{-\ii\int H\dd t/\hbar}\); it is a <b>time-ordered exponential</b>, computed numerically by multiplying many short steps \(U \approx \prod_k\ee^{-\ii H(t_k)\Delta t/\hbar}\). Pulse-level simulators do exactly this.</p>
+
+<h3 id="sec-q-dyn-pictures"><span class="secnum">3.2</span> Pictures</h3>
+<p>Expectation values \(\bra{\psi(t)}A\ket{\psi(t)} = \bra{\psi(0)}U^\dagger AU\ket{\psi(0)}\) can be computed by evolving the state (the <b>Schrödinger picture</b>) or by evolving the operator, \(A_H(t) = U^\dagger AU\), with fixed states (the <b>Heisenberg picture</b>). Differentiating gives the Heisenberg equation of motion, the quantum version of \(\dot f = \{f,H\}\):</p>
+<div class="eq" id="eq-q-heisenberg">$$ \frac{\dd A_H}{\dd t} = \frac{\ii}{\hbar}\,[H, A_H] .  \tag{7}$$</div>
+<p>Taking expectation values gives <b>Ehrenfest's theorem</b>: for \(H = p^2/2m+V(x)\), \(\dd\expval x/\dd t = \expval p/m\) and \(\dd\expval p/\dd t = -\expval{V'(x)}\). Average quantities follow Newton's laws when the wavepacket is narrow compared with the scale on which the force varies. That is why harmonic systems, where \(V'\) is linear and \(\expval{V'(x)} = V'(\expval x)\) exactly, behave so classically.</p>
+<p>The <b>interaction picture</b> splits \(H = H_0 + V(t)\), with \(H_0\) simple, and removes the fast \(H_0\) evolution: \(\ket{\tilde\psi} = \ee^{\ii H_0t/\hbar}\ket\psi\) obeys \(\ii\hbar\,\dd\ket{\tilde\psi}/\dd t = \tilde V(t)\ket{\tilde\psi}\) with \(\tilde V = \ee^{\ii H_0t/\hbar}V\ee^{-\ii H_0t/\hbar}\). It is the quantum version of the rotating frame (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-complex-rotframe">Book 1 §1.4</a>) and the starting point of perturbation theory and of the Rabi problem.</p>
+
+<h3 id="sec-q-dyn-wave"><span class="secnum">3.3</span> Wavefunctions</h3>
+<p>For a particle moving in one dimension, the position basis \(\ket x\) gives the <b>wavefunction</b> \(\psi(x) = \braket x\psi\), with \(|\psi(x)|^2\) the probability density. The momentum operator acts as \(p = -\ii\hbar\,\dd/\dd x\) (which satisfies \([x,p] = \ii\hbar\)), and the time-independent Schrödinger equation becomes</p>
+<div class="eq" id="eq-q-tise">$$ -\frac{\hbar^2}{2m}\,\psi''(x) + V(x)\,\psi(x) = E\,\psi(x) .  \tag{8}$$</div>
+<p>Plane waves \(\ee^{\ii kx}\) are momentum eigenstates with \(p = \hbar k\) and, for a free particle, \(E = \hbar^2k^2/2m\): the de Broglie relation \(\lambda = h/p\). A particle confined to a box \(0\lt x\lt L\) with infinite walls must have \(\psi = 0\) at the walls, so \(\psi_n = \sqrt{2/L}\sin(n\pi x/L)\) (the functions of <a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-vectors">Book 1 §2</a>) with</p>
+<div class="eq" id="eq-q-box">$$ E_n = \frac{\hbar^2\pi^2n^2}{2mL^2}, \qquad n = 1, 2, \dots  \tag{9}$$</div>
+<p>Confinement quantises energy, and the ground state has nonzero energy (zero-point energy) because a confined particle has uncertain momentum. A quantum dot is a box a few tens of nanometres across, with level spacings of meV, and a gate-defined spin qubit is an electron in such a box (Book 6). For a well of finite depth \(V_0\), the wavefunction leaks into the walls as \(\ee^{-\kappa|x|}\) with \(\kappa = \sqrt{2m(V_0-E)}/\hbar\); the bound states are found by matching \(\psi\) and \(\psi'\) at the edges, which gives a transcendental equation with a finite number of solutions. The same mathematics describes the modes of an optical slab waveguide (<a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-slab">Book 2 eq. (35)</a>).</p>
+
+<h3 id="sec-q-dyn-tunnel"><span class="secnum">3.4</span> Tunnelling</h3>
+<p>Send a particle of energy \(E\) at a barrier of height \(U > E\) and thickness \(d\). Classically it is reflected. Quantum mechanically, inside the barrier the solution of <a class="xref" href="#eq-q-tise">(8)</a> decays as \(\ee^{-\kappa x}\), and if the barrier is thin some amplitude survives to the far side. Matching wavefunctions at both interfaces gives a transmission probability which, for a thick or high barrier (\(\kappa d\gg1\)), is</p>
+<div class="eq" id="eq-q-tunnel">$$ T \approx \frac{16E(U-E)}{U^2}\,\ee^{-2\kappa d}, \qquad \kappa = \frac{\sqrt{2m(U-E)}}{\hbar} .  \tag{10}$$</div>
+<p>For an electron and a barrier 1 eV above its energy, \(\kappa\approx5.1\) nm\(^{-1}\), so each extra ångström of barrier reduces \(T\) by a factor \(\ee^{-1.02}\approx0.36\). This exponential sensitivity is the central fact of Josephson-junction manufacture. A junction is two superconductors separated by about 1–2 nm of aluminium oxide; its normal-state resistance \(R_n\propto1/T\) and critical current \(I_c\propto1/R_n\) depend exponentially on the oxide thickness (<a class="xref ext" href="../../index.html#eq-tunnel">Lab to Foundry eq. (14)</a>). A fluctuation of a fraction of an ångström across a wafer becomes a percent-level spread in junction energy and a tens-of-MHz spread in qubit frequency (<a class="xref ext" href="../../index.html#sec-var-junction">Lab to Foundry §4.1</a>).</p>
+<p>Tunnelling also appears as a <b>design element</b>: the exchange coupling between two spin qubits is set by tunnelling of electrons between neighbouring dots and is exponential in the gate voltage that controls the barrier, and as a <b>loss mechanism</b>: two-level systems in amorphous oxides are atoms tunnelling between two nearby positions (Book 6).</p>
+<div class="example"><p><b>Worked example: barrier sensitivity.</b> Two junctions differ in average oxide thickness by \(\delta d = 0.02\) nm. Using \(\kappa = 5\) nm\(^{-1}\), \(I_c\propto\ee^{-2\kappa d}\) differs by a factor \(\ee^{-2\times5\times0.02} = \ee^{-0.2} = 0.82\): an 18% change from a variation of one tenth of an atomic diameter. Since the transmon frequency scales as \(\sqrt{E_J}\propto\sqrt{I_c}\), the qubits differ by about 9%, roughly 450 MHz at 5 GHz. In practice junction areas and oxidation are controlled to give spreads of 1–3%, but only through careful statistical process control (Book 7).</p></div>
+
+<div class="eda"><p>Pulse-level simulation (solving \(\ii\hbar\dot U = H(t)U\) for a few coupled transmons) is how gate designs are checked before fabrication and how calibration software builds its models. Its inputs are the Hamiltonian parameters that extraction provides; its outputs are gate errors that feed the error-correction model (<a class="xref ext" href="../../index.html#eq-eps">Lab to Foundry eq. (37)</a>). The tunnelling formula <a class="xref" href="#eq-q-tunnel">(10)</a> is the link between a process parameter (oxide thickness) and a design parameter (\(E_J\)).</p></div>
+
+<div class="exercises" id="ex-q-dynamics"><h4>Exercises</h4><ol>
+<li>A qubit has \(H = \tfrac{\hbar\omega_q}{2}\,Z\) (with \(\ket0\) the upper level in this sign convention) and starts in \(\ket+\). Find \(\ket{\psi(t)}\) and \(\expval X(t)\), \(\expval Y(t)\).
+<details><summary>Solution</summary><p>\(U = \mathrm{diag}(\ee^{-\ii\omega_qt/2}, \ee^{\ii\omega_qt/2})\), so \(\ket{\psi(t)} = (\ee^{-\ii\omega_qt/2}\ket0 + \ee^{\ii\omega_qt/2}\ket1)/\sqrt2\). Then \(\alpha^*\beta = \tfrac12\ee^{\ii\omega_qt}\), so \(\expval X = \cos\omega_qt\), \(\expval Y = \sin\omega_qt\): precession about \(z\) at \(\omega_q\).</p></details></li>
+<li>Use <a class="xref" href="#eq-q-heisenberg">(7)</a> to show that for \(H = p^2/2m + \tfrac12m\omega^2x^2\), \(\ddot x_H = -\omega^2x_H\).
+<details><summary>Solution</summary><p>\([H,x] = [p^2,x]/2m = -\ii\hbar p/m\), so \(\dot x_H = p_H/m\). \([H,p] = \tfrac12m\omega^2[x^2,p] = \ii\hbar m\omega^2x\), so \(\dot p_H = -m\omega^2x_H\). Combining, \(\ddot x_H = -\omega^2x_H\): the operators obey the classical equation exactly.</p></details></li>
+<li>Estimate the ground-state energy of an electron (effective mass \(0.19m_e\) in silicon) in a 30 nm box, in meV and as a temperature.
+<details><summary>Solution</summary><p>\(E_1 = \hbar^2\pi^2/(2m^*L^2) = (1.055\times10^{-34})^2\times9.87/(2\times0.19\times9.11\times10^{-31}\times9\times10^{-16})\approx3.5\times10^{-22}\) J \(\approx 2.2\) meV \(\approx 25\) K. Level spacings of a few meV keep a dot's orbital states frozen out at millikelvin temperatures.</p></details></li>
+<li>An oxide barrier has \(U - E = 2\) eV. By what factor does tunnelling change if the thickness increases by 0.1 nm? (Use the free-electron mass.)
+<details><summary>Solution</summary><p>\(\kappa = \sqrt{2\times9.11\times10^{-31}\times3.2\times10^{-19}}/1.055\times10^{-34}\approx7.2\) nm\(^{-1}\). Factor \(\ee^{-2\times7.2\times0.1} = \ee^{-1.44}\approx0.24\).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-q-qho"><h2><span class="secnum">4</span> The quantum harmonic oscillator</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Solve the harmonic oscillator algebraically with ladder operators, and know its spectrum and eigenstates.</li>
+<li>Quantise an LC circuit and compute its zero-point fluctuations.</li>
+<li>Understand coherent states, the displacement operator and why a classically driven oscillator stays coherent.</li>
+<li>Add a weak nonlinearity and see the spectrum become anharmonic, the first step towards a qubit.</li>
+</ul></div>
+
+<h3 id="sec-q-qho-ladder"><span class="secnum">4.1</span> Ladder operators</h3>
+<p>The Hamiltonian \(H = p^2/2m + \tfrac12m\omega^2x^2\) describes a mass on a spring, an LC circuit (with \(x\to\Phi\), \(p\to Q\), \(m\to C\)), a mode of a cavity, and the small oscillations of almost any system near equilibrium. Rather than solve a differential equation, define</p>
+<div class="eq" id="eq-q-ladder">$$ a = \sqrt{\frac{m\omega}{2\hbar}}\Big(x + \frac{\ii p}{m\omega}\Big), \qquad a^\dagger = \sqrt{\frac{m\omega}{2\hbar}}\Big(x - \frac{\ii p}{m\omega}\Big).  \tag{11}$$</div>
+<p>From \([x,p] = \ii\hbar\) follows \([a,a^\dagger] = 1\), and the Hamiltonian becomes</p>
+<div class="eq" id="eq-q-hqho">$$ H = \hbar\omega\Big(a^\dagger a + \frac12\Big) = \hbar\omega\Big(\hat n + \frac12\Big).  \tag{12}$$</div>
+<p>Everything else follows from the commutator. Using \([\hat n, a^\dagger] = a^\dagger\) and \([\hat n, a] = -a\): if \(\hat n\ket n = n\ket n\), then \(a^\dagger\ket n\) is an eigenvector with eigenvalue \(n+1\) and \(a\ket n\) one with \(n-1\). The operators climb and descend a ladder of states. Since \(\bra\psi\hat n\ket\psi = \|a\ket\psi\|^2\ge0\), the descent must stop at a state with \(a\ket0 = 0\), the ground state. Hence \(n = 0,1,2,\dots\), and with normalisation,</p>
+<div class="eq" id="eq-q-fock">$$ a^\dagger\ket n = \sqrt{n+1}\,\ket{n+1}, \qquad a\ket n = \sqrt n\,\ket{n-1}, \qquad E_n = \hbar\omega\Big(n+\frac12\Big).  \tag{13}$$</div>
+<p>The states \(\ket n\) are <b>number</b> or <b>Fock states</b>: \(n\) quanta of energy \(\hbar\omega\) each. For a mode of the electromagnetic field, the quanta are photons and \(a^\dagger\) creates one; for a mechanical oscillator they are phonons. The levels are equally spaced, which matters: a drive at \(\omega\) that excites \(0\to1\) also excites \(1\to2\), \(2\to3\) and so on, so a harmonic oscillator cannot be used as a qubit.</p>
+<p>The ground-state wavefunction follows from \(a\ket0 = 0\), a first-order differential equation whose solution is a Gaussian, \(\psi_0(x)\propto\ee^{-x^2/4x_{\mathrm{zpf}}^2}\), with <b>zero-point</b> width</p>
+<div class="eq" id="eq-q-xzpf">$$ x_{\mathrm{zpf}} = \sqrt{\frac{\hbar}{2m\omega}}, \qquad x = x_{\mathrm{zpf}}\,(a + a^\dagger), \qquad p = -\ii\,m\omega x_{\mathrm{zpf}}\,(a - a^\dagger).  \tag{14}$$</div>
+<p>Excited states are Gaussians times Hermite polynomials, with \(n\) nodes (<a class="xref" href="#fig-q-qho">Figure 1</a>).</p>
+<figure id="fig-q-qho">
+<img src="../figures/fig-q-qho.svg" alt="Harmonic potential with the first five energy levels and their wavefunctions.">
+<figcaption><b>Figure 1.</b> The harmonic potential, its equally spaced levels \(E_n = \hbar\omega(n+\tfrac12)\), and the wavefunctions \(\psi_n(x)\) drawn at the height of their energies (\(x\) in units of \(x_{\mathrm{zpf}}\)). Even the ground state is spread over \(\pm2x_{\mathrm{zpf}}\), and every state extends a little beyond the classical turning points.</figcaption>
+</figure>
+
+<h3 id="sec-q-qho-lc"><span class="secnum">4.2</span> Quantising an LC circuit</h3>
+<p>With \(x\to\Phi\), \(p\to Q\), \(m\to C\), \(\omega = 1/\sqrt{LC}\) and \(Z = \sqrt{L/C}\),</p>
+<div class="eq" id="eq-q-lc">$$ \Phi = \sqrt{\frac{\hbar Z}{2}}\,(a+a^\dagger), \qquad Q = -\ii\sqrt{\frac{\hbar}{2Z}}\,(a - a^\dagger), \qquad H = \hbar\omega\Big(a^\dagger a+\frac12\Big).  \tag{15}$$</div>
+<p>This is the result promised in Book 2 (<a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-zpf">Book 2 eq. (12)</a>). The voltage on the capacitor, \(V = Q/C\), fluctuates even in the ground state, with rms value \(V_{\mathrm{zpf}} = \omega\sqrt{\hbar Z/2}\): about 1 µV for a 5 GHz, 50 Ω resonator. That tiny voltage, acting on a qubit through a coupling capacitor, is what couples a qubit to a single photon in a resonator. The coupling strength \(g\) is proportional to it (Book 6), which is why high-impedance resonators couple more strongly.</p>
+
+<h3 id="sec-q-qho-coherent"><span class="secnum">4.3</span> Coherent states</h3>
+<p>Fock states have no well-defined phase: \(\bra n x\ket n = 0\) for all \(n\). The states that oscillate like a classical oscillator are the <b>coherent states</b>, eigenstates of the annihilation operator:</p>
+<div class="eq" id="eq-q-coherent">$$ a\ket\alpha = \alpha\ket\alpha, \qquad \ket\alpha = \ee^{-|\alpha|^2/2}\sum_{n=0}^\infty\frac{\alpha^n}{\sqrt{n!}}\ket n = D(\alpha)\ket0, \qquad D(\alpha) = \ee^{\alpha a^\dagger - \alpha^*a} .  \tag{16}$$</div>
+<p>A coherent state is the ground-state Gaussian displaced in phase space to \(\expval x = 2x_{\mathrm{zpf}}\Re\alpha\), \(\expval p = 2m\omega x_{\mathrm{zpf}}\Im\alpha\); the operator \(D(\alpha)\) is the <b>displacement operator</b>. It evolves as \(\ket{\alpha\ee^{-\ii\omega t}}\): the displaced Gaussian circles in phase space without spreading, exactly like the classical phasor of Book 1. Its photon-number distribution is Poisson with mean \(\bar n = |\alpha|^2\) and standard deviation \(\sqrt{\bar n}\), the shot noise of a laser or a microwave generator. A classical current or voltage source driving an oscillator (\(H_d = \hbar(\epsilon(t)a^\dagger + \epsilon^*(t)a)\)) always produces a coherent state from the vacuum. Producing Fock states, superpositions of them, or squeezed states requires a nonlinearity or a measurement (Book 5).</p>
+
+<h3 id="sec-q-qho-anharm"><span class="secnum">4.4</span> Adding a nonlinearity</h3>
+<p>Suppose the potential has a small quartic correction, as for a pendulum or a Josephson junction: \(V = \tfrac12m\omega^2x^2 - \lambda x^4\). Using <a class="xref" href="#eq-q-xzpf">(14)</a>, \(x^4 = x_{\mathrm{zpf}}^4(a+a^\dagger)^4\). To first order in \(\lambda\), only the terms with equal numbers of \(a\) and \(a^\dagger\) change the energies (Chapter 6 justifies this), and normal-ordering them gives</p>
+<div class="eq" id="eq-q-kerr">$$ H \approx \hbar\omega'\,a^\dagger a + \frac{\hbar\alpha}{2}\,a^\dagger a^\dagger aa, \qquad \hbar\alpha = -12\lambda x_{\mathrm{zpf}}^4 ,  \tag{17}$$</div>
+<p>where \(\omega'\) includes a small shift. The levels are now \(E_n = \hbar\omega'n + \tfrac{\hbar\alpha}{2}n(n-1)\): the spacing between \(n\) and \(n+1\) is \(\hbar(\omega' + n\alpha)\), decreasing by \(\alpha\) at each step. A drive at \(\omega'\) addresses \(0\leftrightarrow1\) but is detuned by \(\alpha\) from \(1\leftrightarrow2\). If \(|\alpha|\) is much larger than the drive strength and the linewidth, the lowest two levels form a qubit. This is the transmon in one equation (<a class="xref ext" href="../../index.html#eq-multi">Lab to Foundry eq. (5)</a>); the "Kerr" term \(a^\dagger a^\dagger aa\) is how the anharmonicity is written throughout the literature.</p>
+
+<div class="eda"><p>Every mode found by an electromagnetic eigensolver is quantised as in <a class="xref" href="#eq-q-lc">(15)</a>, and every junction adds a nonlinearity as in <a class="xref" href="#eq-q-kerr">(17)</a>. Energy-participation quantisation (<a class="xref ext" href="../../index.html#eq-epr">Lab to Foundry eq. (10)</a>) is the systematic version: it computes how much of each mode's zero-point flux crosses each junction and expands the cosine. The zero-point fluctuation is therefore a quantity a field solver can deliver.</p></div>
+
+<div class="exercises" id="ex-q-qho"><h4>Exercises</h4><ol>
+<li>Prove \([a,a^\dagger]=1\) from \([x,p] = \ii\hbar\) and <a class="xref" href="#eq-q-ladder">(11)</a>.
+<details><summary>Solution</summary><p>Only the cross terms survive: \([a,a^\dagger] = \frac{m\omega}{2\hbar}\Big(-\frac{\ii}{m\omega}[x,p] + \frac{\ii}{m\omega}[p,x]\Big) = \frac{m\omega}{2\hbar}\Big(\frac{\hbar}{m\omega} + \frac{\hbar}{m\omega}\Big) = 1\).</p></details></li>
+<li>Compute \(\bra n x^2\ket n\) and show that the potential energy is half the total energy in every Fock state.
+<details><summary>Solution</summary><p>\(x^2 = x_{\mathrm{zpf}}^2(a^2 + a^{\dagger2} + aa^\dagger + a^\dagger a)\), and \(\bra n(aa^\dagger + a^\dagger a)\ket n = 2n+1\), so \(\expval{x^2} = x_{\mathrm{zpf}}^2(2n+1)\). Then \(\tfrac12m\omega^2\expval{x^2} = \tfrac12m\omega^2\frac{\hbar}{2m\omega}(2n+1) = \tfrac12\hbar\omega(n+\tfrac12)\), half of \(E_n\).</p></details></li>
+<li>A coherent state has \(\bar n = 4\). What is the probability of finding exactly 0 photons, and exactly 4?
+<details><summary>Solution</summary><p>Poisson: \(p(0) = \ee^{-4}\approx0.018\), \(p(4) = \ee^{-4}4^4/4! \approx 0.195\).</p></details></li>
+<li>Compute \(V_{\mathrm{zpf}}\) for a 6 GHz resonator with \(Z = 50\) Ω and with \(Z = 2\) kΩ.
+<details><summary>Solution</summary><p>\(V_{\mathrm{zpf}} = \omega\sqrt{\hbar Z/2}\). With \(\omega = 3.77\times10^{10}\) s\(^{-1}\): for 50 Ω, \(\sqrt{1.055\times10^{-34}\times25} = 5.1\times10^{-17}\), so \(V\approx1.9\) µV. For 2 kΩ, \(\sqrt{40}\) times larger, about 12 µV.</p></details></li>
+<li>From <a class="xref" href="#eq-q-kerr">(17)</a>, list the transition frequencies \(0\to1\), \(1\to2\), \(2\to3\) for \(\omega'/2\pi = 5\) GHz and \(\alpha/2\pi = -250\) MHz.
+<details><summary>Solution</summary><p>\(E_{n+1}-E_n = \hbar(\omega' + n\alpha)\): 5.00, 4.75 and 4.50 GHz.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-q-spin"><h2><span class="secnum">5</span> Spin, two-level systems and Rabi oscillations</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Describe spin-½ and any two-level system with Pauli operators, and picture its dynamics as rotation on the Bloch sphere.</li>
+<li>Solve the driven two-level system: rotating frame, rotating-wave approximation and the Rabi formula.</li>
+<li>Understand Ramsey interference as a frequency measurement, and how pulse area sets a gate.</li>
+</ul></div>
+
+<h3 id="sec-q-spin-pauli"><span class="secnum">5.1</span> Two-level Hamiltonians and precession</h3>
+<p>An electron's spin has magnetic moment \(\boldsymbol\mu = -\tfrac{g\mu_B}{\hbar}\mathbf S\) with \(\mathbf S = \tfrac\hbar2\boldsymbol\sigma\) and \(g\approx2\). In a field \(\mathbf B\) its energy is \(H = -\boldsymbol\mu\cdot\mathbf B = \tfrac{g\mu_B}{2}\mathbf B\cdot\boldsymbol\sigma\). More generally, any Hermitian \(2\times2\) Hamiltonian can be written (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-op-pauli">Book 1 §3.5</a>)</p>
+<div class="eq" id="eq-q-h2">$$ H = \frac{\hbar}{2}\,\boldsymbol\Omega\cdot\boldsymbol\sigma \quad(\text{plus a multiple of } I),  \tag{18}$$</div>
+<p>with a real vector \(\boldsymbol\Omega\). By <a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-paulirot">Book 1 eq. (18)</a>, \(U(t) = \ee^{-\ii t\,\boldsymbol\Omega\cdot\boldsymbol\sigma/2}\) is a rotation by angle \(|\boldsymbol\Omega|t\) about the axis \(\hat{\boldsymbol\Omega}\). In the Heisenberg picture the Bloch vector obeys</p>
+<div class="eq" id="eq-q-precess">$$ \frac{\dd\mathbf r}{\dd t} = \boldsymbol\Omega\times\mathbf r ,  \tag{19}$$</div>
+<p>the same equation as a classical magnetic moment precessing in a field (Larmor precession). For an electron \(|\boldsymbol\Omega|/2\pi = g\mu_BB/h\approx28\) GHz per tesla, the frequency of a silicon spin qubit in a field of a fraction of a tesla. For a superconducting qubit the "field" is not magnetic, but the mathematics is identical: the two lowest levels with splitting \(\hbar\omega_q\) give \(H = -\tfrac{\hbar\omega_q}{2}Z\) (with \(\ket0\) the lower level), and a superposition precesses about \(z\) at \(\omega_q\).</p>
+
+<h3 id="sec-q-spin-drive"><span class="secnum">5.2</span> The driven qubit</h3>
+<p>To control a qubit we drive it near its frequency. For a superconducting qubit, a microwave voltage on a capacitively coupled line adds a term proportional to the charge, which in the two-level subspace is proportional to \(X\):</p>
+<div class="eq" id="eq-q-drive">$$ H(t) = -\frac{\hbar\omega_q}{2}Z + \hbar\Omega_R\cos(\omega_dt + \phi)\,X .  \tag{20}$$</div>
+<p>\(\Omega_R\) is the <b>Rabi frequency</b>, proportional to the drive amplitude, and \(\omega_d\) the drive frequency. Move to a frame rotating at \(\omega_d\) about \(z\) (the interaction picture with \(H_0 = -\tfrac{\hbar\omega_d}{2}Z\)). Using \(\ee^{-\ii\omega_dtZ/2}X\ee^{\ii\omega_dtZ/2} = X\cos\omega_dt + Y\sin\omega_dt\) and expanding the cosine, the drive term contains pieces oscillating at \(\omega_d-\omega_d = 0\) and at \(2\omega_d\). Dropping the fast terms is the <b>rotating-wave approximation</b> (RWA), valid when \(\Omega_R\ll\omega_d\) (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-complex-euler">Book 1 §1.2</a>). The result is time-independent:</p>
+<div class="eq" id="eq-q-rwa">$$ \tilde H = -\frac{\hbar\Delta}{2}Z + \frac{\hbar\Omega_R}{2}\big(\cos\phi\,X + \sin\phi\,Y\big), \qquad \Delta = \omega_q - \omega_d .  \tag{21}$$</div>
+<p>In the rotating frame the qubit sees a static effective field with a \(z\) component equal to the detuning and an \(xy\) component equal to the Rabi frequency, pointing in a direction set by the drive phase \(\phi\). Its Bloch vector precesses about this field at the <b>generalised Rabi frequency</b> \(\Omega = \sqrt{\Omega_R^2+\Delta^2}\). Starting in \(\ket0\), the probability of finding \(\ket1\) is the <b>Rabi formula</b>:</p>
+<div class="eq" id="eq-q-rabi">$$ P_1(t) = \frac{\Omega_R^2}{\Omega_R^2+\Delta^2}\,\sin^2\!\Big(\frac{\sqrt{\Omega_R^2+\Delta^2}}{2}\,t\Big).  \tag{22}$$</div>
+<p>On resonance the population oscillates completely between \(\ket0\) and \(\ket1\); off resonance the oscillation is faster but incomplete (<a class="xref" href="#fig-q-rabi">Figure 2</a>). This is the quantum counterpart of the energy exchange between coupled oscillators in <a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-osc-coupled">Book 2 §3.2</a>, with the same Lorentzian envelope \(\Omega_R^2/(\Omega_R^2+\Delta^2)\).</p>
+<figure id="fig-q-rabi">
+<img src="../figures/fig-q-rabi.svg" alt="Excited-state probability versus time for detunings of zero, one and two Rabi frequencies.">
+<figcaption><b>Figure 2.</b> Rabi oscillations from <a class="xref" href="#eq-q-rabi">(22)</a> for detuning \(\Delta = 0\), \(\Omega_R\) and \(2\Omega_R\). A resonant pulse of duration \(\pi/\Omega_R\) (dashed line) inverts the qubit; detuning reduces the contrast and speeds up the oscillation.</figcaption>
+</figure>
+
+<h3 id="sec-q-spin-gates"><span class="secnum">5.3</span> Pulses as rotations</h3>
+<p>On resonance (\(\Delta=0\)) a pulse of constant amplitude for a time \(t\) rotates the Bloch vector by the angle \(\theta = \Omega_Rt\) about an axis in the \(xy\) plane at angle \(\phi\). For a shaped envelope \(\Omega_R(t)\) the rotation angle is the <b>pulse area</b> \(\theta = \int\Omega_R(t)\,\dd t\). A "\(\pi\) pulse" (\(\theta = \pi\)) about \(x\) is the gate \(X\) up to phase; a "\(\pi/2\) pulse" creates an equal superposition. Choosing \(\phi = 0\) or \(\pi/2\) selects rotations about \(x\) or \(y\). Rotations about \(z\) can be done "virtually" by shifting the phase of all subsequent pulses, which is free and exact. These three facts make arbitrary single-qubit gates (Book 4).</p>
+<p>The approximations above hide two engineering problems. First, the RWA neglects the counter-rotating terms, which shift the qubit frequency slightly (the Bloch–Siegert shift, \(\approx\Omega_R^2/4\omega_q\)). Second, a real transmon has a third level only \(|\alpha|\) below the drive, and a fast pulse leaks into it (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-fourier-transform">Book 1 §6.2</a>). Pulse shaping (DRAG) addresses the second; calibration absorbs the first (Book 6).</p>
+
+<h3 id="sec-q-spin-ramsey"><span class="secnum">5.4</span> Ramsey interference</h3>
+<p>Apply a \(\pi/2\) pulse, wait a time \(\tau\) with no drive, and apply a second \(\pi/2\) pulse. In the rotating frame, during the wait the Bloch vector precesses about \(z\) by the angle \(\Delta\tau\). The second pulse converts that phase into population:</p>
+<div class="eq" id="eq-q-ramsey">$$ P_1(\tau) = \frac{1+\cos(\Delta\tau)}{2} .  \tag{23}$$</div>
+<p>The fringes oscillate at the detuning, so a Ramsey experiment measures the qubit frequency with a precision that improves with the longest usable \(\tau\). It is the principle of atomic clocks and the standard way to calibrate qubit frequencies. Its fringes decay because of dephasing, which Chapter 8 analyses; the decay time is \(T_2^*\).</p>
+
+<div class="eda"><p>Calibration software performs Rabi and Ramsey experiments on every qubit, fits <a class="xref" href="#eq-q-rabi">(22)</a> and <a class="xref" href="#eq-q-ramsey">(23)</a>, and updates the drive amplitudes and frequencies. The number of such experiments grows with qubit count and drift, and it is one of the review's arguments for designs that need less calibration (<a class="xref ext" href="../../index.html#sec-test-cal">Lab to Foundry §7.3</a>).</p></div>
+
+<div class="exercises" id="ex-q-spin"><h4>Exercises</h4><ol>
+<li>An electron spin in silicon (\(g = 2\)) sits in a 0.5 T field. What is its qubit frequency?
+<details><summary>Solution</summary><p>\(f = g\mu_BB/h = 2\times9.274\times10^{-24}\times0.5/6.626\times10^{-34}\approx14\) GHz.</p></details></li>
+<li>A qubit has \(\Omega_R/2\pi = 25\) MHz. How long is a \(\pi\) pulse? If the drive is detuned by 5 MHz, what is the maximum excited population?
+<details><summary>Solution</summary><p>\(t_\pi = \pi/\Omega_R = 1/(2\times25\,\mathrm{MHz}) = 20\) ns. Max population \(\Omega_R^2/(\Omega_R^2+\Delta^2) = 625/650 = 0.96\). A 5 MHz miscalibration costs 4% of the population, which is why frequencies must be tracked to well below 1 MHz.</p></details></li>
+<li>Show that the rotating-frame Hamiltonian <a class="xref" href="#eq-q-rwa">(21)</a> with \(\Delta = 0\), \(\phi = 0\), applied for time \(t = \pi/\Omega_R\), gives \(U = -\ii X\).
+<details><summary>Solution</summary><p>\(U = \ee^{-\ii(\Omega_Rt/2)X} = \cos(\pi/2) I - \ii\sin(\pi/2)X = -\ii X\).</p></details></li>
+<li>In a Ramsey experiment the fringe period is 400 ns. What is the detuning between drive and qubit? Can you tell its sign from this experiment alone?
+<details><summary>Solution</summary><p>\(|\Delta|/2\pi = 1/400\,\mathrm{ns} = 2.5\) MHz. \(\cos(\Delta\tau)\) is even in \(\Delta\), so the sign is ambiguous; a second Ramsey experiment with a known deliberate detuning, or a phase advance on the second pulse, resolves it.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-q-pert"><h2><span class="secnum">6</span> Approximation methods: perturbation theory and effective Hamiltonians</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Compute first- and second-order energy shifts, and handle degenerate levels.</li>
+<li>Derive effective Hamiltonians by eliminating far-detuned states (the Schrieffer–Wolff idea), including the dispersive shift.</li>
+<li>Use time-dependent perturbation theory and Fermi's golden rule to compute transition rates from a noise spectrum.</li>
+<li>Know the variational principle and when numerical diagonalisation is better.</li>
+</ul></div>
+
+<h3 id="sec-q-pert-nd"><span class="secnum">6.1</span> Non-degenerate perturbation theory</h3>
+<p>Few Hamiltonians can be diagonalised exactly. Perturbation theory treats \(H = H_0 + \lambda V\), where \(H_0\) has known eigenstates \(\ket{n}\) with energies \(E_n\), and \(\lambda V\) is small. Expanding eigenvalues and eigenvectors in powers of \(\lambda\) and matching orders gives, for a non-degenerate level,</p>
+<div class="eq" id="eq-q-pt">$$ E_n' = E_n + \bra nV\ket n + \sum_{m\ne n}\frac{|\bra mV\ket n|^2}{E_n - E_m} + O(V^3), \qquad \ket{n'} = \ket n + \sum_{m\ne n}\frac{\bra mV\ket n}{E_n-E_m}\ket m + \dots  \tag{24}$$</div>
+<p>(setting \(\lambda=1\)). The first-order shift is the average of the perturbation in the unperturbed state. The second-order shift is a sum over virtual transitions to other levels, each weighted by its matrix element squared over the energy denominator. Two rules of thumb follow. Levels <i>repel</i>: a level is pushed down by everything above it and up by everything below it. And the expansion is valid only when \(|\bra mV\ket n|\ll|E_n-E_m|\); when two coupled levels approach each other, the second-order formula diverges and must be replaced by exact diagonalisation of the nearly degenerate pair. You saw exactly this structure in the avoided crossing of <a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-op-eigen">Book 1 §3.3</a>.</p>
+
+<h3 id="sec-q-pert-deg"><span class="secnum">6.2</span> Degenerate levels</h3>
+<p>If several states share an energy, the denominators vanish. The fix is to first diagonalise \(V\) within the degenerate subspace: the "right" zeroth-order states are those in which \(V\) is diagonal, and the first-order shifts are its eigenvalues there. Two identical qubits coupled by \(g(\sigma_+\sigma_-' + \sigma_-\sigma_+')\) have degenerate states \(\ket{01}\) and \(\ket{10}\); the coupling splits them into \((\ket{01}\pm\ket{10})/\sqrt2\) at \(\pm g\). That splitting is what an iSWAP-type gate uses.</p>
+
+<h3 id="sec-q-pert-sw"><span class="secnum">6.3</span> Effective Hamiltonians and the dispersive regime</h3>
+<p>Often we care only about a low-energy subspace (the two qubit levels, or the states with no excitation in a resonator), and other states are far away. We want an <b>effective Hamiltonian</b> acting only on the subspace that includes, to second order, the effect of virtual excursions outside it. The systematic method is the <b>Schrieffer–Wolff transformation</b> <span class="cite">[<a href="#ref-schrieffer1966">2</a>, <a href="#ref-bravyi2011sw">3</a>]</span>: find an anti-Hermitian \(S\) such that \(\ee^{S}H\ee^{-S}\) has no matrix elements between the subspace and the rest, to the desired order. Using the Baker–Campbell–Hausdorff expansion (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-bch">Book 1 eq. (19)</a>), if \(V\) couples the subspaces and \([S, H_0] = -V\), then</p>
+<div class="eq" id="eq-q-sw">$$ H_{\mathrm{eff}} = H_0 + \tfrac12[S, V] + O(V^3) .  \tag{25}$$</div>
+<p>The result is the matrix version of the second-order formula in <a class="xref" href="#eq-q-pt">(24)</a>.</p>
+<div class="example"><p><b>Worked example: the dispersive shift.</b> A qubit (frequency \(\omega_q\)) couples to a resonator (frequency \(\omega_r\)) by the Jaynes–Cummings interaction \(g(a^\dagger\sigma_- + a\sigma_+)\), and they are far detuned, \(|\Delta| = |\omega_q-\omega_r|\gg g\). The state \(\ket{1_q, n}\) (qubit excited, \(n\) photons) couples to \(\ket{0_q, n+1}\) with matrix element \(g\sqrt{n+1}\) and energy difference \(\hbar\Delta\); the state \(\ket{0_q,n}\) couples to \(\ket{1_q, n-1}\) with \(g\sqrt n\) and difference \(-\hbar\Delta\). Second-order shifts are \(+\hbar g^2(n+1)/\Delta\) and \(-\hbar g^2n/\Delta\) respectively. Collecting terms,</p>
+<div class="eq" id="eq-q-dispersive">$$ H_{\mathrm{eff}} = \hbar\Big(\omega_r + \chi\,\sigma_z\Big)a^\dagger a + \frac{\hbar}{2}\big(\omega_q + \chi\big)\sigma_z, \qquad \chi = \frac{g^2}{\Delta},  \tag{26}$$</div>
+<p>with \(\sigma_z = +1\) for the excited qubit. The resonator frequency depends on the qubit state: \(\omega_r\pm\chi\). Probing the resonator therefore measures the qubit without exchanging energy with it, the basis of dispersive readout. The qubit frequency also depends on the photon number, \(\omega_q + 2\chi n\) (the <b>AC Stark shift</b>), so photons in the resonator dephase the qubit. For a transmon, whose third level is close, the same calculation including that level gives the review's <a class="xref ext" href="../../index.html#eq-chi">Lab to Foundry eq. (6)</a>, with the factor \(\alpha/(\Delta+\alpha)\).</p></div>
+
+<h3 id="sec-q-pert-td"><span class="secnum">6.4</span> Time-dependent perturbation theory</h3>
+<p>Now let a weak perturbation \(V(t)\) act on a system initially in \(\ket i\). In the interaction picture, to first order, the amplitude to find the system in \(\ket f\) at time \(t\) is</p>
+<div class="eq" id="eq-q-tdpt">$$ c_f(t) = -\frac{\ii}{\hbar}\int_0^t \bra fV(t')\ket i\,\ee^{\ii\omega_{fi}t'}\,\dd t', \qquad \omega_{fi} = \frac{E_f - E_i}{\hbar} .  \tag{27}$$</div>
+<p>The transition probability \(|c_f|^2\) is the squared Fourier transform of the perturbation at the transition frequency. A perturbation with no spectral content at \(\omega_{fi}\) cannot drive the transition, which is why pulse spectra matter (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-fourier-transform">Book 1 §6.2</a>).</p>
+
+<h3 id="sec-q-pert-golden"><span class="secnum">6.5</span> Fermi's golden rule and noise-induced transitions</h3>
+<p>If the final states form a continuum (a lossy line, the phonons of a crystal, the modes of free space), the probability grows linearly in time and defines a <b>rate</b>. For a constant coupling to a continuum of density \(\rho(E_f)\):</p>
+<div class="eq" id="eq-q-golden">$$ \Gamma_{i\to f} = \frac{2\pi}{\hbar}\,|\bra fV\ket i|^2\,\rho(E_f) .  \tag{28}$$</div>
+<p>An equivalent form is more useful for engineering. Suppose a qubit couples to a fluctuating classical or quantum quantity \(\lambda(t)\) through \(V = \hbar\lambda(t)\,X/2\) (transverse noise). Averaging \(|c_f|^2\) over the noise, using the autocorrelation function and the Wiener–Khinchin theorem (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-psd">Book 1 eq. (34)</a>), gives</p>
+<div class="eq" id="eq-q-gamma1">$$ \Gamma_{\downarrow} = \frac14\,S_\lambda(+\omega_q), \qquad \Gamma_{\uparrow} = \frac14\,S_\lambda(-\omega_q),  \tag{29}$$</div>
+<p>with \(S_\lambda\) the two-sided spectral density (quantum noise distinguishes positive and negative frequencies: the environment can absorb energy from the qubit or give energy to it). The qubit is a spectrum analyser: its relaxation rate measures the noise at its own frequency. For a quantum environment in equilibrium, \(S(-\omega)/S(\omega) = \ee^{-\hbar\omega/k_BT}\), which guarantees that the qubit relaxes to the Boltzmann distribution. Combined with the fluctuation–dissipation theorem (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-th-johnson">Book 2 §8.3</a>), <a class="xref" href="#eq-q-gamma1">(29)</a> lets a classical circuit simulation predict \(T_1\): a qubit of capacitance \(C\) seeing an admittance \(Y(\omega)\) relaxes at \(\Gamma_1\approx\Re Y(\omega_q)/C\). Purcell decay through a readout resonator and loss through a drive line are both computed this way.</p>
+
+<h3 id="sec-q-pert-var"><span class="secnum">6.6</span> The variational method and numerics</h3>
+<p>For any normalised trial state, \(\bra\psi H\ket\psi\ge E_0\). Minimising over a family of trial states gives an upper bound on the ground-state energy that is often accurate. The variational principle underlies the variational quantum eigensolver of Book 4 and many computational chemistry methods. For small systems, though, the most reliable method is direct: represent \(H\) in a truncated basis (Fock states for oscillators, charge states for a transmon) and diagonalise numerically. This is what scqubits and similar packages do, and it is exact up to truncation error, which can be checked by enlarging the basis.</p>
+
+<div class="eda"><p>Effective Hamiltonians are the language in which device parameters are specified: \(\omega_q\), \(\alpha\), \(g\), \(\chi\) and \(\zeta\) are all coefficients of a Schrieffer–Wolff expansion. Their formulas (<a class="xref ext" href="../../index.html#eq-chi">Lab to Foundry eq. (6)</a>, <a class="xref ext" href="../../index.html#eq-zz">Lab to Foundry eq. (7)</a>) assume particular regimes; a design tool that applies them outside their validity (for example near a collision, where denominators are small) gives wrong answers silently. Checking against exact diagonalisation is part of sign-off.</p></div>
+
+<div class="exercises" id="ex-q-pert"><h4>Exercises</h4><ol>
+<li>For \(H = \begin{pmatrix}0 & g\\ g & \Delta\end{pmatrix}\) with \(g\ll\Delta\), compute the second-order shift of the lower level and compare with the exact eigenvalue.
+<details><summary>Solution</summary><p>Second order: \(g^2/(0-\Delta) = -g^2/\Delta\). Exact: \(\tfrac\Delta2 - \tfrac12\sqrt{\Delta^2+4g^2}\approx -g^2/\Delta + g^4/\Delta^3\). They agree to leading order.</p></details></li>
+<li>Evaluate \(\chi = g^2/\Delta\) for \(g/2\pi = 100\) MHz and \(\Delta/2\pi = -1.5\) GHz, and the transmon-corrected value with \(\alpha/2\pi = -250\) MHz using \(\chi = \frac{g^2}{\Delta}\frac{\alpha}{\Delta+\alpha}\).
+<details><summary>Solution</summary><p>Two-level: \(10^4/(-1500) = -6.7\) MHz. Transmon: multiply by \(\alpha/(\Delta+\alpha) = -250/(-1750) = 0.143\), giving \(-0.95\) MHz. The third level reduces the dispersive shift sevenfold; using the two-level formula for a transmon is a common mistake.</p></details></li>
+<li>A constant perturbation \(V\) is switched on at \(t=0\). Using <a class="xref" href="#eq-q-tdpt">(27)</a>, show \(|c_f(t)|^2 = \frac{4|V_{fi}|^2}{\hbar^2}\frac{\sin^2(\omega_{fi}t/2)}{\omega_{fi}^2}\).
+<details><summary>Solution</summary><p>\(c_f = -\frac{\ii V_{fi}}{\hbar}\frac{\ee^{\ii\omega_{fi}t}-1}{\ii\omega_{fi}}\), and \(|\ee^{\ii\omega t}-1|^2 = 4\sin^2(\omega t/2)\). For large \(t\), \(\sin^2(\omega t/2)/\omega^2\to\frac{\pi t}{2}\delta(\omega)\), which gives the golden rule.</p></details></li>
+<li>A transmon (\(C = 80\) fF) at 5 GHz sees a 50 Ω drive line through a coupling capacitor \(C_c = 0.05\) fF. With \(\Re Y\approx\omega^2C_c^2R\) for small \(C_c\), estimate the \(T_1\) limit from the drive line.
+<details><summary>Solution</summary><p>\(\omega = 3.14\times10^{10}\). \(\Re Y \approx (3.14\times10^{10})^2(5\times10^{-17})^2\times50 = 9.9\times10^{20}\times2.5\times10^{-33}\times50\approx1.2\times10^{-10}\) S. \(\Gamma_1 = \Re Y/C\approx1.5\times10^3\) s\(^{-1}\), so \(T_1\approx0.65\) ms. Drive lines must be coupled weakly, at the cost of needing more drive power.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-q-composite"><h2><span class="secnum">7</span> Density matrices, composite systems and entanglement</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Describe pure and mixed states with the density matrix, and compute purity and the Bloch vector of a mixed state.</li>
+<li>Use the partial trace to describe one part of a composite system.</li>
+<li>Recognise entanglement, quantify it for pure states, and understand why it is not a means of signalling.</li>
+<li>Derive the CHSH inequality and its quantum violation.</li>
+</ul></div>
+
+<h3 id="sec-q-comp-rho"><span class="secnum">7.1</span> The density matrix</h3>
+<p>Postulate 1 describes a system whose state we know exactly. In practice we are often uncertain: a qubit prepared with a thermal population, a photon from a source that sometimes fails, a qubit entangled with an environment we cannot see. If the system is in state \(\ket{\psi_k}\) with probability \(p_k\), all measurement predictions follow from the <b>density matrix</b></p>
+<div class="eq" id="eq-q-rho">$$ \rho = \sum_k p_k\,\ketbra{\psi_k}{\psi_k}, \qquad \expval A = \Tr(\rho A), \qquad p(a) = \Tr(\rho P_a) .  \tag{30}$$</div>
+<p>(Check: for a single pure state \(\Tr(\ketbra\psi\psi A) = \bra\psi A\ket\psi\).) Every density matrix is Hermitian, positive semi-definite and has trace 1, and every such matrix is a valid state. The Schrödinger equation becomes the <b>von Neumann equation</b> \(\dot\rho = -\tfrac{\ii}{\hbar}[H,\rho]\), so \(\rho(t) = U\rho U^\dagger\).</p>
+<p>A state is <b>pure</b> if \(\rho = \ketbra\psi\psi\), which is equivalent to \(\Tr\rho^2 = 1\); otherwise it is <b>mixed</b>, with \(\Tr\rho^2 \lt 1\). The <b>purity</b> \(\Tr\rho^2\) ranges from \(1/d\) (the maximally mixed state \(I/d\)) to 1. The diagonal elements of \(\rho\) in a basis are populations; the off-diagonal elements are <b>coherences</b>, which carry phase information. The two preparations of <a class="xref" href="#sec-q-post-mixture">§2.5</a> differ exactly there:</p>
+\[ \rho_{\ket+} = \frac12\begin{pmatrix}1&1\\1&1\end{pmatrix}, \qquad \rho_{\mathrm{mix}} = \frac12\begin{pmatrix}1&0\\0&1\end{pmatrix}. \]
+<p>A qubit density matrix can always be written \(\rho = \tfrac12(I + \mathbf r\cdot\boldsymbol\sigma)\) with \(|\mathbf r|\le1\). Pure states lie on the Bloch sphere, mixed states inside it, and the maximally mixed state at the centre. Decoherence (Chapter 8) shrinks the Bloch vector.</p>
+<p>The ensemble decomposition of a mixed \(\rho\) is not unique: an equal mixture of \(\ket0,\ket1\) and an equal mixture of \(\ket+,\ket-\) give the same \(I/2\) and are physically indistinguishable. Only \(\rho\) matters.</p>
+
+<h3 id="sec-q-comp-reduced"><span class="secnum">7.2</span> Subsystems and the partial trace</h3>
+<p>For a state \(\rho_{AB}\) of two systems, everything that can be measured on \(A\) alone is determined by the <b>reduced density matrix</b> \(\rho_A = \Tr_B\rho_{AB}\) (<a class="xref ext" href="../../foundations/mathematics/index.html#eq-m-ptrace">Book 1 eq. (23)</a>), because \(\Tr(\rho_{AB}(A\otimes I)) = \Tr(\rho_AA)\). For a product state \(\rho_A\otimes\rho_B\), the reduced state is just \(\rho_A\). For the Bell state \(\ket{\Phi^+} = (\ket{00}+\ket{11})/\sqrt2\), the global state is pure, yet \(\rho_A = I/2\) is maximally mixed. The whole is known exactly while each part is completely random: this is <b>entanglement</b>.</p>
+<p>This observation explains decoherence. If a qubit interacts with an environment and they become entangled, the qubit alone is described by a mixed reduced state even though the joint state is pure. Nothing "random" was added; information about the qubit's phase has moved into correlations with the environment, where we cannot access it.</p>
+
+<h3 id="sec-q-comp-ent"><span class="secnum">7.3</span> Entanglement</h3>
+<p>A pure state of \(AB\) is <b>entangled</b> if it is not a product \(\ket a\otimes\ket b\). Its <b>Schmidt decomposition</b> (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-tensor-ent">Book 1 §4.3</a>) \(\ket\psi = \sum_k s_k\ket{a_k}\ket{b_k}\) gives the eigenvalues \(s_k^2\) of both reduced states, and the <b>entanglement entropy</b></p>
+<div class="eq" id="eq-q-entropy">$$ S(\rho_A) = -\Tr(\rho_A\log_2\rho_A) = -\sum_k s_k^2\log_2 s_k^2  \tag{31}$$</div>
+<p>quantifies the entanglement: 0 for product states, 1 bit (ebit) for a Bell pair. The four Bell states</p>
+<div class="eq" id="eq-q-bellstates">$$ \ket{\Phi^\pm} = \frac{\ket{00}\pm\ket{11}}{\sqrt2}, \qquad \ket{\Psi^\pm} = \frac{\ket{01}\pm\ket{10}}{\sqrt2}  \tag{32}$$</div>
+<p>form an orthonormal basis of two qubits, all maximally entangled. They are the resource for teleportation and many error-correction circuits (Book 4). For mixed states, deciding whether a state is entangled is harder; for two qubits the <b>concurrence</b> or the Peres–Horodecki test (a state is entangled if its partial transpose has a negative eigenvalue) settles it.</p>
+<p>Entanglement does not allow signalling. Whatever Bob does to his half of an entangled pair, Alice's reduced state \(\rho_A\) is unchanged, so her measurement statistics cannot reveal his choice. Correlations appear only when they compare notes over a classical channel.</p>
+
+<h3 id="sec-q-comp-bell"><span class="secnum">7.4</span> Bell's inequality</h3>
+<p>Could entanglement be explained by hidden classical variables, as if each pair carried a pre-arranged list of answers? Bell showed that it cannot <span class="cite">[<a href="#ref-bell1964">4</a>]</span>. In the CHSH form <span class="cite">[<a href="#ref-chsh1969">5</a>]</span>, Alice measures one of two observables \(A_0, A_1\) and Bob one of \(B_0,B_1\), each with outcomes \(\pm1\). Any local hidden-variable model satisfies</p>
+<div class="eq" id="eq-q-chsh">$$ \big|\expval{A_0B_0} + \expval{A_0B_1} + \expval{A_1B_0} - \expval{A_1B_1}\big| \le 2 ,  \tag{33}$$</div>
+<p>because for any fixed values \(a_i, b_j = \pm1\), \(a_0(b_0+b_1) + a_1(b_0-b_1) = \pm2\). Quantum mechanics with the state \(\ket{\Phi^+}\), \(A_0 = Z\), \(A_1 = X\), \(B_{0,1} = (Z\pm X)/\sqrt2\), gives \(2\sqrt2\approx2.83\). Experiments since the 1980s, and loophole-free ones since 2015, observe the quantum value. Superconducting qubits violate CHSH routinely, and the size of the violation is a benchmark of two-qubit gate and readout quality.</p>
+
+<h3 id="sec-q-comp-fid"><span class="secnum">7.5</span> Distance between states</h3>
+<p>How close is a prepared state \(\rho\) to the target \(\ket\psi\)? The <b>fidelity</b> \(F = \bra\psi\rho\ket\psi\) is the probability that a test for \(\ket\psi\) succeeds; for two mixed states \(F(\rho,\sigma) = (\Tr\sqrt{\sqrt\rho\sigma\sqrt\rho})^2\). The <b>trace distance</b> \(D = \tfrac12\Tr|\rho-\sigma|\) is the maximum difference in probability that any measurement can show between the two states. For qubits, \(D\) is half the Euclidean distance between Bloch vectors. Book 4 extends these to gates.</p>
+
+<div class="eda"><p>Simulating noisy qubits means evolving density matrices, whose size is the square of the state vector's: \(4^n\) entries for \(n\) qubits. That is why device-level noise simulation is limited to a handful of qubits, and why error-correction tools use the restricted but efficient Pauli-channel description of Book 4 (<a class="xref ext" href="../../index.html#sec-qec-dem">Lab to Foundry §9.4</a>).</p></div>
+
+<div class="exercises" id="ex-q-composite"><h4>Exercises</h4><ol>
+<li>A qubit is \(\ket0\) with probability 0.9 and \(\ket+\) with probability 0.1. Find \(\rho\), its Bloch vector and its purity.
+<details><summary>Solution</summary><p>\(\rho = 0.9\begin{pmatrix}1&0\\0&0\end{pmatrix} + 0.05\begin{pmatrix}1&1\\1&1\end{pmatrix} = \begin{pmatrix}0.95 & 0.05\\0.05&0.05\end{pmatrix}\). \(r_x = 2\Re\rho_{01} = 0.1\), \(r_y = 0\), \(r_z = \rho_{00}-\rho_{11} = 0.9\). Purity \(\tfrac12(1+|\mathbf r|^2) = \tfrac12(1+0.82) = 0.91\).</p></details></li>
+<li>Show that \(\Tr_B\ketbra{\Psi^-}{\Psi^-} = I/2\).
+<details><summary>Solution</summary><p>\(\ketbra{\Psi^-}{\Psi^-} = \tfrac12(\ketbra{01}{01} - \ketbra{01}{10} - \ketbra{10}{01} + \ketbra{10}{10})\). The partial trace keeps terms with equal \(B\) labels: \(\tfrac12(\ketbra00 + \ketbra11)\).</p></details></li>
+<li>Compute the entanglement entropy of \(\ket\psi = \sqrt{0.9}\ket{00} + \sqrt{0.1}\ket{11}\).
+<details><summary>Solution</summary><p>Schmidt coefficients squared: 0.9 and 0.1. \(S = -0.9\log_20.9 - 0.1\log_20.1 = 0.137 + 0.332 = 0.47\) ebits.</p></details></li>
+<li>Verify the quantum CHSH value \(2\sqrt2\) using \(\bra{\Phi^+}(P\otimes Q)\ket{\Phi^+} = \tfrac12\Tr(P^{\mathsf T}Q)\) for real Pauli combinations.
+<details><summary>Solution</summary><p>For real symmetric \(P,Q\), \(\expval{P\otimes Q} = \tfrac12\Tr(PQ)\). With \(B_\pm = (Z\pm X)/\sqrt2\): \(\expval{ZB_\pm} = \tfrac12\Tr(Z(Z\pm X))/\sqrt2 = 1/\sqrt2\); \(\expval{XB_\pm} = \pm1/\sqrt2\). Sum: \(1/\sqrt2 + 1/\sqrt2 + 1/\sqrt2 - (-1/\sqrt2) = 4/\sqrt2 = 2\sqrt2\).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-q-open"><h2><span class="secnum">8</span> Open quantum systems and decoherence</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Describe noisy evolution with quantum channels and Kraus operators.</li>
+<li>Write and solve the Lindblad master equation for relaxation and dephasing, and define \(T_1\), \(T_\varphi\), \(T_2\) and \(T_2^*\).</li>
+<li>Relate decoherence rates to noise spectral densities, and see how spin echo and dynamical decoupling filter low-frequency noise.</li>
+</ul></div>
+
+<h3 id="sec-q-open-channels"><span class="secnum">8.1</span> Quantum channels</h3>
+<p>A system that interacts with an environment, after the environment is traced out, undergoes a <b>quantum channel</b>: a linear map \(\rho\mapsto\mathcal E(\rho)\) that takes density matrices to density matrices, even when the system is part of a larger entangled state (<b>complete positivity</b>). Every such map has a <b>Kraus representation</b></p>
+<div class="eq" id="eq-q-kraus">$$ \mathcal E(\rho) = \sum_k K_k\,\rho\,K_k^\dagger, \qquad \sum_k K_k^\dagger K_k = I .  \tag{34}$$</div>
+<p>Two channels describe most qubit noise. <b>Amplitude damping</b> (energy loss with probability \(\gamma\)) has \(K_0 = \begin{pmatrix}1&0\\0&\sqrt{1-\gamma}\end{pmatrix}\), \(K_1 = \begin{pmatrix}0&\sqrt\gamma\\0&0\end{pmatrix}\): \(K_1\) takes \(\ket1\to\ket0\), and \(K_0\) shrinks the excited amplitude in the no-jump case. <b>Phase damping</b> (loss of phase with probability \(p\)) has \(K_0 = \sqrt{1-p}\,I\), \(K_1 = \sqrt p\,Z\): with probability \(p\) the qubit suffers a random \(Z\), which leaves populations alone and multiplies coherences by \(1-2p\). The <b>depolarising</b> channel \(\rho\mapsto(1-p)\rho + p\,I/2\) shrinks the Bloch vector uniformly. Book 4 builds error models from these.</p>
+
+<h3 id="sec-q-open-lindblad"><span class="secnum">8.2</span> The Lindblad master equation</h3>
+<p>When the environment is large, has a short memory compared with the system's dynamics (the <b>Markov approximation</b>), and couples weakly, the continuous-time evolution takes the universal <b>Lindblad form</b> <span class="cite">[<a href="#ref-lindblad1976">6</a>, <a href="#ref-breuer2002">7</a>]</span>:</p>
+<div class="eq" id="eq-q-lindblad">$$ \frac{\dd\rho}{\dd t} = -\frac{\ii}{\hbar}[H,\rho] + \sum_k\gamma_k\Big(L_k\rho L_k^\dagger - \frac12\big\{L_k^\dagger L_k, \rho\big\}\Big),  \tag{35}$$</div>
+<p>where each <b>jump operator</b> \(L_k\) and rate \(\gamma_k\) describe one dissipative process, and \(\{A,B\} = AB+BA\). For a qubit, relaxation has \(L = \sigma_- = \ketbra01\) at rate \(\Gamma_1\), excitation \(\sigma_+\) at rate \(\Gamma_\uparrow\) (small at low temperature), and pure dephasing \(L = Z\) at rate \(\Gamma_\varphi/2\). Solving for the matrix elements gives the <b>Bloch equations</b>:</p>
+<div class="eq" id="eq-q-blocheq">$$ \rho_{11}(t) = \rho_{11}(0)\,\ee^{-t/T_1}, \qquad \rho_{01}(t) = \rho_{01}(0)\,\ee^{-t/T_2}\,\ee^{\ii\omega_qt}, \qquad \frac1{T_2} = \frac1{2T_1} + \frac1{T_\varphi}  \tag{36}$$</div>
+<p>(at zero temperature, in the frame where \(\ket0\) is the ground state). Populations decay at \(1/T_1\); coherences decay at \(1/T_2\). Energy relaxation necessarily destroys coherence too, which gives the factor \(\tfrac12\) and the bound \(T_2\le2T_1\). Pure dephasing \(T_\varphi\) destroys coherence without exchanging energy. For a damped harmonic oscillator, \(L = a\) at rate \(\kappa\) gives \(\dd\expval{a}/\dd t = -(\ii\omega+\kappa/2)\expval a\): the quantum version of the classical damped amplitude, consistent with <a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-inout">Book 2 eq. (14)</a>.</p>
+
+<h3 id="sec-q-open-spectra"><span class="secnum">8.3</span> Where the rates come from</h3>
+<p>Microscopically, rates are set by the noise spectrum of whatever couples to the qubit. Write the qubit–environment coupling as \(H_{\mathrm{int}} = \tfrac\hbar2(\lambda_\perp(t)X + \lambda_\parallel(t)Z)\), with transverse and longitudinal noise. Then (<a class="xref" href="#eq-q-gamma1">(29)</a>)</p>
+<div class="eq" id="eq-q-rates">$$ \Gamma_1 = \tfrac14\big[S_{\perp}(\omega_q) + S_\perp(-\omega_q)\big], \qquad \Gamma_\varphi = \tfrac12 S_{\parallel}(\omega\to0) \quad\text{(white noise)} .  \tag{37}$$</div>
+<p>Relaxation samples noise at the qubit frequency; dephasing samples it near zero frequency. Different physical mechanisms dominate each. A transmon's \(T_1\) is set by dielectric loss, two-level systems, quasiparticles and radiation into lines and package (<a class="xref ext" href="../../index.html#eq-t1">Lab to Foundry eq. (23)</a>); its \(T_\varphi\) by flux noise (if tunable), residual photons in the readout resonator (<a class="xref ext" href="../../index.html#eq-dephase">Lab to Foundry eq. (28)</a>) and charge noise.</p>
+<p>Low-frequency noise is usually not white but \(1/f\)-like, and then the decay is not exponential. If the qubit frequency fluctuates by \(\delta\omega(t)\), a superposition accumulates a random phase \(\varphi(\tau) = \int_0^\tau\delta\omega\,\dd t\), and the coherence is \(\expval{\ee^{\ii\varphi}} = \ee^{-\expval{\varphi^2}/2}\) for Gaussian noise. In the frequency domain,</p>
+<div class="eq" id="eq-q-filter">$$ \expval{\varphi^2} = \frac{1}{2\pi}\int S_{\delta\omega}(\omega)\,\frac{|F(\omega\tau)|^2}{\omega^2}\,\dd\omega ,  \tag{38}$$</div>
+<p>where \(F\) is the <b>filter function</b> of the pulse sequence. For a plain Ramsey experiment \(|F|^2 = 4\sin^2(\omega\tau/2)\), which passes low frequencies, so slow drifts dominate and the decay time is the short \(T_2^*\). A <b>spin echo</b> (a \(\pi\) pulse halfway through) reverses the sign of the accumulated phase for the second half, so static and slow fluctuations cancel: its filter function vanishes at \(\omega\to0\) and the decay time \(T_{2E}\) is longer. Sequences of many \(\pi\) pulses (CPMG, dynamical decoupling) push the filter's passband to higher frequency and can map out the noise spectrum. The spread between \(T_2^*\), \(T_{2E}\) and \(2T_1\) tells an experimentalist what kind of noise limits a device (<a class="xref" href="#fig-q-decoh">Figure 3</a>).</p>
+<figure id="fig-q-decoh">
+<img src="../figures/fig-q-decoh.svg" alt="Energy relaxation, Ramsey fringes and echo decay curves for a qubit with T1 = 100 µs.">
+<figcaption><b>Figure 3.</b> Typical coherence measurements for a qubit with \(T_1 = 100\) µs, white dephasing \(T_\varphi = 300\) µs and quasi-static frequency noise of 5 kHz rms. \(T_1\) decay of the excited population; Ramsey fringes at 50 kHz detuning, damped by the Gaussian factor from slow noise; and the echo envelope, from which slow noise has been removed.</figcaption>
+</figure>
+
+<h3 id="sec-q-open-limits"><span class="secnum">8.4</span> Beyond the Lindblad picture</h3>
+<p>The Markov approximation fails when the environment has memory comparable to the dynamics: strongly coupled two-level systems, \(1/f\) noise, a coupler mode close to a qubit, or a qubit near a structured filter. Non-Markovian effects show up as non-exponential decays, revivals and fluctuating \(T_1\). They matter for error correction because they create errors correlated in time and space, which the simple Pauli models of Book 4 do not capture. Treating the near environment (a resonator, a coupler, a strongly coupled defect) as part of the system, and only the far environment as a bath, usually restores the Lindblad form.</p>
+
+<div class="eda"><p>Coherence is the end product that a design and fabrication process delivers. The chain from layout (participation ratios), materials (loss tangents) and circuit (Purcell and line coupling) through <a class="xref" href="#eq-q-rates">(37)</a> to \(T_1\) and \(T_2\), and from there to gate error and logical error (<a class="xref ext" href="../../index.html#eq-eps">Lab to Foundry eq. (37)</a>), is the chain the review argues a quantum EDA system must automate.</p></div>
+
+<div class="exercises" id="ex-q-open"><h4>Exercises</h4><ol>
+<li>Apply the amplitude-damping channel to \(\ket+\) and find the new Bloch vector.
+<details><summary>Solution</summary><p>\(\rho = \tfrac12\begin{pmatrix}1&1\\1&1\end{pmatrix}\). \(K_0\rho K_0^\dagger = \tfrac12\begin{pmatrix}1&\sqrt{1-\gamma}\\ \sqrt{1-\gamma}&1-\gamma\end{pmatrix}\), \(K_1\rho K_1^\dagger = \tfrac12\begin{pmatrix}\gamma&0\\0&0\end{pmatrix}\). Sum: \(\tfrac12\begin{pmatrix}1+\gamma&\sqrt{1-\gamma}\\ \sqrt{1-\gamma}&1-\gamma\end{pmatrix}\). Bloch vector \((\sqrt{1-\gamma}, 0, \gamma)\): coherence shrinks as \(\sqrt{1-\gamma}\) while the vector moves toward \(\ket0\).</p></details></li>
+<li>A qubit has \(T_1 = 80\) µs and \(T_2 = 60\) µs (echo). What is \(T_\varphi\)?
+<details><summary>Solution</summary><p>\(1/T_\varphi = 1/T_2 - 1/2T_1 = 1/60 - 1/160 = 0.01042\) µs\(^{-1}\), so \(T_\varphi\approx96\) µs.</p></details></li>
+<li>Show from the Lindblad equation with \(L = \sigma_-\) that \(\dot\rho_{11} = -\Gamma_1\rho_{11}\).
+<details><summary>Solution</summary><p>\(\sigma_-\rho\sigma_+\) has \((0,0)\) element \(\rho_{11}\) and \((1,1)\) element 0. \(\sigma_+\sigma_- = \ketbra11\), so \(\{\sigma_+\sigma_-,\rho\}_{11} = 2\rho_{11}\). Hence \(\dot\rho_{11} = \Gamma_1(0 - \rho_{11})\).</p></details></li>
+<li>Quasi-static Gaussian frequency noise with rms \(\sigma\) (in rad/s) gives Ramsey coherence \(\ee^{-\sigma^2\tau^2/2}\). For \(\sigma/2\pi = 5\) kHz, what is the \(1/\ee\) time? Why does an echo remove this decay?
+<details><summary>Solution</summary><p>\(\sigma^2\tau^2/2 = 1\) gives \(\tau = \sqrt2/\sigma = \sqrt2/(2\pi\times5000)\approx45\) µs. In an echo the phase accumulated in the first half, \(\delta\omega\tau/2\), is cancelled by \(-\delta\omega\tau/2\) in the second half when \(\delta\omega\) is constant during the sequence.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-q-second"><h2><span class="secnum">9</span> Identical particles and second quantisation</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand why identical particles are bosons or fermions, and the consequences: Pauli exclusion and bunching.</li>
+<li>Use creation and annihilation operators for many modes, with commutation and anticommutation relations.</li>
+<li>Write tight-binding (hopping) Hamiltonians and see how energy bands form.</li>
+<li>Prepare the ground for photons (Book 5) and Cooper pairs (Book 6).</li>
+</ul></div>
+
+<h3 id="sec-q-sec-ident"><span class="secnum">9.1</span> Identical particles</h3>
+<p>Two electrons cannot be labelled: swapping them must leave every probability unchanged, so the two-particle state can at most change sign under exchange. Nature uses both options. <b>Bosons</b> (photons, phonons, helium-4 atoms, Cooper pairs as composite objects) have symmetric states; <b>fermions</b> (electrons, protons, neutrons) have antisymmetric states. For two particles in single-particle states \(\ket a\) and \(\ket b\),</p>
+<div class="eq" id="eq-q-sym">$$ \ket{\psi_\pm} = \frac{1}{\sqrt2}\big(\ket a_1\ket b_2 \pm \ket b_1\ket a_2\big) .  \tag{39}$$</div>
+<p>For fermions, \(a = b\) gives zero: two fermions cannot occupy the same state (<b>Pauli exclusion</b>). That fills the energy levels of atoms and solids one electron per state and gives metals their Fermi energy. For bosons, the symmetric combination enhances the probability of two particles in the same state relative to distinguishable particles: bosons <b>bunch</b>. Two identical photons arriving at a beam splitter always leave together, the Hong–Ou–Mandel effect (Book 5), and the macroscopic occupation of a single state by bosons underlies lasers, Bose–Einstein condensates and superconductivity.</p>
+
+<h3 id="sec-q-sec-fock"><span class="secnum">9.2</span> Second quantisation</h3>
+<p>Symmetrising wavefunctions by hand becomes unmanageable for many particles. Instead, specify how many particles occupy each single-particle mode \(k\): \(\ket{n_1, n_2, \dots}\). Introduce, for each mode, an annihilation operator \(c_k\) and creation operator \(c_k^\dagger\). For bosons they behave like the oscillator ladder operators of Chapter 4, one oscillator per mode, with</p>
+<div class="eq" id="eq-q-ccr">$$ [b_j, b_k^\dagger] = \delta_{jk}, \qquad [b_j,b_k] = 0 .  \tag{40}$$</div>
+<p>For fermions the commutators are replaced by <b>anticommutators</b>,</p>
+<div class="eq" id="eq-q-car">$$ \{c_j, c_k^\dagger\} = \delta_{jk}, \qquad \{c_j,c_k\} = 0 \;\Rightarrow\; (c_k^\dagger)^2 = 0 ,  \tag{41}$$</div>
+<p>so each fermionic mode holds 0 or 1 particle. Exchange symmetry is now automatic: it is built into the algebra. A one-body operator such as kinetic energy becomes \(\sum_{jk}h_{jk}c_j^\dagger c_k\) ("remove a particle from mode \(k\), put it in mode \(j\), with amplitude \(h_{jk}\)"), and a two-body interaction becomes a sum of terms with two creation and two annihilation operators. The name "second quantisation" is historical: the field is quantised, not the particle twice.</p>
+<p>For photons, the modes are the electromagnetic eigenmodes of a cavity or waveguide, and \(a_k^\dagger\) creates a photon in mode \(k\). The free field is \(H = \sum_k\hbar\omega_k(a_k^\dagger a_k + \tfrac12)\): one oscillator per mode, exactly as foreshadowed in <a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-ode-pde">Book 1 §5.6</a>. Linear optical elements (beam splitters, phase shifters) act as linear transformations of the mode operators, \(a_j\to\sum_kU_{jk}a_k\), which is why a beam splitter's S-matrix (<a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-bs">Book 2 eq. (37)</a>) is also its quantum description (Book 5).</p>
+
+<h3 id="sec-q-sec-tb"><span class="secnum">9.3</span> Hopping and bands</h3>
+<p>Electrons in a crystal or in an array of quantum dots hop between neighbouring sites. The <b>tight-binding</b> Hamiltonian for a chain of sites with on-site energy \(\epsilon\) and hopping amplitude \(t\) is</p>
+<div class="eq" id="eq-q-tb">$$ H = \sum_j\epsilon\,c_j^\dagger c_j - t\sum_j\big(c_j^\dagger c_{j+1} + c_{j+1}^\dagger c_j\big).  \tag{42}$$</div>
+<p>Plane-wave modes \(c_k = N^{-1/2}\sum_j\ee^{-\ii kja}c_j\) diagonalise it with energies \(E(k) = \epsilon - 2t\cos ka\): a <b>band</b> of width \(4t\). Many atomic orbitals give many bands, separated by gaps. Fermions fill the lowest states up to the Fermi energy; if it falls inside a band the material is a metal, if in a gap an insulator or semiconductor. Two dots with one electron each, with hopping \(t\) and on-site repulsion \(U\) (the <b>Hubbard model</b>), have an effective spin–spin interaction \(J = 4t^2/U\) from second-order perturbation theory (Chapter 6). That exchange coupling is the two-qubit gate of silicon spin qubits (<a class="xref ext" href="../../index.html#sec-mod-spin">Lab to Foundry §8.3</a>), and its exponential dependence on gate voltage through \(t\) is a central manufacturing sensitivity.</p>
+
+<h3 id="sec-q-sec-sc"><span class="secnum">9.4</span> A first look at superconductivity</h3>
+<p>In some metals at low temperature, a weak attraction between electrons mediated by lattice vibrations binds electrons near the Fermi surface into <b>Cooper pairs</b> of opposite momentum and spin. Pairs behave, collectively, like bosons and condense into a single macroscopic quantum state described by a complex order parameter \(\Psi = |\Psi|\ee^{\ii\varphi}\). The BCS theory <span class="cite">[<a href="#ref-bcs1957">8</a>]</span> shows that breaking a pair costs at least \(2\Delta\), where the gap \(\Delta\approx1.76k_BT_c\), so at temperatures far below \(T_c\) the condensate cannot be excited by small perturbations: it flows without resistance. The phase \(\varphi\) of the condensate is a single, macroscopic quantum variable. Two superconductors separated by a thin barrier have a phase difference across it, and Cooper pairs tunnel through the barrier with an energy that depends on that difference as \(-E_J\cos\varphi\). That is the Josephson junction, with which Book 6 begins.</p>
+
+<div class="eda"><p>Second quantisation is the notation of every Hamiltonian a quantum design tool writes down: \(a_i^\dagger a_j\) for resonator and qubit couplings, \(c_j^\dagger c_{j+1}\) for dot arrays, \(a^\dagger a^\dagger aa\) for Kerr nonlinearities. Being fluent in it is a prerequisite for reading the hardware literature and the review's <a class="xref ext" href="../../index.html#eq-multi">Lab to Foundry eq. (5)</a>.</p></div>
+
+<div class="exercises" id="ex-q-second"><h4>Exercises</h4><ol>
+<li>Show that \(c^\dagger c\) has eigenvalues 0 and 1 for a fermionic mode.
+<details><summary>Solution</summary><p>\((c^\dagger c)^2 = c^\dagger(cc^\dagger)c = c^\dagger(1 - c^\dagger c)c = c^\dagger c - (c^\dagger)^2c^2 = c^\dagger c\). A projector: eigenvalues 0 and 1.</p></details></li>
+<li>For the two-site tight-binding model with one particle, find the eigenstates and energies.
+<details><summary>Solution</summary><p>In the basis \(c_1^\dagger\ket{0}, c_2^\dagger\ket0\), \(H = \begin{pmatrix}\epsilon & -t\\-t&\epsilon\end{pmatrix}\). Eigenstates \((1,\pm1)/\sqrt2\) with energies \(\epsilon\mp t\): bonding and antibonding orbitals, split by \(2t\).</p></details></li>
+<li>Estimate \(J = 4t^2/U\) for \(t = 10\) µeV and \(U = 2\) meV, in MHz. If \(t\) depends on a barrier gate as \(t\propto\ee^{-V/V_0}\) with \(V_0 = 10\) mV, how much does \(J\) change for a 1 mV shift?
+<details><summary>Solution</summary><p>\(J = 4\times10^{-10}/2\times10^{-3}\) eV \(= 0.2\) µeV, i.e. \(0.2\times10^{-6}\times1.6\times10^{-19}/6.63\times10^{-34}\approx48\) MHz. \(J\propto t^2\propto\ee^{-2V/V_0}\), so a 1 mV shift changes \(J\) by \(\ee^{-0.2}\approx0.82\), an 18% change.</p></details></li>
+</ol></div>
+</section>
+
+<section id="references" class="references">
+  <h2>References and further reading</h2>
+  <p class="refnote">Numbered in order of first citation in this book. Entries tagged “verify details” were compiled from memory; check volume and page before citing them.</p>
+  <ol class="reflist">
+<li id="ref-sakurai2020"><span class="refnum">[1]</span> J. J. Sakurai, J. Napolitano, <i>Modern Quantum Mechanics</i>, 3rd ed. (Cambridge University Press, 2020).</li>
+<li id="ref-schrieffer1966"><span class="refnum">[2]</span> J. R. Schrieffer, P. A. Wolff, “Relation between the Anderson and Kondo Hamiltonians,” <i>Phys. Rev.</i> <b>149</b>, 491 (1966).</li>
+<li id="ref-bravyi2011sw"><span class="refnum">[3]</span> S. Bravyi, D. P. DiVincenzo, D. Loss, “Schrieffer–Wolff transformation for quantum many-body systems,” <i>Ann. Phys.</i> <b>326</b>, 2793 (2011).</li>
+<li id="ref-bell1964"><span class="refnum">[4]</span> J. S. Bell, “On the Einstein Podolsky Rosen paradox,” <i>Physics</i> <b>1</b>, 195 (1964).</li>
+<li id="ref-chsh1969"><span class="refnum">[5]</span> J. F. Clauser, M. A. Horne, A. Shimony, R. A. Holt, “Proposed experiment to test local hidden-variable theories,” <i>Phys. Rev. Lett.</i> <b>23</b>, 880 (1969).</li>
+<li id="ref-lindblad1976"><span class="refnum">[6]</span> G. Lindblad, “On the generators of quantum dynamical semigroups,” <i>Commun. Math. Phys.</i> <b>48</b>, 119 (1976).</li>
+<li id="ref-breuer2002"><span class="refnum">[7]</span> H.-P. Breuer, F. Petruccione, <i>The Theory of Open Quantum Systems</i> (Oxford University Press, 2002).</li>
+<li id="ref-bcs1957"><span class="refnum">[8]</span> J. Bardeen, L. N. Cooper, J. R. Schrieffer, “Theory of superconductivity,” <i>Phys. Rev.</i> <b>108</b>, 1175 (1957).</li>
+  </ol>
+</section>
 <nav class="pager" aria-label="Series"><a class="prev" href="../classical-physics/index.html"><span>Previous · Book 2</span>Classical Physics for Quantum Engineers</a><a class="next" href="../quantum-information/index.html"><span>Next · Book 4</span>Quantum Information and Computation</a></nav>
 <footer class="page-footer">
   <p>Foundations of Quantum Engineering, Book 3. Source: <code>curriculum/3-quantum-mechanics/</code>. Rebuild with <code>make</code>; figures are computed by <code>scripts/make_foundation_figures.py</code>. Built 2026-11-14.</p>

@@ -1,0 +1,50 @@
+<section id="sec-q-composite"><h2>Density matrices, composite systems and entanglement</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Describe pure and mixed states with the density matrix, and compute purity and the Bloch vector of a mixed state.</li>
+<li>Use the partial trace to describe one part of a composite system.</li>
+<li>Recognise entanglement, quantify it for pure states, and understand why it is not a means of signalling.</li>
+<li>Derive the CHSH inequality and its quantum violation.</li>
+</ul></div>
+
+<h3 id="sec-q-comp-rho">The density matrix</h3>
+<p>Postulate 1 describes a system whose state we know exactly. In practice we are often uncertain: a qubit prepared with a thermal population, a photon from a source that sometimes fails, a qubit entangled with an environment we cannot see. If the system is in state \(\ket{\psi_k}\) with probability \(p_k\), all measurement predictions follow from the <b>density matrix</b></p>
+<div class="eq" id="eq-q-rho">$$ \rho = \sum_k p_k\,\ketbra{\psi_k}{\psi_k}, \qquad \expval A = \Tr(\rho A), \qquad p(a) = \Tr(\rho P_a) . $$</div>
+<p>(Check: for a single pure state \(\Tr(\ketbra\psi\psi A) = \bra\psi A\ket\psi\).) Every density matrix is Hermitian, positive semi-definite and has trace 1, and every such matrix is a valid state. The Schrödinger equation becomes the <b>von Neumann equation</b> \(\dot\rho = -\tfrac{\ii}{\hbar}[H,\rho]\), so \(\rho(t) = U\rho U^\dagger\).</p>
+<p>A state is <b>pure</b> if \(\rho = \ketbra\psi\psi\), which is equivalent to \(\Tr\rho^2 = 1\); otherwise it is <b>mixed</b>, with \(\Tr\rho^2 \lt 1\). The <b>purity</b> \(\Tr\rho^2\) ranges from \(1/d\) (the maximally mixed state \(I/d\)) to 1. The diagonal elements of \(\rho\) in a basis are populations; the off-diagonal elements are <b>coherences</b>, which carry phase information. The two preparations of @sec:q-post-mixture differ exactly there:</p>
+\[ \rho_{\ket+} = \frac12\begin{pmatrix}1&1\\1&1\end{pmatrix}, \qquad \rho_{\mathrm{mix}} = \frac12\begin{pmatrix}1&0\\0&1\end{pmatrix}. \]
+<p>A qubit density matrix can always be written \(\rho = \tfrac12(I + \mathbf r\cdot\boldsymbol\sigma)\) with \(|\mathbf r|\le1\). Pure states lie on the Bloch sphere, mixed states inside it, and the maximally mixed state at the centre. Decoherence (Chapter 8) shrinks the Bloch vector.</p>
+<p>The ensemble decomposition of a mixed \(\rho\) is not unique: an equal mixture of \(\ket0,\ket1\) and an equal mixture of \(\ket+,\ket-\) give the same \(I/2\) and are physically indistinguishable. Only \(\rho\) matters.</p>
+
+<h3 id="sec-q-comp-reduced">Subsystems and the partial trace</h3>
+<p>For a state \(\rho_{AB}\) of two systems, everything that can be measured on \(A\) alone is determined by the <b>reduced density matrix</b> \(\rho_A = \Tr_B\rho_{AB}\) (@b1:eq-m-ptrace), because \(\Tr(\rho_{AB}(A\otimes I)) = \Tr(\rho_AA)\). For a product state \(\rho_A\otimes\rho_B\), the reduced state is just \(\rho_A\). For the Bell state \(\ket{\Phi^+} = (\ket{00}+\ket{11})/\sqrt2\), the global state is pure, yet \(\rho_A = I/2\) is maximally mixed. The whole is known exactly while each part is completely random: this is <b>entanglement</b>.</p>
+<p>This observation explains decoherence. If a qubit interacts with an environment and they become entangled, the qubit alone is described by a mixed reduced state even though the joint state is pure. Nothing "random" was added; information about the qubit's phase has moved into correlations with the environment, where we cannot access it.</p>
+
+<h3 id="sec-q-comp-ent">Entanglement</h3>
+<p>A pure state of \(AB\) is <b>entangled</b> if it is not a product \(\ket a\otimes\ket b\). Its <b>Schmidt decomposition</b> (@b1:sec-m-tensor-ent) \(\ket\psi = \sum_k s_k\ket{a_k}\ket{b_k}\) gives the eigenvalues \(s_k^2\) of both reduced states, and the <b>entanglement entropy</b></p>
+<div class="eq" id="eq-q-entropy">$$ S(\rho_A) = -\Tr(\rho_A\log_2\rho_A) = -\sum_k s_k^2\log_2 s_k^2 $$</div>
+<p>quantifies the entanglement: 0 for product states, 1 bit (ebit) for a Bell pair. The four Bell states</p>
+<div class="eq" id="eq-q-bellstates">$$ \ket{\Phi^\pm} = \frac{\ket{00}\pm\ket{11}}{\sqrt2}, \qquad \ket{\Psi^\pm} = \frac{\ket{01}\pm\ket{10}}{\sqrt2} $$</div>
+<p>form an orthonormal basis of two qubits, all maximally entangled. They are the resource for teleportation and many error-correction circuits (Book 4). For mixed states, deciding whether a state is entangled is harder; for two qubits the <b>concurrence</b> or the Peres–Horodecki test (a state is entangled if its partial transpose has a negative eigenvalue) settles it.</p>
+<p>Entanglement does not allow signalling. Whatever Bob does to his half of an entangled pair, Alice's reduced state \(\rho_A\) is unchanged, so her measurement statistics cannot reveal his choice. Correlations appear only when they compare notes over a classical channel.</p>
+
+<h3 id="sec-q-comp-bell">Bell's inequality</h3>
+<p>Could entanglement be explained by hidden classical variables, as if each pair carried a pre-arranged list of answers? Bell showed that it cannot [@bell1964]. In the CHSH form [@chsh1969], Alice measures one of two observables \(A_0, A_1\) and Bob one of \(B_0,B_1\), each with outcomes \(\pm1\). Any local hidden-variable model satisfies</p>
+<div class="eq" id="eq-q-chsh">$$ \big|\expval{A_0B_0} + \expval{A_0B_1} + \expval{A_1B_0} - \expval{A_1B_1}\big| \le 2 , $$</div>
+<p>because for any fixed values \(a_i, b_j = \pm1\), \(a_0(b_0+b_1) + a_1(b_0-b_1) = \pm2\). Quantum mechanics with the state \(\ket{\Phi^+}\), \(A_0 = Z\), \(A_1 = X\), \(B_{0,1} = (Z\pm X)/\sqrt2\), gives \(2\sqrt2\approx2.83\). Experiments since the 1980s, and loophole-free ones since 2015, observe the quantum value. Superconducting qubits violate CHSH routinely, and the size of the violation is a benchmark of two-qubit gate and readout quality.</p>
+
+<h3 id="sec-q-comp-fid">Distance between states</h3>
+<p>How close is a prepared state \(\rho\) to the target \(\ket\psi\)? The <b>fidelity</b> \(F = \bra\psi\rho\ket\psi\) is the probability that a test for \(\ket\psi\) succeeds; for two mixed states \(F(\rho,\sigma) = (\Tr\sqrt{\sqrt\rho\sigma\sqrt\rho})^2\). The <b>trace distance</b> \(D = \tfrac12\Tr|\rho-\sigma|\) is the maximum difference in probability that any measurement can show between the two states. For qubits, \(D\) is half the Euclidean distance between Bloch vectors. Book 4 extends these to gates.</p>
+
+<div class="eda"><p>Simulating noisy qubits means evolving density matrices, whose size is the square of the state vector's: \(4^n\) entries for \(n\) qubits. That is why device-level noise simulation is limited to a handful of qubits, and why error-correction tools use the restricted but efficient Pauli-channel description of Book 4 (@lf:sec-qec-dem).</p></div>
+
+<div class="exercises" id="ex-q-composite"><h4>Exercises</h4><ol>
+<li>A qubit is \(\ket0\) with probability 0.9 and \(\ket+\) with probability 0.1. Find \(\rho\), its Bloch vector and its purity.
+<details><summary>Solution</summary><p>\(\rho = 0.9\begin{pmatrix}1&0\\0&0\end{pmatrix} + 0.05\begin{pmatrix}1&1\\1&1\end{pmatrix} = \begin{pmatrix}0.95 & 0.05\\0.05&0.05\end{pmatrix}\). \(r_x = 2\Re\rho_{01} = 0.1\), \(r_y = 0\), \(r_z = \rho_{00}-\rho_{11} = 0.9\). Purity \(\tfrac12(1+|\mathbf r|^2) = \tfrac12(1+0.82) = 0.91\).</p></details></li>
+<li>Show that \(\Tr_B\ketbra{\Psi^-}{\Psi^-} = I/2\).
+<details><summary>Solution</summary><p>\(\ketbra{\Psi^-}{\Psi^-} = \tfrac12(\ketbra{01}{01} - \ketbra{01}{10} - \ketbra{10}{01} + \ketbra{10}{10})\). The partial trace keeps terms with equal \(B\) labels: \(\tfrac12(\ketbra00 + \ketbra11)\).</p></details></li>
+<li>Compute the entanglement entropy of \(\ket\psi = \sqrt{0.9}\ket{00} + \sqrt{0.1}\ket{11}\).
+<details><summary>Solution</summary><p>Schmidt coefficients squared: 0.9 and 0.1. \(S = -0.9\log_20.9 - 0.1\log_20.1 = 0.137 + 0.332 = 0.47\) ebits.</p></details></li>
+<li>Verify the quantum CHSH value \(2\sqrt2\) using \(\bra{\Phi^+}(P\otimes Q)\ket{\Phi^+} = \tfrac12\Tr(P^{\mathsf T}Q)\) for real Pauli combinations.
+<details><summary>Solution</summary><p>For real symmetric \(P,Q\), \(\expval{P\otimes Q} = \tfrac12\Tr(PQ)\). With \(B_\pm = (Z\pm X)/\sqrt2\): \(\expval{ZB_\pm} = \tfrac12\Tr(Z(Z\pm X))/\sqrt2 = 1/\sqrt2\); \(\expval{XB_\pm} = \pm1/\sqrt2\). Sum: \(1/\sqrt2 + 1/\sqrt2 + 1/\sqrt2 - (-1/\sqrt2) = 4/\sqrt2 = 2\sqrt2\).</p></details></li>
+</ol></div>
+</section>

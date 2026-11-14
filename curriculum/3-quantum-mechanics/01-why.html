@@ -1,0 +1,39 @@
+<section id="sec-q-why"><h2>Why quantum mechanics: experiments and the qubit</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Know the experiments that forced quantum theory: quantised energy, wave–particle duality and sequential spin measurements.</li>
+<li>See how the Stern–Gerlach experiment leads directly to complex two-dimensional state vectors.</li>
+<li>Understand superposition, interference and the role of measurement, before any formalism.</li>
+<li>Know the energy scales that decide when quantum effects are visible in engineered devices.</li>
+</ul></div>
+
+<h3 id="sec-q-why-energy">Energy comes in packets</h3>
+<p>By 1900 classical physics predicted that a hot cavity should radiate infinite power at high frequencies, because equipartition gives every mode an energy \(k_BT\) and there are infinitely many modes. Planck fixed this by assuming that a mode of frequency \(\nu\) exchanges energy only in multiples of \(h\nu\). High-frequency modes then cannot be excited at low temperature, exactly the behaviour of @b2:eq-c-nth. Einstein then explained the photoelectric effect (light ejects electrons only above a threshold frequency, however intense it is) by taking the packets literally: light consists of <b>photons</b> of energy \(E = h\nu = \hbar\omega\). Bohr explained the sharp spectral lines of hydrogen by allowing electrons only certain orbits. In each case a continuous classical quantity turned out to be discrete.</p>
+<p>In engineered quantum devices the same discreteness appears when the level spacing \(\hbar\omega\) exceeds the thermal energy \(k_BT\) and the loss rate \(\hbar\gamma\). A 5 GHz superconducting resonator has \(\hbar\omega/k_B\approx 0.24\) K, so at 20 mK its energy levels are resolved; at 4 K they are washed out by thermal fluctuations. An optical photon at 1550 nm has \(\hbar\omega/k_B\approx9300\) K and is quantum at room temperature.</p>
+
+<h3 id="sec-q-why-duality">Waves and particles</h3>
+<p>In a double-slit experiment with electrons, photons, neutrons or even large molecules sent one at a time, each particle arrives at a single point on the screen, like a particle. After many arrivals, the pattern of points shows interference fringes, like a wave passing through both slits. Closing one slit removes the fringes. Trying to detect which slit each particle used also removes the fringes, even if the detection is gentle. The consistent description, due to de Broglie, Schrödinger and Born, assigns the particle a complex <b>amplitude</b> for each path, adds the amplitudes, and takes the modulus squared to get a probability:</p>
+<div class="eq" id="eq-q-born0">$$ P(x) = \big|\psi_1(x) + \psi_2(x)\big|^2 = |\psi_1|^2 + |\psi_2|^2 + 2\Re\big(\psi_1^*\psi_2\big). $$</div>
+<p>The interference term is what classical probability lacks. Recording which path was taken makes the two paths distinguishable, and distinguishable alternatives add as probabilities, not as amplitudes. That rule (amplitudes for indistinguishable alternatives, probabilities for distinguishable ones) carries most of quantum mechanics, and it is the key to the Hong–Ou–Mandel effect of Book 5 and to decoherence in Chapter 8.</p>
+
+<h3 id="sec-q-why-sg">Stern–Gerlach and the qubit</h3>
+<p>In 1922 Stern and Gerlach sent silver atoms through an inhomogeneous magnetic field, which deflects a magnetic moment according to its component along the field gradient. Classically, randomly oriented moments should produce a continuous smear. Instead the beam split into exactly two spots, "up" and "down". The atom's magnetic moment along any chosen axis takes only two values. Now chain the devices, as Sakurai does in his textbook [@sakurai2020]:</p>
+<ol>
+<li>Select the atoms that went up along \(z\), and measure \(z\) again. All go up. The measurement is repeatable.</li>
+<li>Select \(z\)-up atoms and measure along \(x\). Half go \(x\)-up and half \(x\)-down, at random.</li>
+<li>Select \(z\)-up, then \(x\)-up atoms, and measure \(z\) again. Half go \(z\)-down. The intermediate \(x\) measurement erased the \(z\) information.</li>
+</ol>
+<p>A description that fits all three needs states that are vectors in a two-dimensional space. Write \(\ket{\uparrow_z}\) and \(\ket{\downarrow_z}\) as an orthonormal basis. Experiment 2 says \(|\braket{\uparrow_x}{\uparrow_z}|^2 = \tfrac12\), so we can take \(\ket{\uparrow_x} = (\ket{\uparrow_z}+\ket{\downarrow_z})/\sqrt2\) and \(\ket{\downarrow_x} = (\ket{\uparrow_z}-\ket{\downarrow_z})/\sqrt2\). Repeating with a \(y\) axis requires a third pair of states with overlap \(\tfrac12\) with all four of these. No real vectors can do it; complex ones can: \(\ket{\uparrow_y} = (\ket{\uparrow_z}+\ii\ket{\downarrow_z})/\sqrt2\). This is the strongest elementary argument that quantum amplitudes must be complex.</p>
+<p>Any physical system with two distinguishable states and the ability to be in superpositions of them is a <b>qubit</b>: a spin in a magnetic field, the two lowest levels of an atom, a photon in one of two waveguides, or the two lowest energy levels of a superconducting circuit. The mathematics is identical, which is why quantum computing can be discussed without committing to hardware, and why hardware can be compared on common terms (Book 6).</p>
+
+<h3 id="sec-q-why-scales">Scales and the limits of the classical picture</h3>
+<p>Planck's constant sets the scale where quantum effects matter: whenever an action (energy × time, or momentum × distance) of a system is comparable to \(\hbar\approx1.05\times10^{-34}\) J s. A transmon has zero-point phase fluctuations of a few tenths of a radian (@b2:eq-c-zpf) and is fully quantum, even though it contains about \(10^{11}\) electrons, because all the Cooper pairs move together as a single collective coordinate. Engineering quantum devices is the art of isolating one such collective coordinate from everything else, coupling it to controls, and protecting it from an environment that constantly tries to measure it. The rest of this book makes those ideas precise.</p>
+
+<div class="exercises" id="ex-q-why"><h4>Exercises</h4><ol>
+<li>Compute the energy of one photon at 5 GHz and at 1550 nm in joules and in electronvolts, and the corresponding temperature \(E/k_B\).
+<details><summary>Solution</summary><p>5 GHz: \(E = 6.626\times10^{-34}\times5\times10^9 = 3.3\times10^{-24}\) J \(= 20.7\) µeV, \(E/k_B = 0.24\) K. 1550 nm: \(\nu = c/\lambda = 1.93\times10^{14}\) Hz, \(E = 1.28\times10^{-19}\) J \(= 0.80\) eV, \(E/k_B\approx9300\) K.</p></details></li>
+<li>Check that \(\ket{\uparrow_y} = (\ket{\uparrow_z}+\ii\ket{\downarrow_z})/\sqrt2\) has overlap probability \(\tfrac12\) with \(\ket{\uparrow_z}\), \(\ket{\downarrow_z}\), \(\ket{\uparrow_x}\) and \(\ket{\downarrow_x}\).
+<details><summary>Solution</summary><p>With \(\ket{\uparrow_z}\): \(1/\sqrt2\), probability \(\tfrac12\). With \(\ket{\downarrow_z}\): \(\ii/\sqrt2\), probability \(\tfrac12\). With \(\ket{\uparrow_x}\): \(\tfrac12(1+\ii)\), modulus squared \(\tfrac12\). With \(\ket{\downarrow_x}\): \(\tfrac12(1-\ii)\), modulus squared \(\tfrac12\).</p></details></li>
+<li>In a double slit, amplitudes at a point are \(\psi_1 = a\) and \(\psi_2 = a\,\ee^{\ii\phi}\). Find \(P\) as a function of \(\phi\). If a which-path detector randomises \(\phi\) uniformly, what is the average?
+<details><summary>Solution</summary><p>\(P = 2|a|^2(1+\cos\phi)\), oscillating between 0 and \(4|a|^2\). Averaging over random \(\phi\) gives \(2|a|^2\): the sum of the two single-slit probabilities, with no fringes. Randomised relative phase is exactly what decoherence does.</p></details></li>
+</ol></div>
+</section>

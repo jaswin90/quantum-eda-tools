@@ -1,0 +1,54 @@
+<section id="sec-q-postulates"><h2>States, observables and measurement</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>State the postulates of quantum mechanics and apply them to a qubit.</li>
+<li>Compute measurement probabilities, post-measurement states and expectation values.</li>
+<li>Understand compatible and incompatible observables, and derive the uncertainty relation.</li>
+<li>Know the difference between global and relative phase, and between superposition and mixture.</li>
+</ul></div>
+
+<h3 id="sec-q-post-list">The postulates</h3>
+<div class="defn"><p><b>Postulate 1 (states).</b> The state of an isolated system is a unit vector \(\ket\psi\) in a complex Hilbert space \(\mathcal H\). Vectors differing only by a global phase, \(\ket\psi\) and \(\ee^{\ii\chi}\ket\psi\), describe the same state.</p></div>
+<div class="defn"><p><b>Postulate 2 (observables).</b> Every measurable quantity is represented by a Hermitian operator \(A\). The possible results of measuring it are its eigenvalues \(a_k\).</p></div>
+<div class="defn"><p><b>Postulate 3 (Born rule).</b> If \(A = \sum_k a_kP_k\), with \(P_k\) the projector onto the eigenspace of \(a_k\), a measurement on \(\ket\psi\) gives \(a_k\) with probability</p>
+<div class="eq" id="eq-q-born">$$ p(a_k) = \bra\psi P_k\ket\psi = \|P_k\ket\psi\|^2 \qquad\big(= |\braket{a_k}{\psi}|^2 \text{ for a non-degenerate eigenvalue}\big), $$</div>
+<p>and immediately afterwards the state is \(P_k\ket\psi/\|P_k\ket\psi\|\) (the <b>projection postulate</b>).</p></div>
+<div class="defn"><p><b>Postulate 4 (dynamics).</b> Between measurements, the state evolves by the Schrödinger equation \(\ii\hbar\,\dd\ket\psi/\dd t = H\ket\psi\), where the Hamiltonian \(H\) is the energy observable.</p></div>
+<div class="defn"><p><b>Postulate 5 (composition).</b> The state space of a composite system is the tensor product of the component spaces.</p></div>
+<p>The probabilities in Postulate 3 sum to one because the projectors resolve the identity (@b1:eq-m-resolution) and \(\ket\psi\) is normalised. The spectral theorem (@b1:sec-m-op-spectral) guarantees that every Hermitian operator has such a decomposition, so every observable has a well-defined set of outcomes.</p>
+
+<h3 id="sec-q-post-qubit">Measuring a qubit</h3>
+<p>Take \(\ket\psi = \alpha\ket0+\beta\ket1\). Measuring \(Z\) (eigenvalues \(+1\) for \(\ket0\), \(-1\) for \(\ket1\)) gives \(+1\) with probability \(|\alpha|^2\) and \(-1\) with probability \(|\beta|^2\). Measuring \(X\) instead projects onto \(\ket\pm\): \(p(\pm) = |\braket{\pm}{\psi}|^2 = \tfrac12|\alpha\pm\beta|^2\). These depend on the relative phase of \(\alpha\) and \(\beta\), which \(Z\) measurements cannot see. A complete characterisation of an unknown state (<b>state tomography</b>) therefore needs measurements along several axes.</p>
+<p>Because of the global-phase freedom and normalisation, a qubit state has two real parameters. It is conventional to write</p>
+<div class="eq" id="eq-q-bloch">$$ \ket\psi = \cos\frac\theta2\,\ket0 + \ee^{\ii\phi}\sin\frac\theta2\,\ket1, \qquad 0\le\theta\le\pi,\ 0\le\phi \lt 2\pi, $$</div>
+<p>which identifies each state with a point on a sphere, the <b>Bloch sphere</b>, at polar angle \(\theta\) and azimuth \(\phi\). \(\ket0\) is the north pole, \(\ket1\) the south pole, \(\ket\pm\) are on the \(x\) axis and \(\ket{\pm\ii}\) on the \(y\) axis. The Bloch vector is \(\mathbf r = (\expval X, \expval Y, \expval Z) = (\sin\theta\cos\phi, \sin\theta\sin\phi, \cos\theta)\). Orthogonal states are antipodal on the sphere, not at right angles: the half-angles in @eq:q-bloch are responsible. Chapter 5 shows that every single-qubit gate is a rotation of this sphere.</p>
+
+<h3 id="sec-q-post-expect">Expectation values and variance</h3>
+<p>The mean result of many measurements of \(A\) on identically prepared systems is</p>
+<div class="eq" id="eq-q-expval">$$ \expval{A} = \sum_k a_k\,p(a_k) = \bra\psi A\ket\psi , \qquad (\Delta A)^2 = \expval{A^2} - \expval{A}^2 . $$</div>
+<p>Expectation values are what experiments estimate. For a qubit, \(\expval Z = |\alpha|^2 - |\beta|^2\), and estimating it to precision \(\epsilon\) takes about \(1/\epsilon^2\) repetitions ("shots"), by the binomial statistics of Book 1. That counting is behind the cost of calibrating and characterising large processors.</p>
+
+<h3 id="sec-q-post-uncert">Compatible observables and the uncertainty relation</h3>
+<p>Two observables are <b>compatible</b> if they commute. Commuting Hermitian operators share an eigenbasis, so both can have definite values at once, and measuring one does not disturb the other. Non-commuting observables cannot. Applying Cauchy–Schwarz (@b1:sec-m-vectors-inner) to the vectors \((A-\expval A)\ket\psi\) and \((B-\expval B)\ket\psi\) gives the <b>Robertson uncertainty relation</b>:</p>
+<div class="eq" id="eq-q-robertson">$$ \Delta A\,\Delta B \;\ge\; \frac12\,\big|\expval{[A,B]}\big| . $$</div>
+<p>For position and momentum, \([x,p] = \ii\hbar\) gives Heisenberg's \(\Delta x\Delta p\ge\hbar/2\). For a qubit, \([X,Y] = 2\ii Z\) gives \(\Delta X\Delta Y\ge|\expval Z|\): a state polarised along \(z\) must be uncertain in \(x\) and \(y\). For a circuit, \([\Phi,Q] = \ii\hbar\) (@b2:eq-c-canonical) means a superconducting island cannot have both a definite charge and a definite phase. The transmon is designed to sit in the regime where the phase is well defined and the charge is not, which makes it insensitive to charge noise (Book 6).</p>
+<p>The uncertainty relation is not about clumsy measurement. It is a property of the state: there is no state with definite values of two non-commuting observables.</p>
+
+<h3 id="sec-q-post-mixture">Superposition is not ignorance</h3>
+<p>Compare two preparations. In the first, every qubit is in \(\ket+ = (\ket0+\ket1)/\sqrt2\). In the second, each qubit is randomly \(\ket0\) or \(\ket1\) with probability \(\tfrac12\) each, a statistical <b>mixture</b>. Measured in the \(Z\) basis, both give 50:50 outcomes. Measured in the \(X\) basis, the first gives \(+\) every time, while the second still gives 50:50. A superposition carries phase information that a mixture lacks. Chapter 7 introduces the density matrix to describe both on equal footing; Chapter 8 shows how coupling to an environment turns superpositions into mixtures, which is decoherence.</p>
+
+<h3 id="sec-q-post-povm">Generalised measurements</h3>
+<p>Real detectors are not ideal projectors: a qubit readout has a small probability of reporting the wrong result, and a photon detector misses some photons. The general description assigns each outcome \(m\) a positive operator \(E_m\) with \(\sum_mE_m = I\) (a <b>POVM</b>), and \(p(m) = \bra\psi E_m\ket\psi\). For a qubit readout with assignment errors \(\epsilon_{01} = P(\text{"1"}\,|\,0)\) and \(\epsilon_{10} = P(\text{"0"}\,|\,1)\), \(E_{\text{"1"}} = \epsilon_{01}\ketbra00 + (1-\epsilon_{10})\ketbra11\). Book 4 uses this to define readout fidelity, and Book 1's Bayes example was exactly this POVM.</p>
+
+<div class="eda"><p>Measurement statistics set the cost of test. Every number a characterisation flow reports (a frequency, a \(T_1\), a gate fidelity) is an estimate from finitely many projective measurements, with a binomial uncertainty that scales as \(1/\sqrt{\text{shots}}\). Choosing which measurements to make, and how many shots to spend, is an experimental-design problem (@lf:eq-boed).</p></div>
+
+<div class="exercises" id="ex-q-postulates"><h4>Exercises</h4><ol>
+<li>For \(\ket\psi = \tfrac{1}{\sqrt3}\ket0 + \sqrt{\tfrac23}\,\ee^{\ii\pi/4}\ket1\), compute the probabilities of \(Z = \pm1\), \(X=\pm1\), and the Bloch vector.
+<details><summary>Solution</summary><p>\(p(Z{=}{+}1) = 1/3\), \(p(Z{=}{-}1) = 2/3\). \(\expval X = 2\Re(\alpha^*\beta) = 2\cdot\tfrac{1}{\sqrt3}\sqrt{\tfrac23}\cos\tfrac\pi4 = \tfrac{2}{3}\), so \(p(X{=}{+}1) = (1+\expval X)/2 = 5/6\). \(\expval Y = 2\Im(\alpha^*\beta) = 2/3\), \(\expval Z = -1/3\). Bloch vector \((2/3, 2/3, -1/3)\), unit length as it must be.</p></details></li>
+<li>Show that \(\expval X = 2\Re(\alpha^*\beta)\) and \(\expval Y = 2\Im(\alpha^*\beta)\) for \(\alpha\ket0+\beta\ket1\).
+<details><summary>Solution</summary><p>\(X\ket\psi = \beta\ket0+\alpha\ket1\), so \(\expval X = \alpha^*\beta + \beta^*\alpha = 2\Re(\alpha^*\beta)\). \(Y\ket\psi = -\ii\beta\ket0 + \ii\alpha\ket1\), so \(\expval Y = -\ii\alpha^*\beta + \ii\beta^*\alpha = 2\Im(\alpha^*\beta)\).</p></details></li>
+<li>Verify the uncertainty relation \(\Delta X\Delta Y\ge|\expval Z|\) for \(\ket0\) and for \(\ket+\).
+<details><summary>Solution</summary><p>For \(\ket0\): \(\expval X = \expval Y = 0\), \(\expval{X^2} = \expval{Y^2} = 1\), so \(\Delta X = \Delta Y = 1\), product 1, and \(|\expval Z| = 1\): equality. For \(\ket+\): \(\Delta X = 0\), \(\Delta Y = 1\), product 0, and \(\expval Z = 0\): satisfied.</p></details></li>
+<li>A readout has \(\epsilon_{01} = 0.02\) and \(\epsilon_{10} = 0.05\). For a qubit prepared in \(\ket+\), what is the probability of reporting "1"?
+<details><summary>Solution</summary><p>\(p(\text{"1"}) = 0.02\times\tfrac12 + 0.95\times\tfrac12 = 0.485\). Assignment errors bias the estimate of \(\expval Z\) unless corrected.</p></details></li>
+</ol></div>
+</section>
