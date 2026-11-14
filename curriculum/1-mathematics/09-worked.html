@@ -59,6 +59,17 @@ f0_fit, ki_fit, ke_fit = fit.x
 print("Qi =", f0_fit / ki_fit, " Qe =", f0_fit / ke_fit)</code></pre>
 <p>With this noise level the fitted \(Q_i\) typically lands within a few percent of \(10^6\), while \(Q_e\) is determined to about 1%. Raise the noise to <code>0.1</code> (closer to a single-photon measurement) and the \(Q_i\) scatter grows to tens of percent while \(Q_e\) stays well determined: internal loss is the small part of the total and the hardest to measure, exactly as experimentalists find.</p></div>
 
+<h3 id="sec-m-w-check">Step 6b: is the fit any good?</h3>
+<p>A fitting routine always returns numbers, even when the model is wrong. Before trusting \(Q_i\), check the fit in three ways.</p>
+<ol>
+<li><b>Look at the residuals</b>, the differences between data and fitted model. If the model is right they look like the noise: random, centred on zero, with no structure. A wiggle that repeats at the resonance, or a slope across the sweep, means the model is missing something (an impedance mismatch that tilts the circle, a second resonance nearby, or a nonlinear resonator driven too hard).</li>
+<li><b>Compare the residual size with the noise.</b> With \(N\) data points and noise \(\sigma\) per point, a good fit has \(\sum_k|r_k|^2\approx N\sigma^2\) (a "reduced chi-squared" near 1, Chapter 7). Much larger means the model is inadequate; much smaller means the noise estimate is wrong or the model is overfitting.</li>
+<li><b>Vary the starting point and the fit window.</b> A fit that lands on different answers from different starting guesses, or whose \(Q_i\) changes when the frequency window is narrowed, is not determined by the data. Nonlinear least squares finds a local minimum (Chapter 8), not necessarily the right one.</li>
+</ol>
+<div class="pitfall"><p>The most common failure in resonator fitting is forgetting the cable delay: a long cable adds a phase \(\ee^{-\ii\omega\tau}\) that winds the circle into a spiral. Fit without it and \(Q_i\) can be wrong by a factor of several while the magnitude plot still looks fine. Always plot the complex data, not just \(|S_{21}|\).</p></div>
+<div class="quick"><p>A fit to 300 points with noise 0.02 per point has a total squared residual of 1.2. Is it good?</p>
+<details><summary>Answer</summary><p>Expected \(\approx N\sigma^2 = 300\times0.0004 = 0.12\). The residual is ten times larger: the model is missing something. Plot the residuals to find out what.</p></details></div>
+
 <h3 id="sec-m-w-decide">Step 7: from numbers to decisions</h3>
 <p>Suppose the fit gives \(Q_i = (8.5\pm1.2)\times10^5\). Is the fabrication process good enough for qubits that need \(Q_i\ge10^6\)? The honest answer is a probability: if the uncertainty is Gaussian, the chance that the true value exceeds \(10^6\) is \(1 - \Phi((10 - 8.5)/1.2) = 1 - \Phi(1.25)\approx11\%\) (Chapter 7). Measuring ten resonators across the wafer, rather than measuring one more precisely, also reveals the spread between devices, which matters more for yield (Chapter 7's yield argument). This shift, from "what is the number?" to "what is the distribution, and what should we do given it?", is the core of the review's approach to quantum chip design.</p>
 

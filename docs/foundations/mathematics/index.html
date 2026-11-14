@@ -62,8 +62,9 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-complex-euler"><span class="tocnum">1.2</span>Polar form and Euler's formula</a></li>
 <li class="toc3"><a href="#sec-m-complex-phasor"><span class="tocnum">1.3</span>Oscillations and phasors</a></li>
 <li class="toc3"><a href="#sec-m-complex-rotframe"><span class="tocnum">1.4</span>Rotating frames</a></li>
-<li class="toc3"><a href="#sec-m-complex-why"><span class="tocnum">1.5</span>Why quantum amplitudes are complex</a></li>
-<li class="toc3"><a href="#sec-m-complex-code"><span class="tocnum">1.6</span>Try it in Python</a></li>
+<li class="toc3"><a href="#sec-m-complex-interf"><span class="tocnum">1.5</span>Adding waves: interference with phasors</a></li>
+<li class="toc3"><a href="#sec-m-complex-why"><span class="tocnum">1.6</span>Why quantum amplitudes are complex</a></li>
+<li class="toc3"><a href="#sec-m-complex-code"><span class="tocnum">1.7</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-vectors"><span class="tocnum">2</span>Vector spaces, inner products and Dirac notation</a></li>
 <li class="toc3"><a href="#sec-m-vectors-space"><span class="tocnum">2.1</span>Vectors beyond arrows</a></li>
 <li class="toc3"><a href="#sec-m-vectors-inner"><span class="tocnum">2.2</span>Inner products, length and angle</a></li>
@@ -96,8 +97,9 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-ode-driven"><span class="tocnum">5.4</span>Driven oscillators and resonance</a></li>
 <li class="toc3"><a href="#sec-m-ode-systems"><span class="tocnum">5.5</span>Systems of linear equations: \(\dot{\mathbf x} = A\mathbf x\)</a></li>
 <li class="toc3"><a href="#sec-m-ode-pde"><span class="tocnum">5.6</span>Partial differential equations</a></li>
-<li class="toc3"><a href="#sec-m-ode-taylor"><span class="tocnum">5.7</span>Taylor series and linearisation</a></li>
-<li class="toc3"><a href="#sec-m-ode-code"><span class="tocnum">5.8</span>Try it in Python</a></li>
+<li class="toc3"><a href="#sec-m-ode-complexfreq"><span class="tocnum">5.7</span>Complex frequencies: frequency and decay in one number</a></li>
+<li class="toc3"><a href="#sec-m-ode-taylor"><span class="tocnum">5.8</span>Taylor series and linearisation</a></li>
+<li class="toc3"><a href="#sec-m-ode-code"><span class="tocnum">5.9</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-m-fourier"><span class="tocnum">6</span>Fourier analysis, linear systems and spectra</a></li>
 <li class="toc3"><a href="#sec-m-fourier-series"><span class="tocnum">6.1</span>Fourier series: periodic signals</a></li>
 <li class="toc3"><a href="#sec-m-fourier-transform"><span class="tocnum">6.2</span>The Fourier transform: any signal</a></li>
@@ -132,7 +134,8 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-m-w-coupled"><span class="tocnum">9.4</span>Step 4: a neighbour shifts the answer (Chapter 3)</a></li>
 <li class="toc3"><a href="#sec-m-w-noise"><span class="tocnum">9.5</span>Step 5: noise and how many sweeps (Chapter 7)</a></li>
 <li class="toc3"><a href="#sec-m-w-fit"><span class="tocnum">9.6</span>Step 6: fitting and uncertainty (Chapters 7 and 8)</a></li>
-<li class="toc3"><a href="#sec-m-w-decide"><span class="tocnum">9.7</span>Step 7: from numbers to decisions</a></li>
+<li class="toc3"><a href="#sec-m-w-check"><span class="tocnum">9.7</span>Step 6b: is the fit any good?</a></li>
+<li class="toc3"><a href="#sec-m-w-decide"><span class="tocnum">9.8</span>Step 7: from numbers to decisions</a></li>
     <li class="toc2"><a href="#references">References</a></li>
   </ol>
 </nav>
@@ -239,12 +242,26 @@ document.addEventListener("DOMContentLoaded", function () {
 <p>In the rotating frame, a component oscillating at \(\omega\) in the lab appears to oscillate at \(\omega - \omega_0\), the <b>detuning</b>. A component exactly at \(\omega_0\) appears frozen. This is what a radio receiver does in hardware (it mixes the signal with a local oscillator), and what a quantum engineer does on paper to make qubit dynamics look slow and simple. You will meet it again in the Rabi problem (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-spin" title="Spin, two-level systems and Rabi oscillations">Book 3 §5</a>), in readout, and in pulse design.</p>
 <div class="example"><p><b>Worked example: beats.</b> Two tones at 5.000 and 5.002 GHz. In a frame rotating at 5.001 GHz, they appear at \(\pm1\) MHz: \(\ee^{-\ii2\pi(10^6)t} + \ee^{+\ii2\pi(10^6)t} = 2\cos(2\pi\times10^6t)\). So the lab signal is a 5.001 GHz carrier whose amplitude swells and fades once every 0.5 µs: a <b>beat</b>. The rotating frame shows this instantly; working directly with 5 GHz sines would hide it.</p></div>
 
-<h3 id="sec-m-complex-why"><span class="secnum">1.5</span> Why quantum amplitudes are complex</h3>
+<h3 id="sec-m-complex-interf"><span class="secnum">1.5</span> Adding waves: interference with phasors</h3>
+<p>What happens when two oscillations of the same frequency meet: two radio waves at an antenna, two microwave paths on a chip, or two quantum amplitudes for the same outcome? With phasors the answer is one line of complex arithmetic. Represent the two waves by \(A_1 = a_1\ee^{\ii\phi_1}\) and \(A_2 = a_2\ee^{\ii\phi_2}\). The combined wave is \(A_1 + A_2\), and its intensity (power) is the squared modulus:</p>
+\[ |A_1+A_2|^2 = a_1^2 + a_2^2 + 2a_1a_2\cos(\phi_1-\phi_2). \]
+<p>(Expand \((A_1+A_2)(A_1+A_2)^*\) and use \(\ee^{\ii x}+\ee^{-\ii x} = 2\cos x\).) The first two terms are what each wave gives alone. The third, the <b>interference term</b>, depends only on the <i>relative</i> phase:</p>
+<ul>
+<li>In phase (\(\phi_1 = \phi_2\)): \((a_1+a_2)^2\), <b>constructive</b> interference. Two equal waves give four times the power of one.</li>
+<li>Out of phase (\(\phi_1-\phi_2 = \pi\)): \((a_1-a_2)^2\), <b>destructive</b> interference. Two equal waves cancel completely.</li>
+<li>Random relative phase: the cosine averages to zero and the powers simply add, \(a_1^2+a_2^2\).</li>
+</ul>
+<div class="example"><p><b>Worked example: a notch.</b> A microwave signal passes a resonator on a feedline. Far from resonance, almost nothing enters the resonator and the transmitted amplitude is about 1. On resonance, the resonator re-radiates a wave of amplitude \(a_2\) that is exactly out of phase with the passing wave, so the transmitted amplitude is \(1 - a_2\). If \(a_2 = 0.9\), the transmission drops to 0.1 in amplitude, 1% in power: the resonance dip of Chapter 9 and Book 2, Chapter 6, explained by subtracting two arrows.</p></div>
+<p>Quantum mechanics uses exactly this rule with probability amplitudes instead of field amplitudes (Book 3, Chapter 1). The interference term is why amplitudes must be complex numbers with phases, not just probabilities, and why a random phase (decoherence) turns quantum behaviour into classical.</p>
+<div class="quick"><p>Three equal waves have phases 0, \(2\pi/3\) and \(4\pi/3\). What is the total?</p>
+<details><summary>Answer</summary><p>Zero: the three arrows point at 120° to each other and form a closed triangle. The same cancellation makes a three-phase electrical supply carry no current in its neutral wire.</p></details></div>
+
+<h3 id="sec-m-complex-why"><span class="secnum">1.6</span> Why quantum amplitudes are complex</h3>
 <p>In quantum mechanics (Book 3), when a system can reach an outcome along two indistinguishable paths, each path is assigned an <b>amplitude</b>, a complex number \(c_k\), and the probability of the outcome is the modulus squared of the sum, \(P = |c_1 + c_2|^2\). By <a class="xref" href="#eq-m-modsq">(2)</a> that contains a cross term \(2\Re(c_1c_2^*)\), so probabilities can cancel: interference.</p>
 <p>Real numbers with signs would allow some cancellation, so why complex? Two reasons that will become clear later. Time evolution is a continuous rotation of phases, \(\ee^{-\ii Et/\hbar}\), which needs a whole circle of phases, not just \(\pm1\). And describing a spin, which can point along three perpendicular directions in space, needs three mutually "perpendicular" families of states in a two-dimensional space, which real numbers cannot supply (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-why-sg" title="Stern–Gerlach and the qubit">Book 3 §1.3</a>).</p>
 <div class="pitfall"><p>Only <i>relative</i> phases between amplitudes are observable. Multiplying every amplitude by the same \(\ee^{\ii\chi}\) leaves every probability \(|c_1+c_2|^2\) unchanged, so a "global phase" means nothing physically. Changing the phase of just one amplitude changes the cross term and is very much observable. Confusing the two is a common early mistake.</p></div>
 
-<h3 id="sec-m-complex-code"><span class="secnum">1.6</span> Try it in Python</h3>
+<h3 id="sec-m-complex-code"><span class="secnum">1.7</span> Try it in Python</h3>
 <p>Python has complex numbers built in (it writes \(\ii\) as <code>1j</code>). Use it to check every hand calculation in this chapter.</p>
 <pre class="code"><code>import cmath, math
 z = 1 + 1j*math.sqrt(3)
@@ -699,7 +716,19 @@ print(rhoA)                                             # identity / 2</code></p
 </table></div></figure>
 <p>(\(\nabla^2 = \partial_x^2 + \partial_y^2 + \partial_z^2\) adds up the curvature in each direction.) The classic analytic method is <b>separation of variables</b>. For the wave equation on a string of length \(L\) with fixed ends, try \(u(x,t) = X(x)T(t)\). Substituting and dividing by \(XT\) gives \(X''/X = T''/(c^2T)\). The left side depends only on \(x\), the right only on \(t\), so both must equal the same constant, call it \(-k^2\). Then \(X = \sin kx\), and the fixed ends require \(kL = n\pi\); and \(T = \cos(ckt + \phi)\). The allowed frequencies \(\omega_n = n\pi c/L\) are the <b>modes</b> of the string, of a half-wave transmission-line resonator and of an optical cavity. Any motion is a sum of modes, each behaving like an independent harmonic oscillator. That observation, made quantum, is how light is quantised in Book 5.</p>
 
-<h3 id="sec-m-ode-taylor"><span class="secnum">5.7</span> Taylor series and linearisation</h3>
+<h3 id="sec-m-ode-complexfreq"><span class="secnum">5.7</span> Complex frequencies: frequency and decay in one number</h3>
+<p>The damped oscillator \(\ddot x + \gamma\dot x + \omega_0^2x = 0\) can be solved with a single guess, \(x = \ee^{st}\), where \(s\) is allowed to be complex. Substituting gives the <b>characteristic equation</b></p>
+\[ s^2 + \gamma s + \omega_0^2 = 0, \qquad s = -\frac\gamma2 \pm \ii\sqrt{\omega_0^2 - \frac{\gamma^2}{4}} . \]
+<p>Write \(s = -\sigma + \ii\omega\). Then \(\ee^{st} = \ee^{-\sigma t}\ee^{\ii\omega t}\): the <b>real part</b> of \(s\) is the decay rate (here \(\gamma/2\), the amplitude decay rate) and the <b>imaginary part</b> is the oscillation frequency. One complex number carries both. Three regimes follow from the square root:</p>
+<ul>
+<li><b>Underdamped</b> (\(\gamma\lt2\omega_0\)): complex \(s\), decaying oscillation. Every resonator and qubit lives here, with \(\gamma\ll\omega_0\).</li>
+<li><b>Critically damped</b> (\(\gamma = 2\omega_0\)): the fastest return to rest without overshoot, used in instrument design.</li>
+<li><b>Overdamped</b> (\(\gamma\gt2\omega_0\)): two real negative roots, slow creeping decay.</li>
+</ul>
+<p>These values of \(s\) are the eigenvalues of the matrix \(A\) when the oscillator is written as \(\dot{\mathbf x} = A\mathbf x\) (<a class="xref" href="#sec-m-ode-systems">§5.5</a>), and the <b>poles</b> of the response function \(1/(s^2+\gamma s+\omega_0^2)\). Electromagnetic eigenmode solvers report exactly these complex numbers for every mode of a chip: the imaginary part is the frequency, and the ratio of imaginary to twice the real part is the quality factor, \(Q = \omega/2\sigma\).</p>
+<div class="example"><p><b>Worked example.</b> An eigenmode solver reports a mode at \(s/2\pi = -350\ \text{Hz} + \ii\,7.000\ \text{GHz}\). The amplitude decay rate is \(\sigma = 2\pi\times350\) s\(^{-1}\), the energy decay rate \(2\sigma = 2\pi\times700\) s\(^{-1}\), and \(Q = 7\times10^9/700 = 10^7\). Stability check: every mode of a passive structure must have a negative real part. A positive one signals an amplifier or a bug.</p></div>
+
+<h3 id="sec-m-ode-taylor"><span class="secnum">5.8</span> Taylor series and linearisation</h3>
 <p>Almost every equation in the physical world is nonlinear, and almost every one is solved, at first, by pretending it is linear. The tool that justifies this is the <b>Taylor series</b>: near a point \(x_0\), a smooth function is a polynomial,</p>
 \[ f(x_0+h) = f(x_0) + f'(x_0)\,h + \tfrac12f''(x_0)\,h^2 + \tfrac16f'''(x_0)\,h^3 + \cdots \]
 <p>For small \(h\), each term is much smaller than the one before, so a few terms are enough. Expansions used throughout the series:</p>
@@ -710,7 +739,7 @@ print(rhoA)                                             # identity / 2</code></p
 <div class="quick"><p>Estimate \(\sqrt{1.02}\) without a calculator.</p>
 <details><summary>Answer</summary><p>\(1 + 0.02/2 = 1.01\). The exact value is 1.00995.</p></details></div>
 
-<h3 id="sec-m-ode-code"><span class="secnum">5.8</span> Try it in Python</h3>
+<h3 id="sec-m-ode-code"><span class="secnum">5.9</span> Try it in Python</h3>
 <p>The solution \(\mathbf x(t) = \ee^{At}\mathbf x(0)\) can be computed directly, or a numerical integrator can step the equation forward. Both should agree.</p>
 <pre class="code"><code>import numpy as np
 from scipy.linalg import expm
@@ -1170,7 +1199,18 @@ f0_fit, ki_fit, ke_fit = fit.x
 print("Qi =", f0_fit / ki_fit, " Qe =", f0_fit / ke_fit)</code></pre>
 <p>With this noise level the fitted \(Q_i\) typically lands within a few percent of \(10^6\), while \(Q_e\) is determined to about 1%. Raise the noise to <code>0.1</code> (closer to a single-photon measurement) and the \(Q_i\) scatter grows to tens of percent while \(Q_e\) stays well determined: internal loss is the small part of the total and the hardest to measure, exactly as experimentalists find.</p></div>
 
-<h3 id="sec-m-w-decide"><span class="secnum">9.7</span> Step 7: from numbers to decisions</h3>
+<h3 id="sec-m-w-check"><span class="secnum">9.7</span> Step 6b: is the fit any good?</h3>
+<p>A fitting routine always returns numbers, even when the model is wrong. Before trusting \(Q_i\), check the fit in three ways.</p>
+<ol>
+<li><b>Look at the residuals</b>, the differences between data and fitted model. If the model is right they look like the noise: random, centred on zero, with no structure. A wiggle that repeats at the resonance, or a slope across the sweep, means the model is missing something (an impedance mismatch that tilts the circle, a second resonance nearby, or a nonlinear resonator driven too hard).</li>
+<li><b>Compare the residual size with the noise.</b> With \(N\) data points and noise \(\sigma\) per point, a good fit has \(\sum_k|r_k|^2\approx N\sigma^2\) (a "reduced chi-squared" near 1, Chapter 7). Much larger means the model is inadequate; much smaller means the noise estimate is wrong or the model is overfitting.</li>
+<li><b>Vary the starting point and the fit window.</b> A fit that lands on different answers from different starting guesses, or whose \(Q_i\) changes when the frequency window is narrowed, is not determined by the data. Nonlinear least squares finds a local minimum (Chapter 8), not necessarily the right one.</li>
+</ol>
+<div class="pitfall"><p>The most common failure in resonator fitting is forgetting the cable delay: a long cable adds a phase \(\ee^{-\ii\omega\tau}\) that winds the circle into a spiral. Fit without it and \(Q_i\) can be wrong by a factor of several while the magnitude plot still looks fine. Always plot the complex data, not just \(|S_{21}|\).</p></div>
+<div class="quick"><p>A fit to 300 points with noise 0.02 per point has a total squared residual of 1.2. Is it good?</p>
+<details><summary>Answer</summary><p>Expected \(\approx N\sigma^2 = 300\times0.0004 = 0.12\). The residual is ten times larger: the model is missing something. Plot the residuals to find out what.</p></details></div>
+
+<h3 id="sec-m-w-decide"><span class="secnum">9.8</span> Step 7: from numbers to decisions</h3>
 <p>Suppose the fit gives \(Q_i = (8.5\pm1.2)\times10^5\). Is the fabrication process good enough for qubits that need \(Q_i\ge10^6\)? The honest answer is a probability: if the uncertainty is Gaussian, the chance that the true value exceeds \(10^6\) is \(1 - \Phi((10 - 8.5)/1.2) = 1 - \Phi(1.25)\approx11\%\) (Chapter 7). Measuring ten resonators across the wafer, rather than measuring one more precisely, also reveals the spread between devices, which matters more for yield (Chapter 7's yield argument). This shift, from "what is the number?" to "what is the distribution, and what should we do given it?", is the core of the review's approach to quantum chip design.</p>
 
 <div class="eda"><p>Resonator characterisation is the simplest instance of the loop the review wants to automate: a model predicts a response from design parameters, a measurement tests it, a fit extracts parameters with uncertainty, and the result updates the process model and the next design (<a class="xref ext" href="../../index.html#sec-prob-record" title="Integration: the die record">Lab to Foundry §11.1</a>). Every step uses this book's mathematics.</p></div>

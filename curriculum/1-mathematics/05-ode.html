@@ -63,6 +63,18 @@
 </table></div></figure>
 <p>(\(\nabla^2 = \partial_x^2 + \partial_y^2 + \partial_z^2\) adds up the curvature in each direction.) The classic analytic method is <b>separation of variables</b>. For the wave equation on a string of length \(L\) with fixed ends, try \(u(x,t) = X(x)T(t)\). Substituting and dividing by \(XT\) gives \(X''/X = T''/(c^2T)\). The left side depends only on \(x\), the right only on \(t\), so both must equal the same constant, call it \(-k^2\). Then \(X = \sin kx\), and the fixed ends require \(kL = n\pi\); and \(T = \cos(ckt + \phi)\). The allowed frequencies \(\omega_n = n\pi c/L\) are the <b>modes</b> of the string, of a half-wave transmission-line resonator and of an optical cavity. Any motion is a sum of modes, each behaving like an independent harmonic oscillator. That observation, made quantum, is how light is quantised in Book 5.</p>
 
+<h3 id="sec-m-ode-complexfreq">Complex frequencies: frequency and decay in one number</h3>
+<p>The damped oscillator \(\ddot x + \gamma\dot x + \omega_0^2x = 0\) can be solved with a single guess, \(x = \ee^{st}\), where \(s\) is allowed to be complex. Substituting gives the <b>characteristic equation</b></p>
+\[ s^2 + \gamma s + \omega_0^2 = 0, \qquad s = -\frac\gamma2 \pm \ii\sqrt{\omega_0^2 - \frac{\gamma^2}{4}} . \]
+<p>Write \(s = -\sigma + \ii\omega\). Then \(\ee^{st} = \ee^{-\sigma t}\ee^{\ii\omega t}\): the <b>real part</b> of \(s\) is the decay rate (here \(\gamma/2\), the amplitude decay rate) and the <b>imaginary part</b> is the oscillation frequency. One complex number carries both. Three regimes follow from the square root:</p>
+<ul>
+<li><b>Underdamped</b> (\(\gamma\lt2\omega_0\)): complex \(s\), decaying oscillation. Every resonator and qubit lives here, with \(\gamma\ll\omega_0\).</li>
+<li><b>Critically damped</b> (\(\gamma = 2\omega_0\)): the fastest return to rest without overshoot, used in instrument design.</li>
+<li><b>Overdamped</b> (\(\gamma\gt2\omega_0\)): two real negative roots, slow creeping decay.</li>
+</ul>
+<p>These values of \(s\) are the eigenvalues of the matrix \(A\) when the oscillator is written as \(\dot{\mathbf x} = A\mathbf x\) (@sec:m-ode-systems), and the <b>poles</b> of the response function \(1/(s^2+\gamma s+\omega_0^2)\). Electromagnetic eigenmode solvers report exactly these complex numbers for every mode of a chip: the imaginary part is the frequency, and the ratio of imaginary to twice the real part is the quality factor, \(Q = \omega/2\sigma\).</p>
+<div class="example"><p><b>Worked example.</b> An eigenmode solver reports a mode at \(s/2\pi = -350\ \text{Hz} + \ii\,7.000\ \text{GHz}\). The amplitude decay rate is \(\sigma = 2\pi\times350\) s\(^{-1}\), the energy decay rate \(2\sigma = 2\pi\times700\) s\(^{-1}\), and \(Q = 7\times10^9/700 = 10^7\). Stability check: every mode of a passive structure must have a negative real part. A positive one signals an amplifier or a bug.</p></div>
+
 <h3 id="sec-m-ode-taylor">Taylor series and linearisation</h3>
 <p>Almost every equation in the physical world is nonlinear, and almost every one is solved, at first, by pretending it is linear. The tool that justifies this is the <b>Taylor series</b>: near a point \(x_0\), a smooth function is a polynomial,</p>
 \[ f(x_0+h) = f(x_0) + f'(x_0)\,h + \tfrac12f''(x_0)\,h^2 + \tfrac16f'''(x_0)\,h^3 + \cdots \]
