@@ -1,41 +1,113 @@
 <section id="sec-c-osc"><h2>Oscillators: damping, driving, coupling and nonlinearity</h2>
 <div class="goals"><p>Goals</p><ul>
 <li>Describe a lossy resonator with internal and external quality factors and the input–output picture.</li>
-<li>Treat coupled oscillators: normal modes, avoided crossings, and the dispersive limit.</li>
+<li>Read a resonator's reflection trace: under-, critically and over-coupled.</li>
+<li>Treat coupled oscillators: normal modes, avoided crossings, energy swapping and the dispersive limit.</li>
 <li>Understand the nonlinear (Duffing) oscillator, whose frequency depends on amplitude, as the classical shadow of a transmon.</li>
 <li>Meet parametric driving, the principle behind quantum-limited amplifiers.</li>
 </ul></div>
 
+<div class="bigpic"><p>A superconducting quantum chip is, from a classical point of view, a collection of oscillators: qubits (slightly nonlinear oscillators), readout resonators (linear oscillators), couplers, filters, and unwanted "box modes" of the package. Almost every property a designer cares about is an oscillator property: its frequency, how fast it loses energy (its quality factor), how strongly it talks to its neighbours, and how nonlinear it is. This chapter covers all four classically. Book 3 then re-does each with quantum mechanics, and the formulas barely change.</p></div>
+
 <h3 id="sec-c-osc-loss">Loss: internal and external</h3>
-<p>Book 1 described a damped oscillator with one decay rate \(\gamma\). A real resonator loses energy through several independent channels, and the rates add: \(\gamma = \sum_i\gamma_i\), or equivalently</p>
-<div class="eq" id="eq-c-qsum">$$ \frac1{Q_L} = \frac1{Q_i} + \frac1{Q_e}, $$</div>
-<p>where the <b>internal</b> quality factor \(Q_i\) collects unwanted loss (dielectrics, metal surfaces, radiation) and the <b>external</b> or coupling quality factor \(Q_e\) describes deliberate coupling to a measurement line. The <b>loaded</b> \(Q_L\) is what sets the observed linewidth. A designer chooses \(Q_e\) by geometry (a coupling capacitor or a length of line running parallel to a feedline). Fabrication and materials set \(Q_i\). Measuring both separately from a single resonance trace is the standard way to characterise materials loss (Chapter 6 and @lf:sec-mat-part).</p>
-<p>In terms of the complex amplitude \(a(t)\) of the resonator (normalised so \(|a|^2\) is the stored energy in units of \(\hbar\omega_0\), i.e. the photon number), coupled to an input line carrying amplitude \(a_{\mathrm{in}}\), the <b>input–output equations</b> read</p>
+<p>Book 1 described a damped oscillator with one energy decay rate. The <b>quality factor</b> \(Q\) is the standard way to quote it: \(Q = \omega_0/\kappa\), where \(\kappa\) is the energy decay rate (energy falls as \(\ee^{-\kappa t}\)). Roughly, \(Q/2\pi\) is the number of oscillations before the energy falls by a factor \(\ee\). A guitar string has \(Q\sim10^3\); a good superconducting resonator \(Q\sim10^6\), meaning it rings for a million cycles.</p>
+<p>A real resonator loses energy through several independent channels at once, and <i>rates add</i> (just as two leaks in a bucket drain it faster than either alone): \(\kappa = \sum_i\kappa_i\). Since \(Q\propto1/\kappa\), inverse quality factors add:</p>
+<div class="eq" id="eq-c-qsum">$$ \frac1{Q_L} = \frac1{Q_i} + \frac1{Q_e}. $$</div>
+<ul>
+<li>The <b>internal</b> quality factor \(Q_i\) collects unwanted loss: absorption in dielectrics and surface layers, resistance in metals, radiation into the package. Fabrication and materials set it.</li>
+<li>The <b>external</b> (coupling) quality factor \(Q_e\) describes deliberate coupling to a measurement line. A designer sets it by geometry: a coupling capacitor or a length of line running beside a feedline.</li>
+<li>The <b>loaded</b> \(Q_L\) is what you see: it sets the width of the resonance.</li>
+</ul>
+<p>Because \(1/Q_L\) is dominated by the <i>smaller</i> of the two, a resonator with \(Q_i = 10^6\) and \(Q_e = 10^4\) has \(Q_L\approx10^4\): the measurement port dominates and the materials loss is hard to see. Measuring both separately from one resonance trace is the standard way to characterise materials loss (Chapter 6 and @lf:sec-mat-part). Here is how that works.</p>
+<p>Describe the resonator by a complex amplitude \(a(t)\), normalised so that \(|a|^2\) is the stored energy in units of \(\hbar\omega_0\) (i.e. the number of photons). It is fed by an incoming wave \(a_{\mathrm{in}}\) on a transmission line and emits an outgoing wave \(a_{\mathrm{out}}\), each normalised so \(|a_{\mathrm{in}}|^2\) is photons per second. The <b>input–output equations</b> are</p>
 <div class="eq" id="eq-c-inout">$$ \dot a = -\ii\omega_0a - \frac{\kappa_i+\kappa_e}{2}\,a + \sqrt{\kappa_e}\,a_{\mathrm{in}}, \qquad a_{\mathrm{out}} = a_{\mathrm{in}} - \sqrt{\kappa_e}\,a , $$</div>
-<p>with \(\kappa_{i,e} = \omega_0/Q_{i,e}\). At steady state with a drive at \(\omega\), \(a = \sqrt{\kappa_e}a_{\mathrm{in}}/[\ii(\omega_0-\omega) + \kappa/2]\), so the reflection coefficient is</p>
+<p>with \(\kappa_{i,e} = \omega_0/Q_{i,e}\). Read them term by term:</p>
+<ul>
+<li>\(-\ii\omega_0a\): free oscillation (the phasor spins).</li>
+<li>\(-\tfrac{\kappa}2a\): the amplitude decays at half the energy rate (energy is amplitude squared).</li>
+<li>\(+\sqrt{\kappa_e}a_{\mathrm{in}}\): the incoming wave pushes in through the same port that leaks out. The same \(\kappa_e\) appears in both, a fact called reciprocity.</li>
+<li>\(a_{\mathrm{out}} = a_{\mathrm{in}} - \sqrt{\kappa_e}a\): what goes back down the line is the reflected input plus whatever leaks out of the resonator, which interferes with it.</li>
+</ul>
+<p>Drive at frequency \(\omega\), so \(a_{\mathrm{in}}\propto\ee^{-\ii\omega t}\) and in steady state \(a\propto\ee^{-\ii\omega t}\) too. Then \(\dot a = -\ii\omega a\), and the first equation becomes algebra: \(a = \sqrt{\kappa_e}a_{\mathrm{in}}/[\ii(\omega_0-\omega) + \kappa/2]\). Substituting in the second gives the <b>reflection coefficient</b>:</p>
 <div class="eq" id="eq-c-reflect">$$ r(\omega) = \frac{a_{\mathrm{out}}}{a_{\mathrm{in}}} = 1 - \frac{\kappa_e}{\ii(\omega_0-\omega) + (\kappa_i+\kappa_e)/2} . $$</div>
-<p>On resonance \(r = (\kappa_i - \kappa_e)/(\kappa_i+\kappa_e)\). If \(\kappa_e = \kappa_i\) (<b>critical coupling</b>) nothing is reflected: all the incoming power is absorbed. If \(\kappa_e\gg\kappa_i\) (<b>overcoupled</b>) almost everything comes back, but with its phase flipped by \(\pi\), which is how a readout resonator encodes information in phase. Plotted in the complex plane as \(\omega\) sweeps, \(r(\omega)\) traces a circle whose diameter is \(2\kappa_e/\kappa\); fitting that circle separates \(\kappa_i\) from \(\kappa_e\). The same equations, with operators in place of numbers, are the quantum input–output theory of Book 5.</p>
+<p>On resonance (\(\omega = \omega_0\)) this simplifies to \(r = (\kappa_i - \kappa_e)/(\kappa_i+\kappa_e)\). Three regimes:</p>
+<figure class="tbl" id="tab-c-coupling"><figcaption>The three coupling regimes of a resonator measured in reflection.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Regime</th><th>Condition</th><th>\(r\) on resonance</th><th>What you see</th></tr>
+<tr><td>Undercoupled</td><td>\(\kappa_e\lt\kappa_i\)</td><td>small, positive</td><td>shallow dip, little phase change</td></tr>
+<tr><td>Critically coupled</td><td>\(\kappa_e=\kappa_i\)</td><td>0</td><td>deep dip: all power absorbed</td></tr>
+<tr><td>Overcoupled</td><td>\(\kappa_e\gt\kappa_i\)</td><td>negative, near \(-1\)</td><td>little dip, phase flips by \(\pi\)</td></tr>
+</table></div></figure>
+<p>A qubit readout resonator is deliberately overcoupled, so that information arrives as a phase shift of a strong reflected signal. Plotted in the complex plane as \(\omega\) sweeps, \(r(\omega)\) traces a <b>circle</b> that starts and ends at \(r=1\) far from resonance and has diameter \(2\kappa_e/\kappa\). Fitting that circle (the "circle fit" used in every materials lab) gives \(\kappa_e\) from its size and \(\kappa = \kappa_i+\kappa_e\) from how fast the point moves round it, and hence \(\kappa_i\) and \(Q_i\). The same equations, with operators in place of numbers, are the quantum input–output theory of Book 5.</p>
+<div class="quick"><p>A resonator has \(Q_i = Q_e = 10^5\). What fraction of incoming power on resonance is reflected?</p>
+<details><summary>Answer</summary><p>None: it is critically coupled, \(r = 0\). All the power is absorbed in the resonator's internal loss.</p></details></div>
 
 <h3 id="sec-c-osc-coupled">Coupled oscillators and avoided crossings</h3>
-<p>Two oscillators with amplitudes \(a_1, a_2\), frequencies \(\omega_1, \omega_2\) and a weak coupling \(g\) obey, in the same complex-amplitude language,</p>
+<p>Two oscillators with complex amplitudes \(a_1, a_2\), frequencies \(\omega_1, \omega_2\) and a weak coupling \(g\) (from a shared capacitor, Chapter 1) obey</p>
 <div class="eq" id="eq-c-coupled">$$ \ii\frac{\dd}{\dd t}\begin{pmatrix}a_1\\a_2\end{pmatrix} = \begin{pmatrix}\omega_1 & g\\ g & \omega_2\end{pmatrix}\begin{pmatrix}a_1\\a_2\end{pmatrix}. $$</div>
-<p>This is the "coupled-mode" form: it keeps only the slowly varying parts of the motion and is accurate when \(g\ll\omega_{1,2}\). It has exactly the structure of the Schrödinger equation for a two-level system. The normal-mode frequencies were found in Book 1: \(\omega_\pm = \bar\omega\pm\tfrac12\sqrt{\Delta^2+4g^2}\). @fig:c-avoided plots them as one oscillator is tuned through the other. The uncoupled frequencies cross; the coupled ones repel, with a minimum gap of \(2g\). Far from the crossing, each mode is pushed away by \(g^2/\Delta\), a shift called the <b>dispersive shift</b>. It is small but nonzero, and it is how a qubit is read out without being directly measured: the qubit's state shifts the resonator's frequency by a state-dependent amount (Book 6).</p>
+<p>This is the "coupled-mode" form. It keeps only the slowly varying, positive-frequency parts of the motion, and is accurate when \(g\ll\omega_{1,2}\). Look at its shape: \(\ii\,\dd\mathbf a/\dd t = M\mathbf a\) with a Hermitian matrix \(M\). That is <i>exactly</i> the Schrödinger equation for a two-level system with \(\hbar = 1\). Everything you learn here about two coupled oscillators transfers directly to a qubit in Book 3.</p>
+<p>The normal modes are the eigenvectors of \(M\), and the normal-mode frequencies its eigenvalues (Book 1, Chapter 2): with \(\bar\omega = (\omega_1+\omega_2)/2\) and detuning \(\Delta = \omega_1 - \omega_2\),</p>
+\[ \omega_\pm = \bar\omega\pm\tfrac12\sqrt{\Delta^2+4g^2}. \]
+<p>@fig:c-avoided plots them as oscillator 1 is tuned through oscillator 2.</p>
 <figure id="fig-c-avoided">
 <img src="../figures/fig-c-avoided.svg" alt="Two mode frequencies versus detuning, showing an avoided crossing of width 2g.">
 <figcaption>Normal-mode frequencies of two coupled oscillators as oscillator 1 is tuned through oscillator 2 (fixed at \(\omega_2\)), for \(g = 0.02\,\omega_2\). Dashed: uncoupled frequencies. The minimum splitting is \(2g\); far away, the shift is \(g^2/\Delta\).</figcaption>
 </figure>
-<p>On resonance, energy put into one oscillator swaps completely into the other in a time \(\pi/2g\) and back. Off resonance the swap is incomplete: the maximum fraction transferred is \(4g^2/(\Delta^2+4g^2)\). This simple formula is the classical version of the Rabi formula of Book 3 and the basis of "frequency collisions" in the review: two qubits that are accidentally close in frequency exchange energy when they should not (@lf:sec-var-collisions).</p>
+<p>Three things to read off the figure:</p>
+<ol>
+<li><b>At resonance</b> (\(\Delta = 0\)) the uncoupled lines would cross, but the coupled frequencies repel: they are split by exactly \(2g\). This is an <b>avoided crossing</b>, and measuring its gap is how experimenters measure couplings. The modes there are equal mixtures, \((a_1\pm a_2)/\sqrt2\).</li>
+<li><b>Far from resonance</b> (\(|\Delta|\gg g\)) each mode is mostly one of the original oscillators, but pushed away from the other by \(g^2/\Delta\). Expand the square root: \(\tfrac12\sqrt{\Delta^2+4g^2}\approx\tfrac12|\Delta|+g^2/|\Delta|\). This small push is the <b>dispersive shift</b>.</li>
+<li><b>Mode character swaps</b>: the upper branch is oscillator 2 on the left of the figure and oscillator 1 on the right.</li>
+</ol>
+<p>The dispersive shift is how a qubit is read out without being directly measured. The qubit's state changes the resonator's frequency by a state-dependent amount of order \(g^2/\Delta\), and that changes the phase of a reflected signal (Book 6).</p>
+<p>What happens in time? Start with all energy in oscillator 1. On resonance the energy swaps completely into oscillator 2 in a time \(\pi/2g\) and back, like two pendulums joined by a weak spring. Off resonance the swap is incomplete: the maximum fraction transferred is</p>
+\[ P_{\max} = \frac{4g^2}{\Delta^2+4g^2}, \]
+<p>and it swaps back and forth at the faster rate \(\sqrt{\Delta^2+4g^2}\). This is the classical version of the Rabi formula of Book 3, and the basis of "frequency collisions" in the review: two qubits that are accidentally close in frequency exchange energy when they should not (@lf:sec-var-collisions).</p>
+<div class="intuition"><p>Think of two people pushing each other on swings. If they swing at the same rhythm, every small push adds up and energy flows fully from one to the other. If their rhythms differ, the pushes go in and out of step, and only a little energy changes hands before the timing reverses the flow. The detuning \(\Delta\) is the mismatch of rhythms; \(g\) is how hard they push.</p></div>
 
 <h3 id="sec-c-osc-duffing">Nonlinearity: the Duffing oscillator</h3>
-<p>A pendulum's potential \(-\cos\theta\) is harmonic only for small angles: \(-\cos\theta\approx-1+\theta^2/2-\theta^4/24\). The quartic term softens the restoring force at large amplitude. The equation \(\ddot x + \omega_0^2x - \beta x^3 = 0\) (the <b>Duffing oscillator</b>, here with a softening sign) has a frequency that falls with amplitude \(A\):</p>
+<p>So far every oscillator has been linear: its frequency does not depend on how hard it swings. A linear oscillator cannot be a qubit, because all its energy levels are equally spaced (Book 3): a pulse at the frequency that takes it from level 0 to level 1 also takes it from 1 to 2, 2 to 3, and so on. We need nonlinearity.</p>
+<p>A pendulum's potential \(-\cos\theta\) is harmonic only for small angles. Its Taylor series (Book 1) is \(-\cos\theta\approx-1+\theta^2/2-\theta^4/24\). The quartic term softens the restoring force at large amplitude. The general model is the <b>Duffing oscillator</b>, \(\ddot x + \omega_0^2x - \beta x^3 = 0\) (here written with a softening sign, \(\beta\gt0\)). Its frequency falls with amplitude \(A\):</p>
 <div class="eq" id="eq-c-duffing">$$ \omega(A) \approx \omega_0 - \frac{3\beta A^2}{8\omega_0}. $$</div>
-<p>(Derivation: substitute \(x = A\cos\omega t\), use \(\cos^3 = \tfrac34\cos+\tfrac14\cos3\), keep the term at \(\omega\).) Because energy is proportional to \(A^2\), the frequency decreases linearly with energy. In quantum mechanics energy comes in quanta, so each successive level is spaced a little less than the one below. The spacing between the first two levels can then be addressed without touching the next: that is what makes an anharmonic oscillator usable as a qubit. A transmon is exactly a Josephson-junction pendulum with a large capacitance, and its anharmonicity \(\alpha\approx-E_C/\hbar\) is the quantum version of @eq:c-duffing (@lf:eq-freq).</p>
-<p>Driven strongly, a Duffing oscillator develops <b>bistability</b>: two stable amplitudes for the same drive, with hysteresis as the drive frequency is swept. Josephson bifurcation amplifiers exploit this for readout, and it also limits how hard you can drive a readout resonator coupled to a qubit before it misbehaves.</p>
+<p><b>Derivation.</b> Guess \(x\approx A\cos\omega t\). Then \(x^3 = A^3\cos^3\omega t = A^3(\tfrac34\cos\omega t + \tfrac14\cos3\omega t)\), using a trig identity. Substitute and keep only the terms at frequency \(\omega\) (the \(3\omega\) term is a small correction): \(-\omega^2A + \omega_0^2A - \tfrac34\beta A^3 = 0\), so \(\omega^2 = \omega_0^2 - \tfrac34\beta A^2\). Taking the square root with \(\sqrt{1-\epsilon}\approx1-\epsilon/2\) gives @eq:c-duffing.</p>
+<p>Because energy is proportional to \(A^2\), the frequency decreases linearly with energy. In quantum mechanics energy comes in quanta, so each successive level is spaced a little less than the one below. The spacing between levels 0 and 1 differs from that between 1 and 2 by the <b>anharmonicity</b>. A pulse tuned to the 0→1 transition then does not drive 1→2: the oscillator behaves as a two-level system, a qubit. A transmon is exactly a Josephson-junction pendulum with a large capacitance, and its anharmonicity \(\alpha\approx-E_C/\hbar\) (about \(-200\) to \(-300\) MHz) is the quantum version of @eq:c-duffing (@lf:eq-freq).</p>
+<p>Driven strongly, a Duffing oscillator develops <b>bistability</b>: for the same drive there are two stable amplitudes, and sweeping the drive frequency up and then down traces different curves (hysteresis). The resonance peak leans over and breaks. Josephson bifurcation amplifiers exploit this for readout, and it also limits how hard you can drive a readout resonator coupled to a qubit before it misbehaves.</p>
+<div class="pitfall"><p>Nonlinearity is a double-edged sword. A qubit needs enough of it to be addressable, but readout resonators, filters and couplers inherit some nonlinearity from the junctions they are coupled to. If you drive them too hard, their frequency shifts and the readout calibration fails. Designers therefore compute not only frequencies but also "self-Kerr" and "cross-Kerr" shifts (the quantum names for Duffing shifts) for every mode.</p></div>
 
 <h3 id="sec-c-osc-param">Parametric driving and amplification</h3>
-<p>Instead of pushing an oscillator, one can modulate one of its parameters. A child on a swing pumps by raising and lowering their centre of mass twice per cycle. Mathematically, \(\ddot x + \omega_0^2[1 + \epsilon\cos(2\omega_0t)]x = 0\) (the Mathieu equation) has solutions that grow exponentially when the pump is at twice the resonance frequency. One quadrature of the motion is amplified, by a gain \(\ee^{\epsilon\omega_0t/2}\) to first order, while the other is de-amplified. This is <b>degenerate parametric amplification</b>. If the oscillator also has loss, gain and loss compete, and below threshold the device acts as a stable amplifier for weak incoming signals. A Josephson parametric amplifier (JPA) modulates the junction inductance with a pump; a travelling-wave parametric amplifier (TWPA) does it along a transmission line of many junctions [@macklin2015]. These amplifiers add only the minimum noise allowed by quantum mechanics and are what makes single-shot qubit readout possible. Book 5 shows that the de-amplified quadrature is a <b>squeezed</b> state of light.</p>
+<p>Instead of pushing an oscillator, one can <i>modulate one of its parameters</i>. A child on a swing pumps by raising and lowering their centre of mass, twice per swing, without anyone pushing. Mathematically,</p>
+\[ \ddot x + \omega_0^2[1 + \epsilon\cos(2\omega_0t)]\,x = 0 \]
+<p>(the Mathieu equation) has solutions that grow exponentially when the pump is at twice the resonance frequency. Why twice? The pump must stiffen the spring each time the swing passes through the bottom with maximum speed, and soften it at each turning point, and that happens twice per cycle.</p>
+<p>A key subtlety: only one <b>quadrature</b> is amplified. Write the motion as \(x = X_1\cos\omega_0t + X_2\sin\omega_0t\). Depending on the pump phase, \(X_1\) grows as \(\ee^{\epsilon\omega_0t/4}\) while \(X_2\) shrinks at the same rate (to first order). This is <b>degenerate parametric amplification</b>. If the oscillator also has loss, gain and loss compete; below the threshold where gain wins, the device is a stable amplifier for weak incoming signals.</p>
+<p>A Josephson parametric amplifier (JPA) modulates the junction inductance with a pump; a travelling-wave parametric amplifier (TWPA) does it along a transmission line of many junctions [@macklin2015]. These amplifiers add only the minimum noise allowed by quantum mechanics and are what makes single-shot qubit readout possible. Book 5 shows that the de-amplified quadrature is a <b>squeezed</b> state of light: quieter than the vacuum in one quadrature, noisier in the other.</p>
+
+<h3 id="sec-c-osc-code">Try it in Python</h3>
+<p>Compute the reflection coefficient of a resonator in the three coupling regimes, and check the size of the circle it traces.</p>
+<pre class="code"><code>import numpy as np
+
+f0 = 7e9
+w0 = 2 * np.pi * f0
+f = np.linspace(f0 - 2e6, f0 + 2e6, 2001)
+w = 2 * np.pi * f
+
+for name, Qi, Qe in [("under", 1e5, 4e5), ("critical", 1e5, 1e5), ("over", 1e5, 1e4)]:
+    ki, ke = w0 / Qi, w0 / Qe
+    r = 1 - ke / (1j * (w0 - w) + (ki + ke) / 2)
+    r0 = r[len(r) // 2]
+    diam = np.max(np.abs(r - 1))           # circle passes through r = 1
+    print(f"{name:8s} |r0|={abs(r0):.3f}  phase={np.degrees(np.angle(r0)):6.1f} deg"
+          f"  diameter={diam:.3f}  (2ke/k = {2 * ke / (ki + ke):.3f})")</code></pre>
+<p>The diameter matches \(2\kappa_e/\kappa\) in every case, and only the overcoupled resonator flips the phase by 180° on resonance. Plot <code>r.real</code> against <code>r.imag</code> to see the circles.</p>
 
 <div class="eda"><p>A chip contains dozens to thousands of coupled oscillators: qubits, couplers, readout resonators, Purcell filters and parasitic package modes. The design problem is to keep every pair either strongly coupled on purpose or far enough apart that their dispersive shifts \(g^2/\Delta\) are harmless. That is a constraint-satisfaction problem over the whole frequency plan, made statistical by fabrication spread (@lf:sec-var-alloc).</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Loss rates add: \(1/Q_L = 1/Q_i + 1/Q_e\); \(Q_i\) from materials, \(Q_e\) from design.</li>
+<li>Reflection \(r(\omega)\) traces a circle of diameter \(2\kappa_e/\kappa\); fitting it separates internal from external loss.</li>
+<li>Coupled oscillators: avoided crossing of gap \(2g\), dispersive shift \(g^2/\Delta\), maximum transfer \(4g^2/(\Delta^2+4g^2)\).</li>
+<li>Duffing nonlinearity makes frequency depend on amplitude: the classical origin of qubit anharmonicity.</li>
+<li>Pumping a parameter at \(2\omega_0\) amplifies one quadrature and squeezes the other.</li>
+</ul></div>
 
 <div class="exercises" id="ex-c-osc"><h4>Exercises</h4><ol>
 <li>A resonator has \(Q_i = 10^6\) and \(Q_e = 10^4\) at 7 GHz. What are \(Q_L\), the linewidth, and the depth of the reflection dip?
@@ -46,5 +118,9 @@
 <details><summary>Solution</summary><p>\(g^2/\Delta = 100/400 = 0.25\) MHz. Maximum transfer \(4g^2/(\Delta^2+4g^2) = 400/(160000+400)\approx0.25\%\). If the detuning had been only 20 MHz the transfer would be 50%.</p></details></li>
 <li>Derive @eq:c-duffing by substituting \(x = A\cos\omega t\) into \(\ddot x + \omega_0^2x - \beta x^3 = 0\) and keeping only the \(\cos\omega t\) terms.
 <details><summary>Solution</summary><p>\(-\omega^2A\cos\omega t + \omega_0^2A\cos\omega t - \beta A^3(\tfrac34\cos\omega t + \tfrac14\cos3\omega t) = 0\). Matching \(\cos\omega t\): \(\omega^2 = \omega_0^2 - \tfrac34\beta A^2\), so \(\omega\approx\omega_0 - 3\beta A^2/8\omega_0\).</p></details></li>
+<li>Find \(\beta\) for a pendulum (\(\ddot\theta + \omega_0^2\sin\theta = 0\)) and the fractional frequency drop at a 20° swing.
+<details><summary>Solution</summary><p>\(\sin\theta\approx\theta - \theta^3/6\), so \(\beta = \omega_0^2/6\) and \(\Delta\omega/\omega_0 = 3\beta A^2/8\omega_0^2 = A^2/16\). At \(A = 0.349\) rad, a drop of 0.76% (the exact pendulum formula agrees to within 0.01%).</p></details></li>
+<li>On resonance, how long does it take to transfer energy completely between two oscillators with \(g/2\pi = 5\) MHz?
+<details><summary>Solution</summary><p>\(\pi/2g = \pi/(2\times2\pi\times5\times10^6) = 50\) ns. Two-qubit "iSWAP"-type gates use exactly this exchange.</p></details></li>
 </ol></div>
 </section>
