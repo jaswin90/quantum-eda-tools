@@ -276,7 +276,38 @@ def fig_i_threshold():
     save(p, "fig-i-threshold.svg", "Logical error rate versus physical error rate for surface-code distances 3 to 9.")
 
 
-FIGS = [fig_i_rb, fig_i_threshold, fig_q_qho, fig_q_rabi, fig_q_decoh, fig_m_lorentz, fig_m_yield, fig_c_avoided, fig_c_notch, fig_c_nth]
+# ============================================================== Book 5: quantum photonics
+def fig_p_hom():
+    p = Plot()
+    p.set_x(-4, 4)
+    p.set_y(0, 0.6)
+    p.axes([-4, -2, 0, 2, 4], [0, 0.25, 0.5], "delay τ / σ", "coincidence probability P_c", fmt, fmt)
+    p.hline(0.5)
+    for V, col, lab in ((1.0, C1, "V = 1"), (0.9, C2, "V = 0.9")):
+        p.line([(x, 0.5 * (1 - V * math.exp(-x * x / 4))) for x in frange(-4, 4, 600)], col)
+    p.label(1.1, 0.12, "V = 1", C1, dy=20)
+    p.label(1.2, 0.17, "V = 0.9", C2, dy=-12)
+    p.label(2.3, 0.5, "distinguishable photons", INK2, dy=-8, size=13, weight=400)
+    save(p, "fig-p-hom.svg", "Hong-Ou-Mandel dip versus delay for two visibilities.")
+
+
+def fig_p_herald():
+    p = Plot()
+    p.set_x(1e-3, 1, log=True)
+    p.set_y(1e-6, 1, log=True)
+    p.axes([1e-3, 1e-2, 1e-1, 1], [1e-6, 1e-4, 1e-2, 1], "mean pair number per pulse n̄", "probability per pulse",
+           lambda v: mf.p10(int(round(math.log10(v)))), lambda v: mf.p10(int(round(math.log10(v)))))
+    xs = [10 ** e for e in frange(-3, 0, 300)]
+    def l2(n): return n / (1 + n)
+    p.line([(n, (1 - l2(n)) * l2(n)) for n in xs], C1)
+    p.line([(n, l2(n) ** 2) for n in xs], C2)
+    p.vline(0.05)
+    p.label(0.0015, 0.0015, "exactly one pair", C1, dy=-10)
+    p.label(0.012, 1.4e-4, "two or more pairs", C2, dy=18)
+    save(p, "fig-p-herald.svg", "One-pair and multi-pair probabilities of a heralded source versus mean pair number.")
+
+
+FIGS = [fig_p_hom, fig_p_herald, fig_i_rb, fig_i_threshold, fig_q_qho, fig_q_rabi, fig_q_decoh, fig_m_lorentz, fig_m_yield, fig_c_avoided, fig_c_notch, fig_c_nth]
 
 
 def main():

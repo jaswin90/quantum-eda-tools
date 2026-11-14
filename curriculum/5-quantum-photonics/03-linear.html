@@ -1,0 +1,48 @@
+<section id="sec-p-linear"><h2>Linear optics and two-photon interference</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Describe a beam splitter as a unitary transformation of mode operators, and compute its effect on photon-number states.</li>
+<li>Derive the Hong–Ou–Mandel effect and understand distinguishability.</li>
+<li>Decompose any multimode interferometer into beam splitters and phase shifters (Reck, Clements), and understand boson sampling.</li>
+<li>Encode qubits in photons (dual-rail, polarisation, time-bin), and model loss as a beam splitter.</li>
+</ul></div>
+
+<h3 id="sec-p-lin-bs">The beam splitter</h3>
+<p>A lossless beam splitter or directional coupler (@b2:eq-c-bs) mixes two input modes into two output modes. Quantum mechanically, it transforms the annihilation operators linearly and unitarily:</p>
+<div class="eq" id="eq-p-bs">$$ \begin{pmatrix}b_1\\b_2\end{pmatrix} = \begin{pmatrix}t & r'\\ r & t'\end{pmatrix}\begin{pmatrix}a_1\\a_2\end{pmatrix}, \qquad \text{50:50:}\ \ b_1 = \frac{a_1 + \ii a_2}{\sqrt2},\ \ b_2 = \frac{\ii a_1 + a_2}{\sqrt2} . $$</div>
+<p>The same matrix that describes classical field amplitudes describes the quantum operators: <b>linear optics is the classical S-matrix applied to mode operators</b>. To find the output state for an input of photons, write the input as creation operators acting on vacuum, \(\ket{n_1,n_2} = \frac{(a_1^\dagger)^{n_1}(a_2^\dagger)^{n_2}}{\sqrt{n_1!n_2!}}\ket0\), substitute \(a^\dagger\) in terms of \(b^\dagger\) using the inverse (conjugate-transpose) relation, and expand. A single photon in port 1 becomes \((\ket{1,0}+\ii\ket{0,1})/\sqrt2\) at the outputs: a superposition of the two paths, a <b>dual-rail</b> qubit.</p>
+
+<h3 id="sec-p-lin-hom">The Hong–Ou–Mandel effect</h3>
+<p>Send one photon into each input of a 50:50 beam splitter. Inverting @eq:p-bs (for a unitary \(U\), \(a_k^\dagger = \sum_jU_{jk}b_j^\dagger\)) gives \(a_1^\dagger = (b_1^\dagger + \ii b_2^\dagger)/\sqrt2\) and \(a_2^\dagger = (\ii b_1^\dagger + b_2^\dagger)/\sqrt2\), so</p>
+<div class="eq" id="eq-p-hom">$$ a_1^\dagger a_2^\dagger\ket0 = \frac12\big(\ii\,b_1^{\dagger2} + b_1^\dagger b_2^\dagger - b_2^\dagger b_1^\dagger + \ii\,b_2^{\dagger2}\big)\ket0 = \frac{\ii}{\sqrt2}\big(\ket{2,0} + \ket{0,2}\big). $$</div>
+<p>The two ways of getting one photon in each output (both transmitted, both reflected) have amplitudes that cancel exactly, so the photons always leave together [@hom1987]. This is two-photon interference, a consequence of bosonic symmetry (@b3:sec-q-sec-ident) with no classical counterpart. It happens only if the photons are <b>indistinguishable</b> in every degree of freedom: frequency, polarisation, spatial mode and arrival time. If one photon is delayed by \(\tau\), the coincidence probability is</p>
+<div class="eq" id="eq-p-homdip">$$ P_c(\tau) = \frac12\Big(1 - V\,\big|\textstyle\int\xi_1^*(t)\,\xi_2(t-\tau)\,\dd t\big|^2\Big), $$</div>
+<p>which dips to zero at \(\tau = 0\) for identical wavepackets (visibility \(V = 1\)) and returns to the classical value \(\tfrac12\) when the wavepackets no longer overlap (@fig:p-hom). The HOM visibility is the standard measure of photon indistinguishability. It must be close to one for photonic quantum computing, because every fusion or entangling measurement relies on this interference, and imperfect indistinguishability acts as an error.</p>
+<figure id="fig-p-hom">
+<img src="../figures/fig-p-hom.svg" alt="Coincidence probability versus delay showing the Hong-Ou-Mandel dip for visibilities of 1 and 0.9.">
+<figcaption>The Hong–Ou–Mandel dip, @eq:p-homdip, for Gaussian wavepackets of temporal width \(\sigma\), with perfect (\(V=1\)) and 90% indistinguishability. Classical (distinguishable) particles would give \(P_c = 1/2\) at every delay.</figcaption>
+</figure>
+
+<h3 id="sec-p-lin-multi">Multimode interferometers</h3>
+<p>An \(N\)-mode linear optical circuit implements \(b_j = \sum_kU_{jk}a_k\) with an \(N\times N\) unitary \(U\). Reck <i>et al.</i> showed that any \(U\) can be built from \(N(N-1)/2\) beam splitters with adjustable reflectivity (in practice MZIs, @b2:eq-c-mzi) and phase shifters arranged in a triangle [@reck1994]; Clements <i>et al.</i> found a rectangular arrangement of the same count with balanced path lengths, which is more tolerant of loss [@clements2016]. Programmable meshes of this kind, with hundreds of thermo-optic or electro-optic phase shifters, are standard components of photonic quantum processors. Their fidelity is limited by the splitting-ratio errors of fabricated couplers (which make some unitaries unreachable unless the mesh is designed with redundancy), by phase crosstalk between heaters, and by loss that differs between paths.</p>
+<p>For \(n\) single photons entering an \(N\)-mode interferometer, the probability of an output pattern is the squared modulus of the <b>permanent</b> of an \(n\times n\) submatrix of \(U\). The permanent is like the determinant without minus signs, and computing it is #P-hard. Sampling from this distribution, <b>boson sampling</b> [@aaronson2011], is believed to be classically intractable for \(n\gtrsim50\), which made it a target for early demonstrations of quantum advantage; the Gaussian variant with squeezed inputs [@hamilton2017] was realised at scale by Xanadu's Borealis (@lf:sec-mod-phot). Boson sampling is not a universal computer, but it shows that even linear optics with photon detection is hard to simulate.</p>
+
+<h3 id="sec-p-lin-qubits">Photonic qubits</h3>
+<ul>
+<li><b>Dual rail</b>: one photon in one of two waveguides, \(\ket0_L = \ket{1,0}\), \(\ket1_L = \ket{0,1}\). Single-qubit gates are MZIs. The natural choice on chips.</li>
+<li><b>Polarisation</b>: horizontal and vertical, manipulated with wave plates. Natural in free space and fibre.</li>
+<li><b>Time bin</b>: early or late, robust in long fibres.</li>
+</ul>
+<p>Single-qubit operations are easy and accurate for all of them. Two-qubit gates are the problem: linear optics conserves photon number and does not make photons interact. Chapter 7 shows how measurement and feed-forward supply the missing nonlinearity.</p>
+<p><b>Loss as a beam splitter.</b> Any loss with transmission \(\eta\) can be modelled as a beam splitter with transmissivity \(\eta\) whose second input is vacuum and whose second output is discarded. Tracing out the discarded mode gives the results of @sec:p-st-loss. For a dual-rail qubit, loss takes the state out of the qubit space (zero photons): a <b>heralded erasure</b> if the absence is detected, which codes tolerate far better than unknown errors.</p>
+
+<div class="eda"><p>The review notes that a photonic quantum circuit must satisfy \(\Pr(\min_{\mathcal P}\eta_{\mathcal P}\ge\eta_{\min})\ge Y_{\min}\) over all paths \(\mathcal P\) (@lf:sec-mod-phot), and the HOM visibility between sources sets a second, independent requirement. A Clements mesh with \(N\) modes has paths of \(N\) MZIs, so per-MZI loss and splitting-ratio statistics compound across the whole mesh.</p></div>
+
+<div class="exercises" id="ex-p-linear"><h4>Exercises</h4><ol>
+<li>Show that a single photon in input 2 of the 50:50 beam splitter of @eq:p-bs leaves as \((\ii\ket{1,0} + \ket{0,1})/\sqrt2\).
+<details><summary>Solution</summary><p>From \(a_k^\dagger = \sum_jU_{jk}b_j^\dagger\) with \(U_{12} = \ii/\sqrt2\) and \(U_{22} = 1/\sqrt2\): \(a_2^\dagger\ket0 = (\ii b_1^\dagger + b_2^\dagger)\ket0/\sqrt2 = (\ii\ket{1,0} + \ket{0,1})/\sqrt2\).</p></details></li>
+<li>Two photons with Gaussian wavepackets \(\xi(t)\propto\ee^{-t^2/4\sigma^2}\) are delayed by \(\tau\). Show that the overlap is \(\ee^{-\tau^2/8\sigma^2}\) and find the delay that restores \(P_c = 1/4\).
+<details><summary>Solution</summary><p>\(\int\xi(t)\xi(t-\tau)\dd t\propto\int\ee^{-(t^2 + (t-\tau)^2)/4\sigma^2}\dd t\), and completing the square gives \(\ee^{-\tau^2/8\sigma^2}\). Then \(P_c = \tfrac12(1 - \ee^{-\tau^2/4\sigma^2})\) for \(V=1\); \(P_c = 1/4\) when \(\ee^{-\tau^2/4\sigma^2} = 1/2\), \(\tau = 2\sigma\sqrt{\ln2}\approx1.67\sigma\).</p></details></li>
+<li>How many MZIs does a Clements mesh on 20 modes need? If each loses 0.1 dB, what is the transmission of the longest path (20 MZIs)?
+<details><summary>Solution</summary><p>\(20\times19/2 = 190\) MZIs. Longest path 2 dB, transmission \(10^{-0.2} = 0.63\).</p></details></li>
+</ol></div>
+</section>

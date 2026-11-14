@@ -1,0 +1,50 @@
+<section id="sec-p-states"><h2>Quantum states of light</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Describe Fock, coherent, thermal and squeezed states, and their photon statistics.</li>
+<li>Use quadrature operators and the Wigner function to picture states in phase space.</li>
+<li>Define and compute the second-order correlation \(g^{(2)}(0)\), the standard test of a single-photon source.</li>
+<li>See how loss degrades each kind of state.</li>
+</ul></div>
+
+<h3 id="sec-p-st-quad">Quadratures and phase space</h3>
+<p>For a single mode, define the <b>quadrature operators</b> \(\hat x = (a + a^\dagger)/\sqrt2\) and \(\hat p = -\ii(a - a^\dagger)/\sqrt2\), the dimensionless position and momentum of the mode's oscillator, with \([\hat x,\hat p] = \ii\). They are the in-phase and out-of-phase components of the field, measurable with a homodyne detector (Chapter 5). The vacuum has \(\Delta x^2 = \Delta p^2 = \tfrac12\), the minimum allowed by the uncertainty relation (@b3:eq-q-robertson). This "shot-noise unit" is the reference for noise in optics.</p>
+<p>The <b>Wigner function</b> \(W(x,p)\) is a quasi-probability distribution on phase space whose marginals are the true probability distributions of \(x\) and of \(p\) (and of any rotated quadrature). For Gaussian states it is a Gaussian; for non-classical states such as Fock states it takes negative values, and Wigner negativity is a necessary resource for quantum advantage in continuous-variable computing.</p>
+
+<h3 id="sec-p-st-zoo">The main states</h3>
+<figure class="tbl" id="tab-p-states"><figcaption>States of a single mode of light.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>State</th><th>Definition</th><th>Photon-number distribution</th><th>\(g^{(2)}(0)\)</th><th>Where it comes from</th></tr>
+<tr><td>Fock \(\ket n\)</td><td>\(\frac{(a^\dagger)^n}{\sqrt{n!}}\ket0\)</td><td>exactly \(n\)</td><td>\(1 - 1/n\)</td><td>Single emitters, heralded sources</td></tr>
+<tr><td>Coherent \(\ket\alpha\)</td><td>\(D(\alpha)\ket0\)</td><td>Poisson, mean \(|\alpha|^2\)</td><td>1</td><td>Lasers, microwave generators</td></tr>
+<tr><td>Thermal</td><td>\(\rho = \sum_n\frac{\bar n^n}{(\bar n+1)^{n+1}}\ketbra nn\)</td><td>Geometric (Bose–Einstein)</td><td>2</td><td>Hot bodies, one arm of a two-mode squeezer</td></tr>
+<tr><td>Squeezed vacuum</td><td>\(S(r)\ket0\), \(S(r) = \ee^{\frac r2(a^2 - a^{\dagger2})}\)</td><td>Only even \(n\)</td><td>\(3 + 1/\sinh^2r\)</td><td>Parametric amplifiers, OPOs</td></tr>
+</table></div></figure>
+<p>A <b>squeezed state</b> has one quadrature's noise reduced below the vacuum level and the other increased, keeping the product at its minimum: \(\Delta x^2 = \tfrac12\ee^{-2r}\), \(\Delta p^2 = \tfrac12\ee^{2r}\). Squeezing is quoted in decibels, \(-10\log_{10}(\ee^{-2r})\); 10 dB means a factor 10 reduction in variance. Squeezed light is produced by the degenerate parametric process of @b2:sec-c-osc-param, either in a nonlinear crystal or waveguide pumped at twice the signal frequency, or in a Josephson parametric amplifier at microwave frequencies. It improves the sensitivity of gravitational-wave detectors, and it is the raw material of continuous-variable photonic quantum computing (Chapter 7).</p>
+
+<h3 id="sec-p-st-g2">Photon statistics and \(g^{(2)}\)</h3>
+<p>Hanbury Brown and Twiss split a beam on a 50:50 beam splitter and correlated the counts of two detectors. The normalised probability of detecting two photons at the same time is</p>
+<div class="eq" id="eq-p-g2">$$ g^{(2)}(0) = \frac{\expval{a^\dagger a^\dagger aa}}{\expval{a^\dagger a}^2} = 1 + \frac{(\Delta n)^2 - \bar n}{\bar n^2} . $$</div>
+<p>Coherent light (Poisson, \(\Delta n^2 = \bar n\)) has \(g^{(2)} = 1\): photons arrive independently. Thermal light has \(g^{(2)} = 2\): photons bunch. A single-photon Fock state has \(g^{(2)} = 0\): two detectors can never click together, because there is only one photon to split. \(g^{(2)}(0) \lt 1\) (<b>antibunching</b>) has no classical explanation, and measuring \(g^{(2)}(0)\) close to zero is the first test of any single-photon source. State-of-the-art quantum-dot sources reach \(g^{(2)}(0)\sim10^{-2}\)–\(10^{-3}\); heralded sources trade \(g^{(2)}\) against brightness (Chapter 5).</p>
+
+<h3 id="sec-p-st-loss">What loss does</h3>
+<p>Loss with transmission \(\eta\) is equivalent to a beam splitter that sends a fraction \(1-\eta\) of the light to an unobserved mode while mixing in vacuum (Chapter 3). Its effect depends on the state:</p>
+<ul>
+<li>A coherent state stays coherent, with \(\alpha\to\sqrt\eta\,\alpha\). Classical light is robust to loss, which is why fibre networks work.</li>
+<li>A single photon becomes a mixture: \(\ket1\to\eta\ketbra11 + (1-\eta)\ketbra00\). The photon is either there or gone, which is an <b>erasure</b> if we can detect its absence, and a silent error otherwise.</li>
+<li>A squeezed state's variance moves towards the vacuum: \(V\to\eta V + (1-\eta)\cdot\tfrac12\) (in the units above), so squeezing degrades continuously. A 15 dB source behind 10% loss retains only about 9 dB, the calculation of the review's @lf:eq-sq.</li>
+<li>A superposition of large coherent states ("cat states") loses its coherence at a rate proportional to its size \(|\alpha|^2\). Large quantum superpositions are fragile in exact proportion to how "macroscopic" they are.</li>
+</ul>
+
+<div class="eda"><p>Because loss acts so differently on different states, a photonic loss budget is not just a sum of decibels: whether a given loss is tolerable depends on the encoding (dual-rail single photons, squeezed states or GKP states) and on the error-correction scheme. A photonic design tool must propagate per-component loss distributions to the architecture's threshold condition (@lf:sec-mod-phot).</p></div>
+
+<div class="exercises" id="ex-p-states"><h4>Exercises</h4><ol>
+<li>Compute \(g^{(2)}(0)\) for the Fock state \(\ket2\).
+<details><summary>Solution</summary><p>\(\expval{a^\dagger a^\dagger aa} = n(n-1) = 2\), \(\expval{a^\dagger a}^2 = 4\), so \(g^{(2)} = 1/2\).</p></details></li>
+<li>Show that a thermal state has \(\Delta n^2 = \bar n^2 + \bar n\) and hence \(g^{(2)}(0) = 2\).
+<details><summary>Solution</summary><p>For the geometric distribution \(p_n = \bar n^n/(\bar n+1)^{n+1}\), the generating function gives \(\expval{n(n-1)} = 2\bar n^2\). So \(\expval{n^2} = 2\bar n^2 + \bar n\), \(\Delta n^2 = \bar n^2 + \bar n\), and @eq:p-g2 gives \(1 + \bar n^2/\bar n^2 = 2\).</p></details></li>
+<li>A squeezer produces 12 dB. How much remains after 80% transmission?
+<details><summary>Solution</summary><p>Variance (in vacuum units) \(10^{-1.2} = 0.063\). After loss: \(0.8\times0.063 + 0.2 = 0.250\), i.e. \(-10\log_{10}0.25 = 6.0\) dB.</p></details></li>
+<li>A single photon passes three components each with 0.2 dB loss. What is the probability it survives?
+<details><summary>Solution</summary><p>Total 0.6 dB: \(10^{-0.06} = 0.871\).</p></details></li>
+</ol></div>
+</section>

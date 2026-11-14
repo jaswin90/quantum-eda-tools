@@ -205,3 +205,5 @@ svg.diagram .muted { fill: var(--muted); }
   .pager { grid-template-columns: minmax(0, 1fr); }
   .pager .next { grid-column: 1; }
 }
+/* Long inline formulas in solutions and teaching boxes scroll inside their box on phones. */
+.exercises details, .example, .defn, .thm, .eda, .goals { overflow-x: auto; overflow-y: hidden; }

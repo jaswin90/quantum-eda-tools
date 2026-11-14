@@ -1,0 +1,46 @@
+<section id="sec-p-qc"><h2>Photonic quantum computing: from KLM to fusion and GKP</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand how measurement and feed-forward create effective photon–photon interactions (KLM).</li>
+<li>Understand measurement-based computing with cluster states, and fusion-based quantum computing.</li>
+<li>Understand continuous-variable computing with squeezed light and GKP qubits.</li>
+<li>Translate architectures into loss and indistinguishability budgets.</li>
+</ul></div>
+
+<h3 id="sec-p-qc-klm">Measurement as the nonlinearity</h3>
+<p>Photons do not interact, and an entangling gate needs an interaction. In 2001 Knill, Laflamme and Milburn showed that linear optics plus single-photon sources, detectors and <b>feed-forward</b> (changing later optical elements depending on earlier detection results) is universal for quantum computing [@knill2001]. The idea: interfere the input photons with ancilla photons, measure some modes, and post-select on detection patterns that herald a successful gate. Measurement projects the state, which is a nonlinear operation. A heralded CZ gate succeeds only with probability \(1/9\) in the simplest scheme; KLM boosted success towards one with gate teleportation (@b4:sec-i-ent-tele) and large entangled ancillas, at an enormous resource cost. The modern architectures below grew from making this idea efficient.</p>
+
+<h3 id="sec-p-qc-mbqc">Cluster states and measurement-based computing</h3>
+<p>In <b>measurement-based quantum computing</b> [@raussendorf2001], one first prepares a large, fixed entangled resource, a <b>cluster state</b> (qubits on a lattice, each pair of neighbours entangled by a CZ), and then computes only by measuring single qubits, in bases chosen adaptively from earlier results. Single-qubit measurements are easy for photons. The difficult part, entanglement, is front-loaded into state preparation, which can be done probabilistically and offline. Browne and Rudolph showed that small cluster states can be joined by <b>fusion</b>: a two-photon Bell-type measurement on photons from different clusters [@browne2005]. Linear-optical fusion succeeds with probability 1/2 (@b4:sec-i-ent-swap); when it fails, it still measures the photons in a known way, so failures are heralded and can be routed around.</p>
+
+<h3 id="sec-p-qc-fbqc">Fusion-based quantum computing</h3>
+<p><b>Fusion-based quantum computing</b> (FBQC), the architecture behind PsiQuantum's roadmap, generates small, constant-size entangled <b>resource states</b> (for example, six-photon states) at a steady clock rate, and performs fusions between photons of neighbouring resource states [@bartolucci2023]. The pattern of fusions forms a three-dimensional lattice in space and time that implements a topological error-correcting code, and fusion outcomes play the role of syndrome measurements. Every component error (fusion failure, photon loss, distinguishability, detector inefficiency) becomes an error on the code, and the code tolerates them below a threshold. Published analyses give thresholds of a few percent to around 10% for photon loss per fusion, depending on the scheme and on boosting fusions with extra photons. Every photon passes through sources, multiplexers, delay lines, switches and detectors before fusing, so per-component losses must be small fractions of a percent.</p>
+
+<h3 id="sec-p-qc-cv">Continuous variables and GKP qubits</h3>
+<p>The alternative encodes information in the quadratures of light. Squeezed states (@sec:p-st-zoo) are produced deterministically and entangled deterministically with beam splitters, so Gaussian cluster states of millions of modes can be generated in time-multiplexed loops [@weedbrook2012]. Gaussian operations alone are classically simulable, so non-Gaussian resources are needed. The leading choice is the <b>Gottesman–Kitaev–Preskill (GKP) qubit</b> [@gottesman2001], a grid state whose wavefunction is a comb of narrow peaks in \(x\) spaced by \(2\sqrt\pi\) (logical 0 on even peaks, logical 1 on odd). Small shifts in \(x\) and \(p\), which is what loss and noise produce, can be detected and corrected by measuring the quadratures modulo \(\sqrt\pi\). The quality of a GKP state is quoted as an effective squeezing, and fault-tolerant architectures need about 10 dB or more after all losses [@bourassa2021]. Since loss pulls squeezing towards zero (@sec:p-st-loss), that sets the loss budget computed in the review (@lf:eq-sq): a 15 dB source tolerates only about 7% total loss. Xanadu's Aurora demonstrated the architecture's building blocks at scale [@aghaeerad2025].</p>
+
+<h3 id="sec-p-qc-budget">Loss budgets</h3>
+<p>Both architectures reduce to the same engineering question: is the probability that every photon in the machine survives its path, and arrives indistinguishable from its partners, above the architecture's threshold? A loss budget lists every element on the longest path (source extraction, multiplexing switches, delay lines, chip-to-chip interconnects, filters, detectors) with its loss in dB, sums them, and compares with the threshold. A schematic budget for one photon:</p>
+<figure class="tbl" id="tab-p-budget"><figcaption>An illustrative per-photon loss budget (values are of the order targeted in published architectures, not a specific product).</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Element</th><th>Loss (dB)</th></tr>
+<tr><td>Source extraction and filtering</td><td class="num">0.10</td></tr>
+<tr><td>Multiplexing switches (5 stages × 0.02 dB)</td><td class="num">0.10</td></tr>
+<tr><td>Delay line (fibre or nitride)</td><td class="num">0.05</td></tr>
+<tr><td>Routing waveguide (10 cm nitride, 0.002 dB/cm)</td><td class="num">0.02</td></tr>
+<tr><td>Chip-to-chip interconnect</td><td class="num">0.05</td></tr>
+<tr><td>Detector inefficiency (99%)</td><td class="num">0.04</td></tr>
+<tr><td><b>Total</b></td><td class="num"><b>0.36 dB (8% loss)</b></td></tr>
+</table></div></figure>
+<p>Every line is an order of magnitude better than typical classical photonics. And this is the mean; a machine has millions of paths, so the tail of the distribution of path losses, not its centre, decides whether the code threshold is met. That is the statistical sign-off problem posed in the review (@lf:sec-mod-phot).</p>
+
+<div class="eda"><p>The design target for a photonic quantum computer is a probability statement over a manufactured population: \(\Pr(\text{every path meets its loss and indistinguishability limits})\ge Y\). Classical photonic PDKs give component means and corners; quantum design needs calibrated distributions, correlations between components on the same wafer, and a way to verify the condition over millions of paths. That gap, and how to fill it, is where this book hands over to Book 7 and the review.</p></div>
+
+<div class="exercises" id="ex-p-qc"><h4>Exercises</h4><ol>
+<li>A fusion succeeds with probability 1/2. If a scheme needs 1,000 successful fusions in parallel and failures cannot be tolerated, what is the success probability? Why do architectures instead make failures heralded and tolerable?
+<details><summary>Solution</summary><p>\(2^{-1000}\), effectively zero. Requiring every probabilistic step to succeed is hopeless; architectures treat failures as known erasures in a code that tolerates a fraction of them, so success probability needs only to exceed a threshold.</p></details></li>
+<li>Using the variance model \(V_{\mathrm{out}} = \eta V_{\mathrm{in}} + (1-\eta)\), what loss can a 15 dB squeezer tolerate while keeping 10 dB?
+<details><summary>Solution</summary><p>\(V_{\mathrm{in}} = 10^{-1.5} = 0.0316\), target \(V_{\mathrm{out}} = 0.1\). Solve \(0.0316\eta + 1 - \eta = 0.1\): \(\eta = 0.9/0.9684 = 0.929\). About 7% loss, as stated in the review.</p></details></li>
+<li>If the loss budget in the table were the mean of a Gaussian distribution across paths with standard deviation 0.05 dB, and the threshold were 0.5 dB, what fraction of paths exceed it? How many failing paths in a machine of \(10^6\) paths?
+<details><summary>Solution</summary><p>\((0.5 - 0.36)/0.05 = 2.8\sigma\), tail probability about \(2.6\times10^{-3}\): roughly 2,600 failing paths. Either the mean must come down, the spread must narrow, or the architecture must route around bad paths, which is the photonic analogue of routing around dead qubits.</p></details></li>
+</ol></div>
+</section>

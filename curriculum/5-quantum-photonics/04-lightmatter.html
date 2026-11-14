@@ -1,0 +1,42 @@
+<section id="sec-p-lightmatter"><h2>Light–matter interaction and cavity QED</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Derive the dipole coupling of a two-level emitter to a quantised mode and the Jaynes–Cummings Hamiltonian.</li>
+<li>Solve the Jaynes–Cummings model: dressed states, vacuum Rabi splitting, and the dispersive limit.</li>
+<li>Understand spontaneous emission, the Purcell effect and the regimes of cavity QED (weak and strong coupling, cooperativity).</li>
+<li>See how the same model becomes circuit QED.</li>
+</ul></div>
+
+<h3 id="sec-p-lm-jc">From dipole coupling to Jaynes–Cummings</h3>
+<p>A two-level emitter (an atom, ion, quantum dot or superconducting qubit) with transition frequency \(\omega_a\) and dipole moment \(\mathbf d\) interacts with a field through \(H_{\mathrm{int}} = -\hat{\mathbf d}\cdot\hat{\mathbf E}\). The dipole operator connects the two levels, \(\hat{\mathbf d} = \mathbf d(\sigma_+ + \sigma_-)\). Using the single-mode field operator (@eq:p-efield), the interaction contains four terms: \(a^\dagger\sigma_-\) (emitter emits a photon), \(a\sigma_+\) (emitter absorbs a photon), and the energy-non-conserving \(a\sigma_-\) and \(a^\dagger\sigma_+\), which oscillate at \(\omega+\omega_a\) in the interaction picture. Dropping the latter (the rotating-wave approximation, valid for \(g\ll\omega\)) gives the <b>Jaynes–Cummings</b> Hamiltonian [@jaynes1963]:</p>
+<div class="eq" id="eq-p-jc">$$ H_{\mathrm{JC}} = \hbar\omega_r\,a^\dagger a + \frac{\hbar\omega_a}{2}\sigma_z + \hbar g\big(a^\dagger\sigma_- + a\sigma_+\big), \qquad \hbar g = \mathbf d\cdot\boldsymbol{\mathcal E}(\mathbf r_a) . $$</div>
+<p>It is the simplest model of light–matter interaction and, astonishingly, an accurate one for many real systems.</p>
+
+<h3 id="sec-p-lm-dressed">Dressed states and vacuum Rabi splitting</h3>
+<p>The interaction only couples \(\ket{e, n}\) to \(\ket{g, n+1}\) (excited emitter with \(n\) photons, or ground emitter with \(n+1\)): it conserves the total number of excitations. \(H_{\mathrm{JC}}\) is therefore block diagonal with \(2\times2\) blocks, each exactly the coupled-mode matrix of @b1:sec-m-op-eigen with coupling \(g\sqrt{n+1}\) and detuning \(\Delta = \omega_a - \omega_r\). Their eigenstates, the <b>dressed states</b>, have energies</p>
+<div class="eq" id="eq-p-dressed">$$ E_{n,\pm} = \hbar\omega_r\Big(n+\frac12\Big) \pm \frac\hbar2\sqrt{\Delta^2 + 4g^2(n+1)} . $$</div>
+<p>On resonance with one excitation, the emitter and the photon swap back and forth at frequency \(2g\) (<b>vacuum Rabi oscillation</b>), and a spectroscopy measurement shows two peaks split by \(2g\) instead of one (<b>vacuum Rabi splitting</b>). The \(\sqrt{n+1}\) dependence makes the spectrum anharmonic: the splitting grows with excitation number, which is a signature of quantised light. Far from resonance (\(|\Delta|\gg g\sqrt{n}\)) the dispersive Hamiltonian of @b3:eq-q-dispersive applies, with \(\chi = g^2/\Delta\).</p>
+
+<h3 id="sec-p-lm-se">Spontaneous emission and the Purcell effect</h3>
+<p>An excited emitter in free space couples to a continuum of modes and decays. Fermi's golden rule (@b3:eq-q-golden) with the free-space density of modes gives the spontaneous emission rate</p>
+<div class="eq" id="eq-p-gamma0">$$ \Gamma_0 = \frac{\omega_a^3|\mathbf d|^2}{3\pi\varepsilon_0\hbar c^3} . $$</div>
+<p>(The cube of the frequency explains why optical transitions decay in nanoseconds while microwave ones in free space would take years.) Spontaneous emission is not a property of the emitter alone but of the emitter and its electromagnetic environment. Put the emitter in a cavity resonant with it, of quality factor \(Q\) and mode volume \(V\), and the density of modes at \(\omega_a\) is concentrated into the cavity line. The rate is enhanced by the <b>Purcell factor</b> [@purcell1946]</p>
+<div class="eq" id="eq-p-purcell">$$ F_P = \frac{3}{4\pi^2}\Big(\frac{\lambda}{n}\Big)^3\frac{Q}{V}, \qquad \Gamma_{\mathrm{cav}} = \frac{4g^2}{\kappa}\ \ (\text{on resonance, } g\ll\kappa). $$</div>
+<p>Off resonance the cavity suppresses emission instead. Both effects are used: Purcell enhancement makes single-photon sources fast and directs their photons into one mode (Chapter 5); Purcell suppression, through detuning and filters, protects superconducting qubits from decaying through their readout resonators at rate \(\kappa(g/\Delta)^2\) (@lf:eq-chi).</p>
+
+<h3 id="sec-p-lm-regimes">Regimes of cavity QED</h3>
+<p>Three rates compete: the coupling \(g\), the cavity decay rate \(\kappa\) and the emitter's decay into other modes \(\gamma\). The <b>cooperativity</b> \(C = 4g^2/\kappa\gamma\) measures how much more likely the emitter is to interact with the cavity mode than with everything else. In the <b>weak-coupling</b> regime (\(g \lt \kappa,\gamma\)) the cavity modifies emission rates but the photon leaves before it can be reabsorbed; with \(C\gg1\) this is already enough for efficient single-photon sources and for photon–photon gates mediated by the emitter. In the <b>strong-coupling</b> regime (\(g > \kappa,\gamma\)) coherent exchange happens many times before anything is lost, and the dressed states are resolved. Atoms in high-finesse optical cavities, quantum dots in photonic-crystal cavities and above all superconducting circuits reach strong coupling; circuit QED reaches \(g/\kappa\) of hundreds [@wallraff2004; @blais2004].</p>
+
+<h3 id="sec-p-lm-cqed">From cavity QED to circuit QED</h3>
+<p>Replace the atom by a transmon and the optical cavity by a coplanar resonator, and @eq:p-jc describes the device (with the transmon's third level added as a correction). The coupling is set by a capacitance: \(\hbar g \approx \frac{C_g}{C_\Sigma}\,eV_{\mathrm{zpf}}\sqrt{2}\,(E_J/8E_C)^{1/4}\) for a transmon, so a layout's coupling capacitance, extracted by an electrostatic solver, determines \(g\). The dispersive shift becomes the readout mechanism, the Purcell effect the readout's price, and the cavity's \(\kappa\) the readout speed. Book 6 develops this in detail; the review's @lf:eq-multi and @lf:eq-chi are this chapter's equations with the transmon's level structure.</p>
+
+<div class="eda"><p>Light–matter coupling is a geometric quantity: \(g\) depends on where the emitter sits in the mode and how the mode is shaped. For quantum-dot sources the emitter position is random relative to the lithographed cavity, so coupling is a yield problem (@lf:sec-mod-phot); for transmons, \(g\) is set by drawn capacitances and is predictable to a few percent, provided the extraction is accurate.</p></div>
+
+<div class="exercises" id="ex-p-lightmatter"><h4>Exercises</h4><ol>
+<li>Verify that \(H_{\mathrm{JC}}\) commutes with the excitation number \(N = a^\dagger a + \sigma_+\sigma_-\).
+<details><summary>Solution</summary><p>\([a^\dagger\sigma_-, N] = [a^\dagger,a^\dagger a]\sigma_- + a^\dagger[\sigma_-,\sigma_+\sigma_-] = -a^\dagger\sigma_- + a^\dagger\sigma_- = 0\), using \([a^\dagger, a^\dagger a] = -a^\dagger\) and \([\sigma_-,\sigma_+\sigma_-] = \sigma_-\). The Hermitian conjugate term commutes likewise, and the free terms commute with \(N\) trivially.</p></details></li>
+<li>A quantum dot in a micropillar has \(g/2\pi = 20\) GHz, \(\kappa/2\pi = 100\) GHz and \(\gamma/2\pi = 0.2\) GHz. Which regime is this, what is \(C\), and what fraction of emission goes into the cavity mode?
+<details><summary>Solution</summary><p>\(g \lt \kappa\): weak coupling (bad-cavity regime). \(C = 4\times400/(100\times0.2) = 80\). Cavity emission rate \(4g^2/\kappa = 16\) GHz × 2π versus \(\gamma = 0.2\): the fraction into the cavity, \(C/(C+1)\approx0.99\). (Collection into the output fibre is a separate efficiency.)</p></details></li>
+<li>For a transmon–resonator system with \(g/2\pi = 80\) MHz on resonance, how long does a single excitation take to swap from qubit to resonator?
+<details><summary>Solution</summary><p>Vacuum Rabi oscillation at angular frequency \(2g\); a full swap takes half a period, \(\pi/2g = 1/(4\times80\,\mathrm{MHz}) = 3.1\) ns.</p></details></li>
+</ol></div>
+</section>

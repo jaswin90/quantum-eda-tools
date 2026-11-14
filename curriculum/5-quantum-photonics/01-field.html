@@ -1,0 +1,37 @@
+<section id="sec-p-field"><h2>Quantising the electromagnetic field</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Expand the field in a cavity in normal modes and show that each mode is a harmonic oscillator.</li>
+<li>Write the quantised field operator, and compute vacuum fluctuations and the single-photon field strength.</li>
+<li>Extend the picture to travelling modes in waveguides, and state quantum input–output relations.</li>
+</ul></div>
+
+<h3 id="sec-p-field-modes">Modes are oscillators</h3>
+<p>Inside a cavity with perfectly conducting walls, Maxwell's equations have discrete solutions, the eigenmodes \(\mathbf u_k(\mathbf r)\) of @b2:eq-c-curlcurl, with frequencies \(\omega_k\). Normalise them so that \(\int\varepsilon(\mathbf r)|\mathbf u_k|^2\dd V = 1\), and expand any field configuration in them: \(\mathbf E(\mathbf r,t) = \sum_k q_k(t)\,\omega_k\,\mathbf u_k(\mathbf r)\) up to constants. Substituting into the field energy \(\tfrac12\int(\varepsilon|\mathbf E|^2 + |\mathbf B|^2/\mu)\dd V\) and using orthogonality gives a sum of independent oscillators,</p>
+<div class="eq" id="eq-p-modes">$$ H = \sum_k\Big(\frac{p_k^2}{2} + \frac12\omega_k^2q_k^2\Big), $$</div>
+<p>with \(q_k\) related to the electric field amplitude and \(p_k\) to the magnetic one. The electric and magnetic energies play the roles of potential and kinetic energy, exactly as capacitor and inductor did for the LC circuit (@b2:sec-c-lag-circuit). Quantising each oscillator (@b3:sec-q-qho) gives</p>
+<div class="eq" id="eq-p-hfield">$$ H = \sum_k\hbar\omega_k\Big(a_k^\dagger a_k + \frac12\Big), \qquad [a_j, a_k^\dagger] = \delta_{jk} . $$</div>
+<p>A <b>photon</b> is one quantum of excitation of one mode. "Which mode" is as much a part of a photon's identity as its frequency: a photon in a different spatial mode, polarisation, time bin or frequency band is a different photon and does not interfere with the first. Much of photonic engineering is about making photons occupy exactly the intended mode.</p>
+
+<h3 id="sec-p-field-op">The field operator and vacuum fluctuations</h3>
+<p>The electric field becomes an operator,</p>
+<div class="eq" id="eq-p-efield">$$ \hat{\mathbf E}(\mathbf r) = \ii\sum_k\mathcal E_k\big(a_k\,\mathbf f_k(\mathbf r) - a_k^\dagger\,\mathbf f_k^*(\mathbf r)\big), \qquad \mathcal E_k = \sqrt{\frac{\hbar\omega_k}{2\varepsilon_0V_k}} , $$</div>
+<p>where \(\mathbf f_k\) is the mode shape normalised to a maximum of one and \(V_k = \int\varepsilon_r|\mathbf f_k|^2\dd V\) is the <b>mode volume</b>. In the vacuum, \(\expval{\hat{\mathbf E}} = 0\) but \(\expval{\hat{\mathbf E}^2}\ne0\): every mode has zero-point fluctuations of amplitude \(\mathcal E_k\). The <b>single-photon field</b> \(\mathcal E_k\) is the key figure of merit for coupling light to matter: an atom or qubit with dipole moment \(d\) couples to the mode with strength \(\hbar g = d\,\mathcal E_k\). Small mode volumes give large fields. A micropillar cavity with \(V\sim\lambda^3\) at 900 nm has \(\mathcal E\sim10^4\) V/m. A superconducting coplanar resonator at 5 GHz has a single-photon voltage of about a microvolt across a gap of about 10 µm, a field of only 0.1 V/m. Circuit QED nevertheless reaches couplings of \(g/2\pi\sim100\) MHz because its "atom" is a transmon with an enormous effective dipole: its Cooper pairs move across tens of micrometres rather than an ångström (@b3:sec-q-qho-lc).</p>
+<p>Vacuum fluctuations are not a curiosity. They cause spontaneous emission (Chapter 4), they are the noise floor of every optical measurement (the shot noise of a coherent beam is vacuum noise beating with the beam), and they set the "added noise" of amplifiers at the quantum limit (@b2:sec-c-th-johnson).</p>
+
+<h3 id="sec-p-field-travel">Travelling modes</h3>
+<p>In a waveguide or a transmission line there is a continuum of modes labelled by frequency (and direction). The appropriate operators are \(a(\omega)\) with \([a(\omega), a^\dagger(\omega')] = \delta(\omega-\omega')\), or their Fourier transforms \(a(t)\), which annihilate a photon passing a point at time \(t\), normalised so that \(\expval{a^\dagger(t)a(t)}\) is the photon flux (photons per second). A single photon in a wavepacket \(\xi(t)\) is \(\int\xi(t)a^\dagger(t)\dd t\ket0\) with \(\int|\xi|^2 = 1\). Its temporal shape is part of its mode: two single photons interfere perfectly only if their wavepackets overlap completely (Chapter 3).</p>
+<p>A cavity mode \(a\) coupled to a waveguide at rate \(\kappa\) obeys the quantum version of the input–output relations of @b2:eq-c-inout:</p>
+<div class="eq" id="eq-p-inout">$$ \dot a = -\frac{\ii}{\hbar}[a, H_{\mathrm{sys}}] - \frac\kappa2a + \sqrt\kappa\,a_{\mathrm{in}}(t), \qquad a_{\mathrm{out}}(t) = a_{\mathrm{in}}(t) - \sqrt\kappa\,a(t) . $$</div>
+<p>The input operator \(a_{\mathrm{in}}\) carries the vacuum fluctuations of the waveguide into the cavity even when nothing is sent in. That noise term is what preserves the commutation relations as the cavity decays, and it is the quantum origin of the fluctuation–dissipation theorem. Every lossy element, from a waveguide with scattering loss to an attenuator in a cryostat, mixes in vacuum (or thermal) noise in the same way, a fact that becomes the beam-splitter model of loss in Chapter 3.</p>
+
+<div class="eda"><p>Photonic and microwave EDA meet here: the same eigenmode solvers compute optical cavity modes and microwave resonator modes, and the same mode volume and participation integrals decide coupling strengths in both. A field solver that reports \(V_k\) and \(\mathbf f_k\) at the emitter location reports \(g\).</p></div>
+
+<div class="exercises" id="ex-p-field"><h4>Exercises</h4><ol>
+<li>Compute the single-photon field \(\mathcal E\) for a mode of volume \(V = (1\,\mu\mathrm m)^3\) at \(\lambda = 930\) nm in vacuum.
+<details><summary>Solution</summary><p>\(\omega = 2\pi c/\lambda = 2.03\times10^{15}\) s\(^{-1}\). \(\mathcal E = \sqrt{\hbar\omega/2\varepsilon_0V} = \sqrt{2.14\times10^{-19}/(2\times8.85\times10^{-12}\times10^{-18})}\approx1.1\times10^5\) V/m.</p></details></li>
+<li>An atom with dipole moment \(d = 3ea_0\) (\(a_0 = 0.053\) nm) sits at the field maximum of that mode. What is \(g/2\pi\)?
+<details><summary>Solution</summary><p>\(d = 3\times1.6\times10^{-19}\times5.3\times10^{-11} = 2.5\times10^{-29}\) C m. \(g = d\mathcal E/\hbar = 2.5\times10^{-29}\times1.1\times10^5/1.055\times10^{-34}\approx2.6\times10^{10}\) s\(^{-1}\), so \(g/2\pi\approx4\) GHz. Real quantum-dot cavities reach tens of GHz because quantum dots have larger dipoles.</p></details></li>
+<li>Show that the output field of a lossless cavity (no internal loss) satisfies \([a_{\mathrm{out}}(t), a_{\mathrm{out}}^\dagger(t')] = \delta(t-t')\) in the steady state for an empty cavity.
+<details><summary>Solution</summary><p>For an empty cavity (no \(H_{\mathrm{sys}}\) beyond the frame), \(a\) is a linear filter of \(a_{\mathrm{in}}\); in the frequency domain \(a_{\mathrm{out}}(\omega) = r(\omega)a_{\mathrm{in}}(\omega)\) with \(|r| = 1\) (@b2:sec-c-osc-loss, exercise 2). A unit-modulus filter preserves the commutator \(\delta(\omega-\omega')\), and hence its Fourier transform \(\delta(t-t')\).</p></details></li>
+</ol></div>
+</section>

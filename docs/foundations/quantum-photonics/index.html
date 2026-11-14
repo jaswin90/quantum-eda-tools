@@ -48,14 +48,51 @@ document.addEventListener("DOMContentLoaded", function () {
 <header class="topbar">
 <a class="brand" href="index.html">Book 5 · <span>Quantum Photonics</span></a>
 <span class="spacer"></span>
-<nav><a href="../index.html">Roadmap</a><a href="#references">Exercises</a><a href="../../index.html">Lab to Foundry</a></nav>
+<nav><a href="../index.html">Roadmap</a><a href="#ex-p-field">Exercises</a><a href="../../index.html">Lab to Foundry</a></nav>
 <button class="btn icon-btn" id="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
 </header>
 <div class="layout">
 <nav class="toc" aria-label="Contents">
   <p class="toc-title">Contents</p>
   <ol>
-<li class="toc2"><a href="#sec-soon">In preparation</a></li>
+<li class="toc2"><a href="#sec-p-preface">How to use this book</a></li>
+<li class="toc2"><a href="#sec-p-field"><span class="tocnum">1</span>Quantising the electromagnetic field</a></li>
+<li class="toc3"><a href="#sec-p-field-modes"><span class="tocnum">1.1</span>Modes are oscillators</a></li>
+<li class="toc3"><a href="#sec-p-field-op"><span class="tocnum">1.2</span>The field operator and vacuum fluctuations</a></li>
+<li class="toc3"><a href="#sec-p-field-travel"><span class="tocnum">1.3</span>Travelling modes</a></li>
+<li class="toc2"><a href="#sec-p-states"><span class="tocnum">2</span>Quantum states of light</a></li>
+<li class="toc3"><a href="#sec-p-st-quad"><span class="tocnum">2.1</span>Quadratures and phase space</a></li>
+<li class="toc3"><a href="#sec-p-st-zoo"><span class="tocnum">2.2</span>The main states</a></li>
+<li class="toc3"><a href="#sec-p-st-g2"><span class="tocnum">2.3</span>Photon statistics and \(g^{(2)}\)</a></li>
+<li class="toc3"><a href="#sec-p-st-loss"><span class="tocnum">2.4</span>What loss does</a></li>
+<li class="toc2"><a href="#sec-p-linear"><span class="tocnum">3</span>Linear optics and two-photon interference</a></li>
+<li class="toc3"><a href="#sec-p-lin-bs"><span class="tocnum">3.1</span>The beam splitter</a></li>
+<li class="toc3"><a href="#sec-p-lin-hom"><span class="tocnum">3.2</span>The Hong–Ou–Mandel effect</a></li>
+<li class="toc3"><a href="#sec-p-lin-multi"><span class="tocnum">3.3</span>Multimode interferometers</a></li>
+<li class="toc3"><a href="#sec-p-lin-qubits"><span class="tocnum">3.4</span>Photonic qubits</a></li>
+<li class="toc2"><a href="#sec-p-lightmatter"><span class="tocnum">4</span>Light–matter interaction and cavity QED</a></li>
+<li class="toc3"><a href="#sec-p-lm-jc"><span class="tocnum">4.1</span>From dipole coupling to Jaynes–Cummings</a></li>
+<li class="toc3"><a href="#sec-p-lm-dressed"><span class="tocnum">4.2</span>Dressed states and vacuum Rabi splitting</a></li>
+<li class="toc3"><a href="#sec-p-lm-se"><span class="tocnum">4.3</span>Spontaneous emission and the Purcell effect</a></li>
+<li class="toc3"><a href="#sec-p-lm-regimes"><span class="tocnum">4.4</span>Regimes of cavity QED</a></li>
+<li class="toc3"><a href="#sec-p-lm-cqed"><span class="tocnum">4.5</span>From cavity QED to circuit QED</a></li>
+<li class="toc2"><a href="#sec-p-sources"><span class="tocnum">5</span>Single-photon sources and detectors</a></li>
+<li class="toc3"><a href="#sec-p-src-spdc"><span class="tocnum">5.1</span>Probabilistic pair sources</a></li>
+<li class="toc3"><a href="#sec-p-src-qd"><span class="tocnum">5.2</span>Deterministic sources: quantum dots</a></li>
+<li class="toc3"><a href="#sec-p-src-det"><span class="tocnum">5.3</span>Detectors</a></li>
+<li class="toc3"><a href="#sec-p-src-trans"><span class="tocnum">5.4</span>Frequency conversion and transduction</a></li>
+<li class="toc2"><a href="#sec-p-integrated"><span class="tocnum">6</span>Integrated quantum photonics: platforms, components and fabrication</a></li>
+<li class="toc3"><a href="#sec-p-int-platforms"><span class="tocnum">6.1</span>Material platforms</a></li>
+<li class="toc3"><a href="#sec-p-int-components"><span class="tocnum">6.2</span>The component library</a></li>
+<li class="toc3"><a href="#sec-p-int-var"><span class="tocnum">6.3</span>Variation, tuning and yield</a></li>
+<li class="toc3"><a href="#sec-p-int-pdk"><span class="tocnum">6.4</span>Process design kits</a></li>
+<li class="toc2"><a href="#sec-p-qc"><span class="tocnum">7</span>Photonic quantum computing: from KLM to fusion and GKP</a></li>
+<li class="toc3"><a href="#sec-p-qc-klm"><span class="tocnum">7.1</span>Measurement as the nonlinearity</a></li>
+<li class="toc3"><a href="#sec-p-qc-mbqc"><span class="tocnum">7.2</span>Cluster states and measurement-based computing</a></li>
+<li class="toc3"><a href="#sec-p-qc-fbqc"><span class="tocnum">7.3</span>Fusion-based quantum computing</a></li>
+<li class="toc3"><a href="#sec-p-qc-cv"><span class="tocnum">7.4</span>Continuous variables and GKP qubits</a></li>
+<li class="toc3"><a href="#sec-p-qc-budget"><span class="tocnum">7.5</span>Loss budgets</a></li>
+    <li class="toc2"><a href="#references">References</a></li>
   </ol>
 </nav>
 <main>
@@ -65,11 +102,367 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Quantum Photonics</h1>
   <p class="subtitle">The quantised field, states of light, linear optics, light–matter interaction, sources and detectors, integrated photonics and photonic quantum computing</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">0 chapters · 0 numbered equations · 0 exercises with solutions · about 45 hours of study</p>
+  <p class="meta">7 chapters · 13 numbered equations · 22 exercises with solutions · about 45 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../classical-physics/index.html">Book 2: Classical Physics</a>, <a href="../quantum-mechanics/index.html">Book 3: Quantum Mechanics</a>, <a href="../quantum-information/index.html">Book 4: Quantum Computing</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
-<section id="sec-soon" class="unnumbered"><h2>In preparation</h2><p>This book has not been written yet.</p></section>
+<section id="sec-p-preface" class="unnumbered"><h2>How to use this book</h2>
+<p>Photons are the natural carriers of quantum information: they travel at the speed of light, barely interact with their environment, and at optical frequencies are quantum even at room temperature. The same weak interaction makes them hard to compute with, because two photons do not naturally affect each other. Quantum photonics is the engineering of that trade-off. It also provides the language for every other platform: a microwave resonator holds photons, a qubit is read out by photons, ions and atoms are controlled with lasers, and the circuit QED of Book 6 is cavity QED transplanted to a chip.</p>
+<p>The book has three parts. Chapters 1–2 quantise the electromagnetic field and describe the states of light: Fock, coherent, thermal and squeezed. Chapters 3–5 treat what can be done with photons: linear optics and two-photon interference, interaction with atoms and cavities, and the sources and detectors that make photonic experiments possible. Chapters 6–7 turn to engineering: integrated photonic circuits and their fabrication, and the architectures for photonic quantum computing, where loss replaces decoherence as the central enemy. The last chapter connects directly to the review's section on photonics (<a class="xref ext" href="../../index.html#sec-mod-phot">Lab to Foundry §8.2</a>).</p>
+<p>Prerequisites: Book 2 Chapters 5–7 (Maxwell's equations, resonators, waveguides and interferometers), Book 3 Chapters 4 and 9 (the harmonic oscillator and second quantisation) and Book 4 Chapters 1–2 and 6–7. Standard references are Gerry and Knight <span class="cite">[<a href="#ref-gerry2005">1</a>]</span> and, for photonic quantum computing, Kok <i>et al.</i> <span class="cite">[<a href="#ref-kok2007">2</a>]</span>.</p>
+</section>
 
+<section id="sec-p-field"><h2><span class="secnum">1</span> Quantising the electromagnetic field</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Expand the field in a cavity in normal modes and show that each mode is a harmonic oscillator.</li>
+<li>Write the quantised field operator, and compute vacuum fluctuations and the single-photon field strength.</li>
+<li>Extend the picture to travelling modes in waveguides, and state quantum input–output relations.</li>
+</ul></div>
+
+<h3 id="sec-p-field-modes"><span class="secnum">1.1</span> Modes are oscillators</h3>
+<p>Inside a cavity with perfectly conducting walls, Maxwell's equations have discrete solutions, the eigenmodes \(\mathbf u_k(\mathbf r)\) of <a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-curlcurl">Book 2 eq. (24)</a>, with frequencies \(\omega_k\). Normalise them so that \(\int\varepsilon(\mathbf r)|\mathbf u_k|^2\dd V = 1\), and expand any field configuration in them: \(\mathbf E(\mathbf r,t) = \sum_k q_k(t)\,\omega_k\,\mathbf u_k(\mathbf r)\) up to constants. Substituting into the field energy \(\tfrac12\int(\varepsilon|\mathbf E|^2 + |\mathbf B|^2/\mu)\dd V\) and using orthogonality gives a sum of independent oscillators,</p>
+<div class="eq" id="eq-p-modes">$$ H = \sum_k\Big(\frac{p_k^2}{2} + \frac12\omega_k^2q_k^2\Big),  \tag{1}$$</div>
+<p>with \(q_k\) related to the electric field amplitude and \(p_k\) to the magnetic one. The electric and magnetic energies play the roles of potential and kinetic energy, exactly as capacitor and inductor did for the LC circuit (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-lag-circuit">Book 2 §1.4</a>). Quantising each oscillator (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-qho">Book 3 §4</a>) gives</p>
+<div class="eq" id="eq-p-hfield">$$ H = \sum_k\hbar\omega_k\Big(a_k^\dagger a_k + \frac12\Big), \qquad [a_j, a_k^\dagger] = \delta_{jk} .  \tag{2}$$</div>
+<p>A <b>photon</b> is one quantum of excitation of one mode. "Which mode" is as much a part of a photon's identity as its frequency: a photon in a different spatial mode, polarisation, time bin or frequency band is a different photon and does not interfere with the first. Much of photonic engineering is about making photons occupy exactly the intended mode.</p>
+
+<h3 id="sec-p-field-op"><span class="secnum">1.2</span> The field operator and vacuum fluctuations</h3>
+<p>The electric field becomes an operator,</p>
+<div class="eq" id="eq-p-efield">$$ \hat{\mathbf E}(\mathbf r) = \ii\sum_k\mathcal E_k\big(a_k\,\mathbf f_k(\mathbf r) - a_k^\dagger\,\mathbf f_k^*(\mathbf r)\big), \qquad \mathcal E_k = \sqrt{\frac{\hbar\omega_k}{2\varepsilon_0V_k}} ,  \tag{3}$$</div>
+<p>where \(\mathbf f_k\) is the mode shape normalised to a maximum of one and \(V_k = \int\varepsilon_r|\mathbf f_k|^2\dd V\) is the <b>mode volume</b>. In the vacuum, \(\expval{\hat{\mathbf E}} = 0\) but \(\expval{\hat{\mathbf E}^2}\ne0\): every mode has zero-point fluctuations of amplitude \(\mathcal E_k\). The <b>single-photon field</b> \(\mathcal E_k\) is the key figure of merit for coupling light to matter: an atom or qubit with dipole moment \(d\) couples to the mode with strength \(\hbar g = d\,\mathcal E_k\). Small mode volumes give large fields. A micropillar cavity with \(V\sim\lambda^3\) at 900 nm has \(\mathcal E\sim10^4\) V/m. A superconducting coplanar resonator at 5 GHz has a single-photon voltage of about a microvolt across a gap of about 10 µm, a field of only 0.1 V/m. Circuit QED nevertheless reaches couplings of \(g/2\pi\sim100\) MHz because its "atom" is a transmon with an enormous effective dipole: its Cooper pairs move across tens of micrometres rather than an ångström (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-qho-lc">Book 3 §4.2</a>).</p>
+<p>Vacuum fluctuations are not a curiosity. They cause spontaneous emission (Chapter 4), they are the noise floor of every optical measurement (the shot noise of a coherent beam is vacuum noise beating with the beam), and they set the "added noise" of amplifiers at the quantum limit (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-th-johnson">Book 2 §8.3</a>).</p>
+
+<h3 id="sec-p-field-travel"><span class="secnum">1.3</span> Travelling modes</h3>
+<p>In a waveguide or a transmission line there is a continuum of modes labelled by frequency (and direction). The appropriate operators are \(a(\omega)\) with \([a(\omega), a^\dagger(\omega')] = \delta(\omega-\omega')\), or their Fourier transforms \(a(t)\), which annihilate a photon passing a point at time \(t\), normalised so that \(\expval{a^\dagger(t)a(t)}\) is the photon flux (photons per second). A single photon in a wavepacket \(\xi(t)\) is \(\int\xi(t)a^\dagger(t)\dd t\ket0\) with \(\int|\xi|^2 = 1\). Its temporal shape is part of its mode: two single photons interfere perfectly only if their wavepackets overlap completely (Chapter 3).</p>
+<p>A cavity mode \(a\) coupled to a waveguide at rate \(\kappa\) obeys the quantum version of the input–output relations of <a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-inout">Book 2 eq. (14)</a>:</p>
+<div class="eq" id="eq-p-inout">$$ \dot a = -\frac{\ii}{\hbar}[a, H_{\mathrm{sys}}] - \frac\kappa2a + \sqrt\kappa\,a_{\mathrm{in}}(t), \qquad a_{\mathrm{out}}(t) = a_{\mathrm{in}}(t) - \sqrt\kappa\,a(t) .  \tag{4}$$</div>
+<p>The input operator \(a_{\mathrm{in}}\) carries the vacuum fluctuations of the waveguide into the cavity even when nothing is sent in. That noise term is what preserves the commutation relations as the cavity decays, and it is the quantum origin of the fluctuation–dissipation theorem. Every lossy element, from a waveguide with scattering loss to an attenuator in a cryostat, mixes in vacuum (or thermal) noise in the same way, a fact that becomes the beam-splitter model of loss in Chapter 3.</p>
+
+<div class="eda"><p>Photonic and microwave EDA meet here: the same eigenmode solvers compute optical cavity modes and microwave resonator modes, and the same mode volume and participation integrals decide coupling strengths in both. A field solver that reports \(V_k\) and \(\mathbf f_k\) at the emitter location reports \(g\).</p></div>
+
+<div class="exercises" id="ex-p-field"><h4>Exercises</h4><ol>
+<li>Compute the single-photon field \(\mathcal E\) for a mode of volume \(V = (1\,\mu\mathrm m)^3\) at \(\lambda = 930\) nm in vacuum.
+<details><summary>Solution</summary><p>\(\omega = 2\pi c/\lambda = 2.03\times10^{15}\) s\(^{-1}\). \(\mathcal E = \sqrt{\hbar\omega/2\varepsilon_0V} = \sqrt{2.14\times10^{-19}/(2\times8.85\times10^{-12}\times10^{-18})}\approx1.1\times10^5\) V/m.</p></details></li>
+<li>An atom with dipole moment \(d = 3ea_0\) (\(a_0 = 0.053\) nm) sits at the field maximum of that mode. What is \(g/2\pi\)?
+<details><summary>Solution</summary><p>\(d = 3\times1.6\times10^{-19}\times5.3\times10^{-11} = 2.5\times10^{-29}\) C m. \(g = d\mathcal E/\hbar = 2.5\times10^{-29}\times1.1\times10^5/1.055\times10^{-34}\approx2.6\times10^{10}\) s\(^{-1}\), so \(g/2\pi\approx4\) GHz. Real quantum-dot cavities reach tens of GHz because quantum dots have larger dipoles.</p></details></li>
+<li>Show that the output field of a lossless cavity (no internal loss) satisfies \([a_{\mathrm{out}}(t), a_{\mathrm{out}}^\dagger(t')] = \delta(t-t')\) in the steady state for an empty cavity.
+<details><summary>Solution</summary><p>For an empty cavity (no \(H_{\mathrm{sys}}\) beyond the frame), \(a\) is a linear filter of \(a_{\mathrm{in}}\); in the frequency domain \(a_{\mathrm{out}}(\omega) = r(\omega)a_{\mathrm{in}}(\omega)\) with \(|r| = 1\) (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-osc-loss">Book 2 §3.1</a>, exercise 2). A unit-modulus filter preserves the commutator \(\delta(\omega-\omega')\), and hence its Fourier transform \(\delta(t-t')\).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-p-states"><h2><span class="secnum">2</span> Quantum states of light</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Describe Fock, coherent, thermal and squeezed states, and their photon statistics.</li>
+<li>Use quadrature operators and the Wigner function to picture states in phase space.</li>
+<li>Define and compute the second-order correlation \(g^{(2)}(0)\), the standard test of a single-photon source.</li>
+<li>See how loss degrades each kind of state.</li>
+</ul></div>
+
+<h3 id="sec-p-st-quad"><span class="secnum">2.1</span> Quadratures and phase space</h3>
+<p>For a single mode, define the <b>quadrature operators</b> \(\hat x = (a + a^\dagger)/\sqrt2\) and \(\hat p = -\ii(a - a^\dagger)/\sqrt2\), the dimensionless position and momentum of the mode's oscillator, with \([\hat x,\hat p] = \ii\). They are the in-phase and out-of-phase components of the field, measurable with a homodyne detector (Chapter 5). The vacuum has \(\Delta x^2 = \Delta p^2 = \tfrac12\), the minimum allowed by the uncertainty relation (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#eq-q-robertson">Book 3 eq. (5)</a>). This "shot-noise unit" is the reference for noise in optics.</p>
+<p>The <b>Wigner function</b> \(W(x,p)\) is a quasi-probability distribution on phase space whose marginals are the true probability distributions of \(x\) and of \(p\) (and of any rotated quadrature). For Gaussian states it is a Gaussian; for non-classical states such as Fock states it takes negative values, and Wigner negativity is a necessary resource for quantum advantage in continuous-variable computing.</p>
+
+<h3 id="sec-p-st-zoo"><span class="secnum">2.2</span> The main states</h3>
+<figure class="tbl" id="tab-p-states"><figcaption><b>Table 1.</b> States of a single mode of light.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>State</th><th>Definition</th><th>Photon-number distribution</th><th>\(g^{(2)}(0)\)</th><th>Where it comes from</th></tr>
+<tr><td>Fock \(\ket n\)</td><td>\(\frac{(a^\dagger)^n}{\sqrt{n!}}\ket0\)</td><td>exactly \(n\)</td><td>\(1 - 1/n\)</td><td>Single emitters, heralded sources</td></tr>
+<tr><td>Coherent \(\ket\alpha\)</td><td>\(D(\alpha)\ket0\)</td><td>Poisson, mean \(|\alpha|^2\)</td><td>1</td><td>Lasers, microwave generators</td></tr>
+<tr><td>Thermal</td><td>\(\rho = \sum_n\frac{\bar n^n}{(\bar n+1)^{n+1}}\ketbra nn\)</td><td>Geometric (Bose–Einstein)</td><td>2</td><td>Hot bodies, one arm of a two-mode squeezer</td></tr>
+<tr><td>Squeezed vacuum</td><td>\(S(r)\ket0\), \(S(r) = \ee^{\frac r2(a^2 - a^{\dagger2})}\)</td><td>Only even \(n\)</td><td>\(3 + 1/\sinh^2r\)</td><td>Parametric amplifiers, OPOs</td></tr>
+</table></div></figure>
+<p>A <b>squeezed state</b> has one quadrature's noise reduced below the vacuum level and the other increased, keeping the product at its minimum: \(\Delta x^2 = \tfrac12\ee^{-2r}\), \(\Delta p^2 = \tfrac12\ee^{2r}\). Squeezing is quoted in decibels, \(-10\log_{10}(\ee^{-2r})\); 10 dB means a factor 10 reduction in variance. Squeezed light is produced by the degenerate parametric process of <a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-osc-param">Book 2 §3.4</a>, either in a nonlinear crystal or waveguide pumped at twice the signal frequency, or in a Josephson parametric amplifier at microwave frequencies. It improves the sensitivity of gravitational-wave detectors, and it is the raw material of continuous-variable photonic quantum computing (Chapter 7).</p>
+
+<h3 id="sec-p-st-g2"><span class="secnum">2.3</span> Photon statistics and \(g^{(2)}\)</h3>
+<p>Hanbury Brown and Twiss split a beam on a 50:50 beam splitter and correlated the counts of two detectors. The normalised probability of detecting two photons at the same time is</p>
+<div class="eq" id="eq-p-g2">$$ g^{(2)}(0) = \frac{\expval{a^\dagger a^\dagger aa}}{\expval{a^\dagger a}^2} = 1 + \frac{(\Delta n)^2 - \bar n}{\bar n^2} .  \tag{5}$$</div>
+<p>Coherent light (Poisson, \(\Delta n^2 = \bar n\)) has \(g^{(2)} = 1\): photons arrive independently. Thermal light has \(g^{(2)} = 2\): photons bunch. A single-photon Fock state has \(g^{(2)} = 0\): two detectors can never click together, because there is only one photon to split. \(g^{(2)}(0) \lt 1\) (<b>antibunching</b>) has no classical explanation, and measuring \(g^{(2)}(0)\) close to zero is the first test of any single-photon source. State-of-the-art quantum-dot sources reach \(g^{(2)}(0)\sim10^{-2}\)–\(10^{-3}\); heralded sources trade \(g^{(2)}\) against brightness (Chapter 5).</p>
+
+<h3 id="sec-p-st-loss"><span class="secnum">2.4</span> What loss does</h3>
+<p>Loss with transmission \(\eta\) is equivalent to a beam splitter that sends a fraction \(1-\eta\) of the light to an unobserved mode while mixing in vacuum (Chapter 3). Its effect depends on the state:</p>
+<ul>
+<li>A coherent state stays coherent, with \(\alpha\to\sqrt\eta\,\alpha\). Classical light is robust to loss, which is why fibre networks work.</li>
+<li>A single photon becomes a mixture: \(\ket1\to\eta\ketbra11 + (1-\eta)\ketbra00\). The photon is either there or gone, which is an <b>erasure</b> if we can detect its absence, and a silent error otherwise.</li>
+<li>A squeezed state's variance moves towards the vacuum: \(V\to\eta V + (1-\eta)\cdot\tfrac12\) (in the units above), so squeezing degrades continuously. A 15 dB source behind 10% loss retains only about 9 dB, the calculation of the review's <a class="xref ext" href="../../index.html#eq-sq">Lab to Foundry eq. (33)</a>.</li>
+<li>A superposition of large coherent states ("cat states") loses its coherence at a rate proportional to its size \(|\alpha|^2\). Large quantum superpositions are fragile in exact proportion to how "macroscopic" they are.</li>
+</ul>
+
+<div class="eda"><p>Because loss acts so differently on different states, a photonic loss budget is not just a sum of decibels: whether a given loss is tolerable depends on the encoding (dual-rail single photons, squeezed states or GKP states) and on the error-correction scheme. A photonic design tool must propagate per-component loss distributions to the architecture's threshold condition (<a class="xref ext" href="../../index.html#sec-mod-phot">Lab to Foundry §8.2</a>).</p></div>
+
+<div class="exercises" id="ex-p-states"><h4>Exercises</h4><ol>
+<li>Compute \(g^{(2)}(0)\) for the Fock state \(\ket2\).
+<details><summary>Solution</summary><p>\(\expval{a^\dagger a^\dagger aa} = n(n-1) = 2\), \(\expval{a^\dagger a}^2 = 4\), so \(g^{(2)} = 1/2\).</p></details></li>
+<li>Show that a thermal state has \(\Delta n^2 = \bar n^2 + \bar n\) and hence \(g^{(2)}(0) = 2\).
+<details><summary>Solution</summary><p>For the geometric distribution \(p_n = \bar n^n/(\bar n+1)^{n+1}\), the generating function gives \(\expval{n(n-1)} = 2\bar n^2\). So \(\expval{n^2} = 2\bar n^2 + \bar n\), \(\Delta n^2 = \bar n^2 + \bar n\), and <a class="xref" href="#eq-p-g2">(5)</a> gives \(1 + \bar n^2/\bar n^2 = 2\).</p></details></li>
+<li>A squeezer produces 12 dB. How much remains after 80% transmission?
+<details><summary>Solution</summary><p>Variance (in vacuum units) \(10^{-1.2} = 0.063\). After loss: \(0.8\times0.063 + 0.2 = 0.250\), i.e. \(-10\log_{10}0.25 = 6.0\) dB.</p></details></li>
+<li>A single photon passes three components each with 0.2 dB loss. What is the probability it survives?
+<details><summary>Solution</summary><p>Total 0.6 dB: \(10^{-0.06} = 0.871\).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-p-linear"><h2><span class="secnum">3</span> Linear optics and two-photon interference</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Describe a beam splitter as a unitary transformation of mode operators, and compute its effect on photon-number states.</li>
+<li>Derive the Hong–Ou–Mandel effect and understand distinguishability.</li>
+<li>Decompose any multimode interferometer into beam splitters and phase shifters (Reck, Clements), and understand boson sampling.</li>
+<li>Encode qubits in photons (dual-rail, polarisation, time-bin), and model loss as a beam splitter.</li>
+</ul></div>
+
+<h3 id="sec-p-lin-bs"><span class="secnum">3.1</span> The beam splitter</h3>
+<p>A lossless beam splitter or directional coupler (<a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-bs">Book 2 eq. (37)</a>) mixes two input modes into two output modes. Quantum mechanically, it transforms the annihilation operators linearly and unitarily:</p>
+<div class="eq" id="eq-p-bs">$$ \begin{pmatrix}b_1\\b_2\end{pmatrix} = \begin{pmatrix}t & r'\\ r & t'\end{pmatrix}\begin{pmatrix}a_1\\a_2\end{pmatrix}, \qquad \text{50:50:}\ \ b_1 = \frac{a_1 + \ii a_2}{\sqrt2},\ \ b_2 = \frac{\ii a_1 + a_2}{\sqrt2} .  \tag{6}$$</div>
+<p>The same matrix that describes classical field amplitudes describes the quantum operators: <b>linear optics is the classical S-matrix applied to mode operators</b>. To find the output state for an input of photons, write the input as creation operators acting on vacuum, \(\ket{n_1,n_2} = \frac{(a_1^\dagger)^{n_1}(a_2^\dagger)^{n_2}}{\sqrt{n_1!n_2!}}\ket0\), substitute \(a^\dagger\) in terms of \(b^\dagger\) using the inverse (conjugate-transpose) relation, and expand. A single photon in port 1 becomes \((\ket{1,0}+\ii\ket{0,1})/\sqrt2\) at the outputs: a superposition of the two paths, a <b>dual-rail</b> qubit.</p>
+
+<h3 id="sec-p-lin-hom"><span class="secnum">3.2</span> The Hong–Ou–Mandel effect</h3>
+<p>Send one photon into each input of a 50:50 beam splitter. Inverting <a class="xref" href="#eq-p-bs">(6)</a> (for a unitary \(U\), \(a_k^\dagger = \sum_jU_{jk}b_j^\dagger\)) gives \(a_1^\dagger = (b_1^\dagger + \ii b_2^\dagger)/\sqrt2\) and \(a_2^\dagger = (\ii b_1^\dagger + b_2^\dagger)/\sqrt2\), so</p>
+<div class="eq" id="eq-p-hom">$$ a_1^\dagger a_2^\dagger\ket0 = \frac12\big(\ii\,b_1^{\dagger2} + b_1^\dagger b_2^\dagger - b_2^\dagger b_1^\dagger + \ii\,b_2^{\dagger2}\big)\ket0 = \frac{\ii}{\sqrt2}\big(\ket{2,0} + \ket{0,2}\big).  \tag{7}$$</div>
+<p>The two ways of getting one photon in each output (both transmitted, both reflected) have amplitudes that cancel exactly, so the photons always leave together <span class="cite">[<a href="#ref-hom1987">3</a>]</span>. This is two-photon interference, a consequence of bosonic symmetry (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-sec-ident">Book 3 §9.1</a>) with no classical counterpart. It happens only if the photons are <b>indistinguishable</b> in every degree of freedom: frequency, polarisation, spatial mode and arrival time. If one photon is delayed by \(\tau\), the coincidence probability is</p>
+<div class="eq" id="eq-p-homdip">$$ P_c(\tau) = \frac12\Big(1 - V\,\big|\textstyle\int\xi_1^*(t)\,\xi_2(t-\tau)\,\dd t\big|^2\Big),  \tag{8}$$</div>
+<p>which dips to zero at \(\tau = 0\) for identical wavepackets (visibility \(V = 1\)) and returns to the classical value \(\tfrac12\) when the wavepackets no longer overlap (<a class="xref" href="#fig-p-hom">Figure 1</a>). The HOM visibility is the standard measure of photon indistinguishability. It must be close to one for photonic quantum computing, because every fusion or entangling measurement relies on this interference, and imperfect indistinguishability acts as an error.</p>
+<figure id="fig-p-hom">
+<img src="../figures/fig-p-hom.svg" alt="Coincidence probability versus delay showing the Hong-Ou-Mandel dip for visibilities of 1 and 0.9.">
+<figcaption><b>Figure 1.</b> The Hong–Ou–Mandel dip, <a class="xref" href="#eq-p-homdip">(8)</a>, for Gaussian wavepackets of temporal width \(\sigma\), with perfect (\(V=1\)) and 90% indistinguishability. Classical (distinguishable) particles would give \(P_c = 1/2\) at every delay.</figcaption>
+</figure>
+
+<h3 id="sec-p-lin-multi"><span class="secnum">3.3</span> Multimode interferometers</h3>
+<p>An \(N\)-mode linear optical circuit implements \(b_j = \sum_kU_{jk}a_k\) with an \(N\times N\) unitary \(U\). Reck <i>et al.</i> showed that any \(U\) can be built from \(N(N-1)/2\) beam splitters with adjustable reflectivity (in practice MZIs, <a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-mzi">Book 2 eq. (38)</a>) and phase shifters arranged in a triangle <span class="cite">[<a href="#ref-reck1994">4</a>]</span>; Clements <i>et al.</i> found a rectangular arrangement of the same count with balanced path lengths, which is more tolerant of loss <span class="cite">[<a href="#ref-clements2016">5</a>]</span>. Programmable meshes of this kind, with hundreds of thermo-optic or electro-optic phase shifters, are standard components of photonic quantum processors. Their fidelity is limited by the splitting-ratio errors of fabricated couplers (which make some unitaries unreachable unless the mesh is designed with redundancy), by phase crosstalk between heaters, and by loss that differs between paths.</p>
+<p>For \(n\) single photons entering an \(N\)-mode interferometer, the probability of an output pattern is the squared modulus of the <b>permanent</b> of an \(n\times n\) submatrix of \(U\). The permanent is like the determinant without minus signs, and computing it is #P-hard. Sampling from this distribution, <b>boson sampling</b> <span class="cite">[<a href="#ref-aaronson2011">6</a>]</span>, is believed to be classically intractable for \(n\gtrsim50\), which made it a target for early demonstrations of quantum advantage; the Gaussian variant with squeezed inputs <span class="cite">[<a href="#ref-hamilton2017">7</a>]</span> was realised at scale by Xanadu's Borealis (<a class="xref ext" href="../../index.html#sec-mod-phot">Lab to Foundry §8.2</a>). Boson sampling is not a universal computer, but it shows that even linear optics with photon detection is hard to simulate.</p>
+
+<h3 id="sec-p-lin-qubits"><span class="secnum">3.4</span> Photonic qubits</h3>
+<ul>
+<li><b>Dual rail</b>: one photon in one of two waveguides, \(\ket0_L = \ket{1,0}\), \(\ket1_L = \ket{0,1}\). Single-qubit gates are MZIs. The natural choice on chips.</li>
+<li><b>Polarisation</b>: horizontal and vertical, manipulated with wave plates. Natural in free space and fibre.</li>
+<li><b>Time bin</b>: early or late, robust in long fibres.</li>
+</ul>
+<p>Single-qubit operations are easy and accurate for all of them. Two-qubit gates are the problem: linear optics conserves photon number and does not make photons interact. Chapter 7 shows how measurement and feed-forward supply the missing nonlinearity.</p>
+<p><b>Loss as a beam splitter.</b> Any loss with transmission \(\eta\) can be modelled as a beam splitter with transmissivity \(\eta\) whose second input is vacuum and whose second output is discarded. Tracing out the discarded mode gives the results of <a class="xref" href="#sec-p-st-loss">§2.4</a>. For a dual-rail qubit, loss takes the state out of the qubit space (zero photons): a <b>heralded erasure</b> if the absence is detected, which codes tolerate far better than unknown errors.</p>
+
+<div class="eda"><p>The review notes that a photonic quantum circuit must satisfy \(\Pr(\min_{\mathcal P}\eta_{\mathcal P}\ge\eta_{\min})\ge Y_{\min}\) over all paths \(\mathcal P\) (<a class="xref ext" href="../../index.html#sec-mod-phot">Lab to Foundry §8.2</a>), and the HOM visibility between sources sets a second, independent requirement. A Clements mesh with \(N\) modes has paths of \(N\) MZIs, so per-MZI loss and splitting-ratio statistics compound across the whole mesh.</p></div>
+
+<div class="exercises" id="ex-p-linear"><h4>Exercises</h4><ol>
+<li>Show that a single photon in input 2 of the 50:50 beam splitter of <a class="xref" href="#eq-p-bs">(6)</a> leaves as \((\ii\ket{1,0} + \ket{0,1})/\sqrt2\).
+<details><summary>Solution</summary><p>From \(a_k^\dagger = \sum_jU_{jk}b_j^\dagger\) with \(U_{12} = \ii/\sqrt2\) and \(U_{22} = 1/\sqrt2\): \(a_2^\dagger\ket0 = (\ii b_1^\dagger + b_2^\dagger)\ket0/\sqrt2 = (\ii\ket{1,0} + \ket{0,1})/\sqrt2\).</p></details></li>
+<li>Two photons with Gaussian wavepackets \(\xi(t)\propto\ee^{-t^2/4\sigma^2}\) are delayed by \(\tau\). Show that the overlap is \(\ee^{-\tau^2/8\sigma^2}\) and find the delay that restores \(P_c = 1/4\).
+<details><summary>Solution</summary><p>\(\int\xi(t)\xi(t-\tau)\dd t\propto\int\ee^{-(t^2 + (t-\tau)^2)/4\sigma^2}\dd t\), and completing the square gives \(\ee^{-\tau^2/8\sigma^2}\). Then \(P_c = \tfrac12(1 - \ee^{-\tau^2/4\sigma^2})\) for \(V=1\); \(P_c = 1/4\) when \(\ee^{-\tau^2/4\sigma^2} = 1/2\), \(\tau = 2\sigma\sqrt{\ln2}\approx1.67\sigma\).</p></details></li>
+<li>How many MZIs does a Clements mesh on 20 modes need? If each loses 0.1 dB, what is the transmission of the longest path (20 MZIs)?
+<details><summary>Solution</summary><p>\(20\times19/2 = 190\) MZIs. Longest path 2 dB, transmission \(10^{-0.2} = 0.63\).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-p-lightmatter"><h2><span class="secnum">4</span> Light–matter interaction and cavity QED</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Derive the dipole coupling of a two-level emitter to a quantised mode and the Jaynes–Cummings Hamiltonian.</li>
+<li>Solve the Jaynes–Cummings model: dressed states, vacuum Rabi splitting, and the dispersive limit.</li>
+<li>Understand spontaneous emission, the Purcell effect and the regimes of cavity QED (weak and strong coupling, cooperativity).</li>
+<li>See how the same model becomes circuit QED.</li>
+</ul></div>
+
+<h3 id="sec-p-lm-jc"><span class="secnum">4.1</span> From dipole coupling to Jaynes–Cummings</h3>
+<p>A two-level emitter (an atom, ion, quantum dot or superconducting qubit) with transition frequency \(\omega_a\) and dipole moment \(\mathbf d\) interacts with a field through \(H_{\mathrm{int}} = -\hat{\mathbf d}\cdot\hat{\mathbf E}\). The dipole operator connects the two levels, \(\hat{\mathbf d} = \mathbf d(\sigma_+ + \sigma_-)\). Using the single-mode field operator (<a class="xref" href="#eq-p-efield">(3)</a>), the interaction contains four terms: \(a^\dagger\sigma_-\) (emitter emits a photon), \(a\sigma_+\) (emitter absorbs a photon), and the energy-non-conserving \(a\sigma_-\) and \(a^\dagger\sigma_+\), which oscillate at \(\omega+\omega_a\) in the interaction picture. Dropping the latter (the rotating-wave approximation, valid for \(g\ll\omega\)) gives the <b>Jaynes–Cummings</b> Hamiltonian <span class="cite">[<a href="#ref-jaynes1963">8</a>]</span>:</p>
+<div class="eq" id="eq-p-jc">$$ H_{\mathrm{JC}} = \hbar\omega_r\,a^\dagger a + \frac{\hbar\omega_a}{2}\sigma_z + \hbar g\big(a^\dagger\sigma_- + a\sigma_+\big), \qquad \hbar g = \mathbf d\cdot\boldsymbol{\mathcal E}(\mathbf r_a) .  \tag{9}$$</div>
+<p>It is the simplest model of light–matter interaction and, astonishingly, an accurate one for many real systems.</p>
+
+<h3 id="sec-p-lm-dressed"><span class="secnum">4.2</span> Dressed states and vacuum Rabi splitting</h3>
+<p>The interaction only couples \(\ket{e, n}\) to \(\ket{g, n+1}\) (excited emitter with \(n\) photons, or ground emitter with \(n+1\)): it conserves the total number of excitations. \(H_{\mathrm{JC}}\) is therefore block diagonal with \(2\times2\) blocks, each exactly the coupled-mode matrix of <a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-op-eigen">Book 1 §3.3</a> with coupling \(g\sqrt{n+1}\) and detuning \(\Delta = \omega_a - \omega_r\). Their eigenstates, the <b>dressed states</b>, have energies</p>
+<div class="eq" id="eq-p-dressed">$$ E_{n,\pm} = \hbar\omega_r\Big(n+\frac12\Big) \pm \frac\hbar2\sqrt{\Delta^2 + 4g^2(n+1)} .  \tag{10}$$</div>
+<p>On resonance with one excitation, the emitter and the photon swap back and forth at frequency \(2g\) (<b>vacuum Rabi oscillation</b>), and a spectroscopy measurement shows two peaks split by \(2g\) instead of one (<b>vacuum Rabi splitting</b>). The \(\sqrt{n+1}\) dependence makes the spectrum anharmonic: the splitting grows with excitation number, which is a signature of quantised light. Far from resonance (\(|\Delta|\gg g\sqrt{n}\)) the dispersive Hamiltonian of <a class="xref ext" href="../../foundations/quantum-mechanics/index.html#eq-q-dispersive">Book 3 eq. (26)</a> applies, with \(\chi = g^2/\Delta\).</p>
+
+<h3 id="sec-p-lm-se"><span class="secnum">4.3</span> Spontaneous emission and the Purcell effect</h3>
+<p>An excited emitter in free space couples to a continuum of modes and decays. Fermi's golden rule (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#eq-q-golden">Book 3 eq. (28)</a>) with the free-space density of modes gives the spontaneous emission rate</p>
+<div class="eq" id="eq-p-gamma0">$$ \Gamma_0 = \frac{\omega_a^3|\mathbf d|^2}{3\pi\varepsilon_0\hbar c^3} .  \tag{11}$$</div>
+<p>(The cube of the frequency explains why optical transitions decay in nanoseconds while microwave ones in free space would take years.) Spontaneous emission is not a property of the emitter alone but of the emitter and its electromagnetic environment. Put the emitter in a cavity resonant with it, of quality factor \(Q\) and mode volume \(V\), and the density of modes at \(\omega_a\) is concentrated into the cavity line. The rate is enhanced by the <b>Purcell factor</b> <span class="cite">[<a href="#ref-purcell1946">9</a>]</span></p>
+<div class="eq" id="eq-p-purcell">$$ F_P = \frac{3}{4\pi^2}\Big(\frac{\lambda}{n}\Big)^3\frac{Q}{V}, \qquad \Gamma_{\mathrm{cav}} = \frac{4g^2}{\kappa}\ \ (\text{on resonance, } g\ll\kappa).  \tag{12}$$</div>
+<p>Off resonance the cavity suppresses emission instead. Both effects are used: Purcell enhancement makes single-photon sources fast and directs their photons into one mode (Chapter 5); Purcell suppression, through detuning and filters, protects superconducting qubits from decaying through their readout resonators at rate \(\kappa(g/\Delta)^2\) (<a class="xref ext" href="../../index.html#eq-chi">Lab to Foundry eq. (6)</a>).</p>
+
+<h3 id="sec-p-lm-regimes"><span class="secnum">4.4</span> Regimes of cavity QED</h3>
+<p>Three rates compete: the coupling \(g\), the cavity decay rate \(\kappa\) and the emitter's decay into other modes \(\gamma\). The <b>cooperativity</b> \(C = 4g^2/\kappa\gamma\) measures how much more likely the emitter is to interact with the cavity mode than with everything else. In the <b>weak-coupling</b> regime (\(g \lt \kappa,\gamma\)) the cavity modifies emission rates but the photon leaves before it can be reabsorbed; with \(C\gg1\) this is already enough for efficient single-photon sources and for photon–photon gates mediated by the emitter. In the <b>strong-coupling</b> regime (\(g > \kappa,\gamma\)) coherent exchange happens many times before anything is lost, and the dressed states are resolved. Atoms in high-finesse optical cavities, quantum dots in photonic-crystal cavities and above all superconducting circuits reach strong coupling; circuit QED reaches \(g/\kappa\) of hundreds <span class="cite">[<a href="#ref-wallraff2004">10</a>, <a href="#ref-blais2004">11</a>]</span>.</p>
+
+<h3 id="sec-p-lm-cqed"><span class="secnum">4.5</span> From cavity QED to circuit QED</h3>
+<p>Replace the atom by a transmon and the optical cavity by a coplanar resonator, and <a class="xref" href="#eq-p-jc">(9)</a> describes the device (with the transmon's third level added as a correction). The coupling is set by a capacitance: \(\hbar g \approx \frac{C_g}{C_\Sigma}\,eV_{\mathrm{zpf}}\sqrt{2}\,(E_J/8E_C)^{1/4}\) for a transmon, so a layout's coupling capacitance, extracted by an electrostatic solver, determines \(g\). The dispersive shift becomes the readout mechanism, the Purcell effect the readout's price, and the cavity's \(\kappa\) the readout speed. Book 6 develops this in detail; the review's <a class="xref ext" href="../../index.html#eq-multi">Lab to Foundry eq. (5)</a> and <a class="xref ext" href="../../index.html#eq-chi">Lab to Foundry eq. (6)</a> are this chapter's equations with the transmon's level structure.</p>
+
+<div class="eda"><p>Light–matter coupling is a geometric quantity: \(g\) depends on where the emitter sits in the mode and how the mode is shaped. For quantum-dot sources the emitter position is random relative to the lithographed cavity, so coupling is a yield problem (<a class="xref ext" href="../../index.html#sec-mod-phot">Lab to Foundry §8.2</a>); for transmons, \(g\) is set by drawn capacitances and is predictable to a few percent, provided the extraction is accurate.</p></div>
+
+<div class="exercises" id="ex-p-lightmatter"><h4>Exercises</h4><ol>
+<li>Verify that \(H_{\mathrm{JC}}\) commutes with the excitation number \(N = a^\dagger a + \sigma_+\sigma_-\).
+<details><summary>Solution</summary><p>\([a^\dagger\sigma_-, N] = [a^\dagger,a^\dagger a]\sigma_- + a^\dagger[\sigma_-,\sigma_+\sigma_-] = -a^\dagger\sigma_- + a^\dagger\sigma_- = 0\), using \([a^\dagger, a^\dagger a] = -a^\dagger\) and \([\sigma_-,\sigma_+\sigma_-] = \sigma_-\). The Hermitian conjugate term commutes likewise, and the free terms commute with \(N\) trivially.</p></details></li>
+<li>A quantum dot in a micropillar has \(g/2\pi = 20\) GHz, \(\kappa/2\pi = 100\) GHz and \(\gamma/2\pi = 0.2\) GHz. Which regime is this, what is \(C\), and what fraction of emission goes into the cavity mode?
+<details><summary>Solution</summary><p>\(g \lt \kappa\): weak coupling (bad-cavity regime). \(C = 4\times400/(100\times0.2) = 80\). Cavity emission rate \(4g^2/\kappa = 16\) GHz × 2π versus \(\gamma = 0.2\): the fraction into the cavity, \(C/(C+1)\approx0.99\). (Collection into the output fibre is a separate efficiency.)</p></details></li>
+<li>For a transmon–resonator system with \(g/2\pi = 80\) MHz on resonance, how long does a single excitation take to swap from qubit to resonator?
+<details><summary>Solution</summary><p>Vacuum Rabi oscillation at angular frequency \(2g\); a full swap takes half a period, \(\pi/2g = 1/(4\times80\,\mathrm{MHz}) = 3.1\) ns.</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-p-sources"><h2><span class="secnum">5</span> Single-photon sources and detectors</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand probabilistic sources (SPDC, spontaneous four-wave mixing) and the brightness–purity trade-off of heralding.</li>
+<li>Understand deterministic sources (quantum dots) and their figures of merit: efficiency, purity, indistinguishability.</li>
+<li>Know the physics and specifications of single-photon detectors (SNSPDs) and homodyne detection.</li>
+<li>Know why multiplexing and frequency conversion are needed, and the role of transduction.</li>
+</ul></div>
+
+<h3 id="sec-p-src-spdc"><span class="secnum">5.1</span> Probabilistic pair sources</h3>
+<p>In a material with a second-order nonlinearity \(\chi^{(2)}\) (lithium niobate, KTP), a pump photon at \(\omega_p\) can split into two photons ("signal" and "idler") with \(\omega_s+\omega_i = \omega_p\): <b>spontaneous parametric down-conversion</b> (SPDC). In silicon and silicon nitride, which have a \(\chi^{(3)}\) nonlinearity, two pump photons convert into a pair, \(2\omega_p = \omega_s + \omega_i\): <b>spontaneous four-wave mixing</b> (SFWM), conveniently done in ring resonators on a chip. Both processes need phase matching (momentum conservation), which waveguide dispersion engineering provides. The state produced in the signal and idler modes is a <b>two-mode squeezed vacuum</b>:</p>
+<div class="eq" id="eq-p-tmsv">$$ \ket{\psi} = \sqrt{1-\lambda^2}\sum_{n=0}^\infty\lambda^n\ket{n}_s\ket n_i, \qquad p(n) = (1-\lambda^2)\lambda^{2n},  \tag{13}$$</div>
+<p>with \(\lambda^2\) set by pump power. Photons always come in pairs, so detecting the idler <b>heralds</b> a signal photon. But the pair number is random: increasing the pump raises the probability of one pair, \(p(1)\approx\lambda^2\), and also the probability of two, \(p(2)\approx\lambda^4\), which contaminates the heralded state. A heralded source therefore operates at \(p(1)\) of a few percent to keep multi-photon contamination low (<a class="xref" href="#fig-p-herald">Figure 2</a>). Each signal photon must also be in a single spectral mode (spectral <b>purity</b>), or it will not interfere perfectly with photons from other sources; this needs careful phase-matching design or filtering, which costs brightness.</p>
+<figure id="fig-p-herald">
+<img src="../figures/fig-p-herald.svg" alt="Single-pair and multi-pair probabilities versus mean pair number for a heralded source, and the heralded g2.">
+<figcaption><b>Figure 2.</b> Probability of exactly one pair (blue) and of two or more pairs (orange) per pulse versus the mean pair number \(\bar n\), from <a class="xref" href="#eq-p-tmsv">(13)</a>. The one-pair probability never exceeds 25%, while multi-pair contamination grows as \(\bar n^2\). Practical sources run at \(\bar n\) of a few percent, where about one heralded event in twenty is contaminated; this is why multiplexing is needed.</figcaption>
+</figure>
+<p><b>Multiplexing</b> overcomes the low probability: run many sources (in space or in time) in parallel, detect which ones heralded, and route one heralded photon to the output with fast switches. With \(M\) sources at probability \(p\), the probability of at least one success is \(1-(1-p)^M\). The switches and delay lines must be very low loss, or multiplexing adds back the loss it was meant to overcome. Building near-deterministic multiplexed sources is one of the central engineering programmes of photonic quantum computing.</p>
+
+<h3 id="sec-p-src-qd"><span class="secnum">5.2</span> Deterministic sources: quantum dots</h3>
+<p>A semiconductor quantum dot (for example InAs in GaAs) is an artificial atom: excite it with a laser pulse and it emits exactly one photon. Embedded in a micropillar or photonic-crystal cavity, Purcell enhancement (<a class="xref" href="#eq-p-purcell">(12)</a>) makes emission fast and directs it into a collectable mode <span class="cite">[<a href="#ref-lodahl2015">12</a>]</span>. Figures of merit: <b>brightness</b> (probability of a photon in the output fibre per pulse, now 50–70% for the best devices), <b>purity</b> (\(g^{(2)}(0)\) of order \(10^{-2}\)), and <b>indistinguishability</b> (HOM visibility between successive photons, above 95%; between photons from different dots, lower, because each dot's frequency differs). The last is the key problem: dots grow at random positions with random frequencies, a fabrication spread that must be tuned out with strain, electric fields or temperature (<a class="xref ext" href="../../index.html#sec-mod-phot">Lab to Foundry §8.2</a>). Quandela builds its machines from such sources <span class="cite">[<a href="#ref-somaschi2016">13</a>]</span>.</p>
+
+<h3 id="sec-p-src-det"><span class="secnum">5.3</span> Detectors</h3>
+<p><b>Superconducting nanowire single-photon detectors</b> (SNSPDs) <span class="cite">[<a href="#ref-hadfield2009">14</a>]</span> are thin (about 5 nm), narrow (about 100 nm) wires of NbN, NbTiN or WSi, biased just below their critical current. An absorbed photon creates a resistive hotspot that diverts the current and produces a voltage pulse. Their performance is remarkable: system detection efficiency above 95% at 1550 nm, dark counts below one per second, timing jitter of tens of picoseconds, and recovery times of tens of nanoseconds. They must be cooled to 1–3 K, so a photonic quantum computer still needs cryogenics for its detectors, though not millikelvin. Integrating SNSPDs on photonic chips (evanescently coupled to waveguides) removes fibre-coupling loss. Most SNSPDs only distinguish zero from "one or more" photons; <b>photon-number resolution</b> requires arrays of wires, multiplexing in time, or transition-edge sensors, and it matters for heralding and GKP state generation.</p>
+<p><b>Homodyne detection</b> measures a quadrature rather than photon number. The signal is interfered on a 50:50 beam splitter with a strong coherent "local oscillator" of controlled phase \(\theta\), and the difference of two photodiode currents is proportional to \(\hat x\cos\theta + \hat p\sin\theta\). It needs no single-photon sensitivity and works at room temperature with high efficiency and bandwidth, which makes it the natural detector for continuous-variable architectures.</p>
+
+<h3 id="sec-p-src-trans"><span class="secnum">5.4</span> Frequency conversion and transduction</h3>
+<p>Different systems prefer different frequencies: quantum dots near 900 nm, telecom fibre at 1550 nm, superconducting qubits at 5 GHz. Nonlinear frequency conversion moves single photons between optical bands without destroying their quantum state. Converting between microwave and optical photons, <b>quantum transduction</b>, is much harder, because the photon energies differ by a factor of \(4\times10^4\); electro-optic, optomechanical and magnonic transducers are research topics. Efficient transduction would let superconducting processors in different refrigerators be linked by optical fibre.</p>
+
+<div class="eda"><p>Every source and detector in this chapter is a manufactured device with a distribution of performance: quantum-dot frequencies, ring-resonator wavelengths, SNSPD efficiencies. Which sources can be paired, which rings need how much heater power, which detectors meet the efficiency floor: these are matching and binning problems familiar from classical manufacturing, applied at quantum tolerances.</p></div>
+
+<div class="exercises" id="ex-p-sources"><h4>Exercises</h4><ol>
+<li>For the two-mode squeezed vacuum, show that the mean pair number is \(\bar n = \lambda^2/(1-\lambda^2)\), and compute \(p(1)\) and \(p(\ge2)\) at \(\bar n = 0.05\).
+<details><summary>Solution</summary><p>\(\bar n = \sum n(1-\lambda^2)\lambda^{2n} = \lambda^2/(1-\lambda^2)\). For \(\bar n = 0.05\), \(\lambda^2 = 0.0476\). \(p(1) = (1-\lambda^2)\lambda^2 = 0.0454\), \(p(\ge2) = \lambda^4 = 0.00227\). Roughly one heralded event in twenty contains an extra pair.</p></details></li>
+<li>How many multiplexed sources at \(p = 0.04\) are needed to deliver a heralded photon with probability 0.9? 0.99?
+<details><summary>Solution</summary><p>\(1 - 0.96^M\ge0.9\) gives \(M\ge\ln0.1/\ln0.96 = 56\); for 0.99, \(M = 113\). With switch losses, the real requirement is larger.</p></details></li>
+<li>An SNSPD has 93% efficiency and the chip-to-detector path 0.3 dB loss. What is the overall detection probability of a photon on the chip?
+<details><summary>Solution</summary><p>\(0.93\times10^{-0.03} = 0.93\times0.933 = 0.868\).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-p-integrated"><h2><span class="secnum">6</span> Integrated quantum photonics: platforms, components and fabrication</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Compare the main material platforms (silicon, silicon nitride, lithium niobate, III–V, glass) for quantum use.</li>
+<li>Know the component library of a photonic chip and the figures of merit of each component.</li>
+<li>Understand how fabrication variation maps to device errors and why active tuning is needed.</li>
+<li>Know what a photonic process design kit (PDK) contains and what quantum circuits need beyond it.</li>
+</ul></div>
+
+<h3 id="sec-p-int-platforms"><span class="secnum">6.1</span> Material platforms</h3>
+<figure class="tbl" id="tab-p-platforms"><figcaption><b>Table 2.</b> Integrated photonic platforms for quantum technology (typical values; they improve every year).</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Platform</th><th>Index contrast</th><th>Propagation loss</th><th>Nonlinearity</th><th>Phase shifters</th><th>Notes</th></tr>
+<tr><td>Silicon on insulator</td><td>High (3.48/1.44)</td><td>1–2 dB/cm</td><td>\(\chi^{(3)}\), two-photon absorption</td><td>Thermal, carrier</td><td>CMOS foundries, dense, mature PDKs</td></tr>
+<tr><td>Silicon nitride</td><td>Medium (2.0/1.44)</td><td>0.001–0.1 dB/cm</td><td>Weak \(\chi^{(3)}\)</td><td>Thermal (slow)</td><td>Lowest loss; visible to telecom</td></tr>
+<tr><td>Thin-film lithium niobate</td><td>Medium (2.2/1.44)</td><td>0.03–0.3 dB/cm</td><td>Strong \(\chi^{(2)}\)</td><td>Electro-optic (fast)</td><td>Squeezing, fast switches</td></tr>
+<tr><td>III–V (GaAs, InP)</td><td>High</td><td>1–3 dB/cm</td><td>\(\chi^{(2)}\)</td><td>Electro-optic</td><td>Hosts quantum dots and lasers</td></tr>
+<tr><td>Laser-written glass</td><td>Low</td><td>0.1–0.3 dB/cm</td><td>None</td><td>Thermal</td><td>3D circuits, low coupling loss</td></tr>
+</table></div></figure>
+<p>No platform does everything. A full photonic quantum computer needs sources (nonlinear material or quantum emitters), low-loss routing (nitride), fast switches (electro-optic), and detectors (superconducting films), which drives <b>heterogeneous integration</b>: bonding or growing different materials on one chip, or co-packaging several chips. PsiQuantum's platform combines silicon and silicon nitride photonics with integrated SNSPDs and barium titanate switches in a commercial foundry; Xanadu combines nitride and lithium-niobate-style squeezers with photon-number-resolving detectors (<a class="xref ext" href="../../index.html#sec-land-modalities">Lab to Foundry §2.1</a>).</p>
+
+<h3 id="sec-p-int-components"><span class="secnum">6.2</span> The component library</h3>
+<ul>
+<li><b>Waveguides and bends</b>: loss per length and per bend; bend radius trades area for radiation loss.</li>
+<li><b>Couplers</b>: directional couplers (splitting ratio depends exponentially on gap), multimode interference couplers (more tolerant, slightly lossier), adiabatic couplers (broadband and tolerant, but long).</li>
+<li><b>Phase shifters</b>: thermo-optic heaters (simple, milliwatts each, slow, crosstalk between neighbours), electro-optic (fast, low power, needs a \(\chi^{(2)}\) material), MEMS (low power, emerging).</li>
+<li><b>Ring resonators</b> as filters, pair sources and modulators; Mach–Zehnder interferometers as tunable couplers and switches.</li>
+<li><b>Fibre and chip couplers</b>: grating couplers (any position on chip, 2–4 dB typical) and edge couplers (sub-dB possible, at the chip edge only).</li>
+<li><b>On-chip detectors</b> and <b>filters</b> to remove pump light, which can be \(10^{10}\) times brighter than the single photons and must be suppressed by 100 dB or more.</li>
+</ul>
+
+<h3 id="sec-p-int-var"><span class="secnum">6.3</span> Variation, tuning and yield</h3>
+<p>A silicon waveguide's effective index changes by about \(2\times10^{-3}\) per nanometre of width. A ring of radius 10 µm then shifts its resonance by roughly 1 nm per nanometre of width error, comparable to its linewidth many times over. Directional couplers' splitting ratios vary with gap and thickness. Lithography and etching produce width and thickness variations of a few nanometres across a wafer, with both a smooth component (wafer-scale gradients) and a random local component (line-edge roughness). Consequences:</p>
+<ol>
+<li>Every resonant device needs a <b>tuner</b> and a <b>control loop</b> to find and hold its operating point. Tuning power and crosstalk become system budgets.</li>
+<li>Interferometer meshes must be designed with enough redundancy that fabricated splitting errors can be corrected by programming, or certain unitaries become unreachable.</li>
+<li>Two sources that must emit indistinguishable photons must have their resonances matched, which is a pairing problem on the fabricated distribution.</li>
+<li>Loss itself varies from device to device. In quantum circuits it cannot be compensated by gain, so the statistics of loss, not its mean, decide whether a circuit works.</li>
+</ol>
+
+<h3 id="sec-p-int-pdk"><span class="secnum">6.4</span> Process design kits</h3>
+<p>Classical silicon photonics has mature design infrastructure <span class="cite">[<a href="#ref-chrostowski2015">15</a>, <a href="#ref-bogaerts2018">16</a>]</span>. A foundry's <b>PDK</b> contains the layer stack and design rules, a library of characterised components (with S-parameter models and, increasingly, statistical "corner" models), and verification decks. Designers draw circuits with parametrised cells (open tools such as gdsfactory provide this in Python), simulate components with mode solvers, eigenmode expansion or FDTD, simulate circuits by chaining S-matrices, and verify layouts before tape-out. What quantum use needs beyond this, as the review argues: models of components that classical kits do not contain (SNSPDs, quantum emitters, cryogenic behaviour of phase shifters), statistical models at the tails rather than at the mean, and verification of architecture-level conditions such as path-loss thresholds and source matching (<a class="xref ext" href="../../index.html#sec-tools-gap">Lab to Foundry §10.4</a>).</p>
+
+<div class="eda"><p>Integrated photonics is the platform where quantum EDA can lean most heavily on existing classical tools: layout, mode solving and circuit simulation are solved problems. The quantum-specific layer is statistical: propagate per-component distributions to an architecture's threshold condition and to a yield, and use measured wafer data to update the models. That is the photonic instance of the review's general thesis.</p></div>
+
+<div class="exercises" id="ex-p-integrated"><h4>Exercises</h4><ol>
+<li>A path crosses 8 cm of silicon waveguide at 1.5 dB/cm. Compare with 8 cm of nitride at 0.05 dB/cm.
+<details><summary>Solution</summary><p>Silicon: 12 dB, transmission 6%. Nitride: 0.4 dB, transmission 91%. Long delay lines, needed for multiplexing and for storing photons while measurements are processed, must be nitride or fibre.</p></details></li>
+<li>A chip has 500 thermo-optic phase shifters at 20 mW each for a \(\pi\) shift, with average phase \(\pi/2\). Estimate the heater power. Why is this a problem at cryogenic temperatures?
+<details><summary>Solution</summary><p>About \(500\times10\) mW = 5 W. A 4 K stage of a cryocooler offers roughly 1–2 W, so heaters alone would overwhelm it, and thermal crosstalk between heaters grows. Cryogenic photonics favours electro-optic or MEMS phase shifters.</p></details></li>
+<li>A ring's resonance shifts 1 nm per nm of width. Its linewidth is 20 pm, and the fabricated width varies by ±3 nm (1σ). What tuning range covers 99.7% of rings?
+<details><summary>Solution</summary><p>±3σ = ±9 nm of width, so ±9 nm of resonance shift, 900 linewidths. A heater must cover about 18 nm, or the design must use a free spectral range small enough that the nearest resonance is always within reach (then the range needed is one FSR).</p></details></li>
+</ol></div>
+</section>
+
+<section id="sec-p-qc"><h2><span class="secnum">7</span> Photonic quantum computing: from KLM to fusion and GKP</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Understand how measurement and feed-forward create effective photon–photon interactions (KLM).</li>
+<li>Understand measurement-based computing with cluster states, and fusion-based quantum computing.</li>
+<li>Understand continuous-variable computing with squeezed light and GKP qubits.</li>
+<li>Translate architectures into loss and indistinguishability budgets.</li>
+</ul></div>
+
+<h3 id="sec-p-qc-klm"><span class="secnum">7.1</span> Measurement as the nonlinearity</h3>
+<p>Photons do not interact, and an entangling gate needs an interaction. In 2001 Knill, Laflamme and Milburn showed that linear optics plus single-photon sources, detectors and <b>feed-forward</b> (changing later optical elements depending on earlier detection results) is universal for quantum computing <span class="cite">[<a href="#ref-knill2001">17</a>]</span>. The idea: interfere the input photons with ancilla photons, measure some modes, and post-select on detection patterns that herald a successful gate. Measurement projects the state, which is a nonlinear operation. A heralded CZ gate succeeds only with probability \(1/9\) in the simplest scheme; KLM boosted success towards one with gate teleportation (<a class="xref ext" href="../../foundations/quantum-information/index.html#sec-i-ent-tele">Book 4 §2.2</a>) and large entangled ancillas, at an enormous resource cost. The modern architectures below grew from making this idea efficient.</p>
+
+<h3 id="sec-p-qc-mbqc"><span class="secnum">7.2</span> Cluster states and measurement-based computing</h3>
+<p>In <b>measurement-based quantum computing</b> <span class="cite">[<a href="#ref-raussendorf2001">18</a>]</span>, one first prepares a large, fixed entangled resource, a <b>cluster state</b> (qubits on a lattice, each pair of neighbours entangled by a CZ), and then computes only by measuring single qubits, in bases chosen adaptively from earlier results. Single-qubit measurements are easy for photons. The difficult part, entanglement, is front-loaded into state preparation, which can be done probabilistically and offline. Browne and Rudolph showed that small cluster states can be joined by <b>fusion</b>: a two-photon Bell-type measurement on photons from different clusters <span class="cite">[<a href="#ref-browne2005">19</a>]</span>. Linear-optical fusion succeeds with probability 1/2 (<a class="xref ext" href="../../foundations/quantum-information/index.html#sec-i-ent-swap">Book 4 §2.4</a>); when it fails, it still measures the photons in a known way, so failures are heralded and can be routed around.</p>
+
+<h3 id="sec-p-qc-fbqc"><span class="secnum">7.3</span> Fusion-based quantum computing</h3>
+<p><b>Fusion-based quantum computing</b> (FBQC), the architecture behind PsiQuantum's roadmap, generates small, constant-size entangled <b>resource states</b> (for example, six-photon states) at a steady clock rate, and performs fusions between photons of neighbouring resource states <span class="cite">[<a href="#ref-bartolucci2023">20</a>]</span>. The pattern of fusions forms a three-dimensional lattice in space and time that implements a topological error-correcting code, and fusion outcomes play the role of syndrome measurements. Every component error (fusion failure, photon loss, distinguishability, detector inefficiency) becomes an error on the code, and the code tolerates them below a threshold. Published analyses give thresholds of a few percent to around 10% for photon loss per fusion, depending on the scheme and on boosting fusions with extra photons. Every photon passes through sources, multiplexers, delay lines, switches and detectors before fusing, so per-component losses must be small fractions of a percent.</p>
+
+<h3 id="sec-p-qc-cv"><span class="secnum">7.4</span> Continuous variables and GKP qubits</h3>
+<p>The alternative encodes information in the quadratures of light. Squeezed states (<a class="xref" href="#sec-p-st-zoo">§2.2</a>) are produced deterministically and entangled deterministically with beam splitters, so Gaussian cluster states of millions of modes can be generated in time-multiplexed loops <span class="cite">[<a href="#ref-weedbrook2012">21</a>]</span>. Gaussian operations alone are classically simulable, so non-Gaussian resources are needed. The leading choice is the <b>Gottesman–Kitaev–Preskill (GKP) qubit</b> <span class="cite">[<a href="#ref-gottesman2001">22</a>]</span>, a grid state whose wavefunction is a comb of narrow peaks in \(x\) spaced by \(2\sqrt\pi\) (logical 0 on even peaks, logical 1 on odd). Small shifts in \(x\) and \(p\), which is what loss and noise produce, can be detected and corrected by measuring the quadratures modulo \(\sqrt\pi\). The quality of a GKP state is quoted as an effective squeezing, and fault-tolerant architectures need about 10 dB or more after all losses <span class="cite">[<a href="#ref-bourassa2021">23</a>]</span>. Since loss pulls squeezing towards zero (<a class="xref" href="#sec-p-st-loss">§2.4</a>), that sets the loss budget computed in the review (<a class="xref ext" href="../../index.html#eq-sq">Lab to Foundry eq. (33)</a>): a 15 dB source tolerates only about 7% total loss. Xanadu's Aurora demonstrated the architecture's building blocks at scale <span class="cite">[<a href="#ref-aghaeerad2025">24</a>]</span>.</p>
+
+<h3 id="sec-p-qc-budget"><span class="secnum">7.5</span> Loss budgets</h3>
+<p>Both architectures reduce to the same engineering question: is the probability that every photon in the machine survives its path, and arrives indistinguishable from its partners, above the architecture's threshold? A loss budget lists every element on the longest path (source extraction, multiplexing switches, delay lines, chip-to-chip interconnects, filters, detectors) with its loss in dB, sums them, and compares with the threshold. A schematic budget for one photon:</p>
+<figure class="tbl" id="tab-p-budget"><figcaption><b>Table 3.</b> An illustrative per-photon loss budget (values are of the order targeted in published architectures, not a specific product).</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Element</th><th>Loss (dB)</th></tr>
+<tr><td>Source extraction and filtering</td><td class="num">0.10</td></tr>
+<tr><td>Multiplexing switches (5 stages × 0.02 dB)</td><td class="num">0.10</td></tr>
+<tr><td>Delay line (fibre or nitride)</td><td class="num">0.05</td></tr>
+<tr><td>Routing waveguide (10 cm nitride, 0.002 dB/cm)</td><td class="num">0.02</td></tr>
+<tr><td>Chip-to-chip interconnect</td><td class="num">0.05</td></tr>
+<tr><td>Detector inefficiency (99%)</td><td class="num">0.04</td></tr>
+<tr><td><b>Total</b></td><td class="num"><b>0.36 dB (8% loss)</b></td></tr>
+</table></div></figure>
+<p>Every line is an order of magnitude better than typical classical photonics. And this is the mean; a machine has millions of paths, so the tail of the distribution of path losses, not its centre, decides whether the code threshold is met. That is the statistical sign-off problem posed in the review (<a class="xref ext" href="../../index.html#sec-mod-phot">Lab to Foundry §8.2</a>).</p>
+
+<div class="eda"><p>The design target for a photonic quantum computer is a probability statement over a manufactured population: \(\Pr(\text{every path meets its loss and indistinguishability limits})\ge Y\). Classical photonic PDKs give component means and corners; quantum design needs calibrated distributions, correlations between components on the same wafer, and a way to verify the condition over millions of paths. That gap, and how to fill it, is where this book hands over to Book 7 and the review.</p></div>
+
+<div class="exercises" id="ex-p-qc"><h4>Exercises</h4><ol>
+<li>A fusion succeeds with probability 1/2. If a scheme needs 1,000 successful fusions in parallel and failures cannot be tolerated, what is the success probability? Why do architectures instead make failures heralded and tolerable?
+<details><summary>Solution</summary><p>\(2^{-1000}\), effectively zero. Requiring every probabilistic step to succeed is hopeless; architectures treat failures as known erasures in a code that tolerates a fraction of them, so success probability needs only to exceed a threshold.</p></details></li>
+<li>Using the variance model \(V_{\mathrm{out}} = \eta V_{\mathrm{in}} + (1-\eta)\), what loss can a 15 dB squeezer tolerate while keeping 10 dB?
+<details><summary>Solution</summary><p>\(V_{\mathrm{in}} = 10^{-1.5} = 0.0316\), target \(V_{\mathrm{out}} = 0.1\). Solve \(0.0316\eta + 1 - \eta = 0.1\): \(\eta = 0.9/0.9684 = 0.929\). About 7% loss, as stated in the review.</p></details></li>
+<li>If the loss budget in the table were the mean of a Gaussian distribution across paths with standard deviation 0.05 dB, and the threshold were 0.5 dB, what fraction of paths exceed it? How many failing paths in a machine of \(10^6\) paths?
+<details><summary>Solution</summary><p>\((0.5 - 0.36)/0.05 = 2.8\sigma\), tail probability about \(2.6\times10^{-3}\): roughly 2,600 failing paths. Either the mean must come down, the spread must narrow, or the architecture must route around bad paths, which is the photonic analogue of routing around dead qubits.</p></details></li>
+</ol></div>
+</section>
+
+<section id="references" class="references">
+  <h2>References and further reading</h2>
+  <p class="refnote">Numbered in order of first citation in this book. Entries tagged “verify details” were compiled from memory; check volume and page before citing them.</p>
+  <ol class="reflist">
+<li id="ref-gerry2005"><span class="refnum">[1]</span> C. C. Gerry, P. L. Knight, <i>Introductory Quantum Optics</i> (Cambridge University Press, 2005).</li>
+<li id="ref-kok2007"><span class="refnum">[2]</span> P. Kok, W. J. Munro, K. Nemoto et al., “Linear optical quantum computing with photonic qubits,” <i>Rev. Mod. Phys.</i> <b>79</b>, 135 (2007).</li>
+<li id="ref-hom1987"><span class="refnum">[3]</span> C. K. Hong, Z. Y. Ou, L. Mandel, “Measurement of subpicosecond time intervals between two photons by interference,” <i>Phys. Rev. Lett.</i> <b>59</b>, 2044 (1987).</li>
+<li id="ref-reck1994"><span class="refnum">[4]</span> M. Reck, A. Zeilinger, H. J. Bernstein, P. Bertani, “Experimental realization of any discrete unitary operator,” <i>Phys. Rev. Lett.</i> <b>73</b>, 58 (1994).</li>
+<li id="ref-clements2016"><span class="refnum">[5]</span> W. R. Clements, P. C. Humphreys, B. J. Metcalf et al., “Optimal design for universal multiport interferometers,” <i>Optica</i> <b>3</b>, 1460 (2016).</li>
+<li id="ref-aaronson2011"><span class="refnum">[6]</span> S. Aaronson, A. Arkhipov, “The computational complexity of linear optics,” in <i>Proc. 43rd ACM Symposium on Theory of Computing</i> (2011).</li>
+<li id="ref-hamilton2017"><span class="refnum">[7]</span> C. S. Hamilton, R. Kruse, L. Sansoni et al., “Gaussian boson sampling,” <i>Phys. Rev. Lett.</i> <b>119</b>, 170501 (2017).</li>
+<li id="ref-jaynes1963"><span class="refnum">[8]</span> E. T. Jaynes, F. W. Cummings, “Comparison of quantum and semiclassical radiation theories with application to the beam maser,” <i>Proc. IEEE</i> <b>51</b>, 89 (1963).</li>
+<li id="ref-purcell1946"><span class="refnum">[9]</span> E. M. Purcell, “Spontaneous emission probabilities at radio frequencies,” <i>Phys. Rev.</i> <b>69</b>, 681 (1946).</li>
+<li id="ref-wallraff2004"><span class="refnum">[10]</span> A. Wallraff, D. I. Schuster, A. Blais et al., “Strong coupling of a single photon to a superconducting qubit using circuit quantum electrodynamics,” <i>Nature</i> <b>431</b>, 162 (2004).</li>
+<li id="ref-blais2004"><span class="refnum">[11]</span> A. Blais, R.-S. Huang, A. Wallraff et al., “Cavity quantum electrodynamics for superconducting electrical circuits: an architecture for quantum computation,” <i>Phys. Rev. A</i> <b>69</b>, 062320 (2004).</li>
+<li id="ref-lodahl2015"><span class="refnum">[12]</span> P. Lodahl, S. Mahmoodian, S. Stobbe, “Interfacing single photons and single quantum dots with photonic nanostructures,” <i>Rev. Mod. Phys.</i> <b>87</b>, 347 (2015).</li>
+<li id="ref-somaschi2016"><span class="refnum">[13]</span> N. Somaschi et al., “Near-optimal single-photon sources in the solid state,” <i>Nat. Photon.</i> <b>10</b>, 340 (2016).</li>
+<li id="ref-hadfield2009"><span class="refnum">[14]</span> R. H. Hadfield, “Single-photon detectors for optical quantum information applications,” <i>Nat. Photon.</i> <b>3</b>, 696 (2009).</li>
+<li id="ref-chrostowski2015"><span class="refnum">[15]</span> L. Chrostowski, M. Hochberg, <i>Silicon Photonics Design: From Devices to Systems</i> (Cambridge University Press, 2015).</li>
+<li id="ref-bogaerts2018"><span class="refnum">[16]</span> W. Bogaerts, L. Chrostowski, “Silicon photonics circuit design: methods, tools and challenges,” <i>Laser Photonics Rev.</i> <b>12</b>, 1700237 (2018).</li>
+<li id="ref-knill2001"><span class="refnum">[17]</span> E. Knill, R. Laflamme, G. J. Milburn, “A scheme for efficient quantum computation with linear optics,” <i>Nature</i> <b>409</b>, 46 (2001).</li>
+<li id="ref-raussendorf2001"><span class="refnum">[18]</span> R. Raussendorf, H. J. Briegel, “A one-way quantum computer,” <i>Phys. Rev. Lett.</i> <b>86</b>, 5188 (2001).</li>
+<li id="ref-browne2005"><span class="refnum">[19]</span> D. E. Browne, T. Rudolph, “Resource-efficient linear optical quantum computation,” <i>Phys. Rev. Lett.</i> <b>95</b>, 010501 (2005).</li>
+<li id="ref-bartolucci2023"><span class="refnum">[20]</span> S. Bartolucci et al., “Fusion-based quantum computation,” <i>Nat. Commun.</i> <b>14</b>, 912 (2023).</li>
+<li id="ref-weedbrook2012"><span class="refnum">[21]</span> C. Weedbrook, S. Pirandola, R. Garc\'\ia-Patrón et al., “Gaussian quantum information,” <i>Rev. Mod. Phys.</i> <b>84</b>, 621 (2012).</li>
+<li id="ref-gottesman2001"><span class="refnum">[22]</span> D. Gottesman, A. Kitaev, J. Preskill, “Encoding a qubit in an oscillator,” <i>Phys. Rev. A</i> <b>64</b>, 012310 (2001).</li>
+<li id="ref-bourassa2021"><span class="refnum">[23]</span> J. E. Bourassa et al., “Blueprint for a scalable photonic fault-tolerant quantum computer,” <i>Quantum</i> <b>5</b>, 392 (2021).</li>
+<li id="ref-aghaeerad2025"><span class="refnum">[24]</span> H. Aghaee Rad et al., “Scaling and networking a modular photonic quantum computer,” <i>Nature</i> (2025).</li>
+  </ol>
+</section>
 <nav class="pager" aria-label="Series"><a class="prev" href="../quantum-information/index.html"><span>Previous · Book 4</span>Quantum Information and Computation</a><a class="next" href="../quantum-hardware/index.html"><span>Next · Book 6</span>Quantum Hardware: Superconducting Circuits and Other Qubits</a></nav>
 <footer class="page-footer">
   <p>Foundations of Quantum Engineering, Book 5. Source: <code>curriculum/5-quantum-photonics/</code>. Rebuild with <code>make</code>; figures are computed by <code>scripts/make_foundation_figures.py</code>. Built 2026-11-14.</p>
