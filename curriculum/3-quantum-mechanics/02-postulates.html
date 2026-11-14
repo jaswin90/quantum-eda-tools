@@ -2,44 +2,121 @@
 <div class="goals"><p>Goals</p><ul>
 <li>State the postulates of quantum mechanics and apply them to a qubit.</li>
 <li>Compute measurement probabilities, post-measurement states and expectation values.</li>
+<li>Picture any qubit state as a point on the Bloch sphere.</li>
 <li>Understand compatible and incompatible observables, and derive the uncertainty relation.</li>
-<li>Know the difference between global and relative phase, and between superposition and mixture.</li>
+<li>Know the difference between global and relative phase, between superposition and mixture, and how imperfect detectors are described.</li>
 </ul></div>
 
+<div class="bigpic"><p>Chapter 1 discovered, from experiments, that states are complex vectors and probabilities are squared amplitudes. This chapter writes those discoveries down as five rules, the <b>postulates</b>, from which all of quantum mechanics follows. They use only the linear algebra of Book 1, Chapter 3: vectors, inner products, Hermitian matrices, eigenvalues and projectors. We apply every rule immediately to a qubit, so that by the end you can take any qubit state, predict what any measurement will give and how often, and picture the state as a point on a sphere.</p></div>
+
 <h3 id="sec-q-post-list">The postulates</h3>
+<p>Read each postulate, then the plain-language comment after it.</p>
 <div class="defn"><p><b>Postulate 1 (states).</b> The state of an isolated system is a unit vector \(\ket\psi\) in a complex Hilbert space \(\mathcal H\). Vectors differing only by a global phase, \(\ket\psi\) and \(\ee^{\ii\chi}\ket\psi\), describe the same state.</p></div>
+<p><i>Comment.</i> A "Hilbert space" is just a vector space with complex entries and an inner product; for a qubit it is \(\mathbb C^2\), pairs of complex numbers. "Unit" means \(\braket\psi\psi = 1\): probabilities will sum to one. Multiplying the whole vector by a phase \(\ee^{\ii\chi}\) changes no prediction, because every probability is a modulus squared.</p>
 <div class="defn"><p><b>Postulate 2 (observables).</b> Every measurable quantity is represented by a Hermitian operator \(A\). The possible results of measuring it are its eigenvalues \(a_k\).</p></div>
+<p><i>Comment.</i> Hermitian matrices (\(A^\dagger = A\)) have real eigenvalues, and measurement results are real numbers, so that fits. The eigenvalues are the <i>only</i> possible results: measure the energy of an atom and you get one of its energy levels, never something in between. This is where quantisation comes from.</p>
 <div class="defn"><p><b>Postulate 3 (Born rule).</b> If \(A = \sum_k a_kP_k\), with \(P_k\) the projector onto the eigenspace of \(a_k\), a measurement on \(\ket\psi\) gives \(a_k\) with probability</p>
 <div class="eq" id="eq-q-born">$$ p(a_k) = \bra\psi P_k\ket\psi = \|P_k\ket\psi\|^2 \qquad\big(= |\braket{a_k}{\psi}|^2 \text{ for a non-degenerate eigenvalue}\big), $$</div>
 <p>and immediately afterwards the state is \(P_k\ket\psi/\|P_k\ket\psi\|\) (the <b>projection postulate</b>).</p></div>
+<p><i>Comment.</i> In the common case where each eigenvalue has a single eigenvector \(\ket{a_k}\), the probability is simply the squared overlap between the state and that eigenvector: how much of \(\ket\psi\) "points along" \(\ket{a_k}\). After the measurement, the state <i>becomes</i> \(\ket{a_k}\) (this is the "collapse"), which is why repeating the measurement gives the same answer, as in Stern–Gerlach experiment 1.</p>
 <div class="defn"><p><b>Postulate 4 (dynamics).</b> Between measurements, the state evolves by the Schrödinger equation \(\ii\hbar\,\dd\ket\psi/\dd t = H\ket\psi\), where the Hamiltonian \(H\) is the energy observable.</p></div>
+<p><i>Comment.</i> This is a linear differential equation (Book 1, Chapter 5), deterministic and smooth. Its solution is a unitary rotation of the state vector (Chapter 3). The Hamiltonian is the quantum version of the classical one from Book 2, Chapter 2.</p>
 <div class="defn"><p><b>Postulate 5 (composition).</b> The state space of a composite system is the tensor product of the component spaces.</p></div>
+<p><i>Comment.</i> Two qubits live in \(\mathbb C^2\otimes\mathbb C^2 = \mathbb C^4\) (Book 1, Chapter 4). This rule is what makes entanglement possible, and why \(n\) qubits need \(2^n\) amplitudes. Chapter 7 develops it.</p>
 <p>The probabilities in Postulate 3 sum to one because the projectors resolve the identity (@b1:eq-m-resolution) and \(\ket\psi\) is normalised. The spectral theorem (@b1:sec-m-op-spectral) guarantees that every Hermitian operator has such a decomposition, so every observable has a well-defined set of outcomes.</p>
+<div class="pitfall"><p>Two kinds of time evolution appear: smooth unitary evolution (Postulate 4) and abrupt collapse on measurement (Postulate 3). How they fit together is the famous "measurement problem". For engineering you need only the practical answer from Chapter 8: a measurement is an interaction that copies information into a large environment (a detector, an amplifier), and once copied, interference between outcomes is lost for good.</p></div>
 
 <h3 id="sec-q-post-qubit">Measuring a qubit</h3>
-<p>Take \(\ket\psi = \alpha\ket0+\beta\ket1\). Measuring \(Z\) (eigenvalues \(+1\) for \(\ket0\), \(-1\) for \(\ket1\)) gives \(+1\) with probability \(|\alpha|^2\) and \(-1\) with probability \(|\beta|^2\). Measuring \(X\) instead projects onto \(\ket\pm\): \(p(\pm) = |\braket{\pm}{\psi}|^2 = \tfrac12|\alpha\pm\beta|^2\). These depend on the relative phase of \(\alpha\) and \(\beta\), which \(Z\) measurements cannot see. A complete characterisation of an unknown state (<b>state tomography</b>) therefore needs measurements along several axes.</p>
-<p>Because of the global-phase freedom and normalisation, a qubit state has two real parameters. It is conventional to write</p>
+<p>Write the qubit's basis states as \(\ket0 = \binom10\) and \(\ket1 = \binom01\), and a general state as \(\ket\psi = \alpha\ket0+\beta\ket1\) with \(|\alpha|^2+|\beta|^2 = 1\). The three most important observables are the <b>Pauli matrices</b> (Book 1, Chapter 3):</p>
+\[ X = \begin{pmatrix}0&1\\1&0\end{pmatrix},\quad Y = \begin{pmatrix}0&-\ii\\ \ii&0\end{pmatrix},\quad Z = \begin{pmatrix}1&0\\0&-1\end{pmatrix}. \]
+<p>Each has eigenvalues \(\pm1\). \(Z\)'s eigenvectors are \(\ket0\) (\(+1\)) and \(\ket1\) (\(-1\)); \(X\)'s are \(\ket\pm = (\ket0\pm\ket1)/\sqrt2\); \(Y\)'s are \(\ket{\pm\ii} = (\ket0\pm\ii\ket1)/\sqrt2\). These are exactly the \(z\), \(x\) and \(y\) states of Stern–Gerlach.</p>
+<div class="example"><p><b>Worked example.</b> Take \(\ket\psi = \tfrac{\sqrt3}{2}\ket0 + \tfrac12\ket1\).</p>
+<ul>
+<li><b>Measure \(Z\):</b> result \(+1\) with probability \(|\braket0\psi|^2 = 3/4\), after which the state is \(\ket0\); result \(-1\) with probability \(1/4\), after which the state is \(\ket1\).</li>
+<li><b>Measure \(X\):</b> \(\braket+\psi = \tfrac1{\sqrt2}(\tfrac{\sqrt3}2+\tfrac12) = 0.966\), probability 0.933; \(\braket-\psi = \tfrac1{\sqrt2}(\tfrac{\sqrt3}2-\tfrac12) = 0.259\), probability 0.067. They sum to 1.</li>
+<li><b>Change the relative phase:</b> \(\ket{\psi'} = \tfrac{\sqrt3}{2}\ket0 - \tfrac12\ket1\). \(Z\) probabilities are unchanged (3/4, 1/4), but now \(X\) gives \(+1\) only 6.7% of the time.</li>
+</ul></div>
+<p>The last point is crucial. In general, measuring \(X\) gives \(p(\pm) = |\braket{\pm}{\psi}|^2 = \tfrac12|\alpha\pm\beta|^2\), which depends on the <b>relative phase</b> of \(\alpha\) and \(\beta\), which \(Z\) measurements cannot see. A <i>global</i> phase multiplies both \(\alpha\) and \(\beta\) and is invisible; a <i>relative</i> phase is physical. A complete characterisation of an unknown state (<b>state tomography</b>) therefore needs measurements along several axes.</p>
+<p>How many real numbers describe a qubit? Two complex numbers make four real numbers; normalisation removes one; global phase removes another. Two are left. It is conventional to write</p>
 <div class="eq" id="eq-q-bloch">$$ \ket\psi = \cos\frac\theta2\,\ket0 + \ee^{\ii\phi}\sin\frac\theta2\,\ket1, \qquad 0\le\theta\le\pi,\ 0\le\phi \lt 2\pi, $$</div>
-<p>which identifies each state with a point on a sphere, the <b>Bloch sphere</b>, at polar angle \(\theta\) and azimuth \(\phi\). \(\ket0\) is the north pole, \(\ket1\) the south pole, \(\ket\pm\) are on the \(x\) axis and \(\ket{\pm\ii}\) on the \(y\) axis. The Bloch vector is \(\mathbf r = (\expval X, \expval Y, \expval Z) = (\sin\theta\cos\phi, \sin\theta\sin\phi, \cos\theta)\). Orthogonal states are antipodal on the sphere, not at right angles: the half-angles in @eq:q-bloch are responsible. Chapter 5 shows that every single-qubit gate is a rotation of this sphere.</p>
+<p>which identifies each state with a point on a sphere, the <b>Bloch sphere</b>, at polar angle \(\theta\) (from the north pole) and azimuth \(\phi\) (around the equator). Landmarks:</p>
+<ul>
+<li>\(\ket0\) is the north pole (\(\theta = 0\)); \(\ket1\) the south pole (\(\theta = \pi\)).</li>
+<li>\(\ket\pm\) are on the equator along \(\pm x\) (\(\phi = 0, \pi\)); \(\ket{\pm\ii}\) along \(\pm y\) (\(\phi = \pm\pi/2\)).</li>
+<li>The relative phase \(\phi\) is longitude; the populations are set by latitude.</li>
+</ul>
+<p>The point's Cartesian coordinates are the expectation values of the Pauli matrices, the <b>Bloch vector</b> \(\mathbf r = (\expval X, \expval Y, \expval Z) = (\sin\theta\cos\phi, \sin\theta\sin\phi, \cos\theta)\). Note that <i>orthogonal states are antipodal</i> on the sphere (\(\ket0\) and \(\ket1\) are opposite poles), not at right angles; the half-angles \(\theta/2\) in @eq:q-bloch are responsible. Chapter 5 shows that every single-qubit gate is a rotation of this sphere, which makes it the most useful picture in qubit engineering.</p>
+<div class="quick"><p>Where on the Bloch sphere is \((\ket0 - \ii\ket1)/\sqrt2\)?</p>
+<details><summary>Answer</summary><p>On the equator (\(\theta = \pi/2\)) at \(\phi = -\pi/2\): pointing along \(-y\). It is the eigenvector of \(Y\) with eigenvalue \(-1\).</p></details></div>
 
 <h3 id="sec-q-post-expect">Expectation values and variance</h3>
-<p>The mean result of many measurements of \(A\) on identically prepared systems is</p>
+<p>A single measurement gives a random result. Repeat the experiment many times on identically prepared systems and average: the mean result is the <b>expectation value</b></p>
 <div class="eq" id="eq-q-expval">$$ \expval{A} = \sum_k a_k\,p(a_k) = \bra\psi A\ket\psi , \qquad (\Delta A)^2 = \expval{A^2} - \expval{A}^2 . $$</div>
-<p>Expectation values are what experiments estimate. For a qubit, \(\expval Z = |\alpha|^2 - |\beta|^2\), and estimating it to precision \(\epsilon\) takes about \(1/\epsilon^2\) repetitions ("shots"), by the binomial statistics of Book 1. That counting is behind the cost of calibrating and characterising large processors.</p>
+<p>The second form, "sandwich \(A\) between the state and its conjugate", is usually the quickest to compute, and it follows from the first by writing \(A = \sum a_kP_k\). The <b>uncertainty</b> \(\Delta A\) is the standard deviation of the results (Book 1, Chapter 7).</p>
+<p>Expectation values are what experiments estimate. For a qubit, \(\expval Z = |\alpha|^2 - |\beta|^2 = p_0 - p_1\). Each measurement ("shot") gives \(\pm1\), and the average of \(N\) shots has standard error \(\sqrt{(1-\expval Z^2)/N}\), so estimating \(\expval Z\) to precision \(\epsilon\) takes about \(1/\epsilon^2\) shots, by the binomial statistics of Book 1. A precision of 0.1% takes a million shots. That counting is behind the time and cost of calibrating and characterising large processors.</p>
 
 <h3 id="sec-q-post-uncert">Compatible observables and the uncertainty relation</h3>
-<p>Two observables are <b>compatible</b> if they commute. Commuting Hermitian operators share an eigenbasis, so both can have definite values at once, and measuring one does not disturb the other. Non-commuting observables cannot. Applying Cauchy–Schwarz (@b1:sec-m-vectors-inner) to the vectors \((A-\expval A)\ket\psi\) and \((B-\expval B)\ket\psi\) gives the <b>Robertson uncertainty relation</b>:</p>
+<p>Two observables are <b>compatible</b> if they commute, \([A,B] = AB - BA = 0\). Commuting Hermitian operators share an eigenbasis (Book 1, Chapter 3), so both can have definite values at once, and measuring one does not disturb the other. Non-commuting observables cannot: no state is an eigenvector of both, so at least one of them must be uncertain. How uncertain? Apply the Cauchy–Schwarz inequality (@b1:sec-m-vectors-inner) to the vectors \((A-\expval A)\ket\psi\) and \((B-\expval B)\ket\psi\); after a few lines this gives the <b>Robertson uncertainty relation</b>:</p>
 <div class="eq" id="eq-q-robertson">$$ \Delta A\,\Delta B \;\ge\; \frac12\,\big|\expval{[A,B]}\big| . $$</div>
-<p>For position and momentum, \([x,p] = \ii\hbar\) gives Heisenberg's \(\Delta x\Delta p\ge\hbar/2\). For a qubit, \([X,Y] = 2\ii Z\) gives \(\Delta X\Delta Y\ge|\expval Z|\): a state polarised along \(z\) must be uncertain in \(x\) and \(y\). For a circuit, \([\Phi,Q] = \ii\hbar\) (@b2:eq-c-canonical) means a superconducting island cannot have both a definite charge and a definite phase. The transmon is designed to sit in the regime where the phase is well defined and the charge is not, which makes it insensitive to charge noise (Book 6).</p>
-<p>The uncertainty relation is not about clumsy measurement. It is a property of the state: there is no state with definite values of two non-commuting observables.</p>
+<p>Three applications, each important later:</p>
+<ul>
+<li><b>Position and momentum:</b> \([x,p] = \ii\hbar\) gives Heisenberg's \(\Delta x\Delta p\ge\hbar/2\). A particle confined to a small box must have a spread of momenta, hence kinetic energy: this is why the ground state of an oscillator has zero-point energy (Chapter 4).</li>
+<li><b>Qubit:</b> \([X,Y] = 2\ii Z\) gives \(\Delta X\Delta Y\ge|\expval Z|\). A state pointing along \(z\) must be maximally uncertain in \(x\) and \(y\).</li>
+<li><b>Circuit:</b> \([\Phi,Q] = \ii\hbar\) (@b2:eq-c-canonical). A superconducting island cannot have both a definite charge and a definite phase. The transmon is designed to sit in the regime where the phase is well defined and the charge is not, which makes it insensitive to stray charges (Book 6).</li>
+</ul>
+<div class="intuition"><p>The uncertainty relation is not about clumsy measurement disturbing the system. It is a property of the state itself: there is simply no vector that is an eigenvector of both \(X\) and \(Z\). Just as a musical note cannot have both a perfectly sharp pitch and a perfectly short duration (Book 1, Chapter 6: a short pulse has a broad spectrum), a quantum state cannot have sharp values of non-commuting quantities.</p></div>
 
 <h3 id="sec-q-post-mixture">Superposition is not ignorance</h3>
-<p>Compare two preparations. In the first, every qubit is in \(\ket+ = (\ket0+\ket1)/\sqrt2\). In the second, each qubit is randomly \(\ket0\) or \(\ket1\) with probability \(\tfrac12\) each, a statistical <b>mixture</b>. Measured in the \(Z\) basis, both give 50:50 outcomes. Measured in the \(X\) basis, the first gives \(+\) every time, while the second still gives 50:50. A superposition carries phase information that a mixture lacks. Chapter 7 introduces the density matrix to describe both on equal footing; Chapter 8 shows how coupling to an environment turns superpositions into mixtures, which is decoherence.</p>
+<p>Beginners often think a superposition such as \(\ket+ = (\ket0+\ket1)/\sqrt2\) means "the qubit is really \(\ket0\) or \(\ket1\), we just don't know which". This is wrong, and the difference is measurable. Compare two preparations:</p>
+<ol>
+<li>Every qubit is prepared in \(\ket+\).</li>
+<li>Each qubit is randomly prepared in \(\ket0\) or \(\ket1\), with probability \(\tfrac12\) each, by flipping a coin. This is a statistical <b>mixture</b>.</li>
+</ol>
+<p>Measured in the \(Z\) basis, both give 50:50 outcomes: indistinguishable so far. Measured in the \(X\) basis, preparation 1 gives \(+1\) <i>every time</i> (it is \(X\)'s eigenvector), while preparation 2 still gives 50:50 (each of \(\ket0\) and \(\ket1\) gives 50:50 in \(X\)). A superposition carries phase information that a mixture lacks. On the Bloch sphere, \(\ket+\) is a point on the surface; the mixture is the centre of the sphere.</p>
+<p>Chapter 7 introduces the <b>density matrix</b> to describe both on equal footing; Chapter 8 shows how coupling to an environment turns superpositions into mixtures, which is <b>decoherence</b>, the main enemy of quantum computing.</p>
 
 <h3 id="sec-q-post-povm">Generalised measurements</h3>
-<p>Real detectors are not ideal projectors: a qubit readout has a small probability of reporting the wrong result, and a photon detector misses some photons. The general description assigns each outcome \(m\) a positive operator \(E_m\) with \(\sum_mE_m = I\) (a <b>POVM</b>), and \(p(m) = \bra\psi E_m\ket\psi\). For a qubit readout with assignment errors \(\epsilon_{01} = P(\text{"1"}\,|\,0)\) and \(\epsilon_{10} = P(\text{"0"}\,|\,1)\), \(E_{\text{"1"}} = \epsilon_{01}\ketbra00 + (1-\epsilon_{10})\ketbra11\). Book 4 uses this to define readout fidelity, and Book 1's Bayes example was exactly this POVM.</p>
+<p>Real detectors are not ideal projectors. A superconducting qubit readout has a small probability of reporting the wrong result; a photon detector misses some photons and occasionally clicks with no photon (a "dark count"). The general description assigns each outcome \(m\) a positive operator \(E_m\) with \(\sum_mE_m = I\) (a <b>POVM</b>, positive operator-valued measure), and \(p(m) = \bra\psi E_m\ket\psi\). Projectors are the special, ideal case.</p>
+<p>For a qubit readout with assignment errors \(\epsilon_{01} = P(\text{"1"}\,|\,0)\) and \(\epsilon_{10} = P(\text{"0"}\,|\,1)\),</p>
+\[ E_{\text{"1"}} = \epsilon_{01}\ketbra00 + (1-\epsilon_{10})\ketbra11, \qquad E_{\text{"0"}} = I - E_{\text{"1"}}. \]
+<p>Book 4 uses this to define readout fidelity, and Book 1's Bayes example was exactly this POVM. Knowing \(\epsilon_{01}\) and \(\epsilon_{10}\) lets you correct measured averages ("readout error mitigation").</p>
+
+<h3 id="sec-q-post-code">Try it in Python</h3>
+<p>Do state tomography by simulation: measure \(X\), \(Y\) and \(Z\) with a finite number of shots, reconstruct the Bloch vector, and see the \(1/\sqrt N\) error.</p>
+<pre class="code"><code>import numpy as np
+rng = np.random.default_rng(0)
+
+X = np.array([[0, 1], [1, 0]])
+Y = np.array([[0, -1j], [1j, 0]])
+Z = np.array([[1, 0], [0, -1]])
+
+theta, phi = 1.1, 0.7                        # a state on the Bloch sphere
+psi = np.array([np.cos(theta / 2), np.exp(1j * phi) * np.sin(theta / 2)])
+exact = [np.vdot(psi, P @ psi).real for P in (X, Y, Z)]
+
+def estimate(P, N):
+    """Measure observable P N times; return the average of the +-1 results."""
+    vals, vecs = np.linalg.eigh(P)
+    probs = np.abs(vecs.conj().T @ psi) ** 2  # Born rule for each eigenvalue
+    return rng.choice(vals, size=N, p=probs).mean()
+
+print("exact Bloch vector:", np.round(exact, 4))
+for N in (100, 10_000, 1_000_000):
+    est = [estimate(P, N) for P in (X, Y, Z)]
+    err = np.linalg.norm(np.array(est) - exact)
+    print(f"N = {N:>9,}: estimate {np.round(est, 4)}  error {err:.4f}")</code></pre>
+<p>Each factor of 100 in shots buys a factor of 10 in accuracy.</p>
 
 <div class="eda"><p>Measurement statistics set the cost of test. Every number a characterisation flow reports (a frequency, a \(T_1\), a gate fidelity) is an estimate from finitely many projective measurements, with a binomial uncertainty that scales as \(1/\sqrt{\text{shots}}\). Choosing which measurements to make, and how many shots to spend, is an experimental-design problem (@lf:eq-boed).</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>States are unit complex vectors (global phase irrelevant); observables are Hermitian; results are eigenvalues.</li>
+<li>Born rule: probability = squared overlap with the eigenvector; the state then becomes that eigenvector.</li>
+<li>A qubit state is a point on the Bloch sphere, coordinates \((\expval X,\expval Y,\expval Z)\); relative phase is longitude.</li>
+<li>\(\expval A = \bra\psi A\ket\psi\); estimating it to \(\epsilon\) costs about \(1/\epsilon^2\) shots.</li>
+<li>\(\Delta A\Delta B\ge\tfrac12|\expval{[A,B]}|\): no state has sharp values of non-commuting observables.</li>
+<li>Superposition differs measurably from a mixture; real detectors are POVMs.</li>
+</ul></div>
 
 <div class="exercises" id="ex-q-postulates"><h4>Exercises</h4><ol>
 <li>For \(\ket\psi = \tfrac{1}{\sqrt3}\ket0 + \sqrt{\tfrac23}\,\ee^{\ii\pi/4}\ket1\), compute the probabilities of \(Z = \pm1\), \(X=\pm1\), and the Bloch vector.
@@ -50,5 +127,9 @@
 <details><summary>Solution</summary><p>For \(\ket0\): \(\expval X = \expval Y = 0\), \(\expval{X^2} = \expval{Y^2} = 1\), so \(\Delta X = \Delta Y = 1\), product 1, and \(|\expval Z| = 1\): equality. For \(\ket+\): \(\Delta X = 0\), \(\Delta Y = 1\), product 0, and \(\expval Z = 0\): satisfied.</p></details></li>
 <li>A readout has \(\epsilon_{01} = 0.02\) and \(\epsilon_{10} = 0.05\). For a qubit prepared in \(\ket+\), what is the probability of reporting "1"?
 <details><summary>Solution</summary><p>\(p(\text{"1"}) = 0.02\times\tfrac12 + 0.95\times\tfrac12 = 0.485\). Assignment errors bias the estimate of \(\expval Z\) unless corrected.</p></details></li>
+<li>How many shots are needed to estimate \(\expval Z\) of the state \(\ket+\) to a standard error of 0.01?
+<details><summary>Solution</summary><p>For \(\ket+\), \(\expval Z = 0\) and each shot has variance 1. Standard error \(1/\sqrt N = 0.01\) needs \(N = 10^4\) shots.</p></details></li>
+<li>Show that \(\ket\psi\) and \(-\ket\psi\) give identical probabilities for every measurement, but \(\ket0+\ket1\) and \(\ket0-\ket1\) do not.
+<details><summary>Solution</summary><p>\(|\braket{a}{-\psi}|^2 = |-\braket a\psi|^2 = |\braket a\psi|^2\) for every \(\ket a\): a global phase of \(-1\). For the second pair the sign is relative; measuring \(X\) gives \(+1\) with certainty for one and \(-1\) for the other.</p></details></li>
 </ol></div>
 </section>
