@@ -1,50 +1,80 @@
 <section id="sec-p-states"><h2>Quantum states of light</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>Describe Fock, coherent, thermal and squeezed states, and their photon statistics.</li>
-<li>Use quadrature operators and the Wigner function to picture states in phase space.</li>
-<li>Define and compute the second-order correlation \(g^{(2)}(0)\), the standard test of a single-photon source.</li>
-<li>See how loss degrades each kind of state.</li>
+<li>Describe a mode of light in phase space with quadratures, and picture states as blobs in that space.</li>
+<li>Know the four basic states (Fock, coherent, thermal, squeezed): how each is made, what its photon statistics are, and what it looks like in phase space.</li>
+<li>Compute the second-order correlation \(g^{(2)}(0)\), the standard test of a single-photon source.</li>
+<li>Understand exactly how loss damages each kind of state, the most important practical fact in photonics.</li>
 </ul></div>
 
-<h3 id="sec-p-st-quad">Quadratures and phase space</h3>
-<p>For a single mode, define the <b>quadrature operators</b> \(\hat x = (a + a^\dagger)/\sqrt2\) and \(\hat p = -\ii(a - a^\dagger)/\sqrt2\), the dimensionless position and momentum of the mode's oscillator, with \([\hat x,\hat p] = \ii\). They are the in-phase and out-of-phase components of the field, measurable with a homodyne detector (Chapter 5). The vacuum has \(\Delta x^2 = \Delta p^2 = \tfrac12\), the minimum allowed by the uncertainty relation (@b3:eq-q-robertson). This "shot-noise unit" is the reference for noise in optics.</p>
-<p>The <b>Wigner function</b> \(W(x,p)\) is a quasi-probability distribution on phase space whose marginals are the true probability distributions of \(x\) and of \(p\) (and of any rotated quadrature). For Gaussian states it is a Gaussian; for non-classical states such as Fock states it takes negative values, and Wigner negativity is a necessary resource for quantum advantage in continuous-variable computing.</p>
+<div class="bigpic"><p>Chapter 1 showed that a mode of light is a quantum harmonic oscillator. An oscillator can be in many different quantum states, and those states behave very differently: a laser beam, the light from a hot lamp, a single photon from a quantum dot and the "squeezed" light used in gravitational-wave detectors are all states of the same oscillator. This chapter introduces them with two tools: a phase-space picture (where is the wave's amplitude and phase?) and photon-counting statistics (how many photons arrive, and do they come in bunches?). It ends with the question that dominates photonic engineering: what happens to each state when some light is lost.</p></div>
 
-<h3 id="sec-p-st-zoo">The main states</h3>
-<figure class="tbl" id="tab-p-states"><figcaption>States of a single mode of light.</figcaption>
+<h3 id="sec-p-st-quad">Quadratures and phase space</h3>
+<p>A classical light wave in one mode is \(E(t) = E_0\cos(\omega t - \phi)\), which can be rewritten as \(X_1\cos\omega t + X_2\sin\omega t\). The two amplitudes \(X_1\) (in phase) and \(X_2\) (out of phase) are the wave's <b>quadratures</b>. Plot them as a point \((X_1, X_2)\): the distance from the origin is the amplitude and the angle is the phase. This is the phasor of Book 1 (@b1:sec-m-complex-phasor), and also the phase-space picture of an oscillator, with position and momentum (@b2:sec-c-ham-eqs).</p>
+<p>Quantum mechanically, the quadratures become operators, the dimensionless position and momentum of the mode's oscillator:</p>
+<div class="eq" id="eq-p-quad">$$ \hat x = \frac{a + a^\dagger}{\sqrt2}, \qquad \hat p = \frac{a - a^\dagger}{\ii\sqrt2}, \qquad [\hat x,\hat p] = \ii . $$</div>
+<p>Because they do not commute, they cannot both be sharp: \(\Delta x\,\Delta p\ge\tfrac12\) (@b3:eq-q-robertson). So a quantum state is not a point in phase space but a <b>blob</b>. For the vacuum, the blob is a circle with \(\Delta x^2 = \Delta p^2 = \tfrac12\). This vacuum noise level is called the <b>shot-noise unit</b>, and it is the reference against which all optical noise is measured. Quadratures can be measured directly with a <b>homodyne detector</b> (Chapter 5).</p>
+<p>The blob is made precise by the <b>Wigner function</b> \(W(x,p)\), a quasi-probability distribution on phase space. Its projections onto any axis are the true probability distributions of the corresponding quadrature (so projecting onto \(x\) gives the distribution of \(\hat x\) measurements). For many states \(W\) is a positive Gaussian; for genuinely non-classical states such as single photons it takes <i>negative</i> values in places, which no classical probability distribution can do. Wigner negativity turns out to be a necessary resource for quantum computational advantage with light.</p>
+
+<h3 id="sec-p-st-zoo">The four basic states</h3>
+<figure class="tbl" id="tab-p-states"><figcaption>The four basic states of a single mode of light.</figcaption>
 <div class="tblwrap"><table>
-<tr><th>State</th><th>Definition</th><th>Photon-number distribution</th><th>\(g^{(2)}(0)\)</th><th>Where it comes from</th></tr>
-<tr><td>Fock \(\ket n\)</td><td>\(\frac{(a^\dagger)^n}{\sqrt{n!}}\ket0\)</td><td>exactly \(n\)</td><td>\(1 - 1/n\)</td><td>Single emitters, heralded sources</td></tr>
-<tr><td>Coherent \(\ket\alpha\)</td><td>\(D(\alpha)\ket0\)</td><td>Poisson, mean \(|\alpha|^2\)</td><td>1</td><td>Lasers, microwave generators</td></tr>
-<tr><td>Thermal</td><td>\(\rho = \sum_n\frac{\bar n^n}{(\bar n+1)^{n+1}}\ketbra nn\)</td><td>Geometric (Bose–Einstein)</td><td>2</td><td>Hot bodies, one arm of a two-mode squeezer</td></tr>
-<tr><td>Squeezed vacuum</td><td>\(S(r)\ket0\), \(S(r) = \ee^{\frac r2(a^2 - a^{\dagger2})}\)</td><td>Only even \(n\)</td><td>\(3 + 1/\sinh^2r\)</td><td>Parametric amplifiers, OPOs</td></tr>
+<tr><th>State</th><th>Definition</th><th>Photon numbers</th><th>\(g^{(2)}(0)\)</th><th>Phase-space picture</th><th>Source</th></tr>
+<tr><td>Fock \(\ket n\)</td><td>\(\frac{(a^\dagger)^n}{\sqrt{n!}}\ket0\)</td><td>exactly \(n\)</td><td>\(1 - 1/n\)</td><td>Ring, no definite phase; Wigner negative</td><td>Single emitters, heralded sources</td></tr>
+<tr><td>Coherent \(\ket\alpha\)</td><td>\(D(\alpha)\ket0\)</td><td>Poisson, mean \(|\alpha|^2\)</td><td>1</td><td>Vacuum circle, displaced</td><td>Lasers, microwave generators</td></tr>
+<tr><td>Thermal</td><td>\(\rho = \sum_n\frac{\bar n^n}{(\bar n+1)^{n+1}}\ketbra nn\)</td><td>Geometric</td><td>2</td><td>Wide circle at the origin</td><td>Hot bodies, half of a photon pair</td></tr>
+<tr><td>Squeezed vacuum</td><td>\(S(r)\ket0\)</td><td>Even \(n\) only</td><td>\(3 + 1/\sinh^2r\)</td><td>Ellipse at the origin</td><td>Parametric amplifiers, OPOs</td></tr>
 </table></div></figure>
-<p>A <b>squeezed state</b> has one quadrature's noise reduced below the vacuum level and the other increased, keeping the product at its minimum: \(\Delta x^2 = \tfrac12\ee^{-2r}\), \(\Delta p^2 = \tfrac12\ee^{2r}\). Squeezing is quoted in decibels, \(-10\log_{10}(\ee^{-2r})\); 10 dB means a factor 10 reduction in variance. Squeezed light is produced by the degenerate parametric process of @b2:sec-c-osc-param, either in a nonlinear crystal or waveguide pumped at twice the signal frequency, or in a Josephson parametric amplifier at microwave frequencies. It improves the sensitivity of gravitational-wave detectors, and it is the raw material of continuous-variable photonic quantum computing (Chapter 7).</p>
+<p>Let us take them one at a time.</p>
+<p><b>Fock (number) states.</b> \(\ket n\) has exactly \(n\) photons, so its energy is sharp, but by the uncertainty relation between number and phase its phase is completely undefined: in phase space it is a ring around the origin. The single-photon state \(\ket1\) is the workhorse of discrete-variable photonic quantum computing (Chapters 3 and 7). Producing it is hard: it needs a single quantum emitter or a heralded source (Chapter 5).</p>
+<p><b>Coherent states.</b> \(\ket\alpha\) is the vacuum blob shifted to the point \((\sqrt2\Re\alpha, \sqrt2\Im\alpha)\) by the displacement operator (@b3:eq-q-coherent). It is the quantum state closest to a classical wave: it has a well-defined amplitude and phase, up to the minimum vacuum noise, and it keeps its shape as it rotates in phase space at frequency \(\omega\). Its photon number is Poisson-distributed with mean \(\bar n = |\alpha|^2\) and standard deviation \(\sqrt{\bar n}\): this randomness of photon arrival is <b>shot noise</b>. A laser and a microwave signal generator produce coherent states, because a classical current driving an oscillator always does (@b3:sec-q-qho-coherent).</p>
+<p><b>Thermal states.</b> Light from a hot object, in one mode, is a mixture of Fock states with Bose–Einstein probabilities \(p_n = \bar n^n/(\bar n+1)^{n+1}\) (@b2:eq-c-nth). It has no phase at all: a broad circular blob centred at the origin. Its photon number fluctuates more than a coherent state's (variance \(\bar n^2 + \bar n\), not \(\bar n\)).</p>
+<p><b>Squeezed states.</b> The uncertainty principle limits the <i>product</i> \(\Delta x\Delta p\), not each separately. A squeezed state reduces the noise in one quadrature below the vacuum level at the cost of increasing it in the other: the blob becomes an ellipse.</p>
+<div class="eq" id="eq-p-squeeze">$$ \Delta x^2 = \tfrac12\ee^{-2r}, \qquad \Delta p^2 = \tfrac12\ee^{2r}, \qquad \text{squeezing in dB} = 10\log_{10}\ee^{2r} . $$</div>
+<p>A squeezing of 10 dB means the variance of the quiet quadrature is ten times below the vacuum level. Squeezed light is produced by the degenerate parametric process of Book 2 (@b2:sec-c-osc-param): a nonlinear crystal or waveguide pumped at twice the light's frequency creates photons in pairs, which amplifies one quadrature and de-amplifies the other. Josephson parametric amplifiers do the same for microwaves. Squeezed light improves the sensitivity of gravitational-wave detectors, and it is the raw material of continuous-variable photonic quantum computing (Chapter 7).</p>
 
 <h3 id="sec-p-st-g2">Photon statistics and \(g^{(2)}\)</h3>
-<p>Hanbury Brown and Twiss split a beam on a 50:50 beam splitter and correlated the counts of two detectors. The normalised probability of detecting two photons at the same time is</p>
+<p>How do you test whether a source really emits single photons? Hanbury Brown and Twiss's answer: split the light on a 50:50 beam splitter onto two detectors and count how often both click at the same time (coincidences). Normalised to what independent arrivals would give, this is the <b>second-order correlation</b></p>
 <div class="eq" id="eq-p-g2">$$ g^{(2)}(0) = \frac{\expval{a^\dagger a^\dagger aa}}{\expval{a^\dagger a}^2} = 1 + \frac{(\Delta n)^2 - \bar n}{\bar n^2} . $$</div>
-<p>Coherent light (Poisson, \(\Delta n^2 = \bar n\)) has \(g^{(2)} = 1\): photons arrive independently. Thermal light has \(g^{(2)} = 2\): photons bunch. A single-photon Fock state has \(g^{(2)} = 0\): two detectors can never click together, because there is only one photon to split. \(g^{(2)}(0) \lt 1\) (<b>antibunching</b>) has no classical explanation, and measuring \(g^{(2)}(0)\) close to zero is the first test of any single-photon source. State-of-the-art quantum-dot sources reach \(g^{(2)}(0)\sim10^{-2}\)–\(10^{-3}\); heralded sources trade \(g^{(2)}\) against brightness (Chapter 5).</p>
-
-<h3 id="sec-p-st-loss">What loss does</h3>
-<p>Loss with transmission \(\eta\) is equivalent to a beam splitter that sends a fraction \(1-\eta\) of the light to an unobserved mode while mixing in vacuum (Chapter 3). Its effect depends on the state:</p>
+<p>(The second form follows from \(a^\dagger a^\dagger aa = \hat n(\hat n - 1)\).) Interpret the three benchmark values:</p>
 <ul>
-<li>A coherent state stays coherent, with \(\alpha\to\sqrt\eta\,\alpha\). Classical light is robust to loss, which is why fibre networks work.</li>
-<li>A single photon becomes a mixture: \(\ket1\to\eta\ketbra11 + (1-\eta)\ketbra00\). The photon is either there or gone, which is an <b>erasure</b> if we can detect its absence, and a silent error otherwise.</li>
-<li>A squeezed state's variance moves towards the vacuum: \(V\to\eta V + (1-\eta)\cdot\tfrac12\) (in the units above), so squeezing degrades continuously. A 15 dB source behind 10% loss retains only about 9 dB, the calculation of the review's @lf:eq-sq.</li>
-<li>A superposition of large coherent states ("cat states") loses its coherence at a rate proportional to its size \(|\alpha|^2\). Large quantum superpositions are fragile in exact proportion to how "macroscopic" they are.</li>
+<li><b>Coherent light, \(g^{(2)} = 1\).</b> Poisson statistics have \(\Delta n^2 = \bar n\): photons arrive independently, like raindrops.</li>
+<li><b>Thermal light, \(g^{(2)} = 2\).</b> Photons arrive in bunches: detecting one makes another more likely just then.</li>
+<li><b>A single photon, \(g^{(2)} = 0\).</b> There is only one photon to split, so both detectors can never click together. This <b>antibunching</b> (\(g^{(2)} \lt 1\)) has no explanation in terms of classical waves of any kind.</li>
 </ul>
+<p>Measuring \(g^{(2)}(0)\) close to zero is therefore the first test of any single-photon source. State-of-the-art quantum-dot sources reach \(10^{-2}\)–\(10^{-3}\); heralded sources trade low \(g^{(2)}\) against brightness (Chapter 5).</p>
+<div class="example"><p><b>Worked example: is my source a single-photon source?</b> A source emits pulses containing 0 photons with probability 0.40, 1 with probability 0.58 and 2 with probability 0.02. Then \(\bar n = 0.58 + 2\times0.02 = 0.62\), \(\expval{n(n-1)} = 2\times1\times0.02 = 0.04\), so \(g^{(2)}(0) = 0.04/0.62^2 = 0.104\). Well below 1 (genuinely quantum), but the 2-photon probability still matters: in a photonic computer, those extra photons cause errors. For comparison, an attenuated laser with the same \(\bar n\) would have \(g^{(2)} = 1\), with two-photon probability \(\ee^{-0.62}0.62^2/2\approx0.10\), five times worse.</p></div>
 
-<div class="eda"><p>Because loss acts so differently on different states, a photonic loss budget is not just a sum of decibels: whether a given loss is tolerable depends on the encoding (dual-rail single photons, squeezed states or GKP states) and on the error-correction scheme. A photonic design tool must propagate per-component loss distributions to the architecture's threshold condition (@lf:sec-mod-phot).</p></div>
+<h3 id="sec-p-st-loss">What loss does to each state</h3>
+<p>Loss with transmission \(\eta\) (a fraction \(1-\eta\) of the light is absorbed or scattered away) is equivalent to a beam splitter that sends \(1-\eta\) of the light into a mode nobody looks at, while mixing in the vacuum from that mode's other input (Chapter 1's "loss comes with noise", made concrete in Chapter 3). Its effect depends dramatically on the state:</p>
+<ul>
+<li><b>Coherent states stay coherent</b>, just weaker: \(\ket\alpha\to\ket{\sqrt\eta\,\alpha}\). Classical light is robust to loss, which is why fibre-optic networks work with amplifiers every 80 km.</li>
+<li><b>A single photon becomes a mixture of "there" and "gone"</b>: \(\ketbra11\to\eta\ketbra11 + (1-\eta)\ketbra00\). If we can tell that the photon is missing (an <b>erasure</b>), codes can cope well; if not, it is a silent error.</li>
+<li><b>Squeezing degrades continuously towards the vacuum.</b> The quiet quadrature's variance (in shot-noise units, vacuum = 1) becomes \(V\to\eta V + (1-\eta)\). However strong the source, the output can never be quieter than \(1-\eta\): a 15 dB source behind 10% loss keeps only about 9 dB (@lf:eq-sq).</li>
+<li><b>Large superpositions die fast.</b> A "cat state" (superposition of two coherent states \(\ket\alpha+\ket{-\alpha}\)) loses its superposition at a rate proportional to \(|\alpha|^2\): the bigger the cat, the faster it dies.</li>
+</ul>
+<div class="pitfall"><p>Loss cannot be undone by amplification. A classical amplifier makes a weak signal strong; applied to a quantum state, any phase-insensitive amplifier adds at least half a photon of noise per mode (the quantum limit, @b2:sec-c-th-johnson), and no amplifier can copy an unknown quantum state (no-cloning, @b4:sec-i-ent-clone). Once a photon is lost, its quantum information is gone. That is why photonic quantum computers count every hundredth of a decibel.</p></div>
+
+<div class="eda"><p>Because loss acts so differently on different states, a photonic loss budget is not just a sum of decibels: whether a given loss is tolerable depends on the encoding (single photons, squeezed states or GKP states) and on the error-correction scheme. A photonic design tool must propagate per-component loss distributions to the architecture's threshold condition (@lf:sec-mod-phot).</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Quadratures \(\hat x, \hat p\) are the in-phase and out-of-phase field amplitudes; states are blobs in phase space, at least as big as the vacuum's.</li>
+<li>Fock: exact photon number, no phase. Coherent: displaced vacuum, Poisson counts (lasers). Thermal: broad, bunched. Squeezed: an ellipse with one quadrature quieter than vacuum.</li>
+<li>\(g^{(2)}(0)\): 1 for lasers, 2 for thermal light, 0 for single photons; values below 1 prove non-classical light.</li>
+<li>Loss: coherent states just dim; single photons become erasures; squeezing decays towards vacuum; superpositions die fastest. Loss cannot be amplified away.</li>
+</ul></div>
 
 <div class="exercises" id="ex-p-states"><h4>Exercises</h4><ol>
 <li>Compute \(g^{(2)}(0)\) for the Fock state \(\ket2\).
 <details><summary>Solution</summary><p>\(\expval{a^\dagger a^\dagger aa} = n(n-1) = 2\), \(\expval{a^\dagger a}^2 = 4\), so \(g^{(2)} = 1/2\).</p></details></li>
 <li>Show that a thermal state has \(\Delta n^2 = \bar n^2 + \bar n\) and hence \(g^{(2)}(0) = 2\).
-<details><summary>Solution</summary><p>For the geometric distribution \(p_n = \bar n^n/(\bar n+1)^{n+1}\), the generating function gives \(\expval{n(n-1)} = 2\bar n^2\). So \(\expval{n^2} = 2\bar n^2 + \bar n\), \(\Delta n^2 = \bar n^2 + \bar n\), and @eq:p-g2 gives \(1 + \bar n^2/\bar n^2 = 2\).</p></details></li>
+<details><summary>Solution</summary><p>For \(p_n = \bar n^n/(\bar n+1)^{n+1}\), summing the series gives \(\expval{n(n-1)} = 2\bar n^2\). So \(\expval{n^2} = 2\bar n^2 + \bar n\), \(\Delta n^2 = \bar n^2 + \bar n\), and @eq:p-g2 gives \(1 + \bar n^2/\bar n^2 = 2\).</p></details></li>
+<li>A coherent state has \(\bar n = 4\). What are the probabilities of 0, 4 and 8 photons?
+<details><summary>Solution</summary><p>Poisson: \(p(0) = \ee^{-4} = 0.018\); \(p(4) = \ee^{-4}4^4/24 = 0.195\); \(p(8) = \ee^{-4}4^8/40320 = 0.030\).</p></details></li>
 <li>A squeezer produces 12 dB. How much remains after 80% transmission?
-<details><summary>Solution</summary><p>Variance (in vacuum units) \(10^{-1.2} = 0.063\). After loss: \(0.8\times0.063 + 0.2 = 0.250\), i.e. \(-10\log_{10}0.25 = 6.0\) dB.</p></details></li>
-<li>A single photon passes three components each with 0.2 dB loss. What is the probability it survives?
-<details><summary>Solution</summary><p>Total 0.6 dB: \(10^{-0.06} = 0.871\).</p></details></li>
+<details><summary>Solution</summary><p>Variance (shot-noise units) \(10^{-1.2} = 0.063\). After loss: \(0.8\times0.063 + 0.2 = 0.250\), i.e. \(-10\log_{10}0.25 = 6.0\) dB. Half the decibels lost to 20% loss.</p></details></li>
+<li>A single photon passes three components each with 0.2 dB loss. What is the probability it survives? What is the output state?
+<details><summary>Solution</summary><p>Total 0.6 dB: \(\eta = 10^{-0.06} = 0.871\). Output \(0.871\ketbra11 + 0.129\ketbra00\).</p></details></li>
+<li>Why can a classical optical amplifier fix loss in a fibre-optic link but not in a quantum link? Give two reasons.
+<details><summary>Solution</summary><p>(1) Any phase-insensitive amplifier adds at least the quantum-limited noise, which destroys the fragile quantum features (it turns a single photon into a noisy mixture). (2) Amplifying an unknown quantum state would amount to copying it, forbidden by no-cloning. Classical signals tolerate added noise because they carry many photons per bit.</p></details></li>
 </ol></div>
 </section>
