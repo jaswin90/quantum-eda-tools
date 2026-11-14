@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <p class="toc-title">Contents</p>
   <ol>
 <li class="toc2"><a href="#sec-p-preface">How to use this book</a></li>
+<li class="toc3"><a href="#sec-p-pre-terms">Words you will meet</a></li>
 <li class="toc2"><a href="#sec-p-field"><span class="tocnum">1</span>Quantising the electromagnetic field</a></li>
 <li class="toc3"><a href="#sec-p-field-recap"><span class="tocnum">1.1</span>What we already know</a></li>
 <li class="toc3"><a href="#sec-p-field-modes"><span class="tocnum">1.2</span>Step 1: modes are oscillators</a></li>
@@ -117,6 +118,25 @@ document.addEventListener("DOMContentLoaded", function () {
 <p>Photons are the natural carriers of quantum information: they travel at the speed of light, barely interact with their environment, and at optical frequencies are quantum even at room temperature. The same weak interaction makes them hard to compute with, because two photons do not naturally affect each other. Quantum photonics is the engineering of that trade-off. It also provides the language for every other platform: a microwave resonator holds photons, a qubit is read out by photons, ions and atoms are controlled with lasers, and the circuit QED of Book 6 is cavity QED transplanted to a chip.</p>
 <p>The book has three parts. Chapters 1–2 quantise the electromagnetic field and describe the states of light: Fock, coherent, thermal and squeezed. Chapters 3–5 treat what can be done with photons: linear optics and two-photon interference, interaction with atoms and cavities, and the sources and detectors that make photonic experiments possible. Chapters 6–7 turn to engineering: integrated photonic circuits and their fabrication, and the architectures for photonic quantum computing, where loss replaces decoherence as the central enemy. The last chapter connects directly to the review's section on photonics (<a class="xref ext" href="../../index.html#sec-mod-phot" title="Photonics">Lab to Foundry §8.2</a>).</p>
 <p>Prerequisites: Book 2 Chapters 5–7 (Maxwell's equations, resonators, waveguides and interferometers), Book 3 Chapters 4 and 9 (the harmonic oscillator and second quantisation) and Book 4 Chapters 1–2 and 6–7. Standard references are Gerry and Knight <span class="cite">[<a href="#ref-gerry2005">1</a>]</span> and, for photonic quantum computing, Kok <i>et al.</i> <span class="cite">[<a href="#ref-kok2007">2</a>]</span>.</p>
+<h3 id="sec-p-pre-terms">Words you will meet</h3>
+<p>Photonics has its own vocabulary. Skim this list now and come back to it while reading.</p>
+<dl class="terms">
+<dt>Mode</dt><dd>One pattern in which light can exist: a particular spatial shape, polarisation, frequency band and time window. Photons in different modes are different photons.</dd>
+<dt>Photon</dt><dd>One quantum of excitation of one mode, carrying energy \(\hbar\omega\).</dd>
+<dt>Waveguide</dt><dd>A strip of high-index material that traps and guides light, like a wire for light (an optical fibre is one).</dd>
+<dt>Beam splitter / coupler</dt><dd>A component that divides light between two paths; on a chip, two waveguides running close together.</dd>
+<dt>Phase shifter</dt><dd>A component that delays light in one path slightly, changing how paths interfere.</dd>
+<dt>Interferometer (MZI)</dt><dd>Two beam splitters with a phase shifter between them: a programmable switch or beam splitter.</dd>
+<dt>Cavity / resonator</dt><dd>A structure that traps light so it circulates many times; resonant only at certain wavelengths.</dd>
+<dt>Quality factor \(Q\)</dt><dd>How many oscillations stored light survives; high \(Q\) means low loss and a narrow resonance.</dd>
+<dt>Loss, dB</dt><dd>The fraction of light lost, on a logarithmic scale: 0.1 dB ≈ 2.3% lost, 3 dB ≈ 50%, 10 dB = 90%. Losses in dB add along a path.</dd>
+<dt>Squeezing</dt><dd>Reducing the noise of one quadrature of light below the vacuum level, at the cost of the other.</dd>
+<dt>Heralding</dt><dd>Detecting one photon of a pair to learn that its partner exists, without disturbing the partner.</dd>
+<dt>Indistinguishability</dt><dd>How identical two photons are; needed for them to interfere, measured by the Hong–Ou–Mandel dip.</dd>
+<dt>SNSPD</dt><dd>Superconducting nanowire single-photon detector: the standard high-efficiency detector, cooled to a few kelvin.</dd>
+<dt>Fusion</dt><dd>A two-photon measurement that joins two small entangled states into a larger one; succeeds with known probability.</dd>
+<dt>GKP qubit</dt><dd>A qubit encoded in the quadratures of light as a comb of peaks, designed so that small noise shifts can be corrected.</dd>
+</dl>
 </section>
 
 <section id="sec-p-field"><h2><span class="secnum">1</span> Quantising the electromagnetic field</h2>
