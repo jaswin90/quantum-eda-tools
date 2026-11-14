@@ -81,6 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-q-qho-lc"><span class="tocnum">4.2</span>Quantising an LC circuit</a></li>
 <li class="toc3"><a href="#sec-q-qho-coherent"><span class="tocnum">4.3</span>Coherent states</a></li>
 <li class="toc3"><a href="#sec-q-qho-anharm"><span class="tocnum">4.4</span>Adding a nonlinearity</a></li>
+<li class="toc3"><a href="#sec-q-qho-code"><span class="tocnum">4.5</span>Try it in Python</a></li>
 <li class="toc2"><a href="#sec-q-spin"><span class="tocnum">5</span>Spin, two-level systems and Rabi oscillations</a></li>
 <li class="toc3"><a href="#sec-q-spin-pauli"><span class="tocnum">5.1</span>Two-level Hamiltonians and precession</a></li>
 <li class="toc3"><a href="#sec-q-spin-drive"><span class="tocnum">5.2</span>The driven qubit</a></li>
@@ -119,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Quantum Mechanics</h1>
   <p class="subtitle">States, measurement, dynamics, the harmonic oscillator, two-level systems, perturbation theory, entanglement and open systems</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">9 chapters · 42 numbered equations · 41 exercises with solutions · about 60 hours of study</p>
+  <p class="meta">9 chapters · 42 numbered equations · 42 exercises with solutions · about 60 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../mathematics/index.html">Book 1: Mathematics</a>, <a href="../classical-physics/index.html">Book 2: Classical Physics</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-q-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -546,38 +547,107 @@ for d_nm in (0.5, 1.0, 1.5, 2.0):
 <li>Add a weak nonlinearity and see the spectrum become anharmonic, the first step towards a qubit.</li>
 </ul></div>
 
+<div class="bigpic"><p>If you learn one quantum system thoroughly, make it the harmonic oscillator. It describes a mass on a spring, but also an LC circuit, a microwave resonator, every mode of light in a cavity or waveguide, and the vibrations of atoms in a crystal. A superconducting qubit is a harmonic oscillator with a small nonlinearity added, and its readout resonator is a harmonic oscillator with none. The solution is short and elegant: two operators, \(a\) and \(a^\dagger\), that remove or add one quantum of energy. Everything in Books 5 and 6 about photons and circuit qubits is written in their language.</p></div>
+
 <h3 id="sec-q-qho-ladder"><span class="secnum">4.1</span> Ladder operators</h3>
-<p>The Hamiltonian \(H = p^2/2m + \tfrac12m\omega^2x^2\) describes a mass on a spring, an LC circuit (with \(x\to\Phi\), \(p\to Q\), \(m\to C\)), a mode of a cavity, and the small oscillations of almost any system near equilibrium. Rather than solve a differential equation, define</p>
+<p>The Hamiltonian \(H = p^2/2m + \tfrac12m\omega^2x^2\) describes a mass on a spring, an LC circuit (with \(x\to\Phi\), \(p\to Q\), \(m\to C\), Book 2, Chapter 1), a mode of a cavity, and the small oscillations of almost any system near equilibrium (expand any smooth potential to second order around its minimum). Rather than solve a differential equation, we use a trick from Book 2, Chapter 2: combine position and momentum into one complex variable. Define</p>
 <div class="eq" id="eq-q-ladder">$$ a = \sqrt{\frac{m\omega}{2\hbar}}\Big(x + \frac{\ii p}{m\omega}\Big), \qquad a^\dagger = \sqrt{\frac{m\omega}{2\hbar}}\Big(x - \frac{\ii p}{m\omega}\Big).  \tag{11}$$</div>
-<p>From \([x,p] = \ii\hbar\) follows \([a,a^\dagger] = 1\), and the Hamiltonian becomes</p>
-<div class="eq" id="eq-q-hqho">$$ H = \hbar\omega\Big(a^\dagger a + \frac12\Big) = \hbar\omega\Big(\hat n + \frac12\Big).  \tag{12}$$</div>
-<p>Everything else follows from the commutator. Using \([\hat n, a^\dagger] = a^\dagger\) and \([\hat n, a] = -a\): if \(\hat n\ket n = n\ket n\), then \(a^\dagger\ket n\) is an eigenvector with eigenvalue \(n+1\) and \(a\ket n\) one with \(n-1\). The operators climb and descend a ladder of states. Since \(\bra\psi\hat n\ket\psi = \|a\ket\psi\|^2\ge0\), the descent must stop at a state with \(a\ket0 = 0\), the ground state. Hence \(n = 0,1,2,\dots\), and with normalisation,</p>
+<p>Classically this was the rotating phasor \(\alpha\); quantum mechanically it is an operator, and since \(x\) and \(p\) do not commute, neither do \(a\) and \(a^\dagger\). From \([x,p] = \ii\hbar\) follows (exercise 1) the single most-used relation in quantum optics and circuit QED:</p>
+\[ [a,a^\dagger] = 1 . \]
+<p>Substituting \(x\) and \(p\) in terms of \(a\) and \(a^\dagger\) into \(H\), the Hamiltonian becomes</p>
+<div class="eq" id="eq-q-hqho">$$ H = \hbar\omega\Big(a^\dagger a + \frac12\Big) = \hbar\omega\Big(\hat n + \frac12\Big),  \tag{12}$$</div>
+<p>where \(\hat n = a^\dagger a\) is called the <b>number operator</b>. Finding the energies is now finding the eigenvalues of \(\hat n\), and that follows from the commutator alone, in four steps:</p>
+<ol>
+<li>From \([a,a^\dagger] = 1\): \([\hat n, a^\dagger] = a^\dagger\) and \([\hat n, a] = -a\).</li>
+<li>If \(\hat n\ket n = n\ket n\), then \(\hat n(a^\dagger\ket n) = (a^\dagger\hat n + a^\dagger)\ket n = (n+1)\,a^\dagger\ket n\). So \(a^\dagger\ket n\) is an eigenvector with eigenvalue \(n+1\). Likewise \(a\ket n\) has eigenvalue \(n-1\). The operators climb and descend a <b>ladder</b> of states, one rung at a time: \(a^\dagger\) is the <b>raising</b> (creation) operator, \(a\) the <b>lowering</b> (annihilation) operator.</li>
+<li>The eigenvalues cannot be negative: \(\bra\psi\hat n\ket\psi = \bra\psi a^\dagger a\ket\psi = \|a\ket\psi\|^2\ge0\). So descending cannot go on forever; it must stop at a state that \(a\) destroys entirely: \(a\ket0 = 0\). That is the ground state, with \(n = 0\).</li>
+<li>Climbing from \(\ket0\) gives \(n = 0,1,2,\dots\). Fixing normalisation:</li>
+</ol>
 <div class="eq" id="eq-q-fock">$$ a^\dagger\ket n = \sqrt{n+1}\,\ket{n+1}, \qquad a\ket n = \sqrt n\,\ket{n-1}, \qquad E_n = \hbar\omega\Big(n+\frac12\Big).  \tag{13}$$</div>
-<p>The states \(\ket n\) are <b>number</b> or <b>Fock states</b>: \(n\) quanta of energy \(\hbar\omega\) each. For a mode of the electromagnetic field, the quanta are photons and \(a^\dagger\) creates one; for a mechanical oscillator they are phonons. The levels are equally spaced, which matters: a drive at \(\omega\) that excites \(0\to1\) also excites \(1\to2\), \(2\to3\) and so on, so a harmonic oscillator cannot be used as a qubit.</p>
-<p>The ground-state wavefunction follows from \(a\ket0 = 0\), a first-order differential equation whose solution is a Gaussian, \(\psi_0(x)\propto\ee^{-x^2/4x_{\mathrm{zpf}}^2}\), with <b>zero-point</b> width</p>
+<p>The states \(\ket n\) are <b>number</b> or <b>Fock states</b>: \(n\) quanta of energy \(\hbar\omega\) each, on top of the zero-point energy \(\hbar\omega/2\). For a mode of the electromagnetic field, the quanta are <b>photons</b> and \(a^\dagger\) creates one; for a mechanical oscillator they are <b>phonons</b>. The \(\sqrt{n}\) factors are not decoration: they mean it is easier to add a photon to a mode that already has many ("stimulated emission", the principle of the laser).</p>
+<div class="pitfall"><p>The levels are <b>equally spaced</b>, by \(\hbar\omega\). That is fatal for a qubit: a drive at \(\omega\) that excites \(0\to1\) also excites \(1\to2\), \(2\to3\) and so on, and the state wanders up the ladder. A harmonic oscillator cannot be used as a qubit; we need to break the equal spacing (the last section of this chapter).</p></div>
+<p>The ground-state wavefunction follows from \(a\ket0 = 0\). In the position representation (Chapter 3) this is a first-order differential equation, \((x + \frac{\hbar}{m\omega}\frac{\dd}{\dd x})\psi_0 = 0\), whose solution is a Gaussian, \(\psi_0(x)\propto\ee^{-x^2/4x_{\mathrm{zpf}}^2}\), with <b>zero-point</b> width</p>
 <div class="eq" id="eq-q-xzpf">$$ x_{\mathrm{zpf}} = \sqrt{\frac{\hbar}{2m\omega}}, \qquad x = x_{\mathrm{zpf}}\,(a + a^\dagger), \qquad p = -\ii\,m\omega x_{\mathrm{zpf}}\,(a - a^\dagger).  \tag{14}$$</div>
-<p>Excited states are Gaussians times Hermite polynomials, with \(n\) nodes (<a class="xref" href="#fig-q-qho">Figure 1</a>).</p>
+<p>The second and third relations, obtained by inverting <a class="xref" href="#eq-q-ladder">(11)</a>, are what you use in practice: any function of \(x\) and \(p\) can be rewritten with ladder operators. Excited states are Gaussians times Hermite polynomials, with \(n\) nodes (<a class="xref" href="#fig-q-qho">Figure 1</a>).</p>
 <figure id="fig-q-qho">
 <img src="../figures/fig-q-qho.svg" alt="Harmonic potential with the first five energy levels and their wavefunctions.">
 <figcaption><b>Figure 1.</b> The harmonic potential, its equally spaced levels \(E_n = \hbar\omega(n+\tfrac12)\), and the wavefunctions \(\psi_n(x)\) drawn at the height of their energies (\(x\) in units of \(x_{\mathrm{zpf}}\)). Even the ground state is spread over \(\pm2x_{\mathrm{zpf}}\), and every state extends a little beyond the classical turning points.</figcaption>
 </figure>
+<div class="intuition"><p>Think of \(\ket n\) as "exactly \(n\) photons in the box". The ground state \(\ket0\) is the <b>vacuum</b>: no photons, but not nothing. Its position (or flux, or electric field) still fluctuates by \(x_{\mathrm{zpf}}\), because pinning it exactly would require infinite momentum uncertainty (Chapter 2). These vacuum fluctuations are real and measurable: they cause spontaneous emission, the Lamb shift, and part of the noise in every quantum amplifier.</p></div>
 
 <h3 id="sec-q-qho-lc"><span class="secnum">4.2</span> Quantising an LC circuit</h3>
-<p>With \(x\to\Phi\), \(p\to Q\), \(m\to C\), \(\omega = 1/\sqrt{LC}\) and \(Z = \sqrt{L/C}\),</p>
+<p>The translation from mechanics to circuits (Book 2) is \(x\to\Phi\), \(p\to Q\), \(m\to C\), \(\omega = 1/\sqrt{LC}\), and the circuit's characteristic impedance \(Z = \sqrt{L/C}\) plays the role of \(1/m\omega\). Substituting into <a class="xref" href="#eq-q-xzpf">(14)</a>:</p>
 <div class="eq" id="eq-q-lc">$$ \Phi = \sqrt{\frac{\hbar Z}{2}}\,(a+a^\dagger), \qquad Q = -\ii\sqrt{\frac{\hbar}{2Z}}\,(a - a^\dagger), \qquad H = \hbar\omega\Big(a^\dagger a+\frac12\Big).  \tag{15}$$</div>
-<p>This is the result promised in Book 2 (<a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-zpf">Book 2 eq. (12)</a>). The voltage on the capacitor, \(V = Q/C\), fluctuates even in the ground state, with rms value \(V_{\mathrm{zpf}} = \omega\sqrt{\hbar Z/2}\): about 1 µV for a 5 GHz, 50 Ω resonator. That tiny voltage, acting on a qubit through a coupling capacitor, is what couples a qubit to a single photon in a resonator. The coupling strength \(g\) is proportional to it (Book 6), which is why high-impedance resonators couple more strongly.</p>
+<p>This is the result promised in Book 2 (<a class="xref ext" href="../../foundations/classical-physics/index.html#eq-c-zpf">Book 2 eq. (12)</a>). An LC circuit at millikelvin temperatures is a quantum harmonic oscillator, and its energy quanta are microwave photons.</p>
+<p>The voltage on the capacitor, \(V = Q/C\), fluctuates even in the ground state, with rms value</p>
+\[ V_{\mathrm{zpf}} = \frac{Q_{\mathrm{zpf}}}{C} = \omega\sqrt{\frac{\hbar Z}{2}} , \]
+<p>about 1–2 µV for a 5–6 GHz, 50 Ω resonator (exercise 4). That tiny voltage, acting on a qubit through a coupling capacitor, is what couples a qubit to a single photon in a resonator. The coupling strength \(g\) is proportional to it (Book 6), which is why high-impedance resonators couple more strongly to charge-sensitive qubits.</p>
+<div class="example"><p><b>Worked example: how many photons is a readout tone?</b> A readout resonator at 7 GHz with \(\kappa/2\pi = 1\) MHz is driven by an incoming power \(P\). In steady state on resonance the photon number is \(\bar n = 4P/(\hbar\omega\kappa)\) for a resonator whose loss is all through its one port (from Book 2's input–output equations with \(\kappa_e = \kappa\)). For \(\bar n = 10\) photons, \(P = 10\times\hbar\omega\kappa/4 = 10\times(4.6\times10^{-24})\times(6.3\times10^6)/4\approx7\times10^{-17}\) W, about \(-130\) dBm. Readout signals are indeed this faint, which is why the amplifier chain of Book 2, Chapter 8 matters.</p></div>
 
 <h3 id="sec-q-qho-coherent"><span class="secnum">4.3</span> Coherent states</h3>
-<p>Fock states have no well-defined phase: \(\bra n x\ket n = 0\) for all \(n\). The states that oscillate like a classical oscillator are the <b>coherent states</b>, eigenstates of the annihilation operator:</p>
+<p>Fock states are very non-classical. In \(\ket n\) the average position is zero, \(\bra n x\ket n = 0\) for every \(n\), because \(x\propto a + a^\dagger\) changes \(n\) by one. A Fock state has a definite energy but no definite phase: it does not "swing". So which quantum states look like a classical oscillator swinging back and forth? They are the <b>coherent states</b>, eigenstates of the annihilation operator:</p>
 <div class="eq" id="eq-q-coherent">$$ a\ket\alpha = \alpha\ket\alpha, \qquad \ket\alpha = \ee^{-|\alpha|^2/2}\sum_{n=0}^\infty\frac{\alpha^n}{\sqrt{n!}}\ket n = D(\alpha)\ket0, \qquad D(\alpha) = \ee^{\alpha a^\dagger - \alpha^*a} .  \tag{16}$$</div>
-<p>A coherent state is the ground-state Gaussian displaced in phase space to \(\expval x = 2x_{\mathrm{zpf}}\Re\alpha\), \(\expval p = 2m\omega x_{\mathrm{zpf}}\Im\alpha\); the operator \(D(\alpha)\) is the <b>displacement operator</b>. It evolves as \(\ket{\alpha\ee^{-\ii\omega t}}\): the displaced Gaussian circles in phase space without spreading, exactly like the classical phasor of Book 1. Its photon-number distribution is Poisson with mean \(\bar n = |\alpha|^2\) and standard deviation \(\sqrt{\bar n}\), the shot noise of a laser or a microwave generator. A classical current or voltage source driving an oscillator (\(H_d = \hbar(\epsilon(t)a^\dagger + \epsilon^*(t)a)\)) always produces a coherent state from the vacuum. Producing Fock states, superpositions of them, or squeezed states requires a nonlinearity or a measurement (Book 5).</p>
+<p>Their properties:</p>
+<ul>
+<li><b>A displaced vacuum.</b> \(\ket\alpha\) is the ground-state Gaussian, shifted in phase space to \(\expval x = 2x_{\mathrm{zpf}}\Re\alpha\), \(\expval p = 2m\omega x_{\mathrm{zpf}}\Im\alpha\). The operator \(D(\alpha)\) that does the shifting is the <b>displacement operator</b>. The width stays \(x_{\mathrm{zpf}}\): the quantum fuzz is the same as the vacuum's.</li>
+<li><b>Classical motion.</b> It evolves as \(\ket{\alpha\ee^{-\ii\omega t}}\): the displaced Gaussian circles in phase space without spreading, exactly like the classical phasor of Books 1 and 2.</li>
+<li><b>Poisson photon statistics.</b> The probability of \(n\) photons is \(\ee^{-\bar n}\bar n^n/n!\) with mean \(\bar n = |\alpha|^2\) and standard deviation \(\sqrt{\bar n}\): the shot noise of a laser or a microwave generator.</li>
+<li><b>What classical sources make.</b> A classical current or voltage source driving an oscillator, \(H_d = \hbar(\epsilon(t)a^\dagger + \epsilon^*(t)a)\), always produces a coherent state from the vacuum. Producing Fock states, superpositions of them, or squeezed states requires a nonlinearity or a measurement (Book 5).</li>
+</ul>
+<p>For large \(|\alpha|\) the relative fuzz \(1/|\alpha|\) is tiny and the state is indistinguishable from a classical oscillation. That is the bridge between the quantum oscillator and the classical circuits of Book 2.</p>
+<div class="quick"><p>A coherent state has \(\alpha = 3\ii\). What are \(\bar n\) and the standard deviation of the photon number?</p>
+<details><summary>Answer</summary><p>\(\bar n = |\alpha|^2 = 9\); standard deviation \(\sqrt9 = 3\). The phase of \(\alpha\) does not affect the photon statistics.</p></details></div>
 
 <h3 id="sec-q-qho-anharm"><span class="secnum">4.4</span> Adding a nonlinearity</h3>
-<p>Suppose the potential has a small quartic correction, as for a pendulum or a Josephson junction: \(V = \tfrac12m\omega^2x^2 - \lambda x^4\). Using <a class="xref" href="#eq-q-xzpf">(14)</a>, \(x^4 = x_{\mathrm{zpf}}^4(a+a^\dagger)^4\). To first order in \(\lambda\), only the terms with equal numbers of \(a\) and \(a^\dagger\) change the energies (Chapter 6 justifies this), and normal-ordering them gives</p>
+<p>To make a qubit we must break the equal spacing. Suppose the potential has a small quartic correction, as for a pendulum or a Josephson junction (Book 2, Chapter 3): \(V = \tfrac12m\omega^2x^2 - \lambda x^4\). Using <a class="xref" href="#eq-q-xzpf">(14)</a>, \(x^4 = x_{\mathrm{zpf}}^4(a+a^\dagger)^4\). Expanding \((a+a^\dagger)^4\) gives sixteen products of four ladder operators. To first order in \(\lambda\), only the terms with equal numbers of \(a\) and \(a^\dagger\) change the energies (the others connect different levels and only matter in second order; Chapter 6 justifies this). Rearranging those into "normal order" (all \(a^\dagger\) to the left) gives</p>
 <div class="eq" id="eq-q-kerr">$$ H \approx \hbar\omega'\,a^\dagger a + \frac{\hbar\alpha}{2}\,a^\dagger a^\dagger aa, \qquad \hbar\alpha = -12\lambda x_{\mathrm{zpf}}^4 ,  \tag{17}$$</div>
-<p>where \(\omega'\) includes a small shift. The levels are now \(E_n = \hbar\omega'n + \tfrac{\hbar\alpha}{2}n(n-1)\): the spacing between \(n\) and \(n+1\) is \(\hbar(\omega' + n\alpha)\), decreasing by \(\alpha\) at each step. A drive at \(\omega'\) addresses \(0\leftrightarrow1\) but is detuned by \(\alpha\) from \(1\leftrightarrow2\). If \(|\alpha|\) is much larger than the drive strength and the linewidth, the lowest two levels form a qubit. This is the transmon in one equation (<a class="xref ext" href="../../index.html#eq-multi">Lab to Foundry eq. (5)</a>); the "Kerr" term \(a^\dagger a^\dagger aa\) is how the anharmonicity is written throughout the literature.</p>
+<p>where \(\omega'\) includes a small shift of the frequency. (Here \(\alpha\) is the <b>anharmonicity</b>, not a coherent-state amplitude; the notation is standard, if unfortunate.) Since \(a^\dagger a^\dagger aa = \hat n(\hat n - 1)\), the levels are now</p>
+\[ E_n = \hbar\omega'n + \frac{\hbar\alpha}{2}n(n-1), \]
+<p>and the spacing between \(n\) and \(n+1\) is \(\hbar(\omega' + n\alpha)\), changing by \(\alpha\) at each step. With \(\alpha\lt0\) (softening, as for a pendulum) the ladder's rungs get closer together going up.</p>
+<p>Now a drive at \(\omega'\) addresses \(0\leftrightarrow1\) but is detuned by \(\alpha\) from \(1\leftrightarrow2\). If \(|\alpha|\) is much larger than the drive strength and the linewidth, the drive cannot climb past level 1, and the lowest two levels form a <b>qubit</b>. This is the transmon in one equation (<a class="xref ext" href="../../index.html#eq-multi">Lab to Foundry eq. (5)</a>). The term \(a^\dagger a^\dagger aa\) is called a <b>Kerr</b> term (after the optical Kerr effect, where a material's index depends on light intensity) and is how the anharmonicity is written throughout the literature.</p>
+<div class="pitfall"><p>The third level never fully disappears. A fast pulse has a broad spectrum (Book 1, Chapter 6), and if its bandwidth reaches \(|\alpha|\) it leaks population into level 2 ("leakage"). This sets a speed limit on transmon gates of roughly a few times \(1/|\alpha|\), about 10–20 ns for \(|\alpha|/2\pi\approx250\) MHz, and is why pulse-shaping techniques such as DRAG exist (Book 6).</p></div>
+
+<h3 id="sec-q-qho-code"><span class="secnum">4.5</span> Try it in Python</h3>
+<p>Represent \(a\) as a matrix on the first \(N\) Fock states, build a coherent state by displacing the vacuum, check its Poisson statistics, and compute the transitions of a Kerr oscillator.</p>
+<pre class="code"><code>import numpy as np
+from scipy.linalg import expm
+from math import factorial
+
+N = 30                                        # keep Fock states 0..N-1
+a = np.diag(np.sqrt(np.arange(1, N)), k=1)    # annihilation operator
+ad = a.conj().T
+n_op = ad @ a
+
+comm = a @ ad - ad @ a
+print("diag of [a, a+] (first 5, last):", np.round(np.diag(comm)[:5], 3), np.round(comm[-1, -1], 1))
+
+# Coherent state by displacing the vacuum, and its photon statistics
+alpha = 2.0
+D = expm(alpha * ad - np.conj(alpha) * a)
+vac = np.zeros(N); vac[0] = 1
+coh = D @ vac
+p = np.abs(coh) ** 2
+poisson = [np.exp(-abs(alpha)**2) * abs(alpha)**(2*k) / factorial(k) for k in range(6)]
+print("P(n), n=0..5   :", np.round(p[:6], 4))
+print("Poisson, n=0..5:", np.round(poisson, 4))
+print("mean photon number:", round(float(coh.conj() @ n_op @ coh), 4))
+
+# Kerr oscillator: H/h = f * n + (alpha_k / 2) * a+ a+ a a
+f, alpha_k = 5.0, -0.25                        # GHz
+H = f * n_op + alpha_k / 2 * ad @ ad @ a @ a
+E = np.diag(H).real                            # H is diagonal in the Fock basis
+print("transition frequencies (GHz):", np.round(np.diff(E)[:4], 3))</code></pre>
+<p>Note the last diagonal element of the commutator: \(-29\) instead of 1. Truncating to \(N\) levels breaks \([a,a^\dagger]=1\) at the top of the ladder. Simulations are reliable only if the states involved never reach the cut-off, a check every circuit-simulation tool must make.</p>
 
 <div class="eda"><p>Every mode found by an electromagnetic eigensolver is quantised as in <a class="xref" href="#eq-q-lc">(15)</a>, and every junction adds a nonlinearity as in <a class="xref" href="#eq-q-kerr">(17)</a>. Energy-participation quantisation (<a class="xref ext" href="../../index.html#eq-epr">Lab to Foundry eq. (10)</a>) is the systematic version: it computes how much of each mode's zero-point flux crosses each junction and expands the cosine. The zero-point fluctuation is therefore a quantity a field solver can deliver.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>\([a,a^\dagger] = 1\); \(H = \hbar\omega(a^\dagger a+\tfrac12)\); ladder \(a^\dagger\ket n = \sqrt{n+1}\ket{n+1}\).</li>
+<li>Equally spaced levels: a harmonic oscillator cannot be a qubit.</li>
+<li>Zero-point width \(x_{\mathrm{zpf}} = \sqrt{\hbar/2m\omega}\); for circuits \(\Phi_{\mathrm{zpf}} = \sqrt{\hbar Z/2}\).</li>
+<li>Coherent states: displaced vacuum, classical motion, Poisson statistics; classical drives make them.</li>
+<li>A quartic nonlinearity gives a Kerr term \(\tfrac{\hbar\alpha}{2}a^{\dagger2}a^2\) and transitions \(\omega'+n\alpha\): the transmon.</li>
+</ul></div>
 
 <div class="exercises" id="ex-q-qho"><h4>Exercises</h4><ol>
 <li>Prove \([a,a^\dagger]=1\) from \([x,p] = \ii\hbar\) and <a class="xref" href="#eq-q-ladder">(11)</a>.
@@ -590,6 +660,8 @@ for d_nm in (0.5, 1.0, 1.5, 2.0):
 <details><summary>Solution</summary><p>\(V_{\mathrm{zpf}} = \omega\sqrt{\hbar Z/2}\). With \(\omega = 3.77\times10^{10}\) s\(^{-1}\): for 50 Ω, \(\sqrt{1.055\times10^{-34}\times25} = 5.1\times10^{-17}\), so \(V\approx1.9\) µV. For 2 kΩ, \(\sqrt{40}\) times larger, about 12 µV.</p></details></li>
 <li>From <a class="xref" href="#eq-q-kerr">(17)</a>, list the transition frequencies \(0\to1\), \(1\to2\), \(2\to3\) for \(\omega'/2\pi = 5\) GHz and \(\alpha/2\pi = -250\) MHz.
 <details><summary>Solution</summary><p>\(E_{n+1}-E_n = \hbar(\omega' + n\alpha)\): 5.00, 4.75 and 4.50 GHz.</p></details></li>
+<li>Show that \(\bra n x\ket n = 0\) for every Fock state, but \(\bra\alpha x\ket\alpha = 2x_{\mathrm{zpf}}\Re\alpha\).
+<details><summary>Solution</summary><p>\(x = x_{\mathrm{zpf}}(a+a^\dagger)\) changes \(n\) by \(\pm1\), so \(\bra n x\ket n\) involves \(\braket n{n\pm1} = 0\). For a coherent state, \(\bra\alpha a\ket\alpha = \alpha\) and \(\bra\alpha a^\dagger\ket\alpha = \alpha^*\), so \(\expval x = x_{\mathrm{zpf}}(\alpha+\alpha^*) = 2x_{\mathrm{zpf}}\Re\alpha\).</p></details></li>
 </ol></div>
 </section>
 
