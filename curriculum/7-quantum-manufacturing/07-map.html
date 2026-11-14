@@ -33,6 +33,28 @@
 <li><b>Photonic path-loss sign-off</b> (<a href="../../index.html#p7">Problem 7</a>). Model a 16-mode Clements mesh with per-MZI loss and splitting-ratio distributions; compute by Monte Carlo the probability that every path meets a loss threshold and that the mesh can still be programmed to a target unitary. <i>Uses:</i> @b5:sec-p-linear, @b5:sec-p-integrated, @b5:sec-p-qc.</li>
 </ol>
 
+<h3 id="sec-f-map-howto">How to read a section of the review</h3>
+<p>The review is written for specialists and moves fast. Each of its technical sections follows the same pattern, and knowing the pattern makes it far easier to read:</p>
+<ol>
+<li><b>The physics.</b> A few equations that state how a design or process quantity maps to a device parameter. For each one, find where this course derived it (the table above), and re-read that derivation first.</li>
+<li><b>The numbers.</b> An estimate showing why the problem is hard, usually a sensitivity ("a 1% error moves the frequency by 25 MHz") or a scaling ("cost grows as \(N^2\)"). Redo each estimate yourself with a calculator. If your number differs, find out why.</li>
+<li><b>The tools.</b> What existing commercial and open-source software does. Ask which step of the flow in @sec:f-eda each tool corresponds to.</li>
+<li><b>The gap.</b> What is missing. Ask whether it is engineering (an existing method needs porting) or research (no method exists).</li>
+</ol>
+<div class="example"><p><b>Worked example: reading the review's §3.2, "The parameter vector a designer must hit".</b> The section writes a multi-qubit Hamiltonian (@lf:eq-multi). You know every term: qubit frequencies and Kerr terms from @b6:sec-h-q-transmon, exchange couplings from @b6:sec-h-g-zz, resonators and their couplings from @b6:sec-h-cqed. It then gives the dispersive shift (@lf:eq-chi, which you derived in @b3:sec-q-pert-sw and used in @b6:sec-h-cq-disp) and the \(ZZ\) formula (@lf:eq-zz, from @b6:sec-h-g-zz). Finally it derives the sensitivity \(\delta\omega/\omega\approx\tfrac12\delta E_J/E_J - \tfrac12\delta C/C\) (@lf:eq-sens). Check it: from \(\hbar\omega_{01}\approx\sqrt{8E_JE_C} - E_C\), differentiate with respect to \(E_J\) and \(C\) (\(E_C\propto1/C\)); the square root gives the factors of ½. Then redo its punchline: a 1% error in either gives about 25 MHz at 5 GHz. If you can do this for every section, you have understood the review.</p></div>
+
+<h3 id="sec-f-map-walk">Walking through an open problem: Problem 4</h3>
+<p>To show how the pieces fit, here is <a href="../../index.html#p4">Problem 4</a> (warm-to-cold prediction, trim planning and die ranking) unpacked using only this course.</p>
+<ol>
+<li><b>What is measured warm?</b> Every junction's resistance \(R_n\), by a wafer prober in seconds (@sec:f-fab-flow, @b6:sec-h-jj-ab).</li>
+<li><b>What do we want cold?</b> Each qubit's frequency \(f_{01}\), which depends on \(E_J\) through \(\sqrt{8E_JE_C}\) (@b6:eq-h-transmon), and \(E_J\) on \(R_n\) through Ambegaokar–Baratoff (@b6:eq-h-ab).</li>
+<li><b>Why is the prediction uncertain?</b> The ratio between warm and cold resistance varies by wafer and by position (oxide ageing, film thickness affecting the gap), and capacitances vary too. That is a nested variance structure (@eq:f-var).</li>
+<li><b>The model.</b> A hierarchical regression (@eq:f-hier): physics gives the mean, random effects capture wafer and die offsets, and a few cold measurements per wafer update them.</li>
+<li><b>The decisions.</b> (a) <i>Trim planning</i>: for each junction, choose a laser-anneal amount that moves its predicted frequency to target, accounting for the prediction's uncertainty (trimming can only increase resistance, so aim slightly high). (b) <i>Die ranking</i>: compute each die's probability of meeting its collision-free yield condition (@eq:f-pedge) and cool the best first (@sec:f-pkg-scarce).</li>
+<li><b>Validation.</b> Hold out some wafers; check that the predicted 90% intervals for cold frequencies contain the measured values about 90% of the time (@sec:f-st-cal), and that ranking dies this way finds good chips faster than random order.</li>
+</ol>
+<p>Each step is a few hundred lines of code with standard libraries. Doing it with real production data, and showing it improves yield and saves cold-test time, is a research contribution.</p>
+
 <h3 id="sec-f-map-next">Where to go next</h3>
 <p>The review's reading guide (@lf:sec-reading) and the annotated reading list in the repository point to the primary literature, tiered by how deep you need to go. With this series behind you, the Tier 1 papers there should read as applications of ideas you have already met. The natural next step is to pick one project above, find the two or three papers the review cites for that problem, and reproduce one of their figures before trying to improve on it.</p>
 

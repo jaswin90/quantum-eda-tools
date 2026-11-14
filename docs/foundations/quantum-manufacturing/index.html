@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <p class="toc-title">Contents</p>
   <ol>
 <li class="toc2"><a href="#sec-f-preface">How to use this book</a></li>
+<li class="toc3"><a href="#sec-f-pre-terms">Words you will meet</a></li>
 <li class="toc2"><a href="#sec-f-fab"><span class="tocnum">1</span>How quantum chips are made</a></li>
 <li class="toc3"><a href="#sec-f-fab-wafer"><span class="tocnum">1.1</span>Wafers and cleanrooms</a></li>
 <li class="toc3"><a href="#sec-f-fab-unit"><span class="tocnum">1.2</span>The unit processes</a></li>
@@ -96,7 +97,9 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc2"><a href="#sec-f-map"><span class="tocnum">7</span>Reading the review: a map and seven projects</a></li>
 <li class="toc3"><a href="#sec-f-map-table"><span class="tocnum">7.1</span>Section-by-section preparation</a></li>
 <li class="toc3"><a href="#sec-f-map-projects"><span class="tocnum">7.2</span>Seven projects</a></li>
-<li class="toc3"><a href="#sec-f-map-next"><span class="tocnum">7.3</span>Where to go next</a></li>
+<li class="toc3"><a href="#sec-f-map-howto"><span class="tocnum">7.3</span>How to read a section of the review</a></li>
+<li class="toc3"><a href="#sec-f-map-walk"><span class="tocnum">7.4</span>Walking through an open problem: Problem 4</a></li>
+<li class="toc3"><a href="#sec-f-map-next"><span class="tocnum">7.5</span>Where to go next</a></li>
     <li class="toc2"><a href="#references">References</a></li>
   </ol>
 </nav>
@@ -114,6 +117,24 @@ document.addEventListener("DOMContentLoaded", function () {
 <p>The first six books explained what a quantum processor is and why it behaves as it does. This one explains how it is made, how classical chips are designed so that they can be made reliably, and what it would take to do the same for quantum chips. It is the bridge into the review <i>From Laboratory to Foundry</i>, and it is written so that every section of the review has a chapter here that prepares for it.</p>
 <p>Chapter 1 follows a wafer through a cleanroom. Chapter 2 describes classical electronic design automation (EDA), the industry the review proposes to extend. Chapter 3 opens the black box of electromagnetic solvers. Chapter 4 develops variability and yield, the central technical theme of the review. Chapter 5 covers packaging, cryogenics and test. Chapter 6 assembles the statistical and machine-learning toolkit that the review's open problems call for. Chapter 7 is a map: for each section of the review it lists what to re-read, and it proposes projects that turn the review's open problems into exercises at the scale of a thesis chapter.</p>
 <p>Prerequisites: Book 1 Chapters 7–8 (probability, numerics), Book 2 Chapters 4–6 and 8, and Book 6. Useful references: Plummer, Deal and Griffin for fabrication <span class="cite">[<a href="#ref-plummer2000">1</a>]</span>, Lavagno <i>et al.</i> for EDA <span class="cite">[<a href="#ref-lavagno2016">2</a>]</span>, Jin for finite elements <span class="cite">[<a href="#ref-jin2014">3</a>]</span>, and Gelman <i>et al.</i> for Bayesian statistics <span class="cite">[<a href="#ref-gelman2013">4</a>]</span>.</p>
+<h3 id="sec-f-pre-terms">Words you will meet</h3>
+<p>Manufacturing and design automation have their own vocabulary. Skim this list now and come back to it while reading.</p>
+<dl class="terms">
+<dt>Wafer, die</dt><dd>The disc of crystal on which chips are made; one chip cut from it.</dd>
+<dt>Lithography</dt><dd>Printing a pattern into a light- or electron-sensitive resist, which then acts as a stencil.</dd>
+<dt>Etch, lift-off</dt><dd>Two ways to turn a resist pattern into a metal pattern: remove unprotected metal, or deposit metal over the stencil and dissolve the stencil.</dd>
+<dt>Foundry, fabless</dt><dd>A company that manufactures chips for others; a company that only designs them.</dd>
+<dt>EDA</dt><dd>Electronic design automation: the software used to design, simulate and verify chips.</dd>
+<dt>PDK</dt><dd>Process design kit: the foundry's description of its process (layers, rules, device models, variation) used by EDA tools.</dd>
+<dt>DRC, LVS</dt><dd>Design-rule check (does the geometry obey manufacturing rules?) and layout-versus-schematic (does it implement the intended circuit?).</dd>
+<dt>Extraction</dt><dd>Computing a circuit's electrical parameters (capacitances, inductances, modes) from its drawn geometry.</dd>
+<dt>Compact model</dt><dd>A fast set of equations, fitted to measurements, that predicts a device's behaviour.</dd>
+<dt>Corner, Monte Carlo</dt><dd>Two ways to account for variation: a few worst-case combinations, or many random samples.</dd>
+<dt>Yield</dt><dd>The fraction of manufactured chips that meet specification.</dd>
+<dt>SPC, \(C_{pk}\)</dt><dd>Statistical process control and the process capability index: tools that keep a factory's parameters on target.</dd>
+<dt>Surrogate</dt><dd>A fast approximate model trained to imitate a slow simulator.</dd>
+<dt>Sign-off</dt><dd>The final set of checks a design must pass before it is sent for manufacture.</dd>
+</dl>
 </section>
 
 <section id="sec-f-fab"><h2><span class="secnum">1</span> How quantum chips are made</h2>
@@ -642,7 +663,29 @@ document.addEventListener("DOMContentLoaded", function () {
 <li><b>Photonic path-loss sign-off</b> (<a href="../../index.html#p7">Problem 7</a>). Model a 16-mode Clements mesh with per-MZI loss and splitting-ratio distributions; compute by Monte Carlo the probability that every path meets a loss threshold and that the mesh can still be programmed to a target unitary. <i>Uses:</i> <a class="xref ext" href="../../foundations/quantum-photonics/index.html#sec-p-linear" title="Linear optics and two-photon interference">Book 5 §3</a>, <a class="xref ext" href="../../foundations/quantum-photonics/index.html#sec-p-integrated" title="Integrated quantum photonics: platforms, components and fabrication">Book 5 §6</a>, <a class="xref ext" href="../../foundations/quantum-photonics/index.html#sec-p-qc" title="Photonic quantum computing: from KLM to fusion and GKP">Book 5 §7</a>.</li>
 </ol>
 
-<h3 id="sec-f-map-next"><span class="secnum">7.3</span> Where to go next</h3>
+<h3 id="sec-f-map-howto"><span class="secnum">7.3</span> How to read a section of the review</h3>
+<p>The review is written for specialists and moves fast. Each of its technical sections follows the same pattern, and knowing the pattern makes it far easier to read:</p>
+<ol>
+<li><b>The physics.</b> A few equations that state how a design or process quantity maps to a device parameter. For each one, find where this course derived it (the table above), and re-read that derivation first.</li>
+<li><b>The numbers.</b> An estimate showing why the problem is hard, usually a sensitivity ("a 1% error moves the frequency by 25 MHz") or a scaling ("cost grows as \(N^2\)"). Redo each estimate yourself with a calculator. If your number differs, find out why.</li>
+<li><b>The tools.</b> What existing commercial and open-source software does. Ask which step of the flow in <a class="xref" href="#sec-f-eda">§2</a> each tool corresponds to.</li>
+<li><b>The gap.</b> What is missing. Ask whether it is engineering (an existing method needs porting) or research (no method exists).</li>
+</ol>
+<div class="example"><p><b>Worked example: reading the review's §3.2, "The parameter vector a designer must hit".</b> The section writes a multi-qubit Hamiltonian (<a class="xref ext" href="../../index.html#eq-multi">Lab to Foundry eq. (5)</a>). You know every term: qubit frequencies and Kerr terms from <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-q-transmon" title="The transmon">Book 6 §3.3</a>, exchange couplings from <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-g-zz" title="Coupled transmons and the ZZ problem">Book 6 §5.2</a>, resonators and their couplings from <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-cqed" title="Circuit QED: coupling, readout and amplification">Book 6 §4</a>. It then gives the dispersive shift (<a class="xref ext" href="../../index.html#eq-chi">Lab to Foundry eq. (6)</a>, which you derived in <a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-pert-sw" title="Effective Hamiltonians and the dispersive regime">Book 3 §6.3</a> and used in <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-cq-disp" title="Dispersive readout">Book 6 §4.3</a>) and the \(ZZ\) formula (<a class="xref ext" href="../../index.html#eq-zz">Lab to Foundry eq. (7)</a>, from <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-g-zz" title="Coupled transmons and the ZZ problem">Book 6 §5.2</a>). Finally it derives the sensitivity \(\delta\omega/\omega\approx\tfrac12\delta E_J/E_J - \tfrac12\delta C/C\) (<a class="xref ext" href="../../index.html#eq-sens">Lab to Foundry eq. (8)</a>). Check it: from \(\hbar\omega_{01}\approx\sqrt{8E_JE_C} - E_C\), differentiate with respect to \(E_J\) and \(C\) (\(E_C\propto1/C\)); the square root gives the factors of ½. Then redo its punchline: a 1% error in either gives about 25 MHz at 5 GHz. If you can do this for every section, you have understood the review.</p></div>
+
+<h3 id="sec-f-map-walk"><span class="secnum">7.4</span> Walking through an open problem: Problem 4</h3>
+<p>To show how the pieces fit, here is <a href="../../index.html#p4">Problem 4</a> (warm-to-cold prediction, trim planning and die ranking) unpacked using only this course.</p>
+<ol>
+<li><b>What is measured warm?</b> Every junction's resistance \(R_n\), by a wafer prober in seconds (<a class="xref" href="#sec-f-fab-flow">§1.3</a>, <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-jj-ab" title="From room-temperature resistance to E_J">Book 6 §2.4</a>).</li>
+<li><b>What do we want cold?</b> Each qubit's frequency \(f_{01}\), which depends on \(E_J\) through \(\sqrt{8E_JE_C}\) (<a class="xref ext" href="../../foundations/quantum-hardware/index.html#eq-h-transmon">Book 6 eq. (11)</a>), and \(E_J\) on \(R_n\) through Ambegaokar–Baratoff (<a class="xref ext" href="../../foundations/quantum-hardware/index.html#eq-h-ab">Book 6 eq. (8)</a>).</li>
+<li><b>Why is the prediction uncertain?</b> The ratio between warm and cold resistance varies by wafer and by position (oxide ageing, film thickness affecting the gap), and capacitances vary too. That is a nested variance structure (<a class="xref" href="#eq-f-var">(3)</a>).</li>
+<li><b>The model.</b> A hierarchical regression (<a class="xref" href="#eq-f-hier">(8)</a>): physics gives the mean, random effects capture wafer and die offsets, and a few cold measurements per wafer update them.</li>
+<li><b>The decisions.</b> (a) <i>Trim planning</i>: for each junction, choose a laser-anneal amount that moves its predicted frequency to target, accounting for the prediction's uncertainty (trimming can only increase resistance, so aim slightly high). (b) <i>Die ranking</i>: compute each die's probability of meeting its collision-free yield condition (<a class="xref" href="#eq-f-pedge">(6)</a>) and cool the best first (<a class="xref" href="#sec-f-pkg-scarce">§5.5</a>).</li>
+<li><b>Validation.</b> Hold out some wafers; check that the predicted 90% intervals for cold frequencies contain the measured values about 90% of the time (<a class="xref" href="#sec-f-st-cal">§6.5</a>), and that ranking dies this way finds good chips faster than random order.</li>
+</ol>
+<p>Each step is a few hundred lines of code with standard libraries. Doing it with real production data, and showing it improves yield and saves cold-test time, is a research contribution.</p>
+
+<h3 id="sec-f-map-next"><span class="secnum">7.5</span> Where to go next</h3>
 <p>The review's reading guide (<a class="xref ext" href="../../index.html#sec-reading" title="Reading guide">Lab to Foundry Appendix C</a>) and the annotated reading list in the repository point to the primary literature, tiered by how deep you need to go. With this series behind you, the Tier 1 papers there should read as applications of ideas you have already met. The natural next step is to pick one project above, find the two or three papers the review cites for that problem, and reproduce one of their figures before trying to improve on it.</p>
 
 <div class="eda"><p>The thesis of the review is that quantum processors are now manufactured, and that what separates a research device from a product is the ability to predict, before fabrication, the distribution of what will be made. This series has built the physics and the mathematics behind that sentence. The review is where it is turned into a research agenda.</p></div>

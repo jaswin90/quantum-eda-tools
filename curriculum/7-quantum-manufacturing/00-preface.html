@@ -2,4 +2,22 @@
 <p>The first six books explained what a quantum processor is and why it behaves as it does. This one explains how it is made, how classical chips are designed so that they can be made reliably, and what it would take to do the same for quantum chips. It is the bridge into the review <i>From Laboratory to Foundry</i>, and it is written so that every section of the review has a chapter here that prepares for it.</p>
 <p>Chapter 1 follows a wafer through a cleanroom. Chapter 2 describes classical electronic design automation (EDA), the industry the review proposes to extend. Chapter 3 opens the black box of electromagnetic solvers. Chapter 4 develops variability and yield, the central technical theme of the review. Chapter 5 covers packaging, cryogenics and test. Chapter 6 assembles the statistical and machine-learning toolkit that the review's open problems call for. Chapter 7 is a map: for each section of the review it lists what to re-read, and it proposes projects that turn the review's open problems into exercises at the scale of a thesis chapter.</p>
 <p>Prerequisites: Book 1 Chapters 7–8 (probability, numerics), Book 2 Chapters 4–6 and 8, and Book 6. Useful references: Plummer, Deal and Griffin for fabrication [@plummer2000], Lavagno <i>et al.</i> for EDA [@lavagno2016], Jin for finite elements [@jin2014], and Gelman <i>et al.</i> for Bayesian statistics [@gelman2013].</p>
+<h3 id="sec-f-pre-terms">Words you will meet</h3>
+<p>Manufacturing and design automation have their own vocabulary. Skim this list now and come back to it while reading.</p>
+<dl class="terms">
+<dt>Wafer, die</dt><dd>The disc of crystal on which chips are made; one chip cut from it.</dd>
+<dt>Lithography</dt><dd>Printing a pattern into a light- or electron-sensitive resist, which then acts as a stencil.</dd>
+<dt>Etch, lift-off</dt><dd>Two ways to turn a resist pattern into a metal pattern: remove unprotected metal, or deposit metal over the stencil and dissolve the stencil.</dd>
+<dt>Foundry, fabless</dt><dd>A company that manufactures chips for others; a company that only designs them.</dd>
+<dt>EDA</dt><dd>Electronic design automation: the software used to design, simulate and verify chips.</dd>
+<dt>PDK</dt><dd>Process design kit: the foundry's description of its process (layers, rules, device models, variation) used by EDA tools.</dd>
+<dt>DRC, LVS</dt><dd>Design-rule check (does the geometry obey manufacturing rules?) and layout-versus-schematic (does it implement the intended circuit?).</dd>
+<dt>Extraction</dt><dd>Computing a circuit's electrical parameters (capacitances, inductances, modes) from its drawn geometry.</dd>
+<dt>Compact model</dt><dd>A fast set of equations, fitted to measurements, that predicts a device's behaviour.</dd>
+<dt>Corner, Monte Carlo</dt><dd>Two ways to account for variation: a few worst-case combinations, or many random samples.</dd>
+<dt>Yield</dt><dd>The fraction of manufactured chips that meet specification.</dd>
+<dt>SPC, \(C_{pk}\)</dt><dd>Statistical process control and the process capability index: tools that keep a factory's parameters on target.</dd>
+<dt>Surrogate</dt><dd>A fast approximate model trained to imitate a slow simulator.</dd>
+<dt>Sign-off</dt><dd>The final set of checks a design must pass before it is sent for manufacture.</dd>
+</dl>
 </section>
