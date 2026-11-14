@@ -111,6 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-c-th-johnson"><span class="tocnum">8.3</span>Johnson–Nyquist noise</a></li>
 <li class="toc3"><a href="#sec-c-th-other"><span class="tocnum">8.4</span>Shot noise and 1/f noise</a></li>
 <li class="toc3"><a href="#sec-c-th-cryo"><span class="tocnum">8.5</span>Cryogenics and the attenuation chain</a></li>
+<li class="toc3"><a href="#sec-c-th-code"><span class="tocnum">8.6</span>Try it in Python</a></li>
     <li class="toc2"><a href="#references">References</a></li>
   </ol>
 </nav>
@@ -121,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Classical Physics for Quantum Engineers</h1>
   <p class="subtitle">Lagrangian and Hamiltonian mechanics, oscillators, electromagnetism, microwave circuits, waveguides and thermal noise</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">8 chapters · 42 numbered equations · 46 exercises with solutions · about 45 hours of study</p>
+  <p class="meta">8 chapters · 42 numbered equations · 48 exercises with solutions · about 45 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../mathematics/index.html">Book 1: Mathematics</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-c-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -1054,37 +1055,110 @@ for phi in np.linspace(0, np.pi, 5):
 <li>Budget thermal photons through an attenuator chain, and know what a dilution refrigerator does.</li>
 </ul></div>
 
+<div class="bigpic"><p>Heat is random motion, and random motion is the enemy of a qubit. A qubit stores information in a tiny energy difference, about 20 µeV for a 5 GHz superconducting qubit, and if the environment's thermal energy is comparable, the qubit gets randomly kicked between its states. This chapter explains how to quantify "comparable" (the Boltzmann factor), why microwave qubits must be colder than outer space (more than a hundred times colder), how heat appears as electrical noise in every resistor and amplifier, and how a refrigerator and a chain of attenuators keep room-temperature noise away from the chip. These are the numbers that set how many qubits a refrigerator can host.</p></div>
+
 <h3 id="sec-c-th-boltz"><span class="secnum">8.1</span> The Boltzmann distribution</h3>
-<p>A system in contact with a large reservoir at temperature \(T\) occupies a state of energy \(E\) with probability proportional to the <b>Boltzmann factor</b> \(\ee^{-E/k_BT}\). Normalising,</p>
+<p>Temperature measures how much random energy is available per degree of freedom. The natural energy scale is \(k_BT\), where \(k_B = 1.381\times10^{-23}\) J/K is Boltzmann's constant. At room temperature \(k_BT\approx25\) meV; at 20 mK, about 1.7 µeV.</p>
+<p>The central rule of statistical physics: a system in contact with a large reservoir at temperature \(T\) is found in a state of energy \(E\) with probability proportional to the <b>Boltzmann factor</b> \(\ee^{-E/k_BT}\). High-energy states are exponentially unlikely, and the scale of "high" is \(k_BT\). Normalising so probabilities sum to one,</p>
 <div class="eq" id="eq-c-boltzmann">$$ p_k = \frac{\ee^{-E_k/k_BT}}{Z}, \qquad Z = \sum_k\ee^{-E_k/k_BT}, \qquad \langle E\rangle = -\frac{\partial\ln Z}{\partial\beta}\ \ (\beta = 1/k_BT).  \tag{39}$$</div>
-<p>The <b>partition function</b> \(Z\) contains all equilibrium thermodynamics. Its logarithm gives the free energy \(F = -k_BT\ln Z\), and derivatives give energy, entropy and heat capacity. A useful scale: \(k_BT/h\approx20.8\) GHz per kelvin. At room temperature \(k_BT/h\approx6\) THz; at 20 mK, about 0.4 GHz.</p>
-<p>For a two-level system with splitting \(\hbar\omega\), the excited-state probability is \(p_1 = 1/(\ee^{\hbar\omega/k_BT}+1)\). A 5 GHz qubit at 20 mK has \(\hbar\omega/k_BT = 12\) and \(p_1\approx6\times10^{-6}\). At 50 mK, \(p_1\approx 8\times10^{-3}\). Real qubits often show 0.1–1% excited population, an "effective temperature" of 40–60 mK, because they are imperfectly thermalised: hot photons arrive down wires, and quasiparticles linger.</p>
+<p>The normalising sum \(Z\) is the <b>partition function</b>. It looks like bookkeeping, but it contains all equilibrium thermodynamics: its logarithm gives the free energy \(F = -k_BT\ln Z\), and its derivatives give average energy, entropy and heat capacity. (The formula for \(\langle E\rangle\) follows by differentiating \(Z\) with respect to \(\beta\): each term brings down a factor \(-E_k\).)</p>
+<p>For qubits we compare energies with \(k_BT\) in frequency units, using \(E = hf\). A handy conversion: <b>\(k_BT/h\approx20.8\) GHz per kelvin</b>. At room temperature \(k_BT/h\approx6\) THz; at 20 mK, about 0.4 GHz. A 5 GHz qubit at 20 mK therefore has \(hf/k_BT\approx12\): its energy is twelve times the thermal energy, and it will almost never be thermally excited.</p>
+<div class="example"><p><b>Worked example: a qubit's thermal population.</b> For a two-level system with splitting \(hf\), \(Z = 1 + \ee^{-hf/k_BT}\) and the excited-state probability is</p>
+\[ p_1 = \frac{\ee^{-hf/k_BT}}{1 + \ee^{-hf/k_BT}} = \frac{1}{\ee^{hf/k_BT}+1}. \]
+<p>For a 5 GHz qubit: at 20 mK, \(hf/k_BT = 12\) and \(p_1\approx6\times10^{-6}\). At 50 mK, \(hf/k_BT = 4.8\) and \(p_1\approx 8\times10^{-3}\). At 1 K, \(p_1\approx0.4\): a coin toss. Real qubits often show 0.1–1% excited population, an "effective temperature" of 40–60 mK, even when the refrigerator reads 10 mK, because they are imperfectly thermalised: hot photons arrive down wires, and quasiparticles linger. That residual population is a direct error in state preparation, and Book 7 treats it as a quantity to measure and budget.</p></div>
 
 <h3 id="sec-c-th-planck"><span class="secnum">8.2</span> Thermal oscillators and the Planck distribution</h3>
-<p>A harmonic oscillator of frequency \(\omega\) has quantised energies \(E_n = \hbar\omega(n+\tfrac12)\) (Book 3). Its partition function is a geometric series, and the mean number of quanta is the <b>Bose–Einstein</b> (Planck) occupation:</p>
+<p>A harmonic oscillator of frequency \(\omega\) (a resonator, a mode of a cable) has quantised energies \(E_n = \hbar\omega(n+\tfrac12)\) (Book 3). Each level \(n\) means "\(n\) photons in the mode". Its partition function is a geometric series (exercise 2), and the mean number of quanta is the <b>Bose–Einstein</b> (Planck) occupation:</p>
 <div class="eq" id="eq-c-nth">$$ \bar n(\omega, T) = \frac{1}{\ee^{\hbar\omega/k_BT} - 1} \;\approx\; \begin{cases} k_BT/\hbar\omega & \hbar\omega\ll k_BT \ \text{(classical)}\\ \ee^{-\hbar\omega/k_BT} & \hbar\omega\gg k_BT\ \text{(quantum)}\end{cases}  \tag{40}$$</div>
-<p>In the classical limit the oscillator has energy \(k_BT\), as the equipartition theorem says (\(\tfrac12k_BT\) per quadratic term in the energy, two terms for an oscillator). In the quantum limit the oscillator is almost always in its ground state. <a class="xref" href="#fig-c-nth">Figure 3</a> shows \(\bar n\) for microwave modes. At 4 K a 5 GHz mode holds about 16 thermal photons; at 20 mK, \(6\times10^{-6}\). An optical photon at 200 THz has \(\hbar\omega/k_BT\approx 32\) even at room temperature, which is why photonic qubits can operate warm (only their detectors need cooling), while microwave qubits need dilution refrigerators.</p>
+<p>Two limits:</p>
+<ul>
+<li><b>Classical</b> (\(\hbar\omega\ll k_BT\)): the oscillator has energy \(\bar n\hbar\omega\approx k_BT\), as the classical <b>equipartition theorem</b> says (\(\tfrac12k_BT\) per quadratic term in the energy, and an oscillator has two: kinetic and potential). Many photons, each carrying a tiny energy.</li>
+<li><b>Quantum</b> (\(\hbar\omega\gg k_BT\)): the oscillator is almost always in its ground state, and \(\bar n\) is exponentially small. This is the regime qubits need.</li>
+</ul>
+<p><a class="xref" href="#fig-c-nth">Figure 3</a> shows \(\bar n\) for microwave modes. At 4 K (liquid helium) a 5 GHz mode holds about 16 thermal photons; at 20 mK, \(6\times10^{-6}\). An optical photon at 200 THz has \(\hbar\omega/k_BT\approx 32\) even at room temperature, which is why photonic qubits can operate warm (only their detectors need cooling), while microwave qubits need dilution refrigerators.</p>
 <figure id="fig-c-nth">
 <img src="../figures/fig-c-nth.svg" alt="Mean thermal photon number versus temperature for 1, 5 and 10 GHz modes on log axes.">
 <figcaption><b>Figure 3.</b> Thermal occupation \(\bar n\) of a mode at 1, 5 and 10 GHz from <a class="xref" href="#eq-c-nth">(40)</a>. The shaded band is the mixing-chamber range of a dilution refrigerator; the dashed line marks \(\bar n = 10^{-3}\), a typical requirement for readout resonators.</figcaption>
 </figure>
+<div class="quick"><p>Why is a 1 GHz qubit harder to keep cold than a 10 GHz one?</p>
+<details><summary>Answer</summary><p>Its energy \(hf\) is ten times smaller, so at a given temperature \(hf/k_BT\) is ten times smaller and the Boltzmann factor \(\ee^{-hf/k_BT}\) is far larger. To keep the same \(\bar n\), the temperature must be ten times lower. This is one reason most superconducting qubits sit at 4–8 GHz.</p></details></div>
 
 <h3 id="sec-c-th-johnson"><span class="secnum">8.3</span> Johnson–Nyquist noise</h3>
-<p>Every resistor at temperature \(T\) produces a fluctuating voltage. Nyquist derived its spectrum by a beautiful argument <span class="cite">[<a href="#ref-nyquist1928">9</a>]</span>: connect two resistors \(R\) by a lossless transmission line of impedance \(R\), let everything reach equilibrium, and count the thermal energy in the line's modes. Each mode holds the energy of a thermal oscillator, and the power each resistor sends into the line must equal the power it absorbs. The result for the one-sided voltage spectral density is</p>
+<p>The electrons in a resistor jiggle thermally, so every resistor at temperature \(T\) produces a small fluctuating voltage across its terminals, even with nothing connected. Johnson measured it in 1926 and Nyquist derived its spectrum by a beautiful argument <span class="cite">[<a href="#ref-nyquist1928">9</a>]</span>. Connect two resistors \(R\) by a lossless transmission line of impedance \(R\) (so nothing reflects), and let everything reach the same temperature. The line's modes are oscillators, each holding thermal energy \(\bar n\hbar\omega\). In equilibrium, the power each resistor sends into the line must equal the power it absorbs. Counting modes per unit bandwidth gives the voltage <b>spectral density</b> (Book 1, Chapter 6):</p>
 <div class="eq" id="eq-c-nyquist">$$ S_V(f) = 4k_BTR \quad(\text{classical}), \qquad S_V(f) = 4R\,hf\Big(\bar n(f,T) + \tfrac12\Big)\ \ (\text{quantum, symmetrised}).  \tag{41}$$</div>
-<p>In a bandwidth \(B\), the rms voltage is \(\sqrt{4k_BTRB}\): about 0.9 µV for a 50 Ω resistor at room temperature in 1 GHz. The available noise power delivered into a matched load is simply \(k_BTB\), independent of \(R\). This is why noise is quoted as a <b>noise temperature</b>: an amplifier that adds noise power \(k_BT_NB\) referred to its input has noise temperature \(T_N\). Good cryogenic HEMT amplifiers have \(T_N\approx2\)–\(5\) K at 4–8 GHz; the quantum limit for a phase-preserving amplifier is \(T_N = \hbar\omega/2k_B\approx0.12\) K at 5 GHz, which Josephson parametric amplifiers approach (Chapter 3). The \(\tfrac12\) in the quantum formula is the zero-point fluctuation; it cannot be removed and sets the "standard quantum limit" of measurement (Book 5).</p>
+<p>"Spectral density" means noise power per unit bandwidth; to get the mean-square voltage, multiply by the bandwidth \(B\) of your measurement. So the rms voltage is \(\sqrt{4k_BTRB}\): about 0.9 µV for a 50 Ω resistor at room temperature in 1 GHz. Small, but a qubit drive pulse is only microvolts at the chip.</p>
+<p>A remarkably simple fact: the noise power that a resistor delivers into a matched load is \(k_BTB\), independent of \(R\). This is why noise is quoted as a <b>noise temperature</b>. An amplifier that adds noise power \(k_BT_NB\), referred to its input, has noise temperature \(T_N\): it is as noisy as a resistor at \(T_N\) placed at its input. Benchmarks at 4–8 GHz:</p>
+<ul>
+<li>Good room-temperature amplifiers: \(T_N\approx50\)–\(100\) K.</li>
+<li>Cryogenic HEMT (high-electron-mobility transistor) amplifiers at 4 K: \(T_N\approx2\)–\(5\) K.</li>
+<li>The quantum limit for a phase-preserving amplifier: \(T_N = \hbar\omega/2k_B\approx0.12\) K at 5 GHz, which Josephson parametric amplifiers approach (Chapter 3).</li>
+</ul>
+<p>The \(\tfrac12\) in the quantum formula is the zero-point fluctuation of Chapter 2: even at \(T = 0\) there is noise of half a photon per mode. It cannot be removed, and it sets the "standard quantum limit" of measurement (Book 5).</p>
 <div class="box"><p><strong>Fluctuation and dissipation.</strong> Nyquist's formula is a special case of the <b>fluctuation–dissipation theorem</b>: anything that dissipates energy also fluctuates, with a spectrum set by its dissipation and temperature. A qubit coupled to a lossy element is both damped by it and kicked by its noise. This is why qubit relaxation rates can be computed from the real part of the admittance a qubit sees, \(\Gamma_1\propto\Re Y(\omega_q)/C\): a classical circuit simulation directly predicts a quantum decay rate (Book 6).</p></div>
 
 <h3 id="sec-c-th-other"><span class="secnum">8.4</span> Shot noise and 1/f noise</h3>
-<p><b>Shot noise</b> arises because current is carried by discrete charges arriving at random. For independent arrivals (Poisson statistics, Book 1), the current spectral density is \(S_I = 2eI\), flat in frequency. Photon counting has the same character, and shot noise of the photon flux sets the sensitivity of optical measurements. <b>\(1/f\) noise</b> (flicker noise) has spectral density rising toward low frequency. It appears in almost every solid-state device and usually comes from a large ensemble of fluctuators with a broad distribution of switching rates: microscopic charge traps, magnetic spins on surfaces, two-level systems in oxides. In qubits it shows up as slow wandering of frequency (charge noise in spin qubits, flux noise in tunable transmons), and it is the reason "echo" pulse sequences help (Book 3).</p>
+<p><b>Shot noise</b> arises because current is carried by discrete charges arriving at random, like raindrops on a roof. For independent arrivals (Poisson statistics, Book 1), the current spectral density is \(S_I = 2eI\), flat in frequency ("white"). Photon counting has the same character: a laser beam's photons arrive at random, and the resulting shot noise of the photon flux sets the sensitivity of optical measurements. The relative fluctuation falls as \(1/\sqrt N\) for \(N\) counted particles.</p>
+<p><b>\(1/f\) noise</b> (flicker noise) has spectral density rising toward low frequency, roughly as \(1/f\): slow drifts are bigger than fast jitter. It appears in almost every solid-state device. It usually comes from a large ensemble of microscopic "fluctuators" with a broad distribution of switching rates: charge traps in oxides, magnetic spins on surfaces, two-level systems. Each switches randomly between two states (a Lorentzian spectrum); summing many with rates spread evenly on a log scale gives \(1/f\). In qubits it shows up as slow wandering of the frequency: charge noise in spin qubits, flux noise in tunable transmons. Because it is slow, it can be partly undone by "echo" pulse sequences that reverse the qubit halfway through (Book 3).</p>
 
 <h3 id="sec-c-th-cryo"><span class="secnum">8.5</span> Cryogenics and the attenuation chain</h3>
-<p>A <b>dilution refrigerator</b> reaches 10–20 mK by using the heat of mixing of helium-3 into helium-4, below a stack of warmer stages: about 50 K and 4 K (cooled by a pulse-tube cryocooler), the still (about 0.8 K), the cold plate (about 100 mK) and the mixing chamber <span class="cite">[<a href="#ref-pobell2007">10</a>]</span>. Cooling power falls steeply with temperature: about a watt at 4 K but only tens of microwatts at 20 mK. Every wire from room temperature brings heat by conduction and, if it carries signals, thermal noise from the warmer stages.</p>
-<p>A microwave attenuator of power transmission \(1/A\) at temperature \(T_s\) passes a fraction \(1/A\) of the incoming noise and adds its own thermal noise with weight \(1 - 1/A\) (an attenuator is a resistor, so it radiates):</p>
+<p>A <b>dilution refrigerator</b> reaches 10–20 mK, colder than outer space (2.7 K) by a factor of about 200. It works by mixing two isotopes of helium: helium-3 dissolving into helium-4 absorbs heat, as evaporation does. It sits below a stack of warmer stages, each a metal plate at a fixed temperature <span class="cite">[<a href="#ref-pobell2007">10</a>]</span>:</p>
+<figure class="tbl" id="tab-c-stages"><figcaption><b>Table 6.</b> Stages of a typical dilution refrigerator.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Stage</th><th>Temperature</th><th>Cooling power (order of magnitude)</th></tr>
+<tr><td>First pulse-tube stage</td><td>about 50 K</td><td>tens of W</td></tr>
+<tr><td>Second pulse-tube stage</td><td>about 4 K</td><td>1 W</td></tr>
+<tr><td>Still</td><td>about 0.8 K</td><td>tens of mW</td></tr>
+<tr><td>Cold plate</td><td>about 100 mK</td><td>hundreds of µW</td></tr>
+<tr><td>Mixing chamber</td><td>10–20 mK</td><td>tens of µW</td></tr>
+</table></div></figure>
+<p>Cooling power falls steeply with temperature. Every wire from room temperature brings heat by conduction and, if it carries signals, thermal noise from the warmer stages. Both must be removed stage by stage.</p>
+<p>The noise is handled by <b>attenuators</b>. An attenuator is a small resistive network that transmits a fraction \(1/A\) of the power. It passes a fraction \(1/A\) of the incoming noise and, being a resistor, adds its own thermal noise with weight \(1 - 1/A\):</p>
 <div class="eq" id="eq-c-atten">$$ \bar n_{\mathrm{out}} = \frac{\bar n_{\mathrm{in}}}{A} + \Big(1 - \frac1A\Big)\,\bar n(\omega, T_s) .  \tag{42}$$</div>
-<p>Starting from \(\bar n\approx1250\) at 300 K and 5 GHz, roughly 20 dB at 4 K, 10 dB at the still or cold plate and 20–30 dB at the mixing chamber are needed to bring the residual photon number on a drive line below about \(10^{-3}\) (<a class="xref ext" href="../../index.html#eq-atten">Lab to Foundry eq. (27)</a>). Each attenuator dissipates the signal power it absorbs, so the same chain sets the heat budget. Readout output lines run the other way, through circulators and isolators that block noise travelling back toward the qubit, and through amplifiers at 4 K and room temperature. Book 7 returns to the wiring problem at the scale of thousands of qubits (<a class="xref ext" href="../../index.html#sec-pkg-wiring" title="Wiring: a heat budget and a noise budget">Lab to Foundry §6.2</a>).</p>
+<p>So each attenuator replaces most of the hot incoming noise with its own colder noise. Starting from \(\bar n\approx1250\) at 300 K and 5 GHz, roughly 20 dB at 4 K, 10 dB at the still or cold plate and 20–30 dB at the mixing chamber are needed to bring the residual photon number on a drive line below about \(10^{-3}\) (<a class="xref ext" href="../../index.html#eq-atten">Lab to Foundry eq. (27)</a>). The signal is attenuated by the same 60 dB (a factor of a million), so room-temperature electronics send correspondingly stronger pulses.</p>
+<div class="pitfall"><p>An attenuator only helps if it is actually at its stage's temperature. Each attenuator dissipates the signal and noise power it absorbs, and a poorly heat-sunk one at the mixing chamber may sit at 50 mK instead of 15 mK. The Python example below shows that this alone can raise the photon number reaching the chip several-fold. The same chain also sets the heat budget: thousands of lines times microwatts quickly exceeds the mixing chamber's cooling power.</p></div>
+<p>Readout output lines run the other way. The signal leaving the chip is tiny and must not be attenuated, so instead it passes through circulators and isolators (non-reciprocal devices, Chapter 6) that block noise travelling back toward the qubit, then a near-quantum-limited parametric amplifier, a HEMT at 4 K and room-temperature amplifiers. Book 7 returns to the wiring problem at the scale of thousands of qubits (<a class="xref ext" href="../../index.html#sec-pkg-wiring" title="Wiring: a heat budget and a noise budget">Lab to Foundry §6.2</a>).</p>
+
+<h3 id="sec-c-th-code"><span class="secnum">8.6</span> Try it in Python</h3>
+<p>Compute thermal occupations and follow the photon number down three attenuator chains.</p>
+<pre class="code"><code>import numpy as np
+
+h, kB = 6.62607015e-34, 1.380649e-23
+
+def nbar(f, T):
+    """Bose-Einstein occupation of a mode at frequency f (Hz), temperature T (K)."""
+    return 1 / np.expm1(h * f / (kB * T))
+
+f = 5e9
+for T in (300, 4, 0.8, 0.1, 0.05, 0.02):
+    print(f"T = {T:7.3f} K: nbar = {nbar(f, T):.3g}")
+
+def chain(f, stages, n_start):
+    """stages: list of (attenuation in dB, stage temperature in K)."""
+    n = n_start
+    for dB, T in stages:
+        A = 10 ** (dB / 10)
+        n = n / A + (1 - 1 / A) * nbar(f, T)
+        print(f"  after {dB:2d} dB at {T*1e3:7.1f} mK: nbar = {n:.3g}")
+    return n
+
+print("Chain A: 20 dB @ 4 K, 10 dB @ 100 mK, 30 dB @ 20 mK")
+chain(f, [(20, 4), (10, 0.1), (30, 0.02)], nbar(f, 300))
+print("Chain B: 20 dB @ 4 K, 10 dB @ 100 mK, 40 dB @ 20 mK")
+chain(f, [(20, 4), (10, 0.1), (40, 0.02)], nbar(f, 300))
+print("Chain C: same as A but the last attenuator is badly thermalised at 50 mK")
+chain(f, [(20, 4), (10, 0.1), (30, 0.05)], nbar(f, 300))</code></pre>
+<p>Chain A leaves \(2.9\times10^{-3}\) photons (exercise 4). Ten more decibels at the mixing chamber (chain B) gives \(3\times10^{-4}\). A last attenuator that is only 30 mK too warm (chain C) gives \(1.1\times10^{-2}\), nearly four times worse than A.</p>
 
 <div class="eda"><p>Thermal and noise budgets are design constraints in their own right: the number of control lines per qubit, the attenuation at each stage and the amplifier chain together decide how many qubits a refrigerator can host. They also feed the error model: residual thermal photons in readout resonators dephase qubits at a rate the review writes down explicitly (<a class="xref ext" href="../../index.html#eq-dephase">Lab to Foundry eq. (28)</a>). A system-level design tool has to carry these numbers alongside the chip layout.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Boltzmann factor \(\ee^{-E/k_BT}\); partition function \(Z\) gives all thermal averages; \(k_BT/h\approx20.8\) GHz/K.</li>
+<li>Bose–Einstein \(\bar n = 1/(\ee^{\hbar\omega/k_BT}-1)\): microwave modes need about 20 mK to be empty; optical modes are empty at room temperature.</li>
+<li>Johnson noise \(4k_BTR\); available power \(k_BTB\); amplifiers are rated by noise temperature, with a quantum limit of half a photon.</li>
+<li>Dissipation implies fluctuation: the admittance a qubit sees sets its decay.</li>
+<li>Shot noise \(2eI\); \(1/f\) noise from many fluctuators.</li>
+<li>Attenuators replace hot noise with cold: \(\bar n_{\mathrm{out}} = \bar n_{\mathrm{in}}/A + (1-1/A)\bar n(T_s)\); they must be well thermalised.</li>
+</ul></div>
 
 <div class="exercises" id="ex-c-thermal"><h4>Exercises</h4><ol>
 <li>At what temperature does a 6 GHz mode have \(\bar n = 10^{-3}\)?
@@ -1095,6 +1169,10 @@ for phi in np.linspace(0, np.pi, 5):
 <details><summary>Solution</summary><p>Noise power \(k_BT_NB = 1.38\times10^{-23}\times3\times10^7 = 4.1\times10^{-16}\) W. SNR \(\approx 2.4\times10^{-3}\), hopeless in one shot. Photon rate \(10^{-18}/(hf) = 10^{-18}/(4\times10^{-24})\approx2.5\times10^5\) per second. This is why qubit readout needs near-quantum-limited parametric amplifiers ahead of the HEMT.</p></details></li>
 <li>Apply <a class="xref" href="#eq-c-atten">(42)</a> for 20 dB at 4 K, 10 dB at 100 mK and 30 dB at 20 mK to a 5 GHz line starting at 300 K. What \(\bar n\) reaches the chip?
 <details><summary>Solution</summary><p>\(\bar n(300\,\mathrm K)\approx k_BT/hf = 1250\). After 20 dB at 4 K (\(\bar n_{4K}\approx16.2\)): \(12.5 + 0.99\times16.2\approx28.5\). After 10 dB at 100 mK (\(\bar n\approx0.10\)): \(2.85 + 0.9\times0.10\approx2.94\). After 30 dB at 20 mK (\(\bar n\approx6\times10^{-6}\)): \(2.9\times10^{-3}\). Close to, but above, \(10^{-3}\); more attenuation at the mixing chamber, or better-thermalised attenuators, would be needed.</p></details></li>
+<li>What is the rms Johnson noise voltage of a 50 Ω resistor at 4 K in a 100 MHz bandwidth?
+<details><summary>Solution</summary><p>\(\sqrt{4\times1.38\times10^{-23}\times4\times50\times10^8} = \sqrt{1.10\times10^{-12}}\approx1.05\) µV. Cooling from 300 K to 4 K reduces it by \(\sqrt{75}\approx8.7\).</p></details></li>
+<li>A drive line delivers a 20 ns pulse of 10 nW at room temperature to the top of a 60 dB attenuation chain. How much energy is dissipated in total at the mixing-chamber attenuator (30 dB) per pulse, and roughly how many such pulses per second can the mixing chamber absorb with 20 µW of cooling power?
+<details><summary>Solution</summary><p>The power reaching the 30 dB attenuator is \(10\text{ nW}\times10^{-3} = 10\) pW (after 30 dB above it); it absorbs 99.9% of that, about 10 pW for 20 ns, i.e. \(2\times10^{-19}\) J per pulse. 20 µW allows \(10^{14}\) pulses per second, so the pulses themselves are harmless here; the dominant heat loads are the wires' conduction and continuous signals such as readout tones and flux bias currents.</p></details></li>
 </ol></div>
 </section>
 
