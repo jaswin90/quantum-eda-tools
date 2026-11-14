@@ -231,3 +231,6 @@ dl.terms { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr);
 dl.terms dt { font-family: var(--sans); font-weight: 600; font-size: 14.5px; }
 dl.terms dd { margin: 0; }
 @media (max-width: 700px) { dl.terms { grid-template-columns: minmax(0, 1fr); } dl.terms dd { margin-bottom: 6px; } }
+/* Runnable code examples */
+pre.code { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; overflow-x: auto; font-family: var(--mono); font-size: 13.5px; line-height: 1.5; margin: 1em 0 1.4em; }
+pre.code code { background: none; padding: 0; font-size: inherit; }

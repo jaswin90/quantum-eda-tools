@@ -52,6 +52,28 @@
 <p>At \(\sigma = 18\) MHz: \(\sqrt2\sigma = 25.5\); \(p_{\mathrm{edge}}\approx\Phi(-3.26)\approx5.6\times10^{-4}\); \(Y\approx\ee^{-0.11}\approx90\%\).</p>
 <p>Reducing \(\sigma\) by a factor of 1.7 takes yield from 1% to 90%. Because \(p_{\mathrm{edge}}\) comes from Gaussian tails, yield is a steep cliff in \(\sigma\), and because \(E\) grows with qubit count, the cliff moves to smaller \(\sigma\) as chips grow: holding yield requires \(p_{\mathrm{edge}}\propto1/E\). At \(\sigma\approx50\) MHz (about 2% junction spread), essentially no large fixed-frequency lattice is collision-free.</p></div>
 
+<h3 id="sec-f-y-code">Try it: a Monte Carlo collision-yield model</h3>
+<p>The analytic formula assumed independent edges. A short simulation removes that assumption and is the best way to build intuition. The code below (Python with NumPy) draws fabricated frequencies for a 5×5 lattice many times and counts how often no coupled pair lands in the forbidden window. Run it, then change <code>sigma</code>, the lattice size or the frequency pattern and watch the yield cliff move.</p>
+<pre class="code"><code>import numpy as np
+
+rng = np.random.default_rng(0)
+L = 5                                   # 5 x 5 lattice of qubits
+targets = 5000 + 100 * ((np.add.outer(np.arange(L), np.arange(L))) % 2)   # MHz, checkerboard
+edges = [((i, j), (i + 1, j)) for i in range(L - 1) for j in range(L)] + \
+        [((i, j), (i, j + 1)) for i in range(L) for j in range(L - 1)]
+
+def yield_mc(sigma, window=17.0, trials=20000):
+    ok = 0
+    for _ in range(trials):
+        f = targets + sigma * rng.standard_normal((L, L))      # fabricated frequencies
+        bad = any(abs(f[a] - f[b]) &lt; window for a, b in edges)
+        ok += not bad
+    return ok / trials
+
+for sigma in (10, 20, 30, 40):
+    print(sigma, "MHz ->", yield_mc(sigma))</code></pre>
+<p>With 40 edges, the independent-edge formula predicts about 93% yield at \(\sigma = 20\) MHz and 41% at 30 MHz; the simulation gives about 95% and 50%. The difference comes from correlations: edges that share a qubit are not independent, and here that makes the true yield somewhat higher than the simple estimate. With more realistic windows the correction can go either way, which is why the review calls for full Monte Carlo (or better) at sign-off. Adding spectator conditions (three qubits) or a second window near \(\pm\alpha/2\) is a few more lines, and is exactly what Project 1 of the last chapter asks for.</p>
+
 <h3 id="sec-f-y-design">Designing for yield</h3>
 <ul>
 <li><b>Frequency allocation</b>: choose the target pattern (how many distinct frequencies, which detunings) to maximise yield under the fabrication distribution, not to hit a nominal optimum. With uncertainty this is a <b>chance-constrained</b> optimisation: maximise performance subject to \(\Pr[\text{all constraints met}]\ge1-\epsilon\) [@morvan2022; @luedtke2008].</li>
