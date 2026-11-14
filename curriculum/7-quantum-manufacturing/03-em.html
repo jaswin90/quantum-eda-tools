@@ -26,6 +26,25 @@
 <p>In 2D and 3D the idea is identical: the domain is split into triangles or tetrahedra (a <b>mesh</b>), the unknown is built from simple polynomials on each element, and the weak form gives a sparse linear system. Its strength is flexibility: elements can be tiny near a junction or a metal edge and large in empty space. For electrostatics (capacitance) the unknown is the scalar potential, the matrix is symmetric positive-definite, and each column of the capacitance matrix costs one solve with preconditioned conjugate gradients (@b1:sec-m-num-linear).</p>
 <p>For Maxwell's equations the unknown is a <i>vector</i> field, and naive vector elements (three potentials per node) produce spurious non-physical modes. <b>Edge (Nédélec) elements</b>, whose unknowns are the tangential field components along mesh <i>edges</i>, enforce exactly the continuity that real electric fields obey at material interfaces and eliminate the spurious modes. The curl-curl eigenproblem becomes a generalised sparse eigenproblem \(K\mathbf e = \omega^2M\mathbf e\) with millions of unknowns, solved by shift-invert Arnoldi for the few modes near the frequencies of interest (@b1:sec-m-num-linear). Commercial solvers (Ansys HFSS, COMSOL) and open ones (AWS Palace, Elmer) all work this way.</p>
 
+<h3 id="sec-f-em-code">Try it: finite elements in one dimension</h3>
+<p>The worked example above fits in a few lines of Python. Running it and watching the error shrink as the mesh is refined is the quickest way to understand convergence, which is the heart of trustworthy extraction.</p>
+<pre class="code"><code>import numpy as np
+
+def fem_1d(n):
+    """Solve -u'' = 1 on [0,1], u(0)=u(1)=0, with n linear elements."""
+    h = 1.0 / n
+    main = 2.0 / h * np.ones(n - 1)              # stiffness: 2/h on the diagonal
+    off = -1.0 / h * np.ones(n - 2)               # and -1/h beside it
+    K = np.diag(main) + np.diag(off, 1) + np.diag(off, -1)
+    f = h * np.ones(n - 1)                        # load vector: integral of 1 * hat function
+    u = np.linalg.solve(K, f)
+    return u[(n - 1) // 2]                        # value at the middle node
+
+exact = 0.125                                     # u(x) = x(1-x)/2, so u(0.5) = 1/8
+for n in (4, 8, 16, 32):
+    print(n, fem_1d(n), abs(fem_1d(n) - exact))</code></pre>
+<p>For this simple problem, linear elements happen to be exact at the nodes, so the printed error is zero to rounding. Change the load to <code>np.sin(np.pi * x)</code> (with the matching exact solution \(\sin(\pi x)/\pi^2\)) and you will see the error fall by about four each time the mesh is halved: second-order convergence, the behaviour Richardson extrapolation exploits. Real 3D solvers do the same thing with tetrahedra and millions of unknowns.</p>
+
 <h3 id="sec-f-em-other">Other methods</h3>
 <ul>
 <li><b>Method of moments</b> (MoM) [@harrington1993]: instead of meshing all of space, mesh only the metal surfaces and solve an integral equation using the known response (Green's function) of the layered substrate. Ideal for planar circuits on uniform stacks: Sonnet, Keysight Momentum and Ansys Q3D work this way. The matrices are dense but much smaller; fast multipole and hierarchical-matrix methods compress them.</li>

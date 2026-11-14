@@ -71,10 +71,11 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc2"><a href="#sec-f-em"><span class="tocnum">3</span>Electromagnetic simulation: from layout to Hamiltonian</a></li>
 <li class="toc3"><a href="#sec-f-em-what"><span class="tocnum">3.1</span>What we need from a solver</a></li>
 <li class="toc3"><a href="#sec-f-em-fem"><span class="tocnum">3.2</span>Finite elements, starting in one dimension</a></li>
-<li class="toc3"><a href="#sec-f-em-other"><span class="tocnum">3.3</span>Other methods</a></li>
-<li class="toc3"><a href="#sec-f-em-setup"><span class="tocnum">3.4</span>Setting up a qubit simulation</a></li>
-<li class="toc3"><a href="#sec-f-em-epr"><span class="tocnum">3.5</span>From fields to Hamiltonian</a></li>
-<li class="toc3"><a href="#sec-f-em-mor"><span class="tocnum">3.6</span>Model-order reduction and passivity</a></li>
+<li class="toc3"><a href="#sec-f-em-code"><span class="tocnum">3.3</span>Try it: finite elements in one dimension</a></li>
+<li class="toc3"><a href="#sec-f-em-other"><span class="tocnum">3.4</span>Other methods</a></li>
+<li class="toc3"><a href="#sec-f-em-setup"><span class="tocnum">3.5</span>Setting up a qubit simulation</a></li>
+<li class="toc3"><a href="#sec-f-em-epr"><span class="tocnum">3.6</span>From fields to Hamiltonian</a></li>
+<li class="toc3"><a href="#sec-f-em-mor"><span class="tocnum">3.7</span>Model-order reduction and passivity</a></li>
 <li class="toc2"><a href="#sec-f-yield"><span class="tocnum">4</span>Variability and yield</a></li>
 <li class="toc3"><a href="#sec-f-y-sources"><span class="tocnum">4.1</span>Where variation comes from, and its structure</a></li>
 <li class="toc3"><a href="#sec-f-y-defect"><span class="tocnum">4.2</span>Defect-limited yield</a></li>
@@ -187,6 +188,15 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="eq" id="eq-f-cpk">$$ C_{pk} = \min\Big(\frac{U - \mu}{3\sigma}, \frac{\mu - L}{3\sigma}\Big) ,  \tag{1}$$</div>
 <p>where \(\mu\) and \(\sigma\) are the process mean and standard deviation. \(C_{pk} = 1\) means the nearest specification limit is three standard deviations from the mean (about 0.13% out of specification on that side); industry typically demands \(C_{pk}\ge1.33\) (four standard deviations, about 0.003%).</p>
 <div class="example"><p><b>Worked example: \(C_{pk}\) for junctions.</b> Specification \(10.0\pm0.3\) kΩ. Process: \(\mu = 10.1\) kΩ, \(\sigma = 0.08\) kΩ. Upper side \((10.3 - 10.1)/0.24 = 0.83\); lower side \((10.1 - 9.7)/0.24 = 1.67\). So \(C_{pk} = 0.83\): the process is off-centre, and about 0.6% of junctions exceed the upper limit. Re-centring to \(\mu = 10.0\) gives \(C_{pk} = 1.25\) and only 0.02% out. Often the cheapest improvement is to centre the process, not to tighten it.</p></div>
+<div class="example"><p><b>Try it: a control chart.</b> The code below simulates 60 wafers' test-junction resistance with a small drift starting at wafer 40, and flags points outside the ±3σ control limits set from the first 30 wafers. Run it and notice how long it takes for the drift to be flagged; real SPC adds "run rules" (for example, eight points in a row above the target) to catch drifts sooner.</p>
+<pre class="code"><code>import numpy as np
+rng = np.random.default_rng(1)
+r = 10.0 + 0.08 * rng.standard_normal(60)        # kOhm, in control
+r[40:] += np.linspace(0, 0.3, 20)                # a slow drift begins at wafer 40
+mu, s = r[:30].mean(), r[:30].std(ddof=1)        # limits from a stable period
+for i, x in enumerate(r):
+    if abs(x - mu) > 3 * s:
+        print("wafer", i, "out of control:", round(x, 3))</code></pre></div>
 <p>Between 2024 and 2026, superconducting, ion-trap, photonic and spin-qubit programmes moved onto 200 and 300 mm production lines, and foundries opened to outside customers (<a class="xref ext" href="../../index.html#sec-land-foundry" title="Vertical integration and the first quantum foundries">Lab to Foundry §2.2</a>). That move makes SPC data available at scale, and it is the precondition for the statistical design methods of Chapters 4 and 6.</p>
 
 <div class="eda"><p>Each process step is a source of variation with spatial structure: film thickness varies smoothly across a wafer, linewidths vary with local pattern density, oxidation varies from run to run. A design tool that predicts yield needs a model of this structure, built from metrology and test data. The review's "die record" (<a class="xref ext" href="../../index.html#sec-prob-record" title="Integration: the die record">Lab to Foundry §11.1</a>) is the data structure that links each chip's process history to its measured performance, so such models can be built and checked.</p></div>
@@ -326,14 +336,33 @@ document.addEventListener("DOMContentLoaded", function () {
 <p>In 2D and 3D the idea is identical: the domain is split into triangles or tetrahedra (a <b>mesh</b>), the unknown is built from simple polynomials on each element, and the weak form gives a sparse linear system. Its strength is flexibility: elements can be tiny near a junction or a metal edge and large in empty space. For electrostatics (capacitance) the unknown is the scalar potential, the matrix is symmetric positive-definite, and each column of the capacitance matrix costs one solve with preconditioned conjugate gradients (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-num-linear" title="Solving linear systems and eigenproblems">Book 1 §8.2</a>).</p>
 <p>For Maxwell's equations the unknown is a <i>vector</i> field, and naive vector elements (three potentials per node) produce spurious non-physical modes. <b>Edge (Nédélec) elements</b>, whose unknowns are the tangential field components along mesh <i>edges</i>, enforce exactly the continuity that real electric fields obey at material interfaces and eliminate the spurious modes. The curl-curl eigenproblem becomes a generalised sparse eigenproblem \(K\mathbf e = \omega^2M\mathbf e\) with millions of unknowns, solved by shift-invert Arnoldi for the few modes near the frequencies of interest (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-num-linear" title="Solving linear systems and eigenproblems">Book 1 §8.2</a>). Commercial solvers (Ansys HFSS, COMSOL) and open ones (AWS Palace, Elmer) all work this way.</p>
 
-<h3 id="sec-f-em-other"><span class="secnum">3.3</span> Other methods</h3>
+<h3 id="sec-f-em-code"><span class="secnum">3.3</span> Try it: finite elements in one dimension</h3>
+<p>The worked example above fits in a few lines of Python. Running it and watching the error shrink as the mesh is refined is the quickest way to understand convergence, which is the heart of trustworthy extraction.</p>
+<pre class="code"><code>import numpy as np
+
+def fem_1d(n):
+    """Solve -u'' = 1 on [0,1], u(0)=u(1)=0, with n linear elements."""
+    h = 1.0 / n
+    main = 2.0 / h * np.ones(n - 1)              # stiffness: 2/h on the diagonal
+    off = -1.0 / h * np.ones(n - 2)               # and -1/h beside it
+    K = np.diag(main) + np.diag(off, 1) + np.diag(off, -1)
+    f = h * np.ones(n - 1)                        # load vector: integral of 1 * hat function
+    u = np.linalg.solve(K, f)
+    return u[(n - 1) // 2]                        # value at the middle node
+
+exact = 0.125                                     # u(x) = x(1-x)/2, so u(0.5) = 1/8
+for n in (4, 8, 16, 32):
+    print(n, fem_1d(n), abs(fem_1d(n) - exact))</code></pre>
+<p>For this simple problem, linear elements happen to be exact at the nodes, so the printed error is zero to rounding. Change the load to <code>np.sin(np.pi * x)</code> (with the matching exact solution \(\sin(\pi x)/\pi^2\)) and you will see the error fall by about four each time the mesh is halved: second-order convergence, the behaviour Richardson extrapolation exploits. Real 3D solvers do the same thing with tetrahedra and millions of unknowns.</p>
+
+<h3 id="sec-f-em-other"><span class="secnum">3.4</span> Other methods</h3>
 <ul>
 <li><b>Method of moments</b> (MoM) <span class="cite">[<a href="#ref-harrington1993">10</a>]</span>: instead of meshing all of space, mesh only the metal surfaces and solve an integral equation using the known response (Green's function) of the layered substrate. Ideal for planar circuits on uniform stacks: Sonnet, Keysight Momentum and Ansys Q3D work this way. The matrices are dense but much smaller; fast multipole and hierarchical-matrix methods compress them.</li>
 <li><b>Finite-difference time-domain</b> (FDTD): put space on a regular grid and step Maxwell's equations forward in time. One run with a short pulse gives the whole spectrum after a Fourier transform (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-fourier-transform" title="The Fourier transform">Book 1 §6.2</a>), which suits broadband optics and photonics. It is poorly suited to high-\(Q\) microwave resonators, which ring for millions of periods.</li>
 <li><b>Mode solvers</b>: 2D eigenproblems on the cross-section of a waveguide or transmission line, giving effective index, characteristic impedance and field profile; the inputs to circuit-level models of lines (<a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-tl-cpw" title="The coplanar waveguide">Book 2 §6.2</a>).</li>
 </ul>
 
-<h3 id="sec-f-em-setup"><span class="secnum">3.4</span> Setting up a qubit simulation</h3>
+<h3 id="sec-f-em-setup"><span class="secnum">3.5</span> Setting up a qubit simulation</h3>
 <p>An eigenmode simulation of a transmon with its readout resonator has these ingredients:</p>
 <ol>
 <li><b>Geometry.</b> Metal as thin perfect conductors (or with kinetic inductance as a surface impedance, <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-sc-lk" title="Kinetic inductance">Book 6 §1.4</a>), the substrate with its permittivity, vacuum above, and the package walls.</li>
@@ -345,12 +374,12 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="pitfall"><p>A converged-looking frequency does not mean a converged participation ratio. Frequencies depend on energy integrated over the whole mode and converge quickly; surface participations depend on the field squared in a nanometre-thin layer at the edges, where the field is singular, and can be wrong by tens of percent on a mesh that gives frequencies to 0.1%. Always check convergence of each output separately. The review notes that in current practice "convergence is judged by eye" (<a class="xref ext" href="../../index.html#sec-design-accuracy" title="Accuracy requirements and their numerical cost">Lab to Foundry §3.4</a>).</p></div>
 <div class="example"><p><b>Worked example: a convergence study.</b> Three meshes, each with half the element size of the previous, give a mode at 5.212, 5.183 and 5.176 GHz. Successive differences are 29 and 7 MHz, ratio about 4.1, so the error falls as \(h^2\) (order \(p\approx2\)). Richardson extrapolation (<a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-num-discretise" title="Discretising differential equations">Book 1 §8.3</a>) estimates the converged value as \(5.176 - 7/(2^2-1)\approx5.174\) GHz: the finest mesh is still about 2 MHz off, and you now know by how much.</p></div>
 
-<h3 id="sec-f-em-epr"><span class="secnum">3.5</span> From fields to Hamiltonian</h3>
+<h3 id="sec-f-em-epr"><span class="secnum">3.6</span> From fields to Hamiltonian</h3>
 <p>The eigenmode simulation gives linear mode frequencies \(\omega_m\) and field patterns, with the junction replaced by a linear inductor. To recover the qubit's nonlinearity, the <b>energy-participation ratio</b> (EPR) method computes, for each mode \(m\), the fraction \(p_m\) of its inductive energy stored in the junction <span class="cite">[<a href="#ref-minev2021epr">11</a>]</span>. The junction's phase is then a sum of mode contributions, and expanding its cosine (as for the transmon in <a class="xref ext" href="../../foundations/quantum-hardware/index.html#sec-h-q-transmon" title="The transmon">Book 6 §3.3</a>) gives the anharmonicities and cross-couplings:</p>
 \[ \alpha_m\approx-\frac{p_m^2\,\hbar\omega_m^2}{8E_J}, \qquad \chi_{mn}\approx-\frac{p_mp_n\,\hbar\omega_m\omega_n}{4E_J} . \]
 <p>(<a class="xref ext" href="../../index.html#eq-epr">Lab to Foundry eq. (10)</a>.) For the qubit-like mode, \(p\approx1\); for the readout-like mode, \(p\) is small and sets the dispersive shift. The alternative <b>black-box</b> approach runs a driven simulation with a port at the junction, computes the admittance \(Y(\omega)\) seen by the junction, and finds modes as zeros of \(Y\) with effective impedances from its slope <span class="cite">[<a href="#ref-nigg2012">12</a>, <a href="#ref-solgun2014">13</a>]</span>. It naturally includes loss and leads to model-order reduction.</p>
 
-<h3 id="sec-f-em-mor"><span class="secnum">3.6</span> Model-order reduction and passivity</h3>
+<h3 id="sec-f-em-mor"><span class="secnum">3.7</span> Model-order reduction and passivity</h3>
 <p>A field simulation has millions of unknowns; a circuit model for design and simulation should have tens. <b>Model-order reduction</b> compresses one into the other while keeping the behaviour in the frequency band of interest.</p>
 <ul>
 <li><b>Vector fitting</b> <span class="cite">[<a href="#ref-gustavsen1999">14</a>]</span> fits a sampled response with a rational function, \(Y(s)\approx\sum_k\frac{r_k}{s - p_k} + d + es\). Each pole \(p_k\) is a mode (its imaginary part a frequency, its real part a loss rate, <a class="xref ext" href="../../foundations/mathematics/index.html#sec-m-fourier-lti" title="Linear time-invariant systems and convolution">Book 1 §6.4</a>).</li>
