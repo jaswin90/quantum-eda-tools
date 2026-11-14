@@ -66,10 +66,12 @@ document.addEventListener("DOMContentLoaded", function () {
 <li class="toc3"><a href="#sec-i-circ-univ"><span class="tocnum">1.7</span>Universality: which gates are enough?</a></li>
 <li class="toc3"><a href="#sec-i-circ-divincenzo"><span class="tocnum">1.8</span>What hardware must provide</a></li>
 <li class="toc2"><a href="#sec-i-entangle"><span class="tocnum">2</span>Entanglement as a resource: no-cloning, teleportation and networks</a></li>
-<li class="toc3"><a href="#sec-i-ent-clone"><span class="tocnum">2.1</span>No cloning</a></li>
-<li class="toc3"><a href="#sec-i-ent-tele"><span class="tocnum">2.2</span>Teleportation</a></li>
-<li class="toc3"><a href="#sec-i-ent-dense"><span class="tocnum">2.3</span>Superdense coding</a></li>
-<li class="toc3"><a href="#sec-i-ent-swap"><span class="tocnum">2.4</span>Entanglement swapping and networks</a></li>
+<li class="toc3"><a href="#sec-i-ent-what"><span class="tocnum">2.1</span>What entanglement does</a></li>
+<li class="toc3"><a href="#sec-i-ent-clone"><span class="tocnum">2.2</span>No cloning</a></li>
+<li class="toc3"><a href="#sec-i-ent-bell"><span class="tocnum">2.3</span>The Bell basis and Bell measurements</a></li>
+<li class="toc3"><a href="#sec-i-ent-tele"><span class="tocnum">2.4</span>Teleportation, step by step</a></li>
+<li class="toc3"><a href="#sec-i-ent-dense"><span class="tocnum">2.5</span>Superdense coding</a></li>
+<li class="toc3"><a href="#sec-i-ent-swap"><span class="tocnum">2.6</span>Entanglement swapping and quantum networks</a></li>
 <li class="toc2"><a href="#sec-i-alg1"><span class="tocnum">3</span>Quantum algorithms I: interference, oracles and search</a></li>
 <li class="toc3"><a href="#sec-i-alg1-par"><span class="tocnum">3.1</span>Parallelism and interference</a></li>
 <li class="toc3"><a href="#sec-i-alg1-dj"><span class="tocnum">3.2</span>Deutsch–Jozsa and Bernstein–Vazirani</a></li>
@@ -114,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Quantum Information and Computation</h1>
   <p class="subtitle">Gates and circuits, entanglement, algorithms, noise and benchmarking, quantum error correction and the hardware stack</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">8 chapters · 14 numbered equations · 29 exercises with solutions · about 50 hours of study</p>
+  <p class="meta">8 chapters · 14 numbered equations · 32 exercises with solutions · about 50 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../quantum-mechanics/index.html">Book 3: Quantum Mechanics</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-i-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -258,34 +260,76 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <section id="sec-i-entangle"><h2><span class="secnum">2</span> Entanglement as a resource: no-cloning, teleportation and networks</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>Prove the no-cloning theorem and understand its consequences for error correction.</li>
-<li>Work through quantum teleportation and superdense coding.</li>
-<li>Understand Bell measurements, entanglement swapping and why they matter for modular and photonic architectures.</li>
+<li>Understand what entanglement is operationally: correlations that no pre-arranged classical recipe can produce.</li>
+<li>Prove the no-cloning theorem and see why it forces quantum error correction to work differently from classical.</li>
+<li>Follow quantum teleportation and superdense coding step by step, line by line.</li>
+<li>Understand Bell measurements and entanglement swapping, and why they matter for modular and photonic machines.</li>
 </ul></div>
 
-<h3 id="sec-i-ent-clone"><span class="secnum">2.1</span> No cloning</h3>
-<p>Classical error correction copies data. Quantum mechanics forbids it <span class="cite">[<a href="#ref-wootters1982">4</a>]</span>. Suppose a unitary \(U\) copied every state: \(U\ket\psi\ket0 = \ket\psi\ket\psi\) and \(U\ket\phi\ket0 = \ket\phi\ket\phi\). Taking the inner product of the two equations and using unitarity gives \(\braket\phi\psi = \braket\phi\psi^2\), so \(\braket\phi\psi\) is 0 or 1. Only orthogonal states (which are effectively classical bits) can be copied. The same conclusion holds for any quantum operation, not only unitaries. Two consequences matter here. Quantum error correction must protect information without copying it, by spreading it into entanglement (Chapter 6). And quantum information cannot be amplified like a classical signal, so loss on a photonic channel cannot be fixed by a repeater that copies (Book 5).</p>
+<div class="bigpic"><p>Entanglement is not only a strange feature of quantum mechanics; it is a <i>resource</i>, like energy or bandwidth, that can be created, stored, moved and spent. Two people who share an entangled pair of qubits can do things that are impossible with any amount of classical communication alone, such as move an unknown quantum state from one place to another (teleportation). At the same time, quantum information cannot be copied (no-cloning). These two facts shape everything from error correction to how future quantum computers will be linked together.</p></div>
 
-<h3 id="sec-i-ent-tele"><span class="secnum">2.2</span> Teleportation</h3>
-<p>Alice has a qubit in an unknown state \(\ket\psi = \alpha\ket0+\beta\ket1\) and shares a Bell pair \(\ket{\Phi^+}_{AB}\) with Bob. The joint state of Alice's two qubits and Bob's one can be rewritten exactly in the Bell basis of Alice's pair <span class="cite">[<a href="#ref-bennett1993">5</a>]</span>:</p>
-<div class="eq" id="eq-i-tele">$$ \ket\psi\ket{\Phi^+} = \tfrac12\Big[\ket{\Phi^+}\ket\psi + \ket{\Phi^-}Z\ket\psi + \ket{\Psi^+}X\ket\psi + \ket{\Psi^-}XZ\ket\psi\Big] .  \tag{4}$$</div>
-<p>Alice measures her two qubits in the Bell basis (a CNOT, a Hadamard and two \(Z\) measurements). Each of the four outcomes is equally likely and reveals nothing about \(\alpha,\beta\). She sends the two classical bits to Bob, who applies \(I\), \(Z\), \(X\) or \(XZ\) accordingly, and holds \(\ket\psi\). No cloning is violated (Alice's copy is destroyed by her measurement) and nothing travels faster than light (Bob needs the classical bits). Teleportation is the template for many hardware operations: moving logical qubits between modules, implementing gates by "gate teleportation" with prepared resource states (Chapter 7's magic states), and fusion-based photonic computing (Book 5).</p>
+<h3 id="sec-i-ent-what"><span class="secnum">2.1</span> What entanglement does</h3>
+<p>Recall from Chapter 1 that \(\mathrm{CNOT}(H\otimes I)\ket{00} = \ket{\Phi^+} = (\ket{00}+\ket{11})/\sqrt2\). Give one qubit to Alice and one to Bob, and let them walk apart. Each measures in the \(0/1\) basis. By the Born rule, the outcomes are 00 with probability ½ and 11 with probability ½: each sees a perfectly random bit, but the bits always agree.</p>
+<p>So far this looks like two envelopes each containing the same randomly chosen card. The difference appears when they measure in other bases. If both measure in the \(\pm\) basis instead, they again get random but equal results, because \(\ket{\Phi^+}\) can also be written \((\ket{++}+\ket{--})/\sqrt2\) (Exercise 1). Envelopes would need to have pre-agreed answers for every possible question in advance, and Bell's theorem (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-comp-bell" title="Bell&#x27;s inequality">Book 3 §7.4</a>) shows that no such list can reproduce the quantum correlations for all choices of measurement. Entanglement is a correlation that exists only as a property of the pair, not of each qubit separately.</p>
+<div class="pitfall"><p>Entanglement does not let Alice send a message to Bob faster than light. Whatever Alice does to her qubit, Bob's own measurement results, viewed alone, stay 50:50 random. The correlation only becomes visible when they later compare notes over an ordinary (light-speed or slower) channel. Mathematically, Alice's operations cannot change Bob's reduced density matrix (<a class="xref ext" href="../../foundations/quantum-mechanics/index.html#sec-q-comp-ent" title="Entanglement">Book 3 §7.3</a>).</p></div>
 
-<h3 id="sec-i-ent-dense"><span class="secnum">2.3</span> Superdense coding</h3>
-<p>Run the protocol the other way. If Alice and Bob share \(\ket{\Phi^+}\), Alice can apply one of \(I, X, Z, XZ\) to her half, turning the pair into one of the four Bell states, and send her qubit to Bob. Bob's Bell measurement distinguishes them, so one transmitted qubit carries two classical bits. Teleportation (2 bits + 1 ebit → 1 qubit) and superdense coding (1 qubit + 1 ebit → 2 bits) show that entanglement is a consumable resource with an exchange rate.</p>
+<h3 id="sec-i-ent-clone"><span class="secnum">2.2</span> No cloning</h3>
+<p>A classical bit can be copied: read it and write it twice. Copying is how classical memories, networks and error-correcting codes work. Could a quantum machine copy an unknown qubit state? Suppose a unitary \(U\) did so for every state:</p>
+\[ U\ket\psi\ket0 = \ket\psi\ket\psi \quad\text{and}\quad U\ket\phi\ket0 = \ket\phi\ket\phi . \]
+<p>Take the inner product of the left sides and of the right sides. Unitaries preserve inner products, so the left gives \(\braket\phi\psi\braket00 = \braket\phi\psi\), and the right gives \(\braket\phi\psi^2\). Hence \(\braket\phi\psi = \braket\phi\psi^2\), which forces \(\braket\phi\psi = 0\) or \(1\): the two states are either identical or orthogonal. A copier works only for a fixed set of mutually orthogonal states (that is, for classical bits) and fails for general superpositions <span class="cite">[<a href="#ref-wootters1982">4</a>]</span>. The argument extends to measurements and any physical process, not only unitaries.</p>
+<p>Consequences you will meet again:</p>
+<ul>
+<li><b>Error correction cannot work by copying.</b> The quantum repetition code of Chapter 6 does not make three copies of a state; it spreads one state into an entangled state of three qubits.</li>
+<li><b>Quantum signals cannot be amplified.</b> A classical repeater regenerates a weak signal; a quantum one would need to copy, so long-distance quantum communication needs entanglement swapping instead (below).</li>
+<li><b>Unknown states cannot be fully measured from one copy.</b> If they could, you could prepare copies from the measurement result.</li>
+</ul>
 
-<h3 id="sec-i-ent-swap"><span class="secnum">2.4</span> Entanglement swapping and networks</h3>
-<p>If Alice–Bob share a Bell pair and Bob–Charlie share another, a Bell measurement on Bob's two qubits leaves Alice and Charlie entangled, though they never interacted: <b>entanglement swapping</b>. Chains of swaps, combined with purification, are the principle of quantum repeaters. In computing, the same idea links modules: two chips connected by optical or microwave links can share Bell pairs generated by sending photons and performing a Bell measurement in the middle, and then teleport gates between modules. Every modular roadmap in the industry (multi-chip superconducting systems, linked ion traps, networked neutral-atom arrays) depends on the rate and fidelity of such links, which become hardware specifications like any other.</p>
+<h3 id="sec-i-ent-bell"><span class="secnum">2.3</span> The Bell basis and Bell measurements</h3>
+<p>The four maximally entangled states</p>
+\[ \ket{\Phi^\pm} = \frac{\ket{00}\pm\ket{11}}{\sqrt2}, \qquad \ket{\Psi^\pm} = \frac{\ket{01}\pm\ket{10}}{\sqrt2} \]
+<p>are orthonormal, so they form a basis of two qubits, the <b>Bell basis</b>. A <b>Bell measurement</b> asks which of the four a pair is in. It is done by running the Bell-state circuit backwards: a CNOT, then a Hadamard on the first qubit, then measure both in the \(0/1\) basis. The two bits identify the Bell state: \(\Phi^+\to00\), \(\Psi^+\to01\), \(\Phi^-\to10\), \(\Psi^-\to11\) (Exercise 2).</p>
 
-<div class="box"><p><strong>Linear optics cannot do a complete Bell measurement.</strong> With only beam splitters, phase shifters and photon detectors, at most two of the four Bell states of two photons can be distinguished, so a linear-optical Bell measurement succeeds with probability at most 50%. This single fact shapes photonic quantum computing: computation must be organised around probabilistic "fusion" measurements and redundancy (Book 5, <a class="xref ext" href="../../foundations/quantum-photonics/index.html#sec-p-qc" title="Photonic quantum computing: from KLM to fusion and GKP">Book 5 §7</a>).</p></div>
+<h3 id="sec-i-ent-tele"><span class="secnum">2.4</span> Teleportation, step by step</h3>
+<p>Alice holds a qubit in an unknown state \(\ket\psi = \alpha\ket0+\beta\ket1\). She cannot measure it (that would destroy it and give one bit), and she cannot copy it. She and Bob share a Bell pair \(\ket{\Phi^+}\). Can she transfer \(\ket\psi\) to Bob by sending only classical bits? Yes <span class="cite">[<a href="#ref-bennett1993">5</a>]</span>.</p>
+<p><b>Step 1: write the three-qubit state.</b> Label the qubits 1 (Alice's unknown state), 2 (Alice's half of the pair), 3 (Bob's half):</p>
+\[ \ket\psi_1\ket{\Phi^+}_{23} = \frac{1}{\sqrt2}\big(\alpha\ket0_1+\beta\ket1_1\big)\big(\ket{00}_{23} + \ket{11}_{23}\big) = \frac{1}{\sqrt2}\big(\alpha\ket{000} + \alpha\ket{011} + \beta\ket{100} + \beta\ket{111}\big). \]
+<p><b>Step 2: rewrite qubits 1 and 2 in the Bell basis.</b> Use \(\ket{00} = (\ket{\Phi^+}+\ket{\Phi^-})/\sqrt2\), \(\ket{11} = (\ket{\Phi^+}-\ket{\Phi^-})/\sqrt2\), \(\ket{01} = (\ket{\Psi^+}+\ket{\Psi^-})/\sqrt2\), \(\ket{10} = (\ket{\Psi^+}-\ket{\Psi^-})/\sqrt2\). Substituting and collecting terms (Exercise 3 walks through it) gives exactly</p>
+<div class="eq" id="eq-i-tele">$$ \ket\psi\ket{\Phi^+} = \tfrac12\Big[\ket{\Phi^+}\ket\psi + \ket{\Phi^-}Z\ket\psi + \ket{\Psi^+}X\ket\psi + \ket{\Psi^-}XZ\ket\psi\Big] ,  \tag{4}$$</div>
+<p>with the first ket of each term describing qubits 1 and 2 and the second describing Bob's qubit 3. Nothing has physically happened yet; this is the same state written differently. But it shows that Bob's qubit already "contains" \(\ket\psi\), scrambled by one of four known operations.</p>
+<p><b>Step 3: Alice makes a Bell measurement on qubits 1 and 2.</b> Each of the four outcomes has probability \((1/2)^2 = 1/4\), independent of \(\alpha,\beta\), so the outcome reveals nothing about the state. After the measurement, Bob's qubit is in \(\ket\psi\), \(Z\ket\psi\), \(X\ket\psi\) or \(XZ\ket\psi\).</p>
+<p><b>Step 4: Alice phones Bob</b> with her two bits, and Bob applies the matching correction (\(I\), \(Z\), \(X\) or \(ZX\) — the inverse of the scrambling, which here is the same operators applied in reverse order). Bob now holds exactly \(\ket\psi\).</p>
+<div class="intuition"><p>Check the paradoxes. No-cloning is safe: Alice's original was destroyed by her measurement. Nothing went faster than light: Bob's qubit is useless until the classical bits arrive. And nothing magical crossed the room: two classical bits plus one pre-shared Bell pair were consumed to move one qubit. That accounting, "2 bits + 1 ebit → 1 qubit", is why entanglement is called a resource.</p></div>
+
+<h3 id="sec-i-ent-dense"><span class="secnum">2.5</span> Superdense coding</h3>
+<p>Now the reverse trade. Alice and Bob share \(\ket{\Phi^+}\). Alice applies one of \(I, X, Z, XZ\) to her qubit, turning the pair into one of the four Bell states (Exercise 4), and mails her single qubit to Bob. Bob performs a Bell measurement on the two qubits and learns which of four operations she applied: two classical bits from one transmitted qubit. "1 qubit + 1 ebit → 2 bits". Without the pre-shared pair, one qubit can carry at most one bit of retrievable information (Holevo's bound).</p>
+
+<h3 id="sec-i-ent-swap"><span class="secnum">2.6</span> Entanglement swapping and quantum networks</h3>
+<p>Suppose Alice–Bob share one Bell pair and Bob–Charlie share another. Bob holds two qubits, one from each pair. If he performs a Bell measurement on his two qubits and announces the result, Alice's and Charlie's qubits end up in a known Bell state, although they never interacted. This is <b>entanglement swapping</b>: teleportation applied to half of an entangled pair. Chains of swaps, together with "purification" that distils a few good pairs from many noisy ones, are the principle of <b>quantum repeaters</b>, which extend entanglement over distances where direct transmission would lose almost every photon.</p>
+<p>The same idea links quantum computers. If two chips (or two refrigerators, or two ion traps) can share Bell pairs, created by emitting photons and doing a Bell measurement on them in the middle, then a gate between qubits on different chips can be performed by teleportation. Modular roadmaps across the industry depend on this, and the rate and fidelity of Bell-pair generation between modules becomes a hardware specification just like a gate error.</p>
+<div class="box"><p><strong>Linear optics cannot do a complete Bell measurement.</strong> With only beam splitters, phase shifters and photon detectors, at most two of the four Bell states of two photons can be told apart, so a linear-optical Bell measurement succeeds with probability at most 50%. This single fact shapes photonic quantum computing: computation must be organised around probabilistic "fusion" measurements and redundancy (Book 5, <a class="xref ext" href="../../foundations/quantum-photonics/index.html#sec-p-qc" title="Photonic quantum computing: from KLM to fusion and GKP">Book 5 §7</a>).</p></div>
+
+<div class="eda"><p>Teleportation is not just a demonstration. Fault-tolerant machines use it to perform the expensive \(T\) gate ("gate teleportation" with magic states, Chapter 7), and modular machines use it to connect chips. Both make Bell-pair fidelity and measurement-plus-feed-forward latency into design parameters.</p></div>
+
+<div class="keypoints"><p></p><ul>
+<li>Entangled qubits have correlations that exist only for the pair; no pre-agreed classical recipe reproduces them, and they cannot be used to signal.</li>
+<li>Unknown quantum states cannot be copied; error correction and long-distance communication must work around this.</li>
+<li>Teleportation: 1 Bell pair + 2 classical bits move 1 qubit. Superdense coding: 1 Bell pair + 1 qubit carry 2 bits.</li>
+<li>Entanglement swapping extends entanglement across chains of links and lets separate modules act as one computer.</li>
+</ul></div>
 
 <div class="exercises" id="ex-i-entangle"><h4>Exercises</h4><ol>
-<li>Verify <a class="xref" href="#eq-i-tele">(4)</a> for the coefficient of \(\ket{\Phi^+}\) on Alice's side.
-<details><summary>Solution</summary><p>Write \(\ket\psi\ket{\Phi^+} = \tfrac{1}{\sqrt2}(\alpha\ket{000}+\alpha\ket{011}+\beta\ket{100}+\beta\ket{111})\) (qubits: Alice's input, Alice's half, Bob). Project Alice's two qubits onto \(\bra{\Phi^+} = \tfrac1{\sqrt2}(\bra{00}+\bra{11})\): terms \(\ket{00}\ket0\) and \(\ket{11}\ket1\) survive, giving \(\tfrac12(\alpha\ket0+\beta\ket1)\).</p></details></li>
-<li>In superdense coding, which operation must Alice apply to send "11" if the code is \(00\to I\), \(01\to X\), \(10\to Z\), \(11\to XZ\), and which Bell state does Bob receive?
-<details><summary>Solution</summary><p>\((XZ\otimes I)\ket{\Phi^+} = \tfrac{1}{\sqrt2}(XZ\ket0\ket0 + XZ\ket1\ket1) = \tfrac1{\sqrt2}(\ket1\ket0 - \ket0\ket1) = -\ket{\Psi^-}\).</p></details></li>
-<li>Show that no unitary can map \(\ket\psi\ket0\to\ket\psi\ket\psi\) for both \(\ket0\) and \(\ket+\).
+<li>Show that \(\ket{\Phi^+} = (\ket{++}+\ket{--})/\sqrt2\).
+<details><summary>Solution</summary><p>\(\ket{++} = \tfrac12(\ket{00}+\ket{01}+\ket{10}+\ket{11})\) and \(\ket{--} = \tfrac12(\ket{00}-\ket{01}-\ket{10}+\ket{11})\). Their sum is \(\ket{00}+\ket{11}\); dividing by \(\sqrt2\) gives \(\ket{\Phi^+}\).</p></details></li>
+<li>Apply CNOT then \(H\otimes I\) to each Bell state and check the outcome table given in the text.
+<details><summary>Solution</summary><p>\(\ket{\Phi^+}\): CNOT gives \((\ket{00}+\ket{10})/\sqrt2 = \ket+\ket0\); \(H\) gives \(\ket{00}\). \(\ket{\Phi^-}\): CNOT gives \(\ket-\ket0\), then \(\ket{10}\). \(\ket{\Psi^+}\): CNOT gives \((\ket{01}+\ket{11})/\sqrt2 = \ket+\ket1\), then \(\ket{01}\). \(\ket{\Psi^-}\): \(\ket-\ket1\), then \(\ket{11}\).</p></details></li>
+<li>Verify the \(\ket{\Phi^+}\) and \(\ket{\Psi^-}\) terms of <a class="xref" href="#eq-i-tele">(4)</a>.
+<details><summary>Solution</summary><p>Project qubits 1,2 onto \(\bra{\Phi^+} = (\bra{00}+\bra{11})/\sqrt2\): from the expansion in Step 1, the terms with qubits 1,2 equal to 00 (\(\alpha\ket{000}\)) and 11 (\(\beta\ket{111}\)) survive, giving \(\tfrac{1}{\sqrt2}\cdot\tfrac{1}{\sqrt2}(\alpha\ket0+\beta\ket1) = \tfrac12\ket\psi\). For \(\bra{\Psi^-} = (\bra{01}-\bra{10})/\sqrt2\): the 01 term \(\alpha\ket{011}\) gives \(+\alpha\ket1\) and the 10 term \(\beta\ket{100}\) gives \(-\beta\ket0\), so \(\tfrac12(\alpha\ket1 - \beta\ket0) = \tfrac12XZ\ket\psi\), since \(XZ(\alpha\ket0+\beta\ket1) = X(\alpha\ket0-\beta\ket1) = \alpha\ket1 - \beta\ket0\).</p></details></li>
+<li>In superdense coding, Alice applies \(XZ\) to her qubit of \(\ket{\Phi^+}\). Which Bell state does Bob receive?
+<details><summary>Solution</summary><p>\((XZ\otimes I)\tfrac{1}{\sqrt2}(\ket{00}+\ket{11}) = \tfrac{1}{\sqrt2}(\ket{10} - \ket{01}) = -\ket{\Psi^-}\), which a Bell measurement identifies (the sign is a global phase).</p></details></li>
+<li>Prove that no unitary maps \(\ket\psi\ket0\to\ket\psi\ket\psi\) for both \(\ket0\) and \(\ket+\).
 <details><summary>Solution</summary><p>\(\braket{0}{+} = 1/\sqrt2\), but cloning would require \(\braket0+ = \braket0+^2 = 1/2\). Contradiction.</p></details></li>
+<li>A repeater chain has 4 links. Each link's Bell pair is ready with probability 0.1 per attempt, independently. Why is it essential to store pairs in quantum memory while waiting for the others, rather than requiring all links to succeed in the same attempt?
+<details><summary>Solution</summary><p>Without memory, all four must succeed together: probability \(10^{-4}\) per attempt. With memory, each link keeps trying until it succeeds and then waits; the expected time is set by the slowest link, a few tens of attempts, not ten thousand. Memory turns a product of probabilities into a maximum of waiting times, which is why quantum memories with long coherence are central to networks.</p></details></li>
 </ol></div>
 </section>
 
@@ -425,7 +469,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </ul></div>
 
 <h3 id="sec-i-qec1-rep"><span class="secnum">6.1</span> The repetition code, quantum style</h3>
-<p>Classically, one protects a bit against flips by sending three copies and taking a majority vote. Quantum mechanically we cannot copy (<a class="xref" href="#sec-i-ent-clone">§2.1</a>) and must not measure the data. Instead, <b>encode</b> \(\alpha\ket0+\beta\ket1\mapsto\alpha\ket{000}+\beta\ket{111}\) with two CNOTs. This is not three copies of the state; it is an entangled state in a two-dimensional subspace (the <b>code space</b>) of the eight-dimensional space. A bit flip on qubit 1 gives \(\alpha\ket{100}+\beta\ket{011}\). To detect it without learning \(\alpha,\beta\), measure the <b>parities</b> \(Z_1Z_2\) and \(Z_2Z_3\). Both code states have parities \((+1,+1)\); a flip on qubit 1 gives \((-1,+1)\), on qubit 2 \((-1,-1)\), on qubit 3 \((+1,-1)\). The parity outcomes, the <b>syndrome</b>, identify the error but carry no information about \(\alpha,\beta\), so the superposition survives. Apply \(X\) to the identified qubit and the state is restored. Parities are measured with an ancilla qubit and two CNOTs, then the ancilla is measured: this <b>syndrome extraction</b> circuit is the elementary operation of every error-correcting quantum computer.</p>
+<p>Classically, one protects a bit against flips by sending three copies and taking a majority vote. Quantum mechanically we cannot copy (<a class="xref" href="#sec-i-ent-clone">§2.2</a>) and must not measure the data. Instead, <b>encode</b> \(\alpha\ket0+\beta\ket1\mapsto\alpha\ket{000}+\beta\ket{111}\) with two CNOTs. This is not three copies of the state; it is an entangled state in a two-dimensional subspace (the <b>code space</b>) of the eight-dimensional space. A bit flip on qubit 1 gives \(\alpha\ket{100}+\beta\ket{011}\). To detect it without learning \(\alpha,\beta\), measure the <b>parities</b> \(Z_1Z_2\) and \(Z_2Z_3\). Both code states have parities \((+1,+1)\); a flip on qubit 1 gives \((-1,+1)\), on qubit 2 \((-1,-1)\), on qubit 3 \((+1,-1)\). The parity outcomes, the <b>syndrome</b>, identify the error but carry no information about \(\alpha,\beta\), so the superposition survives. Apply \(X\) to the identified qubit and the state is restored. Parities are measured with an ancilla qubit and two CNOTs, then the ancilla is measured: this <b>syndrome extraction</b> circuit is the elementary operation of every error-correcting quantum computer.</p>
 <p>If each qubit flips independently with probability \(p\), the code fails only when two or more flip: \(p_L = 3p^2 - 2p^3\), better than \(p\) when \(p \lt 1/2\). With \(n = 2t+1\) qubits it corrects \(t\) flips and \(p_L\sim p^{t+1}\). This exponential suppression with code size, below a threshold, is the whole point.</p>
 
 <h3 id="sec-i-qec1-disc"><span class="secnum">6.2</span> Discretisation of errors</h3>
@@ -493,7 +537,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <p>Storing information is not enough; one must compute on encoded qubits without letting errors spread. A procedure is <b>fault tolerant</b> if a single fault anywhere causes at most a correctable error in each code block. The threshold theorem states that with fault-tolerant procedures and \(p \lt p_{\mathrm{th}}\), arbitrarily long computations are possible with polylogarithmic overhead.</p>
 <ul>
 <li><b>Clifford gates</b> on surface codes are done by <b>lattice surgery</b>: merging and splitting patches by measuring joint stabilisers along their boundaries, which implements logical parity measurements such as \(\bar Z\bar Z\) and hence CNOT. Each operation takes about \(d\) cycles.</li>
-<li><b>The \(T\) gate</b> cannot be done transversally in the surface code (no code has a transversal universal gate set). Instead, noisy copies of the "magic state" \(T\ket+\) are prepared and purified by <b>magic-state distillation</b> <span class="cite">[<a href="#ref-bravyi2005">19</a>]</span>, then consumed by gate teleportation (<a class="xref" href="#sec-i-ent-tele">§2.2</a>). Distillation "factories" can occupy a large fraction of a fault-tolerant machine, and the \(T\)-count of an algorithm is its dominant cost.</li>
+<li><b>The \(T\) gate</b> cannot be done transversally in the surface code (no code has a transversal universal gate set). Instead, noisy copies of the "magic state" \(T\ket+\) are prepared and purified by <b>magic-state distillation</b> <span class="cite">[<a href="#ref-bravyi2005">19</a>]</span>, then consumed by gate teleportation (<a class="xref" href="#sec-i-ent-tele">§2.4</a>). Distillation "factories" can occupy a large fraction of a fault-tolerant machine, and the \(T\)-count of an algorithm is its dominant cost.</li>
 </ul>
 
 <h3 id="sec-i-qec2-ldpc"><span class="secnum">7.6</span> Beyond the surface code</h3>
