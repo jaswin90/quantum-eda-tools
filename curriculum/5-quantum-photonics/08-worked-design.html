@@ -1,0 +1,86 @@
+<section id="sec-p-design"><h2>Putting it together: designing a heralded photon source on a chip</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Go from a specification to the main numbers of an integrated heralded single-photon source, using only this book's formulas.</li>
+<li>Combine source statistics, filtering, routing loss and detection into one budget.</li>
+<li>Propagate fabrication variation (ring wavelength, coupler ratio, loss) and see which tolerances matter most.</li>
+<li>See which steps a photonic design tool automates and what it must report.</li>
+</ul></div>
+
+<div class="bigpic"><p>The chapters of this book each explained one component. This chapter assembles them into a small but complete device, the kind of building block from which photonic quantum computers are made: a silicon-nitride ring resonator that produces photon pairs, a filter that removes the pump laser, a detector that heralds one photon of each pair, and a waveguide that delivers the partner photon to the rest of the chip. We size it on paper, compute how often it delivers a good photon, and ask what fabrication spread does. The goal is to see every number in the loss and error budgets of Chapter 7 arise from a concrete design.</p></div>
+
+<h3 id="sec-p-des-spec">Step 0: the specification</h3>
+<figure class="tbl" id="tab-p-spec"><figcaption>Target specification for the worked design.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Quantity</th><th>Target</th><th>Why</th></tr>
+<tr><td>Wavelengths</td><td>Pump 1550.0 nm; signal and idler on neighbouring ring resonances</td><td>Telecom band: low-loss nitride, good detectors</td></tr>
+<tr><td>Heralded photon probability per pulse</td><td>≥ 1% before multiplexing</td><td>Input to a multiplexer of ~200 sources</td></tr>
+<tr><td>Multi-photon contamination</td><td>≤ 2% of heralded events</td><td>Keeps \(g^{(2)}\) low (Chapter 2)</td></tr>
+<tr><td>Signal transmission to the chip's output port</td><td>≥ 90%</td><td>Loss budget of Chapter 7</td></tr>
+<tr><td>Pump suppression before detectors</td><td>≥ 100 dB</td><td>Pump photons outnumber pairs by ~\(10^{10}\)</td></tr>
+</table></div></figure>
+
+<h3 id="sec-p-des-source">Step 1: the pair source</h3>
+<p>A silicon-nitride ring of radius 100 µm has circumference \(L = 628\) µm. With group index \(n_g\approx2.0\), its free spectral range is \(\Delta\lambda = \lambda^2/(n_gL) = (1.55\,\mu\mathrm m)^2/(2.0\times628\,\mu\mathrm m)\approx1.9\) nm (@b2:sec-c-opt-ring). Spontaneous four-wave mixing (Chapter 5) puts the signal and idler on resonances on either side of the pump: about 1548.1 and 1551.9 nm.</p>
+<p>From the specification, multi-photon contamination \(\le2\%\) of heralded events. For the two-mode squeezed state (@eq:p-tmsv), \(p(\ge2)/p(1)\approx\lambda^2\approx\bar n\) for small \(\bar n\), so we need \(\bar n\le0.02\). Choose \(\bar n = 0.02\): then \(p(1)\approx0.0196\) pairs per pulse. The pump power is tuned to give this.</p>
+
+<h3 id="sec-p-des-herald">Step 2: heralding efficiency</h3>
+<p>A heralded photon is delivered only if (a) a pair is created, (b) the idler reaches the herald detector and clicks, and (c) the signal survives to the output. The herald detection probability multiplies through the idler path: ring extraction (the fraction of generated photons that leave the ring into the bus rather than being lost inside it), filter loss, waveguide loss and detector efficiency.</p>
+<p><b>Ring extraction.</b> A ring coupled to its bus at rate \(\kappa_e\) and with intrinsic loss \(\kappa_i\) delivers a fraction \(\kappa_e/(\kappa_e+\kappa_i)\) of its photons to the bus; since \(\kappa = \omega/Q\), this equals \(Q_i/(Q_i + Q_e)\) (@b2:eq-c-qsum). With intrinsic \(Q_i = 2\times10^6\) and coupling \(Q_e = 2\times10^5\) (strongly overcoupled), extraction is \(2\times10^6/(2.2\times10^6) = 91\%\), i.e. 0.41 dB.</p>
+<p><b>Idler path.</b> Pump-rejection filters (several cascaded rings or Bragg gratings, 0.3 dB total), 1 cm of nitride waveguide (0.01 dB), detector efficiency 95% (0.22 dB). Total idler path including extraction: \(0.41 + 0.3 + 0.01 + 0.22 = 0.94\) dB, so the herald fires with probability \(10^{-0.094} = 0.81\) given a pair.</p>
+<p>Heralded events per pulse: \(0.0196\times0.81 = 0.016\), i.e. 1.6%: meets the ≥1% target.</p>
+<div class="pitfall"><p>A heralded photon is not a delivered photon. The herald says a pair was created and the idler survived; the <i>signal</i> still has its own path to traverse. Every loss on the signal side after the herald silently turns a "heralded photon" into "heralded vacuum", an error the downstream computer may not detect. That is why the signal path, not the idler path, is the critical part of the budget.</p></div>
+
+<h3 id="sec-p-des-signal">Step 3: the signal path budget</h3>
+<figure class="tbl" id="tab-p-des-budget"><figcaption>Signal path from ring to output port.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Element</th><th>Loss (dB)</th></tr>
+<tr><td>Ring extraction (\(Q_i/(Q_i+Q_e)\) = 91%)</td><td class="num">0.41</td></tr>
+<tr><td>Wavelength demultiplexer (separate signal from idler)</td><td class="num">0.05</td></tr>
+<tr><td>Pump filter on the signal arm</td><td class="num">0.10</td></tr>
+<tr><td>Routing waveguide (2 cm × 0.002 dB/cm)</td><td class="num">0.004</td></tr>
+<tr><td>Two bends and one crossing</td><td class="num">0.03</td></tr>
+<tr><td><b>Total</b></td><td class="num"><b>0.59 dB (87% transmission)</b></td></tr>
+</table></div></figure>
+<p>This misses the 90% target, and the largest single term is ring extraction. Raising \(Q_i\) (better fabrication, @sec:p-int-var) or overcoupling more strongly (smaller \(Q_e\)) both help. With \(Q_e = 10^5\), extraction rises to 95% (0.21 dB) and the total becomes 0.39 dB (91%), meeting the target. But a more strongly coupled ring has a broader resonance, which lowers the pair-generation efficiency per unit pump power (more pump needed) and changes the photons' spectral shape. Every source design is a balance of such trade-offs.</p>
+
+<h3 id="sec-p-des-var">Step 4: fabrication variation</h3>
+<p>Now the realistic question: what happens across a wafer?</p>
+<ul>
+<li><b>Ring wavelength.</b> In nitride, a resonance shifts by roughly 0.1–0.3 nm per nanometre of width error (less than silicon's 0.7 nm, @sec:p-int-var). With ±3 nm width variation, resonances land anywhere within about ±0.9 nm: half a free spectral range. Each ring therefore needs a heater with at least one FSR (1.9 nm) of tuning range, and a control loop that locks it to the pump. With a thermo-optic coefficient giving about 0.02 nm/K in nitride, that is up to ~100 K of local heating: about 20–50 mW per ring.</li>
+<li><b>Coupling gap.</b> \(Q_e\) depends exponentially on the ring–bus gap; a 10 nm gap error can change \(Q_e\) by 30%. That moves extraction efficiency by a few percent and changes the photon bandwidth, which affects indistinguishability between sources (@sec:p-lin-hom).</li>
+<li><b>Loss.</b> Waveguide and ring losses vary from die to die. With 200 sources multiplexed, the multiplexer will pick a source that happened to herald, so every source's signal path must meet the budget, not just the average one.</li>
+</ul>
+<div class="example"><p><b>Worked example: how many good sources per chip?</b> Suppose ring extraction across a wafer is Gaussian with mean 95% and standard deviation 1.5%, and a source is "good" if extraction is at least 92%. That is \((95-92)/1.5 = 2\) standard deviations, so 97.7% of sources pass. A chip with 200 sources has on average 4.6 bad ones; the multiplexer can simply exclude them, at the cost of slightly lower success probability. If the standard deviation were 3%, only 84% pass and 32 per chip are excluded: then the multiplexer needs more sources to compensate. Tighter fabrication translates directly into fewer sources per photon.</p></div>
+<div class="intuition"><p>This is the same lesson as Book 6's worked transmon design: a design is a distribution. The nominal source meets its specification; the question is what fraction of the fabricated sources do, and how the system architecture (here, multiplexing with exclusion of bad sources) turns that fraction into machine-level performance.</p></div>
+
+<h3 id="sec-p-des-auto">What a design tool automates</h3>
+<figure class="tbl" id="tab-p-auto"><figcaption>Hand design versus automated design for a photonic source.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Hand step</th><th>Automated by</th><th>What it must report</th></tr>
+<tr><td>FSR, resonance positions</td><td>Mode solver for \(n_{\mathrm{eff}}, n_g\) versus width</td><td>Sensitivity of resonance to width and thickness</td></tr>
+<tr><td>\(Q_e\) from the gap</td><td>Coupled-mode or FDTD simulation of the coupler</td><td>\(Q_e\) versus gap, with fabrication spread</td></tr>
+<tr><td>Pair generation and spectral purity</td><td>Nonlinear-optics models of the ring</td><td>Pairs per pulse and joint spectrum</td></tr>
+<tr><td>Loss budget</td><td>Circuit simulation chaining component S-matrices</td><td>Distribution of path loss, not only the mean</td></tr>
+<tr><td>Tuning and power</td><td>Thermal simulation of heaters</td><td>Heater power and thermal crosstalk</td></tr>
+</table></div></figure>
+<p>Classical photonic design tools do most of these individually. What the review argues is missing (@lf:sec-mod-phot) is the statistical layer on top: taking the foundry's measured distributions, propagating them through the whole chain, and verifying an architecture-level condition such as "every multiplexed source delivers its photon with probability above the threshold".</p>
+
+<div class="keypoints"><p></p><ul>
+<li>Contamination fixes the pair probability (\(\bar n\approx\) allowed contamination ratio); heralding efficiency multiplies the idler path.</li>
+<li>The signal path decides delivered quality; ring extraction \(Q_i/(Q_i+Q_e)\) is often its largest loss.</li>
+<li>Overcoupling improves extraction but broadens the resonance: design is a balance of trade-offs.</li>
+<li>Width and gap variation require tuning and change extraction and bandwidth; multiplexing turns component yield into system performance.</li>
+<li>Tools exist per component; the missing layer is statistical, system-level verification.</li>
+</ul></div>
+
+<div class="exercises" id="ex-p-design"><h4>Exercises</h4><ol>
+<li>Compute the FSR of a nitride ring of radius 50 µm with \(n_g = 2.0\) at 1550 nm. Why might a smaller ring be preferred for tuning?
+<details><summary>Solution</summary><p>\(L = 314\) µm, FSR \(= (1.55)^2/(2.0\times314)\) µm \(\approx3.8\) nm. With a larger FSR, the pump, signal and idler resonances are further apart (easier filtering), but the maximum tuning range needed (one FSR) is also larger. Smaller rings also have higher bending loss; the choice balances these.</p></details></li>
+<li>If contamination must be below 1% instead of 2%, what is the heralded rate per pulse with the same herald efficiency?
+<details><summary>Solution</summary><p>\(\bar n\approx0.01\), \(p(1)\approx0.0099\), heralded \(\approx0.0099\times0.81 = 0.8\%\), below the 1% target: the multiplexer must grow by about 25% to compensate.</p></details></li>
+<li>With \(Q_i = 2\times10^6\), what \(Q_e\) gives 98% extraction? What happens to the loaded linewidth at 1550 nm?
+<details><summary>Solution</summary><p>\(Q_i/(Q_i+Q_e) = 0.98\) gives \(Q_e = 2\times10^6\times0.02/0.98\approx4.1\times10^4\). Loaded \(Q_L\approx4.0\times10^4\), linewidth \(\lambda/Q_L\approx39\) pm (about 4.9 GHz), much broader than with \(Q_e = 2\times10^5\) (about 8 pm): the photons become shorter in time and the pair generation needs more pump power.</p></details></li>
+<li>In the "good sources" example, if a chip must have at least 190 good sources out of 200, what fraction of chips qualify when each source passes with probability 0.977?
+<details><summary>Solution</summary><p>The number of bad sources is binomial with mean 4.6 and standard deviation about 2.1. At least 190 good means at most 10 bad: \((10.5 - 4.6)/2.1\approx2.8\) standard deviations, so about 99.7% of chips qualify (a Poisson estimate with mean 4.6 gives about 99.5%).</p></details></li>
+</ol></div>
+</section>
