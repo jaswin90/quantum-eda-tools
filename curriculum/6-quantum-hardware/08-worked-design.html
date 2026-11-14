@@ -1,0 +1,88 @@
+<section id="sec-h-design"><h2>Putting it together: designing a two-qubit device by hand</h2>
+<div class="goals"><p>Goals</p><ul>
+<li>Go from a specification to every number in a two-qubit superconducting device, using only the formulas of this book.</li>
+<li>Check the design against readout, Purcell, \(ZZ\) and coherence budgets.</li>
+<li>Propagate fabrication spread through the design, and see which tolerances matter most.</li>
+<li>See exactly which steps a design tool automates, and which numbers it must get right.</li>
+</ul></div>
+
+<div class="bigpic"><p>The previous chapters each explained one piece. This chapter assembles them. We design, on paper, a small device: two fixed-frequency transmons, a tunable coupler between them, and one readout resonator per qubit with a Purcell filter. At each step we compute numbers with the formulas you have learned, then check whether the design meets its targets, and finally ask what happens when fabrication is imperfect. Doing this once by hand is the best preparation for understanding what the design tools in Book 7 and the review do automatically, and where they can go wrong.</p></div>
+
+<h3 id="sec-h-des-spec">Step 0: the specification</h3>
+<figure class="tbl" id="tab-h-spec"><figcaption>Target specification for the worked design.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Quantity</th><th>Target</th><th>Why</th></tr>
+<tr><td>Qubit frequencies \(f_1, f_2\)</td><td>4.8 and 5.1 GHz</td><td>In the band where amplifiers and electronics work well; 300 MHz apart to limit crosstalk</td></tr>
+<tr><td>Anharmonicity \(\alpha/2\pi\)</td><td>−220 MHz</td><td>Enough for 25 ns single-qubit gates without leakage</td></tr>
+<tr><td>Readout resonators</td><td>7.0 and 7.1 GHz</td><td>About 2 GHz above the qubits; multiplexed on one feedline</td></tr>
+<tr><td>Dispersive shift \(\chi/2\pi\)</td><td>−0.5 MHz</td><td>Readout in ~300 ns</td></tr>
+<tr><td>Resonator linewidth \(\kappa/2\pi\)</td><td>1.0 MHz</td><td>Optimum \(\kappa = 2|\chi|\)</td></tr>
+<tr><td>Purcell-limited \(T_1\)</td><td>&gt; 2 ms</td><td>Negligible compared with material loss</td></tr>
+<tr><td>Residual \(ZZ\) at idle</td><td>&lt; 20 kHz</td><td>Phase error below 0.13 rad per µs; correctable by echo</td></tr>
+<tr><td>Coherence target \(T_1\)</td><td>&gt; 150 µs</td><td>Coherence-limited two-qubit error ~\(5\times10^{-4}\)</td></tr>
+</table></div></figure>
+
+<h3 id="sec-h-des-qubit">Step 1: the qubits</h3>
+<p>From @eq:h-transmon, the anharmonicity sets the charging energy: \(E_C/h = 220\) MHz, so the total qubit capacitance is \(C_\Sigma = e^2/(2E_C) = 2.566\times10^{-38}/(2\times6.626\times10^{-34}\times2.2\times10^8) = 88\) fF.</p>
+<p>Then the frequency sets \(E_J\): \(\sqrt{8E_JE_C}/h = f_{01} + E_C/h\). For qubit 1: \(4.8 + 0.22 = 5.02\) GHz, so \(E_J/h = 5.02^2/(8\times0.22) = 14.3\) GHz. For qubit 2: \(5.32^2/1.76 = 16.1\) GHz. Both have \(E_J/E_C\approx65\)–73, safely transmons.</p>
+<p>Junction resistances from @eq:h-ab, with \(E_J\) in µeV (\(1\) GHz ≈ 4.136 µeV): qubit 1, \(E_J = 59.1\) µeV, \(R_n = 6.45\,\mathrm{k\Omega}\times180/(2\times59.1) = 9.8\) kΩ; qubit 2, \(E_J = 66.6\) µeV, \(R_n = 8.7\) kΩ.</p>
+<p>The layout designer now draws two capacitor pads per qubit whose <i>total</i> capacitance, including every coupling capacitance computed below, is 88 fF. This is where capacitance extraction (Book 2, @b2:sec-c-stat-cmatrix; Book 7) comes in.</p>
+
+<h3 id="sec-h-des-ro">Step 2: readout</h3>
+<p>Qubit 1 with resonator at 7.0 GHz: detuning \(\Delta/2\pi = 4.8 - 7.0 = -2.2\) GHz. We need \(\chi/2\pi = -0.5\) MHz. From @eq:h-chi, \(\chi = \frac{g^2}{\Delta}\frac{\alpha}{\Delta+\alpha}\), with \(\frac{\alpha}{\Delta+\alpha} = \frac{-0.22}{-2.42} = 0.0909\). So \(g^2 = \chi\Delta/0.0909 = (-0.5)(-2200)/0.0909 = 12{,}100\) MHz², \(g/2\pi = 110\) MHz.</p>
+<p>From @eq:h-g, \(g\) is set by the coupling capacitance. For a quarter-wave resonator with effective capacitance \(C_r\approx400\) fF at 7 GHz, \(V_{\mathrm{zpf}}\approx2.4\) µV (Chapter 4's example). With \((E_J/8E_C)^{1/4}/\sqrt2 = (65/8)^{1/4}/\sqrt2 = 1.20\): \(hg = 2e\,(C_g/88\,\mathrm{fF})\times2.4\,\mu\mathrm V\times1.20\). Setting \(g/2\pi = 110\) MHz (\(hg = 7.3\times10^{-26}\) J) gives \(C_g/C_\Sigma = 7.3\times10^{-26}/(3.2\times10^{-19}\times2.4\times10^{-6}\times1.20) = 0.079\), so \(C_g\approx7\) fF.</p>
+<p>Critical photon number: \(n_{\mathrm{crit}} = \Delta^2/4g^2 = 2200^2/(4\times12100) = 100\). Readout with \(\bar n\approx10\) photons is safe.</p>
+<p>Readout speed with \(\kappa = 2|\chi|\) and \(\eta = 0.3\): \(\Gamma_{\mathrm{meas}} = 4|\chi|\bar n = 4\times2\pi\times0.5\times10^6\times10 = 1.26\times10^8\) s\(^{-1}\); for SNR = 5 we need \(\tau = 25/(2\times0.3\times1.26\times10^8)\approx330\) ns. Close to target.</p>
+
+<h3 id="sec-h-des-purcell">Step 3: Purcell check</h3>
+<p>Without a filter, @eq:h-purcell gives \(\Gamma_P = \kappa(g/\Delta)^2 = 2\pi\times1\,\mathrm{MHz}\times(110/2200)^2 = 2\pi\times2.5\) kHz, so \(T_1\le64\) µs. That fails the 2 ms target by a factor of about 31. A Purcell filter of bandwidth \(\kappa_f/2\pi = 100\) MHz suppresses this by roughly \((2\Delta/\kappa_f)^2 = (4400/100)^2\approx1900\), giving a Purcell limit of about 120 ms. Passed, at the cost of one more resonant element per qubit (or one shared filter) that must itself land at the right frequency.</p>
+
+<h3 id="sec-h-des-coupler">Step 4: coupler and \(ZZ\)</h3>
+<p>The qubits are detuned by \(\Delta_{12}/2\pi = -300\) MHz. With a direct coupling capacitance giving \(g_{12}/2\pi = 6\) MHz and no coupler, @eq:h-zz gives \(\zeta = \frac{2g^2(\alpha_1+\alpha_2)}{(\Delta+\alpha_1)(\alpha_2-\Delta)} = \frac{2\times36\times(-440)}{(-300-220)(-220+300)} = \frac{-31680}{-41600} = +0.76\) MHz. Far above the 20 kHz target. So we add a tunable coupler at about 6.5 GHz at idle, coupled to each qubit with \(g_c/2\pi\approx90\) MHz. Its virtual contribution is \(\frac{g_c^2}{2}\big(\frac1{\Delta_1}+\frac1{\Delta_2}\big) = \frac{8100}{2}\big(\frac{1}{-1700}+\frac{1}{-1400}\big) = -5.3\) MHz, which overshoots the direct 6 MHz; tuning the coupler's idle frequency (by flux) moves this term until the net exchange coupling, and with it \(\zeta\), crosses zero. In practice the idle point is found in calibration, and the design only has to guarantee that a zero-crossing exists within the coupler's tuning range for <i>all</i> likely fabricated parameters. That "for all likely parameters" is the essence of robust design.</p>
+
+<h3 id="sec-h-des-coh">Step 5: coherence budget</h3>
+<p>Suppose simulation of the pad geometry gives interface participations \(p_{\mathrm{MS}} = 2\times10^{-4}\), \(p_{\mathrm{SA}} = 3\times10^{-4}\), \(p_{\mathrm{MA}} = 0.5\times10^{-4}\), and the process's measured interface loss tangent is \(1\times10^{-3}\), with substrate \(p = 0.9\), \(\tan\delta = 10^{-7}\). Dielectric: \(5.5\times10^{-4}\times10^{-3} + 9\times10^{-8} = 6.4\times10^{-7}\), \(Q = 1.56\times10^6\), \(T_1 = Q/\omega = 1.56\times10^6/(2\pi\times4.8\times10^9) = 52\) µs. That fails the 150 µs target. Options: wider pad gaps (lower participations, but larger pads and more capacitance to re-balance), trenching the substrate (lower SA participation), or a better process (lower loss tangent). Halving all interface participations and halving the loss tangent gives an interface term of \(2.75\times10^{-4}\times0.5\times10^{-3} = 1.4\times10^{-7}\); adding the substrate's \(0.9\times10^{-7}\) gives \(2.3\times10^{-7}\), so \(Q\approx4.4\times10^6\) and \(T_1\approx145\) µs. This shows why both geometry and process must improve together, and why the substrate, negligible before, now matters.</p>
+
+<h3 id="sec-h-des-var">Step 6: what fabrication spread does</h3>
+<p>Now the hard question: the process delivers junction resistances with 2% standard deviation and pad capacitances with 1%. Using the sensitivity \(\delta f/(f + E_C/h)\approx\tfrac12\delta E_J/E_J - \tfrac12\delta C/C\) (@lf:eq-sens), each qubit's frequency spreads by \(\sqrt{(0.5\times0.02)^2 + (0.5\times0.01)^2}\times5.0\) GHz \(\approx56\) MHz. Consequences:</p>
+<ul>
+<li><b>Qubit–qubit detuning</b> spreads by \(\sqrt2\times56\approx79\) MHz around −300 MHz. The coupler's zero-\(ZZ\) idle point moves accordingly, so the coupler needs tuning range for that; the design should check the range covers ±3σ.</li>
+<li><b>Readout</b>: \(\chi\) depends on \(\Delta^{-2}\) roughly, so a 56 MHz shift in a 2.2 GHz detuning changes \(\chi\) by about 5%: harmless.</li>
+<li><b>Resonator frequencies</b> depend on line length and kinetic inductance; a 1% error in kinetic-inductance fraction of a few percent shifts them by a few MHz, which matters for the 100 MHz multiplexing spacing only if errors are much larger.</li>
+<li>For a <b>larger chip with fixed-frequency qubits and no couplers</b>, 56 MHz spread would cause frequency collisions on a large fraction of neighbouring pairs (Chapter 5's worked example). Here the coupler absorbs most of it, which is exactly why industry adopted tunable couplers.</li>
+</ul>
+<div class="intuition"><p>A design is not a point; it is a distribution. The nominal design above meets every target, but the device you get is a random draw around it. Good design moves the nominal point and chooses architecture (couplers, filters, trimming) so that nearly every draw still meets the targets. Computing the fraction that does is the yield problem of Book 7 and of the review.</p></div>
+
+<h3 id="sec-h-des-auto">What a design tool automates</h3>
+<p>Every step above has an automated counterpart, and each has its failure mode:</p>
+<figure class="tbl" id="tab-h-auto"><figcaption>Hand design versus automated design.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Hand step</th><th>Automated by</th><th>What can go wrong</th></tr>
+<tr><td>\(C_\Sigma\), \(C_g\) from pad shapes</td><td>Electrostatic extraction (FEM, Book 7)</td><td>Coarse mesh at edges; stray couplings omitted</td></tr>
+<tr><td>Resonator frequency and \(\kappa\)</td><td>Full-wave EM simulation</td><td>Kinetic inductance and substrate permittivity uncertain</td></tr>
+<tr><td>\(f_{01}\), \(\alpha\), \(\chi\), \(\zeta\)</td><td>Circuit quantisation and diagonalisation</td><td>Approximate formulas used outside their validity</td></tr>
+<tr><td>Purcell \(T_1\)</td><td>Admittance at the junction port</td><td>Package and filter modes missed</td></tr>
+<tr><td>Dielectric \(T_1\)</td><td>Participation ratios × loss tangents</td><td>Edge singularities poorly resolved; loss tangents uncertain</td></tr>
+<tr><td>Fabrication spread</td><td>Monte Carlo with Jacobians</td><td>No calibrated process statistics available</td></tr>
+</table></div></figure>
+<p>The review's argument (@lf:sec-design) is that each automated step exists but none reports a calibrated uncertainty, and nothing connects the steps into a statistical sign-off. Having done the design by hand, you can now see precisely what that would mean.</p>
+
+<div class="keypoints"><p></p><ul>
+<li>Anharmonicity fixes \(C_\Sigma\); frequency then fixes \(E_J\) and the junction resistance.</li>
+<li>The target \(\chi\) fixes \(g\), and \(g\) fixes the coupling capacitance; check \(n_{\mathrm{crit}}\), readout time and Purcell decay.</li>
+<li>Direct coupling gives large \(ZZ\); a tunable coupler with enough range cancels it for every likely fabricated device.</li>
+<li>Coherence needs both lower participations (geometry) and lower loss tangents (process).</li>
+<li>A design is a distribution; architecture choices (couplers, filters, trimming) make most draws meet spec.</li>
+</ul></div>
+
+<div class="exercises" id="ex-h-design"><h4>Exercises</h4><ol>
+<li>Redo Step 1 for an anharmonicity of −300 MHz and \(f_{01} = 5.0\) GHz. What are \(C_\Sigma\), \(E_J/h\) and \(R_n\)?
+<details><summary>Solution</summary><p>\(C_\Sigma = 2.566\times10^{-38}/(2\times6.626\times10^{-34}\times3\times10^8) = 64.5\) fF. \(\sqrt{8E_JE_C}/h = 5.3\) GHz, \(E_J/h = 5.3^2/2.4 = 11.7\) GHz (\(E_J/E_C = 39\), still a transmon but closer to the charge-sensitive regime). \(E_J = 48.4\) µeV, \(R_n = 6.45\times180/96.8 = 12.0\) kΩ.</p></details></li>
+<li>In Step 2, what \(g\) is needed if the resonator is moved to 6.5 GHz (keeping \(\chi = -0.5\) MHz)? What happens to the Purcell rate without a filter?
+<details><summary>Solution</summary><p>\(\Delta = -1.7\) GHz, \(\alpha/(\Delta+\alpha) = -0.22/-1.92 = 0.115\). \(g^2 = 0.5\times1700/0.115 = 7{,}400\), \(g/2\pi = 86\) MHz. Purcell: \(\kappa(g/\Delta)^2 = 1\,\mathrm{MHz}\times(86/1700)^2 = 2.6\) kHz (×2π), almost the same as before: for fixed \(\chi\) and \(\kappa\), Purcell decay is roughly fixed, which is why filters are needed regardless.</p></details></li>
+<li>In Step 6, if trimming reduces junction spread to 0.5% (capacitance still 1%), what is the frequency spread?
+<details><summary>Solution</summary><p>\(\sqrt{(0.5\times0.005)^2 + (0.5\times0.01)^2}\times5\) GHz \(= \sqrt{6.25+25}\times10^{-3}\times5\) GHz \(\approx28\) MHz. Now capacitance dominates: further trimming of junctions helps little unless pad capacitance is also controlled.</p></details></li>
+<li>List three quantities from this design that you would want a design tool to report with an uncertainty, and say what the uncertainty is mainly caused by.
+<details><summary>Solution</summary><p>Examples: \(f_{01}\) (junction resistance spread, capacitance extraction error, kinetic inductance); dielectric \(T_1\) (loss tangents of interfaces, mesh resolution at edges); resonator frequency (kinetic inductance, substrate permittivity); \(\zeta\) at idle (couplings, coupler tuning curve).</p></details></li>
+</ol></div>
+</section>
