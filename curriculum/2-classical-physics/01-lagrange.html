@@ -1,51 +1,113 @@
 <section id="sec-c-lagrange"><h2>From Newton to Lagrange: the principle of least action</h2>
 <div class="goals"><p>Goals</p><ul>
-<li>Restate Newton's laws as a variational principle and derive the Euler–Lagrange equations.</li>
-<li>Choose generalised coordinates, including ones that are not positions, and write Lagrangians for mechanical and electrical systems.</li>
-<li>Write the Lagrangian of an LC circuit in terms of node flux, the first step of circuit quantisation.</li>
-<li>Connect symmetries to conservation laws.</li>
+<li>Understand why physicists rewrite Newton's laws in terms of energy, and what "least action" means.</li>
+<li>Derive the Euler–Lagrange equation step by step, and use it with any convenient coordinates.</li>
+<li>Write the Lagrangian of an electrical circuit using node fluxes, the first step in designing a superconducting qubit.</li>
+<li>Connect symmetries to conserved quantities, including the conserved charge on a superconducting island.</li>
 </ul></div>
 
+<div class="bigpic"><p>Newton's \(F = ma\) is perfect for a ball on a table. It becomes clumsy for a pendulum (forces in the string you do not care about), for constrained motion, and especially for things that are not particles at all, such as the voltages and currents in a circuit. The Lagrangian method replaces forces with <i>energies</i>: write down the kinetic and potential energy of the system in whatever variables are natural, apply one universal equation, and the equations of motion fall out. It also provides exactly what quantum mechanics needs to "quantise" a system. For superconducting quantum chips this is not a curiosity: the Hamiltonian of every qubit in the review is derived by first writing the circuit's Lagrangian, as this chapter shows.</p></div>
+
 <h3 id="sec-c-lag-newton">Why reformulate Newton</h3>
-<p>Newton's second law, \(m\ddot{\mathbf r} = \mathbf F\), works perfectly for particles in Cartesian coordinates. It becomes awkward when the natural variables are angles, when there are constraints (a bead on a wire), or when the "particle" is not a particle at all but a voltage on a capacitor. Quantum mechanics also needs more than forces: it needs the <b>energy function</b> of a system and a pair of variables (a coordinate and its conjugate momentum) to turn into operators. The Lagrangian and Hamiltonian formulations supply both. For quantum engineering the payoff is concrete: the Hamiltonian of a superconducting circuit is <i>derived</i> by writing its Lagrangian, and every term in the result is a capacitance or inductance computed from the layout (@lf:sec-design-quant).</p>
+<p>Newton's second law, \(m\ddot{\mathbf r} = \mathbf F\), says acceleration equals force over mass. Three situations make it awkward:</p>
+<ul>
+<li><b>Natural variables are not positions.</b> A pendulum is described by an angle; a rotating object by angles; a circuit by voltages and currents.</li>
+<li><b>Constraints.</b> A bead on a wire or a pendulum bob on a rod is pushed by forces (from the wire, the rod) that you neither know nor care about.</li>
+<li><b>Quantum mechanics.</b> To build a quantum description you need the system's energy function and a pair of variables, a coordinate and its "conjugate momentum", to turn into operators. Forces do not provide these.</li>
+</ul>
+<p>The Lagrangian formulation fixes all three. Its only ingredients are the kinetic energy \(T\) and potential energy \(V\), written in any coordinates you like.</p>
 
 <h3 id="sec-c-lag-action">The action and the Euler–Lagrange equation</h3>
-<p>For a system described by a coordinate \(q(t)\), define the <b>Lagrangian</b> as kinetic minus potential energy, \(L(q,\dot q) = T - V\), and the <b>action</b> of a path between times \(t_1\) and \(t_2\) as</p>
+<p>For a system described by one coordinate \(q(t)\) (a position, an angle, a flux), define the <b>Lagrangian</b> as kinetic minus potential energy, \(L(q,\dot q) = T - V\). For any imagined path \(q(t)\) from time \(t_1\) to \(t_2\), define its <b>action</b>:</p>
 <div class="eq" id="eq-c-action">$$ S[q] = \int_{t_1}^{t_2} L\big(q(t), \dot q(t)\big)\,\dd t . $$</div>
-<p>The <b>principle of stationary action</b> states that the path the system actually follows makes \(S\) stationary: changing the path slightly, \(q\to q+\delta q\) with \(\delta q(t_1)=\delta q(t_2)=0\), changes \(S\) only at second order. Compute the first-order change:</p>
-\[ \delta S = \int_{t_1}^{t_2}\Big(\frac{\partial L}{\partial q}\delta q + \frac{\partial L}{\partial\dot q}\delta\dot q\Big)\dd t = \int_{t_1}^{t_2}\Big(\frac{\partial L}{\partial q} - \frac{\dd}{\dd t}\frac{\partial L}{\partial\dot q}\Big)\delta q\,\dd t , \]
-<p>where the second form integrates by parts (the boundary term vanishes because \(\delta q\) is zero at the ends). For this to vanish for every \(\delta q\), the bracket must be zero at every time:</p>
+<p>The action is a single number for each path. The <b>principle of stationary action</b> says: of all paths that start and end at the given points, the one nature actually follows is the one for which small changes to the path do not change \(S\) (to first order), like the bottom of a valley where the ground is locally flat.</p>
+<p>Let us turn that into an equation. Change the path slightly, \(q\to q+\delta q\), keeping the end points fixed (\(\delta q(t_1)=\delta q(t_2)=0\)). To first order the Lagrangian changes by \(\frac{\partial L}{\partial q}\delta q + \frac{\partial L}{\partial\dot q}\delta\dot q\), so</p>
+\[ \delta S = \int_{t_1}^{t_2}\Big(\frac{\partial L}{\partial q}\delta q + \frac{\partial L}{\partial\dot q}\frac{\dd(\delta q)}{\dd t}\Big)\dd t . \]
+<p>Integrate the second term by parts. The boundary term \(\big[\frac{\partial L}{\partial\dot q}\delta q\big]_{t_1}^{t_2}\) vanishes because \(\delta q\) is zero at both ends, leaving</p>
+\[ \delta S = \int_{t_1}^{t_2}\Big(\frac{\partial L}{\partial q} - \frac{\dd}{\dd t}\frac{\partial L}{\partial\dot q}\Big)\delta q\,\dd t . \]
+<p>For this to vanish for <i>every</i> small change \(\delta q(t)\), the bracket must be zero at every moment. That gives the <b>Euler–Lagrange equation</b>:</p>
 <div class="eq" id="eq-c-el">$$ \frac{\dd}{\dd t}\frac{\partial L}{\partial\dot q} - \frac{\partial L}{\partial q} = 0 . $$</div>
-<p>This is the <b>Euler–Lagrange equation</b>. Check it on a particle: \(L = \tfrac12m\dot x^2 - V(x)\) gives \(\partial L/\partial\dot x = m\dot x\) and \(\partial L/\partial x = -V'(x)\), so \(m\ddot x = -V'(x) = F\). Newton's law is recovered. For several coordinates \(q_1,\dots,q_n\) there is one equation per coordinate.</p>
-<div class="box"><p><strong>Why "least" action?</strong> The classical path is a stationary point of \(S\), not always a minimum. The deeper reason it is singled out comes from quantum mechanics: Feynman showed that a quantum particle explores every path with amplitude \(\ee^{\ii S/\hbar}\). Paths near a stationary point have nearly equal phases and add constructively, while other paths cancel. When \(S\gg\hbar\), only the neighbourhood of the classical path survives. Classical mechanics is the constructive-interference limit of quantum mechanics.</p></div>
+<div class="example"><p><b>Worked example: recovering Newton.</b> A particle with \(L = \tfrac12m\dot x^2 - V(x)\). Then \(\partial L/\partial\dot x = m\dot x\) (momentum), so \(\frac{\dd}{\dd t}\frac{\partial L}{\partial\dot x} = m\ddot x\); and \(\partial L/\partial x = -V'(x)\), which is the force \(F\). The Euler–Lagrange equation reads \(m\ddot x - (-V') = 0\), i.e. \(m\ddot x = F\). Newton's law is recovered. For several coordinates \(q_1,\dots,q_n\), there is one Euler–Lagrange equation per coordinate.</p></div>
+<div class="box"><p><strong>Why "least" action?</strong> The real path makes \(S\) stationary, not always a minimum. The deeper reason it is singled out comes from quantum mechanics: Feynman showed that a quantum particle explores <i>every</i> path, each with a complex amplitude \(\ee^{\ii S/\hbar}\) (Book 1, Chapter 1). Paths near a stationary point have nearly equal phases and add up; paths elsewhere have wildly varying phases and cancel. When \(S\) is huge compared with \(\hbar\), only the neighbourhood of the classical path survives. Classical mechanics is the constructive-interference limit of quantum mechanics.</p></div>
 
 <h3 id="sec-c-lag-gen">Generalised coordinates</h3>
-<p>The power of @eq:c-el is that \(q\) can be any set of variables that specifies the configuration. For a pendulum of length \(\ell\), the angle \(\theta\) is enough: \(T = \tfrac12m\ell^2\dot\theta^2\), \(V = -mg\ell\cos\theta\), and the Euler–Lagrange equation gives \(m\ell^2\ddot\theta = -mg\ell\sin\theta\) without ever computing the tension in the string. For small angles \(\sin\theta\approx\theta\) and the pendulum is a harmonic oscillator of frequency \(\sqrt{g/\ell}\); for large angles it is a nonlinear oscillator whose frequency drops with amplitude. Keep this example in mind: the potential energy of a Josephson junction is also \(-E_J\cos\varphi\), so a transmon is, mathematically, a quantum pendulum (Book 6).</p>
+<p>The power of @eq:c-el is that \(q\) can be any set of numbers that pins down the configuration: angles, distances, fluxes. We call them <b>generalised coordinates</b>. Constraint forces never appear, because the coordinates already respect the constraints.</p>
+<div class="example"><p><b>Worked example: the pendulum.</b> A mass \(m\) on a rigid rod of length \(\ell\), angle \(\theta\) from vertical. Speed \(\ell\dot\theta\), so \(T = \tfrac12m\ell^2\dot\theta^2\); height \(-\ell\cos\theta\), so \(V = -mg\ell\cos\theta\). Then \(\partial L/\partial\dot\theta = m\ell^2\dot\theta\) and \(\partial L/\partial\theta = -mg\ell\sin\theta\), giving</p>
+\[ m\ell^2\ddot\theta = -mg\ell\sin\theta \quad\Longrightarrow\quad \ddot\theta = -\frac{g}{\ell}\sin\theta . \]
+<p>We never needed the tension in the rod. For small angles \(\sin\theta\approx\theta\) and the pendulum is a harmonic oscillator with \(\omega = \sqrt{g/\ell}\). For large angles it is <i>nonlinear</i>: its frequency drops as the swing grows. Remember this example: the energy of a Josephson junction is also \(-E_J\cos\varphi\), so a transmon qubit is, mathematically, a quantum pendulum (Book 6), and its nonlinearity is exactly the pendulum's.</p></div>
 
 <h3 id="sec-c-lag-circuit">The Lagrangian of a circuit</h3>
-<p>For electrical circuits, a convenient generalised coordinate is the <b>node flux</b>, the time integral of the node's voltage relative to ground:</p>
+<p>Circuits obey the same mathematics. The trick is choosing the right coordinate. For each circuit node (a point where components meet), define the <b>node flux</b> as the running time integral of its voltage relative to ground:</p>
 <div class="eq" id="eq-c-flux">$$ \Phi(t) = \int_{-\infty}^t V(t')\,\dd t', \qquad V = \dot\Phi . $$</div>
-<p>A capacitor stores energy \(\tfrac12CV^2 = \tfrac12C\dot\Phi^2\), which depends on the "velocity" \(\dot\Phi\), so it plays the role of kinetic energy. An inductor carries current \(I = \Phi/L\) (because \(V = L\dot I\) integrates to \(\Phi = LI\)), and stores energy \(\tfrac12LI^2 = \Phi^2/2L\), which depends on the "position" \(\Phi\): a potential energy. The Lagrangian of an LC circuit is therefore</p>
+<p>(It is called a "flux" because, by Faraday's law, a voltage is a rate of change of magnetic flux, Chapter 5.) Now look at the energies:</p>
+<ul>
+<li>A <b>capacitor</b> stores \(\tfrac12CV^2 = \tfrac12C\dot\Phi^2\). It depends on the rate of change of \(\Phi\), like kinetic energy \(\tfrac12m\dot x^2\). So <b>capacitance plays the role of mass</b>.</li>
+<li>An <b>inductor</b> obeys \(V = L\dot I\); integrating, \(\Phi = LI\), so it stores \(\tfrac12LI^2 = \Phi^2/2L\). It depends on \(\Phi\) itself, like the potential energy \(\tfrac12kx^2\) of a spring. So <b>inverse inductance plays the role of the spring constant</b>.</li>
+</ul>
+<p>The Lagrangian of an LC circuit is therefore</p>
 <div class="eq" id="eq-c-lclag">$$ \mathcal L = \frac12 C\dot\Phi^2 - \frac{\Phi^2}{2L} . $$</div>
-<p>The Euler–Lagrange equation gives \(C\ddot\Phi = -\Phi/L\), i.e. \(\ddot\Phi + \Phi/LC = 0\): a harmonic oscillator at \(\omega_0 = 1/\sqrt{LC}\). The analogy is exact: capacitance is mass, inverse inductance is spring constant, flux is position, and, as the next chapter shows, charge is momentum.</p>
-<p>For a network with many nodes, each node \(i\) gets a flux \(\Phi_i\). Each capacitor between nodes \(i\) and \(j\) contributes \(\tfrac12C_{ij}(\dot\Phi_i-\dot\Phi_j)^2\), and collecting all of them gives \(T = \tfrac12\dot{\boldsymbol\Phi}^{\mathsf T}\mathbf C\dot{\boldsymbol\Phi}\), where \(\mathbf C\) is the <b>capacitance matrix</b> of Chapter 4. Inductors give \(V = \tfrac12\boldsymbol\Phi^{\mathsf T}\mathbf L^{-1}\boldsymbol\Phi\). A Josephson junction, as we will show in Book 6, adds \(-E_J\cos(2\pi\Phi_{\text{branch}}/\Phi_0)\). This is precisely the Lagrangian at the start of the review's design section (@lf:eq-lagr). You now know where it comes from.</p>
-<div class="example"><p><b>Worked example: two capacitively coupled LC oscillators.</b> Two LC circuits \((C_1, L_1)\) and \((C_2, L_2)\) share a coupling capacitor \(C_g\) between their top nodes. With node fluxes \(\Phi_1,\Phi_2\):</p>
-\[ \mathcal L = \tfrac12C_1\dot\Phi_1^2 + \tfrac12C_2\dot\Phi_2^2 + \tfrac12C_g(\dot\Phi_1-\dot\Phi_2)^2 - \frac{\Phi_1^2}{2L_1} - \frac{\Phi_2^2}{2L_2} = \tfrac12\dot{\boldsymbol\Phi}^{\mathsf T}\begin{pmatrix}C_1+C_g & -C_g\\ -C_g & C_2+C_g\end{pmatrix}\dot{\boldsymbol\Phi} - \ldots \]
-<p>The off-diagonal element \(-C_g\) of the capacitance matrix couples the two oscillators. Every coupling between qubits and resonators on a superconducting chip enters this way, and its strength is fixed by a number that an electrostatic solver computes from the geometry.</p></div>
+<p>The Euler–Lagrange equation gives \(C\ddot\Phi = -\Phi/L\), i.e. \(\ddot\Phi + \Phi/LC = 0\): a harmonic oscillator at \(\omega_0 = 1/\sqrt{LC}\). The analogy is exact, term by term:</p>
+<figure class="tbl" id="tab-c-analogy"><figcaption>The mechanical–electrical analogy used throughout the series.</figcaption>
+<div class="tblwrap"><table>
+<tr><th>Mechanics</th><th>Circuit (node-flux picture)</th></tr>
+<tr><td>position \(x\)</td><td>flux \(\Phi\)</td></tr>
+<tr><td>velocity \(\dot x\)</td><td>voltage \(V = \dot\Phi\)</td></tr>
+<tr><td>mass \(m\)</td><td>capacitance \(C\)</td></tr>
+<tr><td>spring constant \(k\)</td><td>inverse inductance \(1/L\)</td></tr>
+<tr><td>momentum \(p = m\dot x\)</td><td>charge \(Q = C\dot\Phi\) (Chapter 2)</td></tr>
+<tr><td>\(\omega = \sqrt{k/m}\)</td><td>\(\omega = 1/\sqrt{LC}\)</td></tr>
+</table></div></figure>
+<p>For a circuit with many nodes, each node \(i\) gets a flux \(\Phi_i\). A capacitor between nodes \(i\) and \(j\) stores \(\tfrac12C_{ij}(\dot\Phi_i-\dot\Phi_j)^2\) (it sees the voltage difference). Adding all the capacitors gives a quadratic form \(T = \tfrac12\dot{\boldsymbol\Phi}^{\mathsf T}\mathbf C\dot{\boldsymbol\Phi}\), where \(\mathbf C\) is the <b>capacitance matrix</b> (Chapter 4). Inductors similarly give \(V = \tfrac12\boldsymbol\Phi^{\mathsf T}\mathbf L^{-1}\boldsymbol\Phi\). A Josephson junction, Book 6 shows, adds \(-E_J\cos(2\pi\Phi_{\text{branch}}/\Phi_0)\). Put together, that is precisely the Lagrangian at the start of the review's design section (@lf:eq-lagr). You now know where it comes from.</p>
+<div class="example"><p><b>Worked example: two capacitively coupled LC oscillators.</b> Two LC circuits \((C_1, L_1)\) and \((C_2, L_2)\) share a small coupling capacitor \(C_g\) between their top nodes. With node fluxes \(\Phi_1,\Phi_2\):</p>
+\[ \mathcal L = \tfrac12C_1\dot\Phi_1^2 + \tfrac12C_2\dot\Phi_2^2 + \tfrac12C_g(\dot\Phi_1-\dot\Phi_2)^2 - \frac{\Phi_1^2}{2L_1} - \frac{\Phi_2^2}{2L_2} . \]
+<p>Expanding \((\dot\Phi_1-\dot\Phi_2)^2\) and collecting terms, the kinetic part is \(\tfrac12\dot{\boldsymbol\Phi}^{\mathsf T}\mathbf C\dot{\boldsymbol\Phi}\) with</p>
+\[ \mathbf C = \begin{pmatrix}C_1+C_g & -C_g\\ -C_g & C_2+C_g\end{pmatrix}. \]
+<p>The off-diagonal \(-C_g\) couples the two oscillators: moving one drags on the other. Every coupling between qubits and resonators on a superconducting chip enters exactly this way, and its strength is set by a number that an electrostatic simulator computes from the drawn geometry.</p></div>
+<div class="quick"><p>In the analogy, what plays the role of a heavy mass, and what of a stiff spring?</p>
+<details><summary>Answer</summary><p>A large capacitance is a heavy mass (hard to change its voltage quickly); a small inductance is a stiff spring (a small flux produces a large current, i.e. a large restoring "force"). Both large \(C\) and large \(L\) lower the frequency \(1/\sqrt{LC}\), as heavy masses and soft springs do.</p></details></div>
 
 <h3 id="sec-c-lag-noether">Symmetry and conservation</h3>
-<p>If \(L\) does not depend on some coordinate \(q_k\) (the coordinate is <b>cyclic</b>), the Euler–Lagrange equation says \(\frac{\dd}{\dd t}(\partial L/\partial\dot q_k) = 0\): the <b>conjugate momentum</b> \(p_k = \partial L/\partial\dot q_k\) is conserved. More generally, Noether's theorem states that every continuous symmetry gives a conserved quantity: translation invariance gives momentum, rotation invariance gives angular momentum, and invariance under shifts in time gives energy. In circuits, a node that is connected to the rest only through capacitors (an "island") has a Lagrangian independent of its flux, so its conjugate momentum, which is its charge, is conserved. That is why the charge on a superconducting island is quantised in units of Cooper pairs, the starting point of the Cooper-pair box and the transmon.</p>
+<p>If the Lagrangian does not depend on some coordinate \(q_k\) (only on its rate \(\dot q_k\)), the Euler–Lagrange equation reduces to \(\frac{\dd}{\dd t}(\partial L/\partial\dot q_k) = 0\): the quantity \(p_k = \partial L/\partial\dot q_k\), the <b>conjugate momentum</b>, never changes. More generally, <b>Noether's theorem</b> says every continuous symmetry gives a conserved quantity: if the physics is unchanged by shifting position, momentum is conserved; by rotating, angular momentum; by shifting time, energy.</p>
+<p>In circuits: a node connected to the rest only through capacitors (an "island") appears in the Lagrangian only through \(\dot\Phi\), never through \(\Phi\) itself. Its conjugate momentum, which is its <b>charge</b>, is therefore conserved: charge cannot leak on or off the island except by tunnelling through a junction. In a superconductor, charge tunnels in units of Cooper pairs, so the island's charge is a whole number of pairs. That is the starting point of the Cooper-pair box and the transmon (Book 6).</p>
+
+<h3 id="sec-c-lag-code">Try it in Python</h3>
+<p>Integrate the pendulum's equation from the Lagrangian and watch the period grow with amplitude (the nonlinearity that makes a transmon a qubit).</p>
+<pre class="code"><code>import numpy as np
+from scipy.integrate import solve_ivp
+
+g, l = 9.81, 1.0
+def rhs(t, y):                       # y = (theta, theta_dot)
+    return [y[1], -g / l * np.sin(y[0])]
+
+for amp_deg in (5, 45, 90, 150):
+    th0 = np.radians(amp_deg)
+    # integrate one swing and find when theta_dot changes sign (half period)
+    sol = solve_ivp(rhs, (0, 10), [th0, 0], max_step=1e-3, dense_output=True)
+    t = np.linspace(0.01, 10, 100000)
+    v = sol.sol(t)[1]
+    half = t[np.argmax(np.sign(v[:-1]) != np.sign(v[1:]))]
+    print(amp_deg, "deg: period", 2 * half, "s  (small-angle:", 2 * np.pi * np.sqrt(l / g), ")")</code></pre>
+<p>At 5° the period matches \(2\pi\sqrt{\ell/g}\approx2.006\) s; at 150° it is about 75% longer. A transmon is a quantum pendulum swinging at small amplitude, where this frequency drop shows up as a small, crucial difference between its energy-level spacings.</p>
 
 <div class="eda"><p>A circuit-quantisation tool takes a netlist (nodes, capacitors, inductors, junctions), builds \(\mathbf C\) and \(\mathbf L^{-1}\), writes the Lagrangian, and hands it to the next chapter's Legendre transform. The capacitances come from an electrostatic simulation of the layout. If those numbers are 1% off, the qubit frequency is about 0.5% off (@lf:eq-sens), which is tens of MHz.</p></div>
 
+<div class="keypoints"><p></p><ul>
+<li>Lagrangian \(L = T - V\); the real path makes the action \(\int L\,\dd t\) stationary, giving \(\frac{\dd}{\dd t}\frac{\partial L}{\partial\dot q} = \frac{\partial L}{\partial q}\).</li>
+<li>Any coordinates work; constraint forces disappear.</li>
+<li>Circuits: node flux is the coordinate, capacitance the mass, inverse inductance the spring; many nodes give a capacitance matrix.</li>
+<li>A coordinate missing from \(L\) has a conserved momentum; an island's charge is conserved.</li>
+</ul></div>
+
 <div class="exercises" id="ex-c-lagrange"><h4>Exercises</h4><ol>
-<li>A mass \(m\) slides on a frictionless ring of radius \(R\) rotating about a vertical diameter at angular velocity \(\Omega\). Using the polar angle \(\theta\) from the bottom, show that \(L = \tfrac12mR^2(\dot\theta^2 + \Omega^2\sin^2\theta) + mgR\cos\theta\) and find the equation of motion.
-<details><summary>Solution</summary><p>Velocity components: \(R\dot\theta\) along the ring and \(R\Omega\sin\theta\) around the axis, so \(T = \tfrac12mR^2(\dot\theta^2+\Omega^2\sin^2\theta)\); height \(-R\cos\theta\) gives \(V = -mgR\cos\theta\). Euler–Lagrange: \(mR^2\ddot\theta = mR^2\Omega^2\sin\theta\cos\theta - mgR\sin\theta\). For \(\Omega^2 > g/R\) the bottom becomes unstable and the bead settles at \(\cos\theta = g/R\Omega^2\).</p></details></li>
-<li>Find the resonance frequency of an LC circuit with \(L = 10\) nH and \(C = 80\) fF. What would \(C\) need to be to halve the frequency?
-<details><summary>Solution</summary><p>\(\omega_0 = 1/\sqrt{LC} = 1/\sqrt{8\times10^{-22}}\approx3.54\times10^{10}\) rad/s, so \(f_0\approx 5.6\) GHz. Halving \(f\) needs four times the capacitance, 320 fF.</p></details></li>
-<li>For the coupled oscillators of the worked example with \(C_1 = C_2 = C\) and \(L_1=L_2=L\), find the two normal-mode frequencies.
-<details><summary>Solution</summary><p>Equations of motion: \(\mathbf C\ddot{\boldsymbol\Phi} = -\boldsymbol\Phi/L\). Try \((1,1)\): the coupling term vanishes, so \(C\ddot\Phi = -\Phi/L\), \(\omega_+ = 1/\sqrt{LC}\). Try \((1,-1)\): the effective capacitance is \(C+2C_g\), \(\omega_- = 1/\sqrt{L(C+2C_g)}\). The splitting is \(\approx\omega_0C_g/C\) for small \(C_g\).</p></details></li>
-<li>Show that if \(L\) has no explicit time dependence, the quantity \(E = \sum_k\dot q_k\,\partial L/\partial\dot q_k - L\) is conserved, and that it equals \(T+V\) when \(T\) is quadratic in velocities.
-<details><summary>Solution</summary><p>\(\frac{\dd E}{\dd t} = \sum_k\big[\ddot q_kp_k + \dot q_k\dot p_k\big] - \sum_k\big[\frac{\partial L}{\partial q_k}\dot q_k + p_k\ddot q_k\big]\), with \(p_k = \partial L/\partial\dot q_k\). Using \(\dot p_k = \partial L/\partial q_k\) everything cancels. For \(T = \tfrac12\sum M_{jk}\dot q_j\dot q_k\), \(\sum\dot q_kp_k = 2T\), so \(E = 2T - (T - V) = T+V\).</p></details></li>
+<li>A mass \(m\) slides on a frictionless ring of radius \(R\) rotating about a vertical diameter at angular velocity \(\Omega\). Using the angle \(\theta\) from the bottom, show that \(L = \tfrac12mR^2(\dot\theta^2 + \Omega^2\sin^2\theta) + mgR\cos\theta\) and find the equation of motion.
+<details><summary>Solution</summary><p>Velocity components \(R\dot\theta\) along the ring and \(R\Omega\sin\theta\) around the axis; height \(-R\cos\theta\). Euler–Lagrange: \(mR^2\ddot\theta = mR^2\Omega^2\sin\theta\cos\theta - mgR\sin\theta\). For \(\Omega^2 > g/R\) the bottom becomes unstable and the bead settles at \(\cos\theta = g/R\Omega^2\).</p></details></li>
+<li>Find the resonance frequency of an LC circuit with \(L = 10\) nH and \(C = 80\) fF. What capacitance halves the frequency?
+<details><summary>Solution</summary><p>\(\omega_0 = 1/\sqrt{8\times10^{-22}}\approx3.54\times10^{10}\) rad/s, \(f_0\approx5.6\) GHz. Four times the capacitance, 320 fF.</p></details></li>
+<li>For the coupled oscillators with \(C_1 = C_2 = C\), \(L_1=L_2=L\), find the two normal-mode frequencies.
+<details><summary>Solution</summary><p>In-phase \((1,1)\): the coupling capacitor sees no voltage, \(\omega_+ = 1/\sqrt{LC}\). Out-of-phase \((1,-1)\): kinetic energy \((C + 2C_g)\dot\Phi^2\) per node pair, so \(\omega_- = 1/\sqrt{L(C+2C_g)}\). Splitting \(\approx\omega_0C_g/C\).</p></details></li>
+<li>Show that if \(L\) has no explicit time dependence, \(E = \sum_k\dot q_k\,\partial L/\partial\dot q_k - L\) is conserved, and equals \(T+V\) when \(T\) is quadratic in velocities.
+<details><summary>Solution</summary><p>Differentiate and use the Euler–Lagrange equations: all terms cancel. For \(T = \tfrac12\sum M_{jk}\dot q_j\dot q_k\), \(\sum\dot q_k\partial T/\partial\dot q_k = 2T\), so \(E = 2T - (T - V) = T+V\).</p></details></li>
+<li>Write the Lagrangian of a single node connected to ground by a capacitor \(C\) and a Josephson junction of energy \(E_J\) (energy \(-E_J\cos(2\pi\Phi/\Phi_0)\)). What is the equation of motion, and when does it reduce to an LC oscillator?
+<details><summary>Solution</summary><p>\(\mathcal L = \tfrac12C\dot\Phi^2 + E_J\cos(2\pi\Phi/\Phi_0)\). Euler–Lagrange: \(C\ddot\Phi = -\frac{2\pi E_J}{\Phi_0}\sin(2\pi\Phi/\Phi_0)\), a pendulum. For small \(\Phi\), \(\sin x\approx x\), giving an LC oscillator with \(1/L_J = (2\pi/\Phi_0)^2E_J\).</p></details></li>
 </ol></div>
 </section>
