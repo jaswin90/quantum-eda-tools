@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <p class="toc-title">Contents</p>
   <ol>
 <li class="toc2"><a href="#sec-q-preface">How to use this book</a></li>
+<li class="toc3"><a href="#sec-q-pre-terms">Words and symbols you will meet</a></li>
 <li class="toc2"><a href="#sec-q-why"><span class="tocnum">1</span>Why quantum mechanics: experiments and the qubit</a></li>
 <li class="toc3"><a href="#sec-q-why-energy"><span class="tocnum">1.1</span>Energy comes in packets</a></li>
 <li class="toc3"><a href="#sec-q-why-duality"><span class="tocnum">1.2</span>Waves and particles</a></li>
@@ -132,6 +133,31 @@ document.addEventListener("DOMContentLoaded", function () {
 <p>This book teaches quantum mechanics the way a quantum engineer uses it. It begins with the smallest quantum system, a two-level system or qubit, because almost every idea of the theory can be seen there with \(2\times2\) matrices. It then adds continuous systems (wavefunctions, tunnelling), the harmonic oscillator that describes every resonator and photon, the approximation methods that produce effective Hamiltonians, the density matrix that describes noisy and entangled systems, and the master equation that describes decoherence. It ends with second quantisation, the language of many identical particles, which Books 5 and 6 use for photons and superconductors.</p>
 <p>The mathematics is that of Book 1, Chapters 1–5: complex numbers, Dirac notation, Hermitian and unitary operators, the matrix exponential and tensor products. The physics of Book 2, Chapters 1–3 (Hamiltonians, Poisson brackets and oscillators) is used from Chapter 3 on. If a step seems unmotivated, look for the classical analogue there first; the correspondence is close.</p>
 <p>Units: we keep \(\hbar\) explicit in the early chapters and sometimes set \(\hbar = 1\) later, so that energies and angular frequencies are interchangeable. Frequencies quoted "in GHz" mean \(\omega/2\pi\).</p>
+<p>Every chapter has the same shape: a "big picture" box saying why the topic matters for hardware, the ideas built up from worked examples, a "Try it in Python" section you can run and change (all use only NumPy and SciPy), a box linking the chapter to design automation, key points, and exercises with solutions. On a first reading, the big picture, the worked examples and the key points carry the story; come back for the derivations.</p>
+<h3 id="sec-q-pre-terms">Words and symbols you will meet</h3>
+<dl class="terms">
+<dt>\(\ket\psi\), \(\bra\psi\)</dt><dd>A state vector ("ket") and its conjugate transpose ("bra").</dd>
+<dt>\(\braket\phi\psi\)</dt><dd>Inner product; \(|\braket\phi\psi|^2\) is the probability of finding \(\ket\psi\) in \(\ket\phi\).</dd>
+<dt>\(\ket0\), \(\ket1\)</dt><dd>The two basis states of a qubit; \(\ket\pm = (\ket0\pm\ket1)/\sqrt2\).</dd>
+<dt>\(X, Y, Z\)</dt><dd>Pauli matrices: the qubit's observables along three axes, and rotation generators.</dd>
+<dt>Bloch vector \(\mathbf r\)</dt><dd>\((\expval X,\expval Y,\expval Z)\): a qubit state drawn as a point in a unit ball.</dd>
+<dt>\(\expval A\)</dt><dd>Expectation value: the average result of measuring \(A\) many times.</dd>
+<dt>\(H\), \(U = \ee^{-\ii Ht/\hbar}\)</dt><dd>The Hamiltonian (energy operator) and the time-evolution operator it generates.</dd>
+<dt>\([A,B]\), \(\{A,B\}\)</dt><dd>Commutator \(AB-BA\) and anticommutator \(AB+BA\).</dd>
+<dt>\(a\), \(a^\dagger\)</dt><dd>Annihilation and creation operators of an oscillator mode: remove or add one quantum.</dd>
+<dt>\(\ket n\), \(\ket\alpha\)</dt><dd>Fock (number) state with \(n\) quanta; coherent state, the quantum version of a classical oscillation.</dd>
+<dt>\(x_{\mathrm{zpf}}\), \(\Phi_{\mathrm{zpf}}\)</dt><dd>Zero-point fluctuation: the spread of position (or flux) in the ground state.</dd>
+<dt>\(\Omega_R\), \(\Delta\)</dt><dd>Rabi frequency (drive strength) and detuning (drive frequency minus qubit frequency, or vice versa).</dd>
+<dt>RWA</dt><dd>Rotating-wave approximation: drop terms oscillating at twice the drive frequency.</dd>
+<dt>\(g\), \(\chi\)</dt><dd>Qubit–resonator coupling; dispersive shift, the resonator frequency change that reveals the qubit's state.</dd>
+<dt>\(\alpha\) (anharmonicity)</dt><dd>How much the \(1\to2\) transition differs from \(0\to1\); what makes a nonlinear oscillator a qubit.</dd>
+<dt>\(\rho\), \(\Tr\)</dt><dd>Density matrix (a state including classical uncertainty) and trace (sum of diagonal elements).</dd>
+<dt>\(\Tr_B\)</dt><dd>Partial trace: the state of one part of a composite system.</dd>
+<dt>\(T_1\), \(T_2\), \(T_2^*\), \(T_\varphi\)</dt><dd>Relaxation time, coherence time (with echo or white noise), Ramsey coherence time, pure-dephasing time.</dd>
+<dt>\(S(\omega)\)</dt><dd>Noise spectral density: how much noise power sits at each frequency.</dd>
+<dt>Kraus operators, Lindblad equation</dt><dd>The two standard ways to write noisy (open-system) evolution.</dd>
+<dt>boson, fermion</dt><dd>Particles whose states are symmetric (photons, Cooper pairs) or antisymmetric (electrons) under exchange.</dd>
+</dl>
 </section>
 
 <section id="sec-q-why"><h2><span class="secnum">1</span> Why quantum mechanics: experiments and the qubit</h2>
