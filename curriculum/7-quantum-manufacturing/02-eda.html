@@ -82,5 +82,7 @@
 <details><summary>Solution</summary><p>1,005 simulations × 10 min ≈ 7 days. A fast surrogate (Chapter 6) trained on a few hundred simulations could evaluate the Monte Carlo samples in seconds; the accurate simulator is then run only on the worst cases the surrogate finds, to confirm.</p></details></li>
 <li>Explain in your own words what "layout versus Hamiltonian" would check, by analogy with LVS.
 <details><summary>Solution</summary><p>LVS checks that the drawn geometry implements the intended circuit. LVH would extract the Hamiltonian (frequencies, anharmonicities, couplings, dispersive shifts) from the drawn layout and check it against the designer's intended Hamiltonian within tolerances, flagging, for example, an unintended coupling between two qubits or a resonator that collides with a qubit.</p></details></li>
+<li>A classical chip team uses three corners (slow, typical, fast) for transistor speed. Propose an analogous set of "corners" for a transmon processor, naming the parameters you would vary and why a few corners might be misleading here.
+<details><summary>Solution</summary><p>Corners could combine junction resistance (low/nominal/high), pad capacitance (low/high, from linewidth and permittivity) and kinetic inductance (low/high). They are misleading for collision yield because failures come from <i>local</i> mismatch between neighbouring qubits, not global shifts: a global corner moves all qubits together and preserves their detunings. Statistical Monte Carlo of local variation is essential.</p></details></li>
 </ol></div>
 </section>

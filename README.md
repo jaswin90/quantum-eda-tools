@@ -28,8 +28,11 @@ review, and exercises with full solutions. Books link to each other and into the
 | 7 | Making Quantum Chips | fabrication, classical EDA, EM simulation, yield, packaging and test, statistical learning, a map of the review |
 
 Recommended order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → the review (the roadmap page shows the
-dependencies and shorter routes). About 56,000 words, 178 numbered equations, 15 computed figures
-and 195 exercises with solutions.
+dependencies and shorter routes). About 86,000 words, 182 numbered equations, 15 computed figures
+and 261 exercises with solutions. Books 4–7 are written for readers with no background:
+each chapter adds a plain-language overview, step-by-step worked examples, quick checks,
+common-confusion boxes and key takeaways, and Books 5–7 add glossaries, worked design
+chapters and short runnable Python examples.
 
 ## Contents of the review
 

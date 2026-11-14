@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <h1>Making Quantum Chips: Fabrication, Simulation, Yield and Design Automation</h1>
   <p class="subtitle">Cleanroom processes, classical EDA, electromagnetic simulation, variability and yield, cryogenic packaging and test, and statistical learning for manufacturing</p>
   <p class="byline">Jaswin</p>
-  <p class="meta">7 chapters · 8 numbered equations · 27 exercises with solutions · about 45 hours of study</p>
+  <p class="meta">7 chapters · 8 numbered equations · 29 exercises with solutions · about 75 hours of study</p>
   <p class="meta prereq">Before this book: <a href="../mathematics/index.html">Book 1: Mathematics</a>, <a href="../classical-physics/index.html">Book 2: Classical Physics</a>, <a href="../quantum-hardware/index.html">Book 6: Quantum Hardware</a>. <a href="../index.html">Series roadmap</a>.</p>
 </header>
 <section id="sec-f-preface" class="unnumbered"><h2>How to use this book</h2>
@@ -305,6 +305,8 @@ for i, x in enumerate(r):
 <details><summary>Solution</summary><p>1,005 simulations × 10 min ≈ 7 days. A fast surrogate (Chapter 6) trained on a few hundred simulations could evaluate the Monte Carlo samples in seconds; the accurate simulator is then run only on the worst cases the surrogate finds, to confirm.</p></details></li>
 <li>Explain in your own words what "layout versus Hamiltonian" would check, by analogy with LVS.
 <details><summary>Solution</summary><p>LVS checks that the drawn geometry implements the intended circuit. LVH would extract the Hamiltonian (frequencies, anharmonicities, couplings, dispersive shifts) from the drawn layout and check it against the designer's intended Hamiltonian within tolerances, flagging, for example, an unintended coupling between two qubits or a resonator that collides with a qubit.</p></details></li>
+<li>A classical chip team uses three corners (slow, typical, fast) for transistor speed. Propose an analogous set of "corners" for a transmon processor, naming the parameters you would vary and why a few corners might be misleading here.
+<details><summary>Solution</summary><p>Corners could combine junction resistance (low/nominal/high), pad capacitance (low/high, from linewidth and permittivity) and kinetic inductance (low/high). They are misleading for collision yield because failures come from <i>local</i> mismatch between neighbouring qubits, not global shifts: a global corner moves all qubits together and preserves their detunings. Statistical Monte Carlo of local variation is essential.</p></details></li>
 </ol></div>
 </section>
 
@@ -595,6 +597,8 @@ for sigma in (10, 20, 30, 40):
 <details><summary>Solution</summary><p>About \(2.9\times10^{-3}\) photons (worked in <a class="xref ext" href="../../foundations/classical-physics/index.html#sec-c-thermal" title="Thermal physics, noise and cryogenics">Book 2 §8</a>, exercise 4): close to, but above, \(10^{-3}\); more mixing-chamber attenuation or better thermalised attenuators are needed.</p></details></li>
 <li>In the "which chips to cool" example, what per-qubit uncertainty would raise the probability that a centred 20-qubit chip passes to 90%?
 <details><summary>Solution</summary><p>Need per-qubit pass probability \(0.9^{1/20} = 0.9947\), so \(2\Phi(100/\sigma) - 1 = 0.9947\), \(\Phi = 0.99737\), \(100/\sigma = 2.79\), \(\sigma\approx36\) MHz. Better warm-to-cold prediction (or trimming) directly raises the useful fraction of cooled chips.</p></details></li>
+<li>Why is a qubit chip with 1,000 qubits not simply "ten 100-qubit chips side by side" from a packaging point of view? Give two reasons.
+<details><summary>Solution</summary><p>(1) The die is larger, so its box modes fall into the qubit band and must be suppressed with vias, pillars or segmentation. (2) Many more lines must reach the chip edge or be brought in vertically, which needs flip-chip or multilayer wiring and raises crosstalk and heat-load challenges. (Splitting into separate chips instead needs low-loss chip-to-chip links, which is the modular alternative.)</p></details></li>
 </ol></div>
 </section>
 

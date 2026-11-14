@@ -73,5 +73,7 @@
 <details><summary>Solution</summary><p>About \(2.9\times10^{-3}\) photons (worked in @b2:sec-c-thermal, exercise 4): close to, but above, \(10^{-3}\); more mixing-chamber attenuation or better thermalised attenuators are needed.</p></details></li>
 <li>In the "which chips to cool" example, what per-qubit uncertainty would raise the probability that a centred 20-qubit chip passes to 90%?
 <details><summary>Solution</summary><p>Need per-qubit pass probability \(0.9^{1/20} = 0.9947\), so \(2\Phi(100/\sigma) - 1 = 0.9947\), \(\Phi = 0.99737\), \(100/\sigma = 2.79\), \(\sigma\approx36\) MHz. Better warm-to-cold prediction (or trimming) directly raises the useful fraction of cooled chips.</p></details></li>
+<li>Why is a qubit chip with 1,000 qubits not simply "ten 100-qubit chips side by side" from a packaging point of view? Give two reasons.
+<details><summary>Solution</summary><p>(1) The die is larger, so its box modes fall into the qubit band and must be suppressed with vias, pillars or segmentation. (2) Many more lines must reach the chip edge or be brought in vertically, which needs flip-chip or multilayer wiring and raises crosstalk and heat-load challenges. (Splitting into separate chips instead needs low-loss chip-to-chip links, which is the modular alternative.)</p></details></li>
 </ol></div>
 </section>
